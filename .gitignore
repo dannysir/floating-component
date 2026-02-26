@@ -3,3 +3,5 @@ dist/
 *.local
 .DS_Store
 .idea
+.claude/settings.local.json
+.claude/worktrees/
