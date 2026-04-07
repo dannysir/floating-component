@@ -1,20 +1,13 @@
 import React from "react";
 import type { LayoutNode } from "../types";
 
-interface TreeLayoutProps {
-  node: LayoutNode;
-  renderPanel: (id: string) => React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-function LayoutNodeRenderer({
+export const LayoutNodeRenderer = ({
   node,
   renderPanel,
 }: {
   node: LayoutNode;
   renderPanel: (id: string) => React.ReactNode;
-}) {
+}) => {
   if (node.type === "panel") {
     return (
       <div
@@ -40,15 +33,4 @@ function LayoutNodeRenderer({
       ))}
     </div>
   );
-}
-
-export function TreeLayout({ node, renderPanel, className, style }: TreeLayoutProps) {
-  return (
-    <div
-      className={className}
-      style={{ display: "flex", width: "100%", height: "100%", ...style }}
-    >
-      <LayoutNodeRenderer node={node} renderPanel={renderPanel} />
-    </div>
-  );
-}
+};
