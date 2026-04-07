@@ -22,8 +22,9 @@ export const LayoutNodeRenderer = ({
         ? node.direction === "horizontal" ? rect.width : rect.height
         : 0;
 
-      if (totalSize === 0) return;
-      const ratioDelta = pixelDelta / totalSize;
+      if (totalSize === 0 || node.type !== "split") return;
+      const totalFlex = node.children.reduce((sum, child) => sum + child.size, 0);
+      const ratioDelta = (pixelDelta / totalSize) * totalFlex;
       onResizeBorder(path, borderIndex, ratioDelta);
     },
     [onResizeBorder, path, node]
