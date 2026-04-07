@@ -1,5 +1,4 @@
-export function PanelA() {
-  return (
+export const PanelA = () => (
     <div
       style={{
         height: "100%",
@@ -11,5 +10,4 @@ export function PanelA() {
     >
       <span style={{ fontSize: 32, fontWeight: "bold", color: "#1d4ed8" }}>A</span>
     </div>
-  );
-}
+);
