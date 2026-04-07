@@ -3,17 +3,16 @@ import type { LayoutNode } from "../types";
 import { LayoutNodeRenderer } from "./LayoutNodeRenderer";
 
 interface TreeLayoutProps {
-  node: LayoutNode;
-  renderPanel: (id: string) => React.ReactNode;
+  tree: LayoutNode;
   className?: string;
   style?: React.CSSProperties;
 }
 
-export const TreeLayout = ({ node, renderPanel, className, style }: TreeLayoutProps) => (
+export const TreeLayout = ({ tree, className, style }: TreeLayoutProps) => (
   <div
     className={className}
     style={{ display: "flex", width: "100%", height: "100%", ...style }}
   >
-    <LayoutNodeRenderer node={node} renderPanel={renderPanel} />
+    <LayoutNodeRenderer node={tree} />
   </div>
 );
