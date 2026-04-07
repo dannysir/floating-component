@@ -19,15 +19,18 @@ import { PanelD } from "../testComponents/PanelD";
 const initialTree: LayoutNode = {
   type: "split",
   direction: "horizontal",
+  size: 1,
   children: [
     {
       type: "split",
       direction: "vertical",
+      size: 1,
       children: [
         { type: "panel", id: "panel-a", size: 1, component: <PanelA /> },
         {
           type: "split",
           direction: "horizontal",
+          size: 1,
           children: [
             { type: "panel", id: "panel-b", size: 1, component: <PanelB /> },
             { type: "panel", id: "panel-c", size: 1, component: <PanelC /> },
@@ -40,11 +43,11 @@ const initialTree: LayoutNode = {
 };
 
 const App = () => {
-  const { tree } = useLayoutTree(initialTree);
+  const { tree, resizeBorder } = useLayoutTree(initialTree);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <TreeLayout tree={tree} />
+      <TreeLayout tree={tree} onResizeBorder={resizeBorder} />
     </div>
   );
 };

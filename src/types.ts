@@ -12,6 +12,7 @@ export interface PanelNode {
 export interface SplitNode {
   type: "split";
   direction: SplitDirection;
+  size: number;
   children: LayoutNode[];
 }
 

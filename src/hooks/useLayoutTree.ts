@@ -1,6 +1,32 @@
 import { useState, useCallback } from "react";
 import type { LayoutNode, PanelNode, SplitNode, SplitDirection } from "../types";
 
+const getNodeAtPath = (root: LayoutNode, path: number[]): LayoutNode | null => {
+  let node = root;
+  for (const idx of path) {
+    if (node.type !== "split" || idx >= node.children.length) return null;
+    node = node.children[idx];
+  }
+  return node;
+};
+
+const updateAtPath = (
+  root: LayoutNode,
+  path: number[],
+  updater: (node: LayoutNode) => LayoutNode
+): LayoutNode => {
+  if (path.length === 0) return updater(root);
+  if (root.type !== "split") return root;
+
+  const [idx, ...rest] = path;
+  return {
+    ...root,
+    children: root.children.map((child, i) =>
+      i === idx ? updateAtPath(child, rest, updater) : child
+    ),
+  };
+};
+
 export const useLayoutTree = (initialTree: LayoutNode) => {
   const [tree, setTree] = useState<LayoutNode>(initialTree);
 
@@ -26,15 +52,35 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
     return node;
   };
 
-  const resizePanel = useCallback((panelId: string, newSize: number) => {
-    setTree((prev) => {
-      const result = findAndUpdate(prev, panelId, (node) => ({
-        ...node,
-        size: Math.max(0, Math.min(1, newSize)),
-      }));
-      return result ?? prev;
-    });
-  }, []);
+  const resizeBorder = useCallback(
+    (path: number[], borderIndex: number, delta: number) => {
+      setTree((prev) => {
+        const split = getNodeAtPath(prev, path);
+        if (!split || split.type !== "split") return prev;
+        if (borderIndex < 0 || borderIndex >= split.children.length - 1) return prev;
+
+        const left = split.children[borderIndex];
+        const right = split.children[borderIndex + 1];
+        const totalSize = left.size + right.size;
+
+        const newLeftSize = Math.max(0.05, Math.min(totalSize - 0.05, left.size + delta));
+        const newRightSize = totalSize - newLeftSize;
+
+        return updateAtPath(prev, path, (node) => {
+          if (node.type !== "split") return node;
+          return {
+            ...node,
+            children: node.children.map((child, i) => {
+              if (i === borderIndex) return { ...child, size: newLeftSize };
+              if (i === borderIndex + 1) return { ...child, size: newRightSize };
+              return child;
+            }),
+          };
+        });
+      });
+    },
+    []
+  );
 
   const splitPanel = useCallback(
     (panelId: string, direction: SplitDirection) => {
@@ -48,18 +94,16 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
 
         const result = findAndUpdate(prev, panelId, (node, parent) => {
           if (parent && parent.direction === direction) {
-            // 같은 방향이면 부모에 형제로 추가 (호출 측에서 처리 불가 → 별도 로직)
             return node;
           }
-          // 다른 방향이거나 부모가 없으면 새 split으로 감쌈
           return {
             type: "split",
             direction,
-            children: [node, newPanel],
+            size: node.size,
+            children: [{ ...node, size: 1 }, { ...newPanel, size: 1 }],
           };
         });
 
-        // 같은 방향인 경우: 부모 split의 children에 직접 삽입
         const insertSibling = (root: LayoutNode): LayoutNode => {
           if (root.type === "split") {
             const targetIndex = root.children.findIndex(
@@ -76,7 +120,6 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
         };
 
         if (result === prev) return prev;
-        // result가 이미 감싸진 경우 그대로 반환
         return result ? insertSibling(result) : prev;
       });
     },
@@ -90,5 +133,5 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
     });
   }, []);
 
-  return { tree, setTree, resizePanel, splitPanel, removePanel };
+  return { tree, setTree, resizeBorder, splitPanel, removePanel };
 };
