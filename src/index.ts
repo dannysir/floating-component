@@ -1,3 +1,3 @@
-export type { LayoutNode, PanelNode, SplitNode, SplitDirection } from "./types";
+export type { LayoutNode, PanelNode, SplitNode, SplitDirection, DropPosition } from "./types";
 export { TreeLayout } from "./renderers/TreeLayout";
 export { useLayoutTree } from "./hooks/useLayoutTree";
