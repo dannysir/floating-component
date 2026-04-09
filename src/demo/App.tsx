@@ -43,11 +43,11 @@ const initialTree: LayoutNode = {
 };
 
 const App = () => {
-  const { tree, resizeBorder } = useLayoutTree(initialTree);
+  const { tree, resizeBorder, movePanel } = useLayoutTree(initialTree);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <TreeLayout tree={tree} onResizeBorder={resizeBorder} />
+      <TreeLayout tree={tree} onResizeBorder={resizeBorder} onMovePanel={movePanel} />
     </div>
   );
 };

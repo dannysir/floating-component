@@ -17,3 +17,5 @@ export interface SplitNode {
 }
 
 export type LayoutNode = PanelNode | SplitNode;
+
+export type DropPosition = "top" | "bottom" | "left" | "right";

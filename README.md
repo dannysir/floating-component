@@ -2,43 +2,22 @@
 
 Tree-based resizable and reorderable panel layout for React.
 
-VS Code나 IDE처럼 패널을 수평/수직으로 분할하고, 크기 조절 및 제거할 수 있는 레이아웃을 트리 자료구조로 관리하는 React 라이브러리입니다.
+VS Code나 IDE처럼 패널을 수평/수직으로 분할하고, 경계선 드래그로 크기를 조절하고, 드래그 앤 드롭으로 패널을 이동할 수 있는 레이아웃 라이브러리입니다.
+
+<img src="doc/assets/layout-overview.png" alt="기본 레이아웃" width="640" />
 
 ---
 
-## 설계 개요
+## 특징
 
-### 핵심 아이디어
-
-레이아웃 상태를 **N-ary 트리**로 표현합니다.
-
-- **Leaf 노드 (`PanelNode`)**: 실제 콘텐츠가 렌더링되는 패널
-- **Branch 노드 (`SplitNode`)**: 자식 노드들을 수평 또는 수직으로 분할하는 컨테이너 (자식 수 제한 없음)
-
-```
-root (SplitNode, horizontal)
-├── panel-a (PanelNode, size: 1)
-├── panel-b (PanelNode, size: 1)   ← 같은 방향으로 분할 시 형제로 추가
-└── right (SplitNode, vertical)
-    ├── panel-c (PanelNode, size: 1)
-    └── panel-d (PanelNode, size: 1)
-```
-
-SplitNode는 2개 이상의 자식을 가질 수 있어 불필요한 중첩 없이 트리를 **flat하게** 유지합니다. 트리 구조이므로 **재귀적 렌더링**과 **불변(immutable) 상태 업데이트**가 자연스럽게 동작합니다.
-
-### 아키텍처
-
-```
-src/
-├── types.ts              # LayoutNode, PanelNode, SplitNode 타입 정의
-├── components/
-│   └── TreeLayout.tsx    # 트리를 재귀적으로 렌더링하는 컴포넌트
-├── hooks/
-│   └── useLayoutTree.ts  # 트리 상태 관리 훅 (split / resize / remove)
-└── index.ts              # public API export
-```
-
-**`TreeLayout` (View)** 와 **`useLayoutTree` (State)** 를 분리해서, 레이아웃 상태 관리와 렌더링을 독립적으로 사용할 수 있습니다.
+- **N-ary 트리 구조** — SplitNode가 2개 이상의 자식을 가질 수 있어 불필요한 중첩 없이 flat한 트리 유지
+- **경계선 드래그 리사이즈** — 패널 사이 경계선을 드래그해서 크기 조절 (requestAnimationFrame 최적화)
+- **드래그 앤 드롭 패널 이동** — HTML5 Drag & Drop API로 패널을 다른 위치로 이동
+- **다단계 드롭 타겟 감지** — 패널 가장자리, 부모 split 가장자리, 루트 가장자리를 구분하여 depth 기반 배치
+- **불변 상태 관리** — 모든 트리 업데이트가 immutable하게 처리
+- **View / State 분리** — `TreeLayout` (렌더링)과 `useLayoutTree` (상태 관리)를 독립적으로 사용 가능
+- **TypeScript 지원** — 모든 타입 선언 포함
+- **ESM + CJS** — 듀얼 포맷 번들 출력
 
 ---
 
@@ -55,38 +34,82 @@ npm install react-tree-layout
 ## 빠른 시작
 
 ```tsx
-import { TreeLayout, useLayoutTree } from "react-tree-layout";
+import { TreeLayout, useLayoutTree, type LayoutNode } from "react-tree-layout";
 
-const initialTree = {
-  root: {
-    id: "split-root",
-    type: "split",
-    direction: "horizontal",
-    children: [
-      { id: "panel-left",  type: "panel", size: 0.5 },
-      { id: "panel-right", type: "panel", size: 0.5 },
-    ],
-  },
+const initialTree: LayoutNode = {
+  type: "split",
+  direction: "horizontal",
+  size: 1,
+  children: [
+    {
+      type: "panel",
+      id: "panel-a",
+      size: 1,
+      component: <div style={{ padding: 16, background: "#dbeafe", height: "100%" }}>Panel A</div>,
+    },
+    {
+      type: "split",
+      direction: "vertical",
+      size: 1,
+      children: [
+        {
+          type: "panel",
+          id: "panel-b",
+          size: 1,
+          component: <div style={{ padding: 16, background: "#dcfce7", height: "100%" }}>Panel B</div>,
+        },
+        {
+          type: "panel",
+          id: "panel-c",
+          size: 1,
+          component: <div style={{ padding: 16, background: "#ffedd5", height: "100%" }}>Panel C</div>,
+        },
+      ],
+    },
+  ],
 };
 
-export default function App() {
-  const { tree, splitPanel, removePanel } = useLayoutTree(initialTree);
+const App = () => {
+  const { tree, resizeBorder, movePanel } = useLayoutTree(initialTree);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <TreeLayout
-        node={tree.root}
-        renderPanel={(id) => (
-          <div style={{ padding: 16, height: "100%" }}>
-            <h3>{id}</h3>
-            <button onClick={() => splitPanel(id, "vertical")}>Split ↕</button>
-            <button onClick={() => removePanel(id)}>Close</button>
-          </div>
-        )}
-      />
+      <TreeLayout tree={tree} onResizeBorder={resizeBorder} onMovePanel={movePanel} />
     </div>
   );
-}
+};
+```
+
+---
+
+## 설계 개요
+
+레이아웃 상태를 **N-ary 트리**로 표현합니다.
+
+- **Leaf 노드 (`PanelNode`)** — 실제 콘텐츠가 렌더링되는 패널. `id`와 `component`를 가짐
+- **Branch 노드 (`SplitNode`)** — 자식 노드들을 수평 또는 수직으로 분할하는 컨테이너. `id` 없음
+
+```
+root (SplitNode, horizontal)
+├── panel-a (PanelNode, size: 1)
+├── panel-b (PanelNode, size: 1)
+└── (SplitNode, vertical)
+    ├── panel-c (PanelNode, size: 1)
+    └── panel-d (PanelNode, size: 1)
+```
+
+### 아키텍처
+
+```
+src/
+├── types.ts                    # LayoutNode, PanelNode, SplitNode 타입
+├── hooks/
+│   └── useLayoutTree.ts        # 트리 상태 관리 훅
+├── renderers/
+│   ├── TreeLayout.tsx           # 루트 레이아웃 컴포넌트
+│   ├── LayoutNodeRenderer.tsx   # 재귀 노드 렌더러 + 드래그 앤 드롭
+│   └── Resizer.tsx              # 경계선 리사이즈 핸들
+└── index.ts                    # public API export
 ```
 
 ---
@@ -98,9 +121,10 @@ export default function App() {
 레이아웃 트리를 재귀적으로 렌더링하는 컴포넌트입니다. flexbox 기반으로 패널을 배치합니다.
 
 | Prop | Type | 필수 | 설명 |
-|------|------|------|------|
-| `node` | `LayoutNode` | ✓ | 렌더링할 트리 노드 (루트부터 전달) |
-| `renderPanel` | `(id: string) => ReactNode` | ✓ | 패널 id를 받아 콘텐츠를 반환하는 렌더 함수 |
+|------|------|:----:|------|
+| `tree` | `LayoutNode` | O | 렌더링할 트리 루트 노드 |
+| `onResizeBorder` | `(path, borderIndex, delta) => void` | | 경계선 리사이즈 콜백 |
+| `onMovePanel` | `(sourceId, anchorId, position, depth) => void` | | 드래그 앤 드롭 이동 콜백 |
 | `className` | `string` | | 최상위 div의 className |
 | `style` | `CSSProperties` | | 최상위 div의 인라인 스타일 |
 
@@ -109,15 +133,17 @@ export default function App() {
 레이아웃 트리 상태를 관리하는 훅입니다.
 
 ```ts
-const { tree, resizePanel, splitPanel, removePanel } = useLayoutTree(initialTree);
+const { tree, setTree, resizeBorder, splitPanel, removePanel, movePanel } = useLayoutTree(initialTree);
 ```
 
 | 반환값 | 타입 | 설명 |
 |--------|------|------|
-| `tree` | `LayoutTree` | 현재 레이아웃 트리 상태 |
-| `resizePanel` | `(panelId: string, newSize: number) => void` | 패널 크기 변경 (0~1 사이로 클램핑) |
-| `splitPanel` | `(panelId: string, direction: SplitDirection) => void` | 패널을 수평/수직으로 분할 |
-| `removePanel` | `(panelId: string) => void` | 패널 제거 (부모 split이 자식 1개만 남으면 자동 언래핑) |
+| `tree` | `LayoutNode` | 현재 레이아웃 트리 상태 |
+| `setTree` | `(tree: LayoutNode) => void` | 트리 직접 설정 |
+| `resizeBorder` | `(path, borderIndex, delta) => void` | 경계선 기반 리사이즈 |
+| `splitPanel` | `(panelId, direction) => void` | 패널 분할 |
+| `removePanel` | `(panelId) => void` | 패널 제거 |
+| `movePanel` | `(sourceId, anchorId, position, depth?) => void` | 패널 이동 |
 
 ---
 
@@ -127,82 +153,83 @@ const { tree, resizePanel, splitPanel, removePanel } = useLayoutTree(initialTree
 type SplitDirection = "horizontal" | "vertical";
 
 interface PanelNode {
-  id: string;
   type: "panel";
-  size: number; // 0~1 비율 (flex 값으로 사용)
+  id: string;
+  size: number;         // flex 비율
+  component: ReactNode; // 렌더링할 콘텐츠
 }
 
 interface SplitNode {
-  id: string;
   type: "split";
   direction: SplitDirection;
-  children: LayoutNode[];
+  size: number;             // flex 비율
+  children: LayoutNode[];   // 2개 이상의 자식
 }
 
 type LayoutNode = PanelNode | SplitNode;
 
-interface LayoutTree {
-  root: LayoutNode;
-}
+type DropPosition = "top" | "bottom" | "left" | "right";
 ```
 
 ---
 
 ## 동작 원리
 
-### `splitPanel`
+### 경계선 리사이즈
+
+<img src="doc/assets/resize-demo.png" alt="경계선 리사이즈" width="640" />
+
+`resizeBorder(path, borderIndex, delta)` — 인접한 두 패널의 flex 비율을 조정합니다.
+
+- `path`: SplitNode까지의 경로 (인덱스 배열)
+- `borderIndex`: 경계선 위치 (0 = 첫째-둘째 자식 사이)
+- `delta`: 비율 변화량 (픽셀을 flex 비율로 변환하여 전달)
+- 양쪽 모두 최소 0.05 이상의 크기를 유지
+
+### 패널 분할 (`splitPanel`)
 
 부모 SplitNode의 방향에 따라 두 가지로 동작합니다.
 
-**① 부모와 같은 방향으로 분할** — 새 패널을 형제로 삽입 (트리 깊이 증가 없음)
+**같은 방향으로 분할** — 새 패널을 형제로 삽입 (트리 깊이 증가 없음)
 
 ```
-Before:
-split-1 (horizontal)
-├── panel-a
-└── panel-b
-
-After splitPanel("panel-a", "horizontal"):
-split-1 (horizontal)
-├── panel-a
-├── panel-new  ← 형제로 삽입
-└── panel-b
+Before: split (horizontal) → [A, B]
+After splitPanel("A", "horizontal"): split (horizontal) → [A, new, B]
 ```
 
-**② 부모와 다른 방향으로 분할** — 대상 패널만 새 SplitNode로 감쌈
+**다른 방향으로 분할** — 대상 패널만 새 SplitNode로 감쌈
 
 ```
-Before:
-split-1 (horizontal)
-├── panel-a
-└── panel-b
-
-After splitPanel("panel-a", "vertical"):
-split-1 (horizontal)
-├── split-2 (vertical)   ← panel-a만 감쌈
-│   ├── panel-a
-│   └── panel-new
-└── panel-b
+Before: split (horizontal) → [A, B]
+After splitPanel("A", "vertical"): split (horizontal) → [split (vertical) → [A, new], B]
 ```
 
-### `removePanel`
+### 패널 제거 (`removePanel`)
 
-대상 패널을 트리에서 제거합니다. 부모 `SplitNode`의 자식이 1개만 남으면, 해당 split을 남은 자식으로 대체합니다(언래핑).
+대상 패널을 트리에서 제거합니다. 부모 `SplitNode`의 자식이 1개만 남으면, 해당 split을 남은 자식으로 대체합니다 (자동 언래핑).
 
-### `resizePanel`
+### 드래그 앤 드롭 이동 (`movePanel`)
 
-대상 패널의 `size` 값을 업데이트합니다. 0 미만 또는 1 초과의 값은 자동으로 클램핑됩니다.
+<img src="doc/assets/drag-drop-demo.png" alt="드래그 앤 드롭" width="640" />
 
-모든 상태 업데이트는 **immutable 트리 순회**(`findAndUpdate`)를 통해 처리되므로 React의 불변성 원칙을 준수합니다.
+`movePanel(sourceId, anchorId, position, depth)` — 패널을 다른 위치로 이동합니다.
+
+- `position`: 앵커 패널 기준 드롭 위치 (`top` / `bottom` / `left` / `right`)
+- `depth`: 드롭 깊이 (0 = 패널 레벨, 1 = 부모 split 레벨, ...)
+
+**드롭 타겟 감지 우선순위:**
+1. 루트 가장자리 (외곽 5%) — 최상위 레벨에 배치
+2. 부모 split 가장자리 (외곽 15%) — 상위 split에 배치
+3. 패널 중앙 — 패널 레벨에서 분할
 
 ---
 
 ## 빌드
 
 ```bash
-npm run build     # dist/ 생성 (ESM + CJS + .d.ts)
-npm run dev       # Vite 개발 서버
-npm run type-check
+npm run build       # dist/ 생성 (ESM + CJS + .d.ts)
+npm run dev         # Vite 개발 서버
+npm run type-check  # 타입 검사
 ```
 
 ### 출력물
@@ -217,8 +244,13 @@ npm run type-check
 
 ## 향후 계획
 
-- [ ] 드래그로 패널 크기 조절 (Resizer 핸들)
-- [ ] 드래그 앤 드롭으로 패널 순서 변경
 - [ ] 최소/최대 크기 제약 옵션
 - [ ] 레이아웃 직렬화 / 복원 유틸리티
 - [ ] 키보드 접근성 지원
+- [ ] 리사이저 스타일 커스터마이징
+
+---
+
+## 라이선스
+
+MIT
