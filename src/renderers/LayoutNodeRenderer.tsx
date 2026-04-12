@@ -5,16 +5,24 @@ import { Resizer } from "./Resizer";
 const ROOT_EDGE_RATIO = 0.05;
 const SPLIT_EDGE_RATIO = 0.15;
 
+export interface DropPreview {
+  sourcePanelId: string;
+  anchorPanelId: string;
+  position: DropPosition;
+  depth: number;
+}
+
 const getNearestEdge = (
-  e: React.DragEvent,
+  clientX: number,
+  clientY: number,
   el: HTMLElement,
 ): { position: DropPosition; dist: number } => {
   const rect = el.getBoundingClientRect();
   const dists: Record<DropPosition, number> = {
-    left: (e.clientX - rect.left) / rect.width,
-    right: (rect.right - e.clientX) / rect.width,
-    top: (e.clientY - rect.top) / rect.height,
-    bottom: (rect.bottom - e.clientY) / rect.height,
+    left: (clientX - rect.left) / rect.width,
+    right: (rect.right - clientX) / rect.width,
+    top: (clientY - rect.top) / rect.height,
+    bottom: (rect.bottom - clientY) / rect.height,
   };
   const position = (Object.keys(dists) as DropPosition[]).reduce((a, b) =>
     dists[a] < dists[b] ? a : b,
@@ -23,10 +31,10 @@ const getNearestEdge = (
 };
 
 const getDropTarget = (
-  e: React.DragEvent,
+  clientX: number,
+  clientY: number,
   panelEl: HTMLElement,
 ): { position: DropPosition; depth: number } => {
-  // Collect ancestor splits (innermost first) and root
   const splitEls: HTMLElement[] = [];
   let rootEl: HTMLElement | null = null;
   let cur: HTMLElement | null = panelEl.parentElement;
@@ -41,25 +49,21 @@ const getDropTarget = (
     cur = cur.parentElement;
   }
 
-  // Check from outermost to innermost so outer edges take priority
-  // 1. Root edge (narrow zone)
   if (rootEl) {
-    const { position, dist } = getNearestEdge(e, rootEl);
+    const { position, dist } = getNearestEdge(clientX, clientY, rootEl);
     if (dist < ROOT_EDGE_RATIO) {
       return { position, depth: splitEls.length + 1 };
     }
   }
 
-  // 2. Split edges (outermost first)
   for (let i = splitEls.length - 1; i >= 0; i--) {
-    const { position, dist } = getNearestEdge(e, splitEls[i]);
+    const { position, dist } = getNearestEdge(clientX, clientY, splitEls[i]);
     if (dist < SPLIT_EDGE_RATIO) {
       return { position, depth: i + 1 };
     }
   }
 
-  // 3. Panel level (center area)
-  const { position } = getNearestEdge(e, panelEl);
+  const { position } = getNearestEdge(clientX, clientY, panelEl);
   return { position, depth: 0 };
 };
 
@@ -68,13 +72,20 @@ export const LayoutNodeRenderer = ({
   path = [],
   onResizeBorder,
   onMovePanel,
+  onDropPreviewChange,
+  shadowPanelId,
+  isPreviewActive,
 }: {
   node: LayoutNode;
   path?: number[];
   onResizeBorder?: (path: number[], borderIndex: number, delta: number) => void;
   onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
+  onDropPreviewChange?: (preview: DropPreview | null) => void;
+  shadowPanelId?: string;
+  isPreviewActive?: boolean;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number>(0);
 
   const handleResize = useCallback(
     (borderIndex: number, pixelDelta: number) => {
@@ -94,25 +105,57 @@ export const LayoutNodeRenderer = ({
   );
 
   if (node.type === "panel") {
+    const isShadow = node.id === shadowPanelId;
+
     return (
       <div
         draggable
         onDragStart={(e) => {
           e.dataTransfer.setData("text/panel-id", node.id);
           e.dataTransfer.effectAllowed = "move";
+          const root = e.currentTarget.closest("[data-tree-root]") as HTMLElement | null;
+          if (root) root.dataset.draggingPanelId = node.id;
         }}
         onDragOver={(e) => {
           e.preventDefault();
           e.dataTransfer.dropEffect = "move";
+
+          const clientX = e.clientX;
+          const clientY = e.clientY;
+          const panelEl = e.currentTarget as HTMLElement;
+
+          const root = panelEl.closest("[data-tree-root]") as HTMLElement | null;
+          const sourcePanelId = root?.dataset.draggingPanelId;
+          if (!sourcePanelId || sourcePanelId === node.id) return;
+
+          if (rafRef.current) return;
+          rafRef.current = requestAnimationFrame(() => {
+            rafRef.current = 0;
+            const { position, depth } = getDropTarget(clientX, clientY, panelEl);
+            onDropPreviewChange?.({ sourcePanelId, anchorPanelId: node.id, position, depth });
+          });
         }}
         onDrop={(e) => {
           e.preventDefault();
+          if (isPreviewActive) return;
+          e.stopPropagation();
+          onDropPreviewChange?.(null);
           const sourcePanelId = e.dataTransfer.getData("text/panel-id");
           if (!sourcePanelId || sourcePanelId === node.id || !onMovePanel) return;
-          const { position, depth } = getDropTarget(e, e.currentTarget as HTMLElement);
+          const { position, depth } = getDropTarget(e.clientX, e.clientY, e.currentTarget as HTMLElement);
           onMovePanel(sourcePanelId, node.id, position, depth);
         }}
-        style={{ flex: node.size, minWidth: 0, minHeight: 0, overflow: "hidden" }}
+        style={{
+          flex: node.size,
+          minWidth: 0,
+          minHeight: 0,
+          overflow: "hidden",
+          ...(isShadow ? {
+            opacity: 0.5,
+            outline: "2px dashed rgba(59, 130, 246, 0.6)",
+            outlineOffset: -2,
+          } : undefined),
+        }}
       >
         {node.component}
       </div>
@@ -128,6 +171,9 @@ export const LayoutNodeRenderer = ({
         path={[...path, i]}
         onResizeBorder={onResizeBorder}
         onMovePanel={onMovePanel}
+        onDropPreviewChange={onDropPreviewChange}
+        shadowPanelId={shadowPanelId}
+        isPreviewActive={isPreviewActive}
       />
     );
     if (i < node.children.length - 1) {
