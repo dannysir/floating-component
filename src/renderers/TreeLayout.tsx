@@ -10,9 +10,10 @@ interface TreeLayoutProps {
   onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
   className?: string;
   style?: React.CSSProperties;
+  resizerClassName?: string;
 }
 
-export const TreeLayout = ({ tree, onResizeBorder, onMovePanel, className, style }: TreeLayoutProps) => {
+export const TreeLayout = ({ tree, onResizeBorder, onMovePanel, className, style, resizerClassName }: TreeLayoutProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const [dropPreview, setDropPreview] = useState<DropPreview | null>(null);
   const prevPreviewRef = useRef<DropPreview | null>(null);
@@ -82,6 +83,7 @@ export const TreeLayout = ({ tree, onResizeBorder, onMovePanel, className, style
         onDropPreviewChange={handleDropPreviewChange}
         shadowPanelId={dropPreview?.sourcePanelId}
         isPreviewActive={!!previewTree}
+        resizerClassName={resizerClassName}
       />
     </div>
   );

@@ -75,6 +75,7 @@ export const LayoutNodeRenderer = ({
   onDropPreviewChange,
   shadowPanelId,
   isPreviewActive,
+  resizerClassName,
 }: {
   node: LayoutNode;
   path?: number[];
@@ -83,6 +84,7 @@ export const LayoutNodeRenderer = ({
   onDropPreviewChange?: (preview: DropPreview | null) => void;
   shadowPanelId?: string;
   isPreviewActive?: boolean;
+  resizerClassName?: string;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
@@ -174,6 +176,7 @@ export const LayoutNodeRenderer = ({
         onDropPreviewChange={onDropPreviewChange}
         shadowPanelId={shadowPanelId}
         isPreviewActive={isPreviewActive}
+        resizerClassName={resizerClassName}
       />
     );
     if (i < node.children.length - 1) {
@@ -182,6 +185,7 @@ export const LayoutNodeRenderer = ({
           key={`resizer-${i}`}
           direction={node.direction}
           onResize={(delta) => handleResize(i, delta)}
+          className={resizerClassName}
         />
       );
     }

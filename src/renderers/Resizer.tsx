@@ -4,9 +4,10 @@ import type { SplitDirection } from "../types";
 interface ResizerProps {
   direction: SplitDirection;
   onResize: (delta: number) => void;
+  className?: string;
 }
 
-export const Resizer = ({ direction, onResize }: ResizerProps) => {
+export const Resizer = ({ direction, onResize, className }: ResizerProps) => {
   const isHorizontal = direction === "horizontal";
   const startPos = useRef(0);
   const rafId = useRef(0);
@@ -54,6 +55,7 @@ export const Resizer = ({ direction, onResize }: ResizerProps) => {
   return (
     <div
       onMouseDown={onMouseDown}
+      className={className}
       style={{
         flexShrink: 0,
         width: isHorizontal ? 4 : "100%",
