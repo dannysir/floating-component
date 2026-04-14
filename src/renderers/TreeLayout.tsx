@@ -1,19 +1,54 @@
-import React, { useRef, useState, useCallback, useMemo } from "react";
+import React, { useRef, useState, useCallback, useMemo, useEffect, useId } from "react";
+import type { CSSProperties } from "react";
 import type { LayoutNode, DropPosition } from "../types";
 import { computeMoveResult } from "../hooks/useLayoutTree";
 import { LayoutNodeRenderer } from "./LayoutNodeRenderer";
 import type { DropPreview } from "./LayoutNodeRenderer";
+import { devWarn } from "../utils/devWarn";
+
+const collectPanelIds = (node: LayoutNode, ids: string[] = []): string[] => {
+  if (node.type === "panel") {
+    ids.push(node.id);
+  } else {
+    node.children.forEach((child) => collectPanelIds(child, ids));
+  }
+  return ids;
+};
+
+export interface LayoutClassNames {
+  panel?: string;
+  split?: string;
+  resizer?: string;
+}
 
 interface TreeLayoutProps {
   tree: LayoutNode;
-  onResizeBorder?: (path: number[], borderIndex: number, delta: number) => void;
+  onResizeBorder?: (path: number[], borderIndex: number, delta: number, totalPixels?: number) => void;
   onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
+  resizerClassName?: string;
+  resizerStyle?: CSSProperties;
+  dragHandleSelector?: string;
+  shadowClassName?: string;
+  shadowStyle?: CSSProperties;
+  classNames?: LayoutClassNames;
 }
 
-export const TreeLayout = ({ tree, onResizeBorder, onMovePanel, className, style }: TreeLayoutProps) => {
+export const TreeLayout = ({ tree, onResizeBorder, onMovePanel, className, style, resizerClassName, resizerStyle, dragHandleSelector, shadowClassName, shadowStyle, classNames }: TreeLayoutProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
+  const instanceId = useId();
+
+  useEffect(() => {
+    const ids = collectPanelIds(tree);
+    const seen = new Set<string>();
+    ids.forEach((id) => {
+      if (seen.has(id)) {
+        devWarn(`Duplicate panel id detected: "${id}". Panel ids must be unique.`);
+      }
+      seen.add(id);
+    });
+  }, [tree]);
   const [dropPreview, setDropPreview] = useState<DropPreview | null>(null);
   const prevPreviewRef = useRef<DropPreview | null>(null);
   const previewRef = useRef<DropPreview | null>(null);
@@ -38,7 +73,7 @@ export const TreeLayout = ({ tree, onResizeBorder, onMovePanel, className, style
     previewRef.current = null;
     setDropPreview(null);
     if (rootRef.current) delete rootRef.current.dataset.draggingPanelId;
-  }, []);
+  }, [instanceId]);
 
   const previewTree = useMemo(() => {
     if (!dropPreview) return null;
@@ -54,7 +89,7 @@ export const TreeLayout = ({ tree, onResizeBorder, onMovePanel, className, style
   return (
     <div
       ref={rootRef}
-      data-tree-root
+      data-tree-root={instanceId}
       className={className}
       style={{ display: "flex", width: "100%", height: "100%", ...style }}
       onDrop={(e) => {
@@ -82,6 +117,13 @@ export const TreeLayout = ({ tree, onResizeBorder, onMovePanel, className, style
         onDropPreviewChange={handleDropPreviewChange}
         shadowPanelId={dropPreview?.sourcePanelId}
         isPreviewActive={!!previewTree}
+        resizerClassName={classNames?.resizer ?? resizerClassName}
+        resizerStyle={resizerStyle}
+        dragHandleSelector={dragHandleSelector}
+        shadowClassName={shadowClassName}
+        shadowStyle={shadowStyle}
+        panelClassName={classNames?.panel}
+        splitClassName={classNames?.split}
       />
     </div>
   );

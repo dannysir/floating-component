@@ -1,5 +1,14 @@
 import { useState, useCallback } from "react";
 import type { LayoutNode, PanelNode, SplitNode, SplitDirection, DropPosition } from "../types";
+import { devWarn } from "../utils/devWarn";
+
+let _idCounter = 0;
+const generatePanelId = (): string => {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `panel-${++_idCounter}-${Math.random().toString(36).slice(2, 9)}`;
+};
 
 const getNodeAtPath = (root: LayoutNode, path: number[]): LayoutNode | null => {
   let node = root;
@@ -209,7 +218,7 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
   const [tree, setTree] = useState<LayoutNode>(initialTree);
 
   const resizeBorder = useCallback(
-    (path: number[], borderIndex: number, delta: number) => {
+    (path: number[], borderIndex: number, delta: number, totalPixels?: number) => {
       setTree((prev) => {
         const split = getNodeAtPath(prev, path);
         if (!split || split.type !== "split") return prev;
@@ -219,7 +228,20 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
         const right = split.children[borderIndex + 1];
         const totalSize = left.size + right.size;
 
-        const newLeftSize = Math.max(0.05, Math.min(totalSize - 0.05, left.size + delta));
+        const toFlex = (px: number) =>
+          totalPixels && totalPixels > 0
+            ? (px / totalPixels) * totalSize
+            : 0;
+
+        const leftMin = left.minSize !== undefined ? toFlex(left.minSize) : 0.05;
+        const leftMax = left.maxSize !== undefined ? toFlex(left.maxSize) : totalSize - 0.05;
+        const rightMin = right.minSize !== undefined ? toFlex(right.minSize) : 0.05;
+        const rightMax = right.maxSize !== undefined ? toFlex(right.maxSize) : totalSize - 0.05;
+
+        const clampedLeftMin = Math.max(leftMin, totalSize - rightMax);
+        const clampedLeftMax = Math.min(leftMax, totalSize - rightMin);
+
+        const newLeftSize = Math.max(clampedLeftMin, Math.min(clampedLeftMax, left.size + delta));
         const newRightSize = totalSize - newLeftSize;
 
         return updateAtPath(prev, path, (node) => {
@@ -239,13 +261,19 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
   );
 
   const splitPanel = useCallback(
-    (panelId: string, direction: SplitDirection) => {
+    (panelId: string, direction: SplitDirection, options?: { newPanel?: Partial<Omit<PanelNode, "type">> }): string => {
+      const newId = options?.newPanel?.id ?? generatePanelId();
+
       setTree((prev) => {
+        if (!findPanelWithAncestors(prev, panelId)) {
+          devWarn(`splitPanel: panel "${panelId}" not found`);
+          return prev;
+        }
         const newPanel: PanelNode = {
           type: "panel",
-          id: `panel-${Date.now()}`,
-          size: 0.5,
-          component: null,
+          id: newId,
+          size: options?.newPanel?.size ?? 0.5,
+          component: options?.newPanel?.component ?? null,
         };
 
         const result = findAndUpdate(prev, panelId, (node, parent) => {
@@ -278,12 +306,18 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
         if (result === prev) return prev;
         return result ? insertSibling(result) : prev;
       });
+
+      return newId;
     },
     []
   );
 
   const removePanel = useCallback((panelId: string) => {
     setTree((prev) => {
+      if (!findPanelWithAncestors(prev, panelId)) {
+        devWarn(`removePanel: panel "${panelId}" not found`);
+        return prev;
+      }
       const result = findAndUpdate(prev, panelId, () => null);
       return result ?? prev;
     });
@@ -291,7 +325,17 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
 
   const movePanel = useCallback(
     (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number = 0) => {
-      setTree((prev) => computeMoveResult(prev, sourcePanelId, anchorPanelId, position, depth) ?? prev);
+      setTree((prev) => {
+        if (!findPanelWithAncestors(prev, sourcePanelId)) {
+          devWarn(`movePanel: source panel "${sourcePanelId}" not found`);
+          return prev;
+        }
+        if (!findPanelWithAncestors(prev, anchorPanelId)) {
+          devWarn(`movePanel: anchor panel "${anchorPanelId}" not found`);
+          return prev;
+        }
+        return computeMoveResult(prev, sourcePanelId, anchorPanelId, position, depth) ?? prev;
+      });
     },
     [],
   );

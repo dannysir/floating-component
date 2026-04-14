@@ -1,12 +1,15 @@
 import React, { useCallback, useRef } from "react";
+import type { CSSProperties } from "react";
 import type { SplitDirection } from "../types";
 
 interface ResizerProps {
   direction: SplitDirection;
   onResize: (delta: number) => void;
+  className?: string;
+  style?: CSSProperties;
 }
 
-export const Resizer = ({ direction, onResize }: ResizerProps) => {
+export const Resizer = ({ direction, onResize, className, style }: ResizerProps) => {
   const isHorizontal = direction === "horizontal";
   const startPos = useRef(0);
   const rafId = useRef(0);
@@ -51,15 +54,23 @@ export const Resizer = ({ direction, onResize }: ResizerProps) => {
     [isHorizontal, onResize]
   );
 
+  const defaultInlineStyle: CSSProperties = className
+    ? {}
+    : {
+        width: isHorizontal ? 4 : "100%",
+        height: isHorizontal ? "100%" : 4,
+        background: "#e0e0e0",
+        cursor: isHorizontal ? "col-resize" : "row-resize",
+      };
+
   return (
     <div
       onMouseDown={onMouseDown}
+      className={className}
       style={{
         flexShrink: 0,
-        width: isHorizontal ? 4 : "100%",
-        height: isHorizontal ? "100%" : 4,
-        cursor: isHorizontal ? "col-resize" : "row-resize",
-        background: "#e0e0e0",
+        ...defaultInlineStyle,
+        ...style,
       }}
     />
   );

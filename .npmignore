@@ -1,0 +1,8 @@
+src/
+doc/
+index.html
+vite.config.ts
+tsconfig.json
+CLAUDE.md
+.claude/
+node_modules/

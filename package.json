@@ -1,7 +1,26 @@
 {
   "name": "react-tree-layout",
   "version": "0.1.0",
-  "description": "Tree-based resizable and reorderable layout for React",
+  "description": "VS Code-style tree-based panel layout for React",
+  "license": "ISC",
+  "author": "dannysir",
+  "keywords": [
+    "react",
+    "layout",
+    "panel",
+    "split",
+    "resize",
+    "drag-drop",
+    "tree"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dannysir/react-tree-layout.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dannysir/react-tree-layout/issues"
+  },
+  "homepage": "https://github.com/dannysir/react-tree-layout#readme",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -13,19 +32,28 @@
       "require": "./dist/index.cjs"
     }
   },
+  "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md",
+    "README.ko.md",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint src --ext ts,tsx",
     "type-check": "tsc --noEmit"
   },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
-    "react": ">=17.0.0",
-    "react-dom": ">=17.0.0"
+    "react": ">=18.0.0"
   },
   "devDependencies": {
     "@types/node": "^25.5.2",

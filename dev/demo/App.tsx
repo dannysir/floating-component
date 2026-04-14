@@ -1,5 +1,5 @@
-import { TreeLayout, useLayoutTree } from "../index";
-import type { LayoutNode } from "../types";
+import { TreeLayout, useLayoutTree } from "../../src/index";
+import type { LayoutNode } from "../../src/types";
 import { PanelA } from "../testComponents/PanelA";
 import { PanelB } from "../testComponents/PanelB";
 import { PanelC } from "../testComponents/PanelC";

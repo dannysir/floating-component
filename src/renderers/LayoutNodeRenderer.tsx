@@ -1,4 +1,5 @@
 import React, { useCallback, useRef } from "react";
+import type { CSSProperties } from "react";
 import type { LayoutNode, DropPosition } from "../types";
 import { Resizer } from "./Resizer";
 
@@ -75,17 +76,32 @@ export const LayoutNodeRenderer = ({
   onDropPreviewChange,
   shadowPanelId,
   isPreviewActive,
+  resizerClassName,
+  resizerStyle,
+  dragHandleSelector,
+  shadowClassName,
+  shadowStyle,
+  panelClassName,
+  splitClassName,
 }: {
   node: LayoutNode;
   path?: number[];
-  onResizeBorder?: (path: number[], borderIndex: number, delta: number) => void;
+  onResizeBorder?: (path: number[], borderIndex: number, delta: number, totalPixels?: number) => void;
   onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
   onDropPreviewChange?: (preview: DropPreview | null) => void;
   shadowPanelId?: string;
   isPreviewActive?: boolean;
+  resizerClassName?: string;
+  resizerStyle?: CSSProperties;
+  dragHandleSelector?: string;
+  shadowClassName?: string;
+  shadowStyle?: CSSProperties;
+  panelClassName?: string;
+  splitClassName?: string;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const handleResize = useCallback(
     (borderIndex: number, pixelDelta: number) => {
@@ -99,9 +115,21 @@ export const LayoutNodeRenderer = ({
       if (totalSize === 0 || node.type !== "split") return;
       const totalFlex = node.children.reduce((sum, child) => sum + child.size, 0);
       const ratioDelta = (pixelDelta / totalSize) * totalFlex;
-      onResizeBorder(path, borderIndex, ratioDelta);
+      onResizeBorder(path, borderIndex, ratioDelta, totalSize);
     },
     [onResizeBorder, path, node]
+  );
+
+  const handlePanelMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      if (!dragHandleSelector) return;
+      const target = e.target as HTMLElement;
+      const isHandle = !!target.closest(dragHandleSelector);
+      if (panelRef.current) {
+        panelRef.current.draggable = isHandle;
+      }
+    },
+    [dragHandleSelector]
   );
 
   if (node.type === "panel") {
@@ -109,7 +137,10 @@ export const LayoutNodeRenderer = ({
 
     return (
       <div
-        draggable
+        ref={panelRef}
+        draggable={!dragHandleSelector}
+        onMouseDown={handlePanelMouseDown}
+        className={isShadow ? (shadowClassName ?? panelClassName) : panelClassName}
         onDragStart={(e) => {
           e.dataTransfer.setData("text/panel-id", node.id);
           e.dataTransfer.effectAllowed = "move";
@@ -150,11 +181,16 @@ export const LayoutNodeRenderer = ({
           minWidth: 0,
           minHeight: 0,
           overflow: "hidden",
-          ...(isShadow ? {
-            opacity: 0.5,
-            outline: "2px dashed rgba(59, 130, 246, 0.6)",
-            outlineOffset: -2,
-          } : undefined),
+          ...(isShadow
+            ? shadowClassName
+              ? shadowStyle
+              : {
+                  opacity: 0.5,
+                  outline: "2px dashed rgba(59, 130, 246, 0.6)",
+                  outlineOffset: -2,
+                  ...shadowStyle,
+                }
+            : undefined),
         }}
       >
         {node.component}
@@ -174,6 +210,13 @@ export const LayoutNodeRenderer = ({
         onDropPreviewChange={onDropPreviewChange}
         shadowPanelId={shadowPanelId}
         isPreviewActive={isPreviewActive}
+        resizerClassName={resizerClassName}
+        resizerStyle={resizerStyle}
+        dragHandleSelector={dragHandleSelector}
+        shadowClassName={shadowClassName}
+        shadowStyle={shadowStyle}
+        panelClassName={panelClassName}
+        splitClassName={splitClassName}
       />
     );
     if (i < node.children.length - 1) {
@@ -182,6 +225,8 @@ export const LayoutNodeRenderer = ({
           key={`resizer-${i}`}
           direction={node.direction}
           onResize={(delta) => handleResize(i, delta)}
+          className={resizerClassName}
+          style={resizerStyle}
         />
       );
     }
@@ -191,6 +236,7 @@ export const LayoutNodeRenderer = ({
     <div
       ref={containerRef}
       data-layout-split
+      className={splitClassName}
       style={{
         display: "flex",
         flexDirection: node.direction === "horizontal" ? "row" : "column",

@@ -8,7 +8,6 @@ export default defineConfig({
         react(),
         dts({
             include: ["src"],
-            exclude: ["src/demo", "src/testComponents"],
             rollupTypes: true,
         }),
     ],
