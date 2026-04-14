@@ -7,6 +7,8 @@ export interface PanelNode {
   id: string;
   size: number;
   component: ReactNode;
+  minSize?: number;
+  maxSize?: number;
 }
 
 export interface SplitNode {
@@ -14,6 +16,8 @@ export interface SplitNode {
   direction: SplitDirection;
   size: number;
   children: LayoutNode[];
+  minSize?: number;
+  maxSize?: number;
 }
 
 export type LayoutNode = PanelNode | SplitNode;
