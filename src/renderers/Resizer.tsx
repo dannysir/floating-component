@@ -54,12 +54,13 @@ export const Resizer = ({ direction, onResize, className, style }: ResizerProps)
     [isHorizontal, onResize]
   );
 
-  const defaultSizeStyle: CSSProperties = className
+  const defaultInlineStyle: CSSProperties = className
     ? {}
     : {
         width: isHorizontal ? 4 : "100%",
         height: isHorizontal ? "100%" : 4,
         background: "#e0e0e0",
+        cursor: isHorizontal ? "col-resize" : "row-resize",
       };
 
   return (
@@ -68,8 +69,7 @@ export const Resizer = ({ direction, onResize, className, style }: ResizerProps)
       className={className}
       style={{
         flexShrink: 0,
-        cursor: isHorizontal ? "col-resize" : "row-resize",
-        ...defaultSizeStyle,
+        ...defaultInlineStyle,
         ...style,
       }}
     />
