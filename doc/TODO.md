@@ -95,7 +95,21 @@ split("horizontal", [panel("a", <A />), panel("b", <B />)])
 
 ---
 
-### 5. 패널 언마운트/재마운트로 인한 내부 상태 소실
+### 5. 트리에 컴포넌트를 삽입하는 API 부재
+
+사용자 입장에서 현재 트리의 특정 위치에 새 패널을 직접 삽입하는 1급 함수가 없다.
+`splitPanel`은 기존 패널을 기준으로 분할하는 방식이라, 빈 트리나 특정 경로에 삽입하려면 트리를 수동으로 조작해야 한다.
+
+**검토**: 삽입 전용 함수 제공.
+```ts
+insertPanel(targetPath: number[], panel: PanelNode, position: "before" | "after"): void
+// 또는
+addPanel(panel: PanelNode, options?: { anchor?: string; direction?: Direction }): void
+```
+
+---
+
+### 6. 패널 언마운트/재마운트로 인한 내부 상태 소실
 
 `removePanel` 후 재추가 시 컴포넌트가 다시 마운트되어 스크롤 위치, 입력값, 폼 상태 등이 전부 초기화된다.
 
