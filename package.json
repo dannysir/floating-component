@@ -1,5 +1,5 @@
 {
-  "name": "react-tree-layout",
+  "name": "@dannysir/floating-components",
   "version": "0.1.0",
   "description": "VS Code-style tree-based panel layout for React",
   "license": "ISC",
@@ -15,12 +15,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dannysir/react-tree-layout.git"
+    "url": "https://github.com/dannysir/floating-component.git"
   },
   "bugs": {
-    "url": "https://github.com/dannysir/react-tree-layout/issues"
+    "url": "https://github.com/dannysir/floating-component/issues"
   },
-  "homepage": "https://github.com/dannysir/react-tree-layout#readme",
+  "homepage": "https://github.com/dannysir/floating-component#readme",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
