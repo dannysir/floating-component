@@ -23,3 +23,16 @@ export interface SplitNode {
 export type LayoutNode = PanelNode | SplitNode;
 
 export type DropPosition = "top" | "bottom" | "left" | "right";
+
+export interface InsertPanelInit {
+  component: ReactNode;
+  id?: string;
+  size?: number;
+  minSize?: number;
+  maxSize?: number;
+}
+
+export interface InsertAt {
+  anchorId: string;
+  position: DropPosition;
+}
