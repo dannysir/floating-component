@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+
+- `useLayoutTree` returns: `rootPanelId`, `panelIds`, `hasPanel`, `insertPanel`
+- Public tree utility functions: `getRootPanelId`, `getPanelIds`, `insertPanelIntoTree`
+- Public types: `InsertPanelInit`, `InsertAt`
+
 ### Changed
 
 - `TreeLayout` style API restricted: removed `className`, `style`, `resizerClassName`, `resizerStyle`, `classNames`, `shadowClassName`, `shadowStyle` props

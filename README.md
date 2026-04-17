@@ -107,17 +107,46 @@ Recursively renders the layout tree using flexbox.
 Hook for managing layout tree state.
 
 ```ts
-const { tree, setTree, resizeBorder, splitPanel, removePanel, movePanel } = useLayoutTree(initialTree);
+const {
+  tree, setTree,
+  rootPanelId, panelIds, hasPanel,
+  resizeBorder, splitPanel, removePanel, movePanel, insertPanel,
+} = useLayoutTree(initialTree);
 ```
 
 | Return | Type | Description |
 |--------|------|-------------|
 | `tree` | `LayoutNode` | Current layout tree state |
 | `setTree` | `(tree: LayoutNode) => void` | Directly set the tree |
+| `rootPanelId` | `string \| null` | First panel id found in the tree (pre-order) |
+| `panelIds` | `string[]` | All panel ids in the tree (pre-order) |
+| `hasPanel` | `(panelId: string) => boolean` | Whether a panel exists in the tree |
 | `resizeBorder` | `(path, borderIndex, delta) => void` | Resize by border index |
-| `splitPanel` | `(panelId, direction) => void` | Split a panel |
+| `splitPanel` | `(panelId, direction) => string` | Split a panel; returns the new panel id |
 | `removePanel` | `(panelId) => void` | Remove a panel |
 | `movePanel` | `(sourceId, anchorId, position, depth?) => void` | Move a panel |
+| `insertPanel` | `(options: { panel: InsertPanelInit; at?: InsertAt }) => string` | Insert a panel; returns the new panel id |
+
+### Tree utilities (pure functions)
+
+Available as standalone imports for when you manage the tree outside the hook (e.g. with `setTree`).
+
+```ts
+import { getRootPanelId, getPanelIds, insertPanelIntoTree } from "react-tree-layout";
+
+getRootPanelId(tree);        // => string | null
+getPanelIds(tree);           // => string[]
+
+// Append to root
+insertPanelIntoTree(tree, panelNode);
+
+// Insert as sibling of an anchor
+insertPanelIntoTree(tree, panelNode, { anchorId: "editor", position: "right" });
+```
+
+`insertPanelIntoTree` takes a full `PanelNode`. Root append rules:
+- Split root → appended to end of `children` (bottom for vertical, right for horizontal)
+- Panel root → wrapped in a horizontal split with the new panel on the right
 
 ---
 
@@ -143,6 +172,38 @@ interface SplitNode {
 type LayoutNode = PanelNode | SplitNode;
 
 type DropPosition = "top" | "bottom" | "left" | "right";
+
+// insertPanel / insertPanelIntoTree helpers
+interface InsertPanelInit {
+  component: ReactNode;  // required
+  id?: string;           // auto-generated if omitted
+  size?: number;
+  minSize?: number;
+  maxSize?: number;
+}
+
+interface InsertAt {
+  anchorId: string;
+  position: DropPosition;
+}
+```
+
+---
+
+## Recipes
+
+### Toggle panel visibility
+
+```tsx
+const { panelIds, removePanel, insertPanel } = useLayoutTree(initialTree);
+
+const togglePanel = (id: string, component: ReactNode) => {
+  if (panelIds.includes(id)) {
+    removePanel(id);
+  } else {
+    insertPanel({ panel: { id, component } });
+  }
+};
 ```
 
 ---

@@ -139,17 +139,46 @@ src/
 레이아웃 트리 상태를 관리하는 훅입니다.
 
 ```ts
-const { tree, setTree, resizeBorder, splitPanel, removePanel, movePanel } = useLayoutTree(initialTree);
+const {
+  tree, setTree,
+  rootPanelId, panelIds, hasPanel,
+  resizeBorder, splitPanel, removePanel, movePanel, insertPanel,
+} = useLayoutTree(initialTree);
 ```
 
 | 반환값 | 타입 | 설명 |
 |--------|------|------|
 | `tree` | `LayoutNode` | 현재 레이아웃 트리 상태 |
 | `setTree` | `(tree: LayoutNode) => void` | 트리 직접 설정 |
+| `rootPanelId` | `string \| null` | 트리에서 pre-order로 처음 만나는 패널의 id |
+| `panelIds` | `string[]` | 트리 내 모든 패널 id 배열 (pre-order) |
+| `hasPanel` | `(panelId: string) => boolean` | 특정 패널 존재 여부 |
 | `resizeBorder` | `(path, borderIndex, delta) => void` | 경계선 기반 리사이즈 |
-| `splitPanel` | `(panelId, direction) => void` | 패널 분할 |
+| `splitPanel` | `(panelId, direction) => string` | 패널 분할, 새 패널 id 반환 |
 | `removePanel` | `(panelId) => void` | 패널 제거 |
 | `movePanel` | `(sourceId, anchorId, position, depth?) => void` | 패널 이동 |
+| `insertPanel` | `(options: { panel: InsertPanelInit; at?: InsertAt }) => string` | 패널 삽입, 새 패널 id 반환 |
+
+### 트리 유틸 (순수 함수)
+
+훅 바깥에서 트리를 직접 조작할 때(`setTree`와 함께) 사용할 수 있는 순수 함수들.
+
+```ts
+import { getRootPanelId, getPanelIds, insertPanelIntoTree } from "react-tree-layout";
+
+getRootPanelId(tree);        // => string | null
+getPanelIds(tree);           // => string[]
+
+// 루트에 append
+insertPanelIntoTree(tree, panelNode);
+
+// anchor 형제로 삽입
+insertPanelIntoTree(tree, panelNode, { anchorId: "editor", position: "right" });
+```
+
+`insertPanelIntoTree`는 완전한 `PanelNode`를 받습니다. 루트 append 규칙:
+- 루트가 `split` → `children` 끝에 추가 (vertical이면 맨 아래, horizontal이면 맨 오른쪽)
+- 루트가 `panel` → horizontal split으로 감싸고 새 패널을 오른쪽에
 
 ---
 
@@ -175,6 +204,38 @@ interface SplitNode {
 type LayoutNode = PanelNode | SplitNode;
 
 type DropPosition = "top" | "bottom" | "left" | "right";
+
+// insertPanel / insertPanelIntoTree 용
+interface InsertPanelInit {
+  component: ReactNode;  // 필수
+  id?: string;           // 미지정 시 자동 생성
+  size?: number;
+  minSize?: number;
+  maxSize?: number;
+}
+
+interface InsertAt {
+  anchorId: string;
+  position: DropPosition;
+}
+```
+
+---
+
+## 레시피
+
+### 패널 표시/숨김 토글
+
+```tsx
+const { panelIds, removePanel, insertPanel } = useLayoutTree(initialTree);
+
+const togglePanel = (id: string, component: ReactNode) => {
+  if (panelIds.includes(id)) {
+    removePanel(id);
+  } else {
+    insertPanel({ panel: { id, component } });
+  }
+};
 ```
 
 ---
