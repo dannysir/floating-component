@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Changed
+
+- `TreeLayout` style API restricted: removed `className`, `style`, `resizerClassName`, `resizerStyle`, `classNames`, `shadowClassName`, `shadowStyle` props
+- Added controlled styling props to `TreeLayout`: `backgroundColor`, `margin`, `padding`, `resizerThickness`, `resizerLength`, `resizerColor`, `resizerHoverOnly`
+- `resizerThickness` accepts `number | string` (e.g. `4`, `"4px"`, `"0.5rem"`)
+- Drag shadow style is now a fixed built-in (opacity 0.5 + dashed blue outline)
+- Removed `LayoutClassNames` type from public API
+
+### Breaking Changes
+
+- `TreeLayout`: `className`, `style`, `resizerClassName`, `resizerStyle`, `classNames`, `shadowClassName`, `shadowStyle` removed
+- `LayoutClassNames` type no longer exported
+
+---
+
 ## [0.1.0] - 2026-04-14
 
 ### Added

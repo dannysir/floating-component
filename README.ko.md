@@ -125,9 +125,14 @@ src/
 | `tree` | `LayoutNode` | O | 렌더링할 트리 루트 노드 |
 | `onResizeBorder` | `(path, borderIndex, delta) => void` | | 경계선 리사이즈 콜백 |
 | `onMovePanel` | `(sourceId, anchorId, position, depth) => void` | | 드래그 앤 드롭 이동 콜백 |
-| `className` | `string` | | 최상위 div의 className |
-| `style` | `CSSProperties` | | 최상위 div의 인라인 스타일 |
-| `resizerClassName` | `string` | | 경계선 div에 적용할 className |
+| `dragHandleSelector` | `string` | | 드래그 핸들 CSS 선택자 (미지정 시 패널 전체) |
+| `backgroundColor` | `string` | | 루트 컨테이너 배경색 |
+| `margin` | `number \| string` | | 루트 컨테이너 마진 |
+| `padding` | `number \| string` | | 루트 컨테이너 패딩 |
+| `resizerThickness` | `number \| string` | | 리사이저 두께 (패널 간 gap). 기본값 `4` |
+| `resizerLength` | `number \| string` | | 리사이저 교차축 길이. 기본값 `"100%"` |
+| `resizerColor` | `string` | | 리사이저 색상. 기본값 `"#e0e0e0"` |
+| `resizerHoverOnly` | `boolean` | | hover 시에만 표시 (평소 투명). 기본값 `false` |
 
 ### `useLayoutTree(initialTree)`
 
@@ -178,21 +183,26 @@ type DropPosition = "top" | "bottom" | "left" | "right";
 
 ### 리사이저 스타일
 
-`resizerClassName`으로 경계선 스타일을 CSS로 완전히 제어할 수 있습니다.
+`resizer*` props로 경계선 외관을 제어합니다.
 
 ```tsx
-// styles.css
-// .my-resizer { background: #6366f1; width: 2px; }
-// .my-resizer:hover { background: #4f46e5; }
-
 <TreeLayout
   tree={tree}
   onResizeBorder={resizeBorder}
-  resizerClassName="my-resizer"
+  backgroundColor="#1e1e1e"
+  padding={4}
+  resizerThickness={6}
+  resizerColor="#3b82f6"
+  resizerHoverOnly
 />
 ```
 
-기본 인라인 스타일(너비 4px, `#e0e0e0` 배경)은 베이스로 유지되며, `className`으로 CSS 우선순위 또는 원하는 스타일링 방식을 통해 덮어쓸 수 있습니다.
+| Prop | 기본값 | 설명 |
+|------|--------|------|
+| `resizerThickness` | `4` | 두께 (px 숫자 또는 `"0.5rem"` 같은 CSS 단위 문자열) |
+| `resizerLength` | `"100%"` | 교차축 길이 — 짧게 설정하면 중앙 핸들 느낌을 줄 수 있음 |
+| `resizerColor` | `"#e0e0e0"` | 경계선 색상 |
+| `resizerHoverOnly` | `false` | hover 시에만 표시 |
 
 <img src="doc/assets/resize-demo.png" alt="경계선 리사이즈" width="640" />
 

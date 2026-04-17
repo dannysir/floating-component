@@ -93,9 +93,14 @@ Recursively renders the layout tree using flexbox.
 | `tree` | `LayoutNode` | Yes | Root node of the layout tree |
 | `onResizeBorder` | `(path, borderIndex, delta) => void` | | Border resize callback |
 | `onMovePanel` | `(sourceId, anchorId, position, depth) => void` | | Drag-and-drop move callback |
-| `className` | `string` | | className for the root div |
-| `style` | `CSSProperties` | | Inline style for the root div |
-| `resizerClassName` | `string` | | className applied to every resizer border div |
+| `dragHandleSelector` | `string` | | CSS selector for drag handle (omit to make entire panel draggable) |
+| `backgroundColor` | `string` | | Background color of the root container |
+| `margin` | `number \| string` | | Margin of the root container |
+| `padding` | `number \| string` | | Padding of the root container |
+| `resizerThickness` | `number \| string` | | Resizer width (horizontal) or height (vertical). Also acts as gap between panels. Default `4` |
+| `resizerLength` | `number \| string` | | Resizer cross-axis size (height when horizontal, width when vertical). Default `"100%"` |
+| `resizerColor` | `string` | | Resizer background color. Default `"#e0e0e0"` |
+| `resizerHoverOnly` | `boolean` | | Show resizer only on hover (transparent otherwise). Default `false` |
 
 ### `useLayoutTree(initialTree)`
 
@@ -146,21 +151,26 @@ type DropPosition = "top" | "bottom" | "left" | "right";
 
 ### Resizer style
 
-Use `resizerClassName` to fully control the border appearance via CSS:
+Use the `resizer*` props to control the border appearance:
 
 ```tsx
-// styles.css
-// .my-resizer { background: #6366f1; width: 2px; }
-// .my-resizer:hover { background: #4f46e5; }
-
 <TreeLayout
   tree={tree}
   onResizeBorder={resizeBorder}
-  resizerClassName="my-resizer"
+  backgroundColor="#1e1e1e"
+  padding={4}
+  resizerThickness={6}
+  resizerColor="#3b82f6"
+  resizerHoverOnly
 />
 ```
 
-The default inline styles (4 px wide, `#e0e0e0` background) are still applied as a base; `className` lets you override them via CSS specificity or your preferred styling solution.
+| Prop | Default | Description |
+|------|---------|-------------|
+| `resizerThickness` | `4` | Border width/height in px or CSS unit string (e.g. `"0.5rem"`) |
+| `resizerLength` | `"100%"` | Cross-axis size — shorter values produce a centered handle look |
+| `resizerColor` | `"#e0e0e0"` | Border color |
+| `resizerHoverOnly` | `false` | Transparent until hovered |
 
 <img src="doc/assets/resize-demo.png" alt="Border resize" width="640" />
 
