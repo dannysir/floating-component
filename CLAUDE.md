@@ -28,6 +28,7 @@
 ## 검증
 
 - 코드 변경 후 `npm run type-check` 실행
+- 빌드 확인: `npm run build`
 - UI 변경 시 dev 서버에서 브라우저로 직접 확인
 
 ## 작업 방식
