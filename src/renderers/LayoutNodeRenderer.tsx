@@ -6,11 +6,24 @@ import { Resizer } from "./Resizer";
 const ROOT_EDGE_RATIO = 0.05;
 const SPLIT_EDGE_RATIO = 0.15;
 
+const SHADOW_STYLE: CSSProperties = {
+  opacity: 0.5,
+  outline: "2px dashed rgba(59, 130, 246, 0.6)",
+  outlineOffset: -2,
+};
+
 export interface DropPreview {
   sourcePanelId: string;
   anchorPanelId: string;
   position: DropPosition;
   depth: number;
+}
+
+export interface ResizerTheme {
+  thickness?: number | string;
+  length?: number | string;
+  color?: string;
+  hoverOnly?: boolean;
 }
 
 const getNearestEdge = (
@@ -76,13 +89,8 @@ export const LayoutNodeRenderer = ({
   onDropPreviewChange,
   shadowPanelId,
   isPreviewActive,
-  resizerClassName,
-  resizerStyle,
+  resizerTheme,
   dragHandleSelector,
-  shadowClassName,
-  shadowStyle,
-  panelClassName,
-  splitClassName,
 }: {
   node: LayoutNode;
   path?: number[];
@@ -91,13 +99,8 @@ export const LayoutNodeRenderer = ({
   onDropPreviewChange?: (preview: DropPreview | null) => void;
   shadowPanelId?: string;
   isPreviewActive?: boolean;
-  resizerClassName?: string;
-  resizerStyle?: CSSProperties;
+  resizerTheme?: ResizerTheme;
   dragHandleSelector?: string;
-  shadowClassName?: string;
-  shadowStyle?: CSSProperties;
-  panelClassName?: string;
-  splitClassName?: string;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
@@ -140,7 +143,6 @@ export const LayoutNodeRenderer = ({
         ref={panelRef}
         draggable={!dragHandleSelector}
         onMouseDown={handlePanelMouseDown}
-        className={isShadow ? (shadowClassName ?? panelClassName) : panelClassName}
         onDragStart={(e) => {
           e.dataTransfer.setData("text/panel-id", node.id);
           e.dataTransfer.effectAllowed = "move";
@@ -181,16 +183,7 @@ export const LayoutNodeRenderer = ({
           minWidth: 0,
           minHeight: 0,
           overflow: "hidden",
-          ...(isShadow
-            ? shadowClassName
-              ? shadowStyle
-              : {
-                  opacity: 0.5,
-                  outline: "2px dashed rgba(59, 130, 246, 0.6)",
-                  outlineOffset: -2,
-                  ...shadowStyle,
-                }
-            : undefined),
+          ...(isShadow ? SHADOW_STYLE : undefined),
         }}
       >
         {node.component}
@@ -210,13 +203,8 @@ export const LayoutNodeRenderer = ({
         onDropPreviewChange={onDropPreviewChange}
         shadowPanelId={shadowPanelId}
         isPreviewActive={isPreviewActive}
-        resizerClassName={resizerClassName}
-        resizerStyle={resizerStyle}
+        resizerTheme={resizerTheme}
         dragHandleSelector={dragHandleSelector}
-        shadowClassName={shadowClassName}
-        shadowStyle={shadowStyle}
-        panelClassName={panelClassName}
-        splitClassName={splitClassName}
       />
     );
     if (i < node.children.length - 1) {
@@ -225,8 +213,10 @@ export const LayoutNodeRenderer = ({
           key={`resizer-${i}`}
           direction={node.direction}
           onResize={(delta) => handleResize(i, delta)}
-          className={resizerClassName}
-          style={resizerStyle}
+          thickness={resizerTheme?.thickness}
+          length={resizerTheme?.length}
+          color={resizerTheme?.color}
+          hoverOnly={resizerTheme?.hoverOnly}
         />
       );
     }
@@ -236,7 +226,6 @@ export const LayoutNodeRenderer = ({
     <div
       ref={containerRef}
       data-layout-split
-      className={splitClassName}
       style={{
         display: "flex",
         flexDirection: node.direction === "horizontal" ? "row" : "column",

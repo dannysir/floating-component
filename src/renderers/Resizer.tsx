@@ -1,15 +1,31 @@
 import React, { useCallback, useRef } from "react";
 import type { CSSProperties } from "react";
 import type { SplitDirection } from "../types";
+import {
+  RESIZER_CLASS,
+  RESIZER_CLASS_HORIZONTAL,
+  RESIZER_CLASS_VERTICAL,
+  RESIZER_CLASS_HOVER_ONLY,
+  RESIZER_COLOR_VAR,
+} from "./resizerStyles";
 
 interface ResizerProps {
   direction: SplitDirection;
   onResize: (delta: number) => void;
-  className?: string;
-  style?: CSSProperties;
+  thickness?: number | string;
+  length?: number | string;
+  color?: string;
+  hoverOnly?: boolean;
 }
 
-export const Resizer = ({ direction, onResize, className, style }: ResizerProps) => {
+export const Resizer = ({
+  direction,
+  onResize,
+  thickness = 4,
+  length = "100%",
+  color,
+  hoverOnly = false,
+}: ResizerProps) => {
   const isHorizontal = direction === "horizontal";
   const startPos = useRef(0);
   const rafId = useRef(0);
@@ -54,24 +70,15 @@ export const Resizer = ({ direction, onResize, className, style }: ResizerProps)
     [isHorizontal, onResize]
   );
 
-  const defaultInlineStyle: CSSProperties = className
-    ? {}
-    : {
-        width: isHorizontal ? 4 : "100%",
-        height: isHorizontal ? "100%" : 4,
-        background: "#e0e0e0",
-        cursor: isHorizontal ? "col-resize" : "row-resize",
-      };
+  const style: CSSProperties = isHorizontal
+    ? { width: thickness, height: length }
+    : { width: length, height: thickness };
+  if (color) (style as Record<string, string | number>)[RESIZER_COLOR_VAR] = color;
 
-  return (
-    <div
-      onMouseDown={onMouseDown}
-      className={className}
-      style={{
-        flexShrink: 0,
-        ...defaultInlineStyle,
-        ...style,
-      }}
-    />
-  );
+  const directionClass = isHorizontal ? RESIZER_CLASS_HORIZONTAL : RESIZER_CLASS_VERTICAL;
+  const className = hoverOnly
+    ? `${RESIZER_CLASS} ${directionClass} ${RESIZER_CLASS_HOVER_ONLY}`
+    : `${RESIZER_CLASS} ${directionClass}`;
+
+  return <div onMouseDown={onMouseDown} className={className} style={style} />;
 };

@@ -1,9 +1,8 @@
 import React, { useRef, useState, useCallback, useMemo, useEffect, useId } from "react";
-import type { CSSProperties } from "react";
 import type { LayoutNode, DropPosition } from "../types";
 import { computeMoveResult } from "../hooks/useLayoutTree";
 import { LayoutNodeRenderer } from "./LayoutNodeRenderer";
-import type { DropPreview } from "./LayoutNodeRenderer";
+import type { DropPreview, ResizerTheme } from "./LayoutNodeRenderer";
 import { devWarn } from "../utils/devWarn";
 
 const collectPanelIds = (node: LayoutNode, ids: string[] = []): string[] => {
@@ -15,27 +14,35 @@ const collectPanelIds = (node: LayoutNode, ids: string[] = []): string[] => {
   return ids;
 };
 
-export interface LayoutClassNames {
-  panel?: string;
-  split?: string;
-  resizer?: string;
-}
-
 interface TreeLayoutProps {
   tree: LayoutNode;
   onResizeBorder?: (path: number[], borderIndex: number, delta: number, totalPixels?: number) => void;
   onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
-  className?: string;
-  style?: CSSProperties;
-  resizerClassName?: string;
-  resizerStyle?: CSSProperties;
   dragHandleSelector?: string;
-  shadowClassName?: string;
-  shadowStyle?: CSSProperties;
-  classNames?: LayoutClassNames;
+
+  backgroundColor?: string;
+  margin?: number | string;
+  padding?: number | string;
+
+  resizerThickness?: number | string;
+  resizerLength?: number | string;
+  resizerColor?: string;
+  resizerHoverOnly?: boolean;
 }
 
-export const TreeLayout = ({ tree, onResizeBorder, onMovePanel, className, style, resizerClassName, resizerStyle, dragHandleSelector, shadowClassName, shadowStyle, classNames }: TreeLayoutProps) => {
+export const TreeLayout = ({
+  tree,
+  onResizeBorder,
+  onMovePanel,
+  dragHandleSelector,
+  backgroundColor,
+  margin,
+  padding,
+  resizerThickness,
+  resizerLength,
+  resizerColor,
+  resizerHoverOnly,
+}: TreeLayoutProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const instanceId = useId();
 
@@ -86,12 +93,18 @@ export const TreeLayout = ({ tree, onResizeBorder, onMovePanel, className, style
     );
   }, [tree, dropPreview]);
 
+  const resizerTheme: ResizerTheme = {
+    thickness: resizerThickness,
+    length: resizerLength,
+    color: resizerColor,
+    hoverOnly: resizerHoverOnly,
+  };
+
   return (
     <div
       ref={rootRef}
       data-tree-root={instanceId}
-      className={className}
-      style={{ display: "flex", width: "100%", height: "100%", ...style }}
+      style={{ display: "flex", backgroundColor, margin, padding }}
       onDrop={(e) => {
         e.preventDefault();
         const preview = previewRef.current;
@@ -117,13 +130,8 @@ export const TreeLayout = ({ tree, onResizeBorder, onMovePanel, className, style
         onDropPreviewChange={handleDropPreviewChange}
         shadowPanelId={dropPreview?.sourcePanelId}
         isPreviewActive={!!previewTree}
-        resizerClassName={classNames?.resizer ?? resizerClassName}
-        resizerStyle={resizerStyle}
+        resizerTheme={resizerTheme}
         dragHandleSelector={dragHandleSelector}
-        shadowClassName={shadowClassName}
-        shadowStyle={shadowStyle}
-        panelClassName={classNames?.panel}
-        splitClassName={classNames?.split}
       />
     </div>
   );
