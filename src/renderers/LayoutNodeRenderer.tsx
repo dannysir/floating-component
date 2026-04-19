@@ -26,6 +26,18 @@ export interface ResizerTheme {
   hoverOnly?: boolean;
 }
 
+interface LayoutNodeRendererProps {
+  node: LayoutNode;
+  path?: number[];
+  onResizeBorder?: (path: number[], borderIndex: number, delta: number, totalPixels?: number) => void;
+  onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
+  onDropPreviewChange?: (preview: DropPreview | null) => void;
+  shadowPanelId?: string;
+  isPreviewActive?: boolean;
+  resizerTheme?: ResizerTheme;
+  dragHandleSelector?: string;
+}
+
 const getNearestEdge = (
   clientX: number,
   clientY: number,
@@ -91,17 +103,7 @@ export const LayoutNodeRenderer = ({
   isPreviewActive,
   resizerTheme,
   dragHandleSelector,
-}: {
-  node: LayoutNode;
-  path?: number[];
-  onResizeBorder?: (path: number[], borderIndex: number, delta: number, totalPixels?: number) => void;
-  onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
-  onDropPreviewChange?: (preview: DropPreview | null) => void;
-  shadowPanelId?: string;
-  isPreviewActive?: boolean;
-  resizerTheme?: ResizerTheme;
-  dragHandleSelector?: string;
-}) => {
+}: LayoutNodeRendererProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
   const panelRef = useRef<HTMLDivElement>(null);
