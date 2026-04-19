@@ -92,15 +92,15 @@
 
 ---
 
-### Phase F — 공개 API 점검 (`src/index.ts`)
+### Phase F — 공개 API 점검 (`src/index.ts`) ✅ 완료 (2026-04-19)
 
 **Why**: 훅과 util이 모두 export되어 있어 사용자가 뭘 써야 할지 모호. 변경 수반 가능 → 마지막에.
 
-- `index.ts` 전체 export 목록을 **사용 시나리오별로 분류**하고 정말 공개할 것만 남김.
-- 네이밍 일관성 리뷰 (`getRootPanelId` 등 Phase A에서 언급).
-- **API 변경은 사용자 승인 후에만** 진행. 변경 시 `CHANGELOG.md` 업데이트.
+- [x] `index.ts` export 목록을 **사용 시나리오별 4구역 주석**(Types / Component / Hook / Tree utilities)으로 그룹화. 공개 대상은 `doc/API.md`와 정확히 일치하므로 항목 추가/삭제 없음.
+- [x] 네이밍 일관성 리뷰 — `getRootPanelId → getFirstPanelId` 리네임은 Phase A에서 이미 완료. 나머지(`getPanelIds`, `insertPanelIntoTree`, 훅의 `insertPanel` 등)도 현 상태 유지가 적절하다고 판단(설계 근거: util은 `IntoTree` 접미사로 훅 메서드와 구분).
+- [x] **공개 API 실질 변경 없음** → `CHANGELOG.md` 추가 엔트리 불필요.
 
-**검증**: 외부 사용자 관점에서 `README.md`/`doc/library-api.md` 예제가 여전히 유효한지 확인.
+**검증**: `npm run type-check` ✅ · `npm run build` ✅ · `doc/API.md` 예제 import 경로(`TreeLayout`, `useLayoutTree`, `getFirstPanelId`, `getPanelIds`, `insertPanelIntoTree`) 모두 유지됨을 수동 확인.
 
 ---
 
