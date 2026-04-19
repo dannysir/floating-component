@@ -11,11 +11,10 @@ import { devWarn } from "../utils/devWarn";
 import {
   getNodeAtPath,
   updateAtPath,
-  findPanelWithAncestors,
   findAndUpdate,
 } from "../utils/treeHelpers";
 import { insertPanelIntoTree, insertAtAnchorDepth } from "../utils/treeInsert";
-import { getRootPanelId, getPanelIds } from "../utils/treeQuery";
+import { getFirstPanelId, getPanelIds, findPanelWithAncestors } from "../utils/treeQuery";
 
 let _idCounter = 0;
 const generatePanelId = (): string => {
@@ -60,7 +59,7 @@ export const computeMoveResult = (
 export const useLayoutTree = (initialTree: LayoutNode) => {
   const [tree, setTree] = useState<LayoutNode>(initialTree);
 
-  const rootPanelId = useMemo(() => getRootPanelId(tree), [tree]);
+  const firstPanelId = useMemo(() => getFirstPanelId(tree), [tree]);
   const panelIds = useMemo(() => getPanelIds(tree), [tree]);
   const hasPanel = useCallback(
     (panelId: string) => findPanelWithAncestors(tree, panelId) !== null,
@@ -213,7 +212,7 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
   return {
     tree,
     setTree,
-    rootPanelId,
+    firstPanelId,
     panelIds,
     hasPanel,
     resizeBorder,

@@ -1,4 +1,4 @@
-import type { LayoutNode, PanelNode, SplitNode } from "../types";
+import type { LayoutNode, SplitNode } from "../types";
 
 export const getNodeAtPath = (root: LayoutNode, path: number[]): LayoutNode | null => {
   let node = root;
@@ -24,27 +24,6 @@ export const updateAtPath = (
       i === idx ? updateAtPath(child, rest, updater) : child,
     ),
   };
-};
-
-export const findPanelWithAncestors = (
-  root: LayoutNode,
-  panelId: string,
-): { panel: PanelNode; ancestors: { split: SplitNode; childIndex: number }[] } | null => {
-  const ancestors: { split: SplitNode; childIndex: number }[] = [];
-
-  const search = (node: LayoutNode): PanelNode | null => {
-    if (node.type === "panel") return node.id === panelId ? node : null;
-    for (let i = 0; i < node.children.length; i++) {
-      ancestors.push({ split: node, childIndex: i });
-      const found = search(node.children[i]);
-      if (found) return found;
-      ancestors.pop();
-    }
-    return null;
-  };
-
-  const panel = search(root);
-  return panel ? { panel, ancestors: [...ancestors] } : null;
 };
 
 export const findAndUpdate = (
