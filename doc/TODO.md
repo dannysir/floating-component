@@ -50,17 +50,17 @@
 
 ---
 
-### Phase C — `LayoutNodeRenderer` 컴포넌트 분리
+### Phase C — `LayoutNodeRenderer` 컴포넌트 분리 ✅ 완료 (2026-04-19)
 
 **Why**: 240줄 한 컴포넌트에 panel/split 두 가지 완전히 다른 렌더링 분기가 있다. `node.type` 분기는 컴포넌트 경계로 더 적합.
 
-- `LayoutNodeRenderer.tsx:138-192` panel 분기 → **`PanelNodeRenderer`** 로 추출 (별 파일).
-- `LayoutNodeRenderer.tsx:194-239` split 분기 → `LayoutNodeRenderer`에 그대로 두거나 **`SplitNodeRenderer`** 로 이름 교체.
-- 드롭 타겟 DOM 탐색 로직 `getNearestEdge`(L29-45), `getDropTarget`(L47-82) → **`src/utils/dropTarget.ts`** 신규 파일로 이동 (순수 DOM 유틸).
-- `onDragOver`(L152-170) 40줄 핸들러 → `useDragOver` 훅 or 일반 함수로 추출 후 컴포넌트에서 콜백만 바인딩.
-- magic ratio `ROOT_EDGE_RATIO`, `SPLIT_EDGE_RATIO` → `dropTarget.ts`로 함께 이동.
+- [x] panel 분기 → **`src/renderers/PanelNodeRenderer.tsx`** 신규 파일로 추출. `SHADOW_STYLE`, `panelRef`, `rafRef`, 핸들러 4개(mouseDown/dragStart/dragOver/drop) 모두 이 컴포넌트로 이동. `onDragOver` 40줄 핸들러는 `useCallback` 함수로 추출해 JSX 얇게.
+- [x] split 분기 → `LayoutNodeRenderer`에 현상 유지 (이름 교체는 파장이 크고 재귀 엔트리 이름으로 `LayoutNodeRenderer`가 자연스러움).
+- [x] 드롭 타겟 DOM 탐색 `getNearestEdge` + `getDropTarget` → **`src/utils/dropTarget.ts`** 신규 파일로 이동 (순수 DOM 유틸). `getNearestEdge`는 내부 전용이라 export 안 함.
+- [x] `ROOT_EDGE_RATIO`, `SPLIT_EDGE_RATIO`는 Phase B에서 이미 `src/constants/dropTarget.ts`로 중앙화되어 있어 중복 이동 생략, 신규 util에서 그대로 import.
+- 공통 rAF 유틸화는 Phase D(`rafBatch`)로 미룸.
 
-**검증**: type-check + build. **UI 변경 위험 있음** — 사용자에게 브라우저 확인용 consumer 프로젝트 경로 요청 필요.
+**검증**: `npm run type-check` ✅ · `npm run build` ✅ · 브라우저 UI 확인은 사용자가 `floating-demo`에서 수행 필요 (preview MCP는 프로젝트 루트 밖이라 자동 실행 불가).
 
 ---
 
