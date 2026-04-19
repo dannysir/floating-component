@@ -1,10 +1,12 @@
 # Changelog
 
+[한국어 CHANGELOG](./CHANGELOG.ko.md) · [← Back to README](./README.md)
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.2.0] - 2026-04-19
 
 ### Added
 
@@ -19,14 +21,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `resizerThickness` accepts `number | string` (e.g. `4`, `"4px"`, `"0.5rem"`)
 - Drag shadow style is now a fixed built-in (opacity 0.5 + dashed blue outline)
 - Removed `LayoutClassNames` type from public API
-- `getRootPanelId` → `getFirstPanelId`, `useLayoutTree().rootPanelId` → `firstPanelId` (실제 동작은 DFS 첫 패널 반환이라 이름을 맞춤)
+- `getRootPanelId` → `getFirstPanelId`, `useLayoutTree().rootPanelId` → `firstPanelId` (renamed to reflect actual DFS-first behavior)
 
 ### Breaking Changes
 
 - `TreeLayout`: `className`, `style`, `resizerClassName`, `resizerStyle`, `classNames`, `shadowClassName`, `shadowStyle` removed
 - `LayoutClassNames` type no longer exported
-- `getRootPanelId` 제거 — `getFirstPanelId` 사용
-- `useLayoutTree` 반환 키 `rootPanelId` 제거 — `firstPanelId` 사용
+- `getRootPanelId` removed — use `getFirstPanelId`
+- `useLayoutTree` return key `rootPanelId` removed — use `firstPanelId`
+
+### Fixed
+
+- Fixed package name in README/API docs: `react-tree-layout` → actual published name `@dannysir/floating-components`
+- Fixed peer dependency docs: `react >= 17, react-dom >= 17` → `react >= 18` (aligned with `package.json`)
 
 ---
 

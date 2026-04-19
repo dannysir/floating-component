@@ -123,7 +123,7 @@ const togglePanel = (id: string, component: ReactNode) => {
 ## 문서
 
 - **[API 레퍼런스](./doc/API.ko.md)** — 전체 props, 훅 반환값, 트리 유틸, 타입
-- **[CHANGELOG](./CHANGELOG.md)**
+- **[CHANGELOG](./CHANGELOG.ko.md)**
 
 ---
 

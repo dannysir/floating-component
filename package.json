@@ -38,7 +38,8 @@
     "LICENSE",
     "README.md",
     "README.ko.md",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "CHANGELOG.ko.md"
   ],
   "scripts": {
     "build": "tsc && vite build",
