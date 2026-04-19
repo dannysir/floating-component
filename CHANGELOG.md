@@ -8,8 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- `useLayoutTree` returns: `rootPanelId`, `panelIds`, `hasPanel`, `insertPanel`
-- Public tree utility functions: `getRootPanelId`, `getPanelIds`, `insertPanelIntoTree`
+- `useLayoutTree` returns: `firstPanelId`, `panelIds`, `hasPanel`, `insertPanel`
+- Public tree utility functions: `getFirstPanelId`, `getPanelIds`, `insertPanelIntoTree`
 - Public types: `InsertPanelInit`, `InsertAt`
 
 ### Changed
@@ -19,11 +19,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `resizerThickness` accepts `number | string` (e.g. `4`, `"4px"`, `"0.5rem"`)
 - Drag shadow style is now a fixed built-in (opacity 0.5 + dashed blue outline)
 - Removed `LayoutClassNames` type from public API
+- `getRootPanelId` → `getFirstPanelId`, `useLayoutTree().rootPanelId` → `firstPanelId` (실제 동작은 DFS 첫 패널 반환이라 이름을 맞춤)
 
 ### Breaking Changes
 
 - `TreeLayout`: `className`, `style`, `resizerClassName`, `resizerStyle`, `classNames`, `shadowClassName`, `shadowStyle` removed
 - `LayoutClassNames` type no longer exported
+- `getRootPanelId` 제거 — `getFirstPanelId` 사용
+- `useLayoutTree` 반환 키 `rootPanelId` 제거 — `firstPanelId` 사용
 
 ---
 

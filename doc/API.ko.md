@@ -72,7 +72,7 @@
 ```ts
 const {
   tree, setTree,
-  rootPanelId, panelIds, hasPanel,
+  firstPanelId, panelIds, hasPanel,
   resizeBorder, splitPanel, removePanel, movePanel, insertPanel,
 } = useLayoutTree(initialTree);
 ```
@@ -83,7 +83,7 @@ const {
 |--------|------|------|
 | `tree` | `LayoutNode` | 현재 레이아웃 트리 상태 |
 | `setTree` | `(tree: LayoutNode) => void` | 트리 직접 설정 |
-| `rootPanelId` | `string \| null` | 트리에서 pre-order로 처음 만나는 패널 id |
+| `firstPanelId` | `string \| null` | 트리에서 pre-order로 처음 만나는 패널 id |
 | `panelIds` | `string[]` | 트리 내 모든 패널 id (pre-order) |
 | `hasPanel` | `(panelId: string) => boolean` | 특정 패널 존재 여부 |
 | `resizeBorder` | `(path, borderIndex, delta, totalPixels?) => void` | split 내부의 경계선 인덱스로 리사이즈 |
@@ -151,7 +151,7 @@ insertPanel({
 
 #### 셀렉터 팁
 
-- `rootPanelId` — "첫 패널 포커스", "상단 근처 삽입" 같은 용도
+- `firstPanelId` — "첫 패널 포커스", "상단 근처 삽입" 같은 용도
 - `panelIds` — `panelIds.includes(id)`로 토글 UI의 표시 여부 체크
 - `hasPanel(id)` — 위와 동일한 체크. Set/배열을 매 렌더마다 새로 만들지 않아도 됨
 
@@ -163,13 +163,13 @@ insertPanel({
 
 ```ts
 import {
-  getRootPanelId,
+  getFirstPanelId,
   getPanelIds,
   insertPanelIntoTree,
 } from "react-tree-layout";
 ```
 
-### `getRootPanelId(tree): string | null`
+### `getFirstPanelId(tree): string | null`
 
 Pre-order로 처음 만나는 패널의 id. 트리에 패널이 없으면 `null` (정상 트리에서는 발생 불가).
 

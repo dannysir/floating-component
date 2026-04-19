@@ -72,7 +72,7 @@ Hook for managing layout tree state. Returns the current tree plus selectors and
 ```ts
 const {
   tree, setTree,
-  rootPanelId, panelIds, hasPanel,
+  firstPanelId, panelIds, hasPanel,
   resizeBorder, splitPanel, removePanel, movePanel, insertPanel,
 } = useLayoutTree(initialTree);
 ```
@@ -83,7 +83,7 @@ const {
 |--------|------|-------------|
 | `tree` | `LayoutNode` | Current layout tree state |
 | `setTree` | `(tree: LayoutNode) => void` | Directly set the tree |
-| `rootPanelId` | `string \| null` | First panel id found in the tree (pre-order) |
+| `firstPanelId` | `string \| null` | First panel id found in the tree (pre-order) |
 | `panelIds` | `string[]` | All panel ids in the tree (pre-order) |
 | `hasPanel` | `(panelId: string) => boolean` | Whether a panel exists in the tree |
 | `resizeBorder` | `(path, borderIndex, delta, totalPixels?) => void` | Resize by border index within a split |
@@ -151,7 +151,7 @@ Resizes the border between two adjacent children of a split at `path`. Honors `m
 
 #### Selector tips
 
-- `rootPanelId` — convenient for "focus the first panel" or "insert near the top" use cases
+- `firstPanelId` — convenient for "focus the first panel" or "insert near the top" use cases
 - `panelIds` — `panelIds.includes(id)` acts as a visibility check for toggle UIs
 - `hasPanel(id)` — same check as `panelIds.includes(id)` but avoids creating a Set/array every render
 
@@ -163,13 +163,13 @@ Pure functions for inspecting or transforming a tree without the hook. Useful wh
 
 ```ts
 import {
-  getRootPanelId,
+  getFirstPanelId,
   getPanelIds,
   insertPanelIntoTree,
 } from "react-tree-layout";
 ```
 
-### `getRootPanelId(tree): string | null`
+### `getFirstPanelId(tree): string | null`
 
 Returns the id of the first panel encountered in pre-order traversal, or `null` if the tree has no panels (shouldn't happen in a well-formed tree).
 

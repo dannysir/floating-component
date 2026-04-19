@@ -17,20 +17,20 @@
 
 ---
 
-### Phase A — 트리 유틸 경계 정리 (`src/utils/`)
+### Phase A — 트리 유틸 경계 정리 (`src/utils/`) ✅ 완료 (2026-04-19)
 
 **Why**: 가장 많이 재사용되는 순수 함수. 여기가 정리되면 `useLayoutTree`와 렌더러가 자동으로 깔끔해진다.
 
-- `treeHelpers.ts:29` `findPanelWithAncestors` — 재귀 중 `ancestors` 배열을 mutate. 불변 누적자 패턴으로 교체.
-- `treeInsert.ts:33-134` `insertAtAnchorDepth` — 3 분기(root/target/ancestor)를 각자 `const` 헬퍼로 분리하고 본체는 디스패처만 남김.
-- `treeInsert.ts:69` 내부 `insertAtTarget`과 `treeHelpers.ts:50` `findAndUpdate`의 child-map+filter 중복 → 공통 재귀 primitive 도입 검토 (단, 과도한 일반화는 피함).
-- 파일 경계 재정립:
+- [x] `findPanelWithAncestors` — closure mutate 제거, 불변 누적 패턴으로 재작성 + `treeQuery.ts`로 이동.
+- [x] `insertAtAnchorDepth` — 3 분기(root/target/ancestor)를 module-level `const` 헬퍼 3개로 분리, 본체는 디스패처만 남김.
+- [ ] 공통 재귀 primitive 추출(insertAtTarget ↔ findAndUpdate) — **사용자 결정으로 이번에 스킵**.
+- [x] 파일 경계 재정립:
   - `treeHelpers.ts` → path 기반 원시 연산(`getNodeAtPath`, `updateAtPath`, `findAndUpdate`)
-  - `treeQuery.ts` → 읽기 전용 조회
-  - `treeInsert.ts` → 구조 변환 (insert/wrap)
-- `treeQuery.ts:3` `getRootPanelId`는 DFS 첫 패널을 반환 — 이름을 의미에 맞게 `getFirstPanelId`로 변경하거나 주석 추가(API 변경 수반 → 사용자 확인 필요).
+  - `treeQuery.ts` → 읽기 전용 조회(`getFirstPanelId`, `getPanelIds`, `findPanelWithAncestors`)
+  - `treeInsert.ts` → 구조 변환(`insertPanelIntoTree`, `insertAtAnchorDepth` + 3 private helpers)
+- [x] `getRootPanelId` → `getFirstPanelId` 리네임 + 훅 반환 키 `rootPanelId` → `firstPanelId` (사용자 승인, breaking change).
 
-**검증**: type-check + build + 외부 동작 없음 확인.
+**검증**: `npm run type-check` ✅ · `npm run build` ✅ · 외부 동작 불변.
 
 ---
 
