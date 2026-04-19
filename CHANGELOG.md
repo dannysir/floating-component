@@ -6,6 +6,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.2.1] - 2026-04-19
+
+### Fixed
+
+- Drop preview no longer disappears permanently when the cursor leaves and re-enters the `TreeLayout` boundary mid-drag. `clearPreview` (visual-only) and `finishDrag` (visual + `draggingPanelId` cleanup) are now separated so re-entry can restore the shadow.
+
+---
+
 ## [0.2.0] - 2026-04-19
 
 ### Added

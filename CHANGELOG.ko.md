@@ -6,6 +6,14 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
+## [0.2.1] - 2026-04-19
+
+### 수정
+
+- 드래그 중 커서가 `TreeLayout` 밖으로 나갔다 재진입하면 drop preview가 복원되지 않던 문제 수정. `clearPreview`(시각 preview만 초기화)와 `finishDrag`(preview 초기화 + `draggingPanelId` 삭제)를 분리하여 재진입 시 shadow가 다시 표시됩니다.
+
+---
+
 ## [0.2.0] - 2026-04-19
 
 ### 추가

@@ -104,7 +104,7 @@ const togglePanel = (id: string, component: ReactNode) => {
 
 패널을 드래그해서 위치를 바꿀 수 있습니다. 드롭 타겟의 미리보기가 반투명 shadow로 커서를 따라다니며, 드롭 영역에 따라 배치 방식이 달라집니다.
 
-<img src="doc/assets/drag-preview.png" alt="드래그 미리보기" width="640" />
+<img width="1280" height="735" alt="ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/6d2ae844-8c40-4c7a-a879-a856741b3160" />
 
 - **패널 중앙**에 드롭 → 해당 패널을 분할
 - **부모 split 가장자리**에 드롭 → 부모 split의 형제로 배치
