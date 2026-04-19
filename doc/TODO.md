@@ -1,38 +1,25 @@
-# TODO
+# TODO — 리팩토링 계획
 
-## 개선 제안 (API / UX)
+## 1. `dev/` 디렉토리 제거
 
-`floating-demo` 프로젝트로 실제 사용해보며 드러난 개선 포인트. 우선순위 순.
+로컬 데모용 코드는 라이브러리 배포에 불필요. 모두 제거한다.
 
-### 1. 패널 ID ↔ 컴포넌트 매핑을 앱이 직접 관리해야 함
+- [x] `dev/demo/`, `dev/testComponents/` 디렉토리 삭제
+- [x] `index.html` 삭제 (`/dev/demo/main.tsx`만 참조)
+- [x] `package.json` scripts에서 `"dev"`, `"preview"` 제거
+- [x] `tsconfig.json` `include`에서 `"dev"` 제거 → `["src"]`만 남김
+- [x] 라이브러리 `files`/publish 영향 없음 확인 (이미 `dist`만 포함)
 
-`splitPanel(id, direction, { newPanel: { component } })` 사용 시 component를 매번 다시 넘겨야 하므로,
-앱에서 id → component 매핑 배열/맵을 별도로 들고 있어야 한다.
+## 2. props 타입 선언 방식 통일
 
-```ts
-// 데모에서 실제로 필요했던 코드
-const PANEL_DEFS = [
-  { id: "explorer", component: <ExplorerPanel /> },
-  // ...
-];
-const def = PANEL_DEFS.find((p) => p.id === id);
-splitPanel(anchorId, "horizontal", { newPanel: { id, component: def.component } });
-```
+모든 컴포넌트에서 **파일 상단에 `interface XxxProps`** 로 선언하고, 함수 시그니처에서는 `({ ... }: XxxProps) =>` 형태로 사용한다.
 
-**검토**: panel registry (`registerPanel(id, component)`) 또는 팩토리 패턴 도입.
+- [ ] `src/renderers/LayoutNodeRenderer.tsx` — 인라인 타입(L94-104)을 상단 `interface LayoutNodeRendererProps`로 추출
+- [ ] `src/renderers/TreeLayout.tsx` — 이미 준수 (확인만)
+- [ ] `src/renderers/Resizer.tsx` — 이미 준수 (확인만)
+- [ ] `DropPreview`, `ResizerTheme`(LayoutNodeRenderer.tsx L15-27)은 props가 아닌 재사용 타입 — 현 위치 유지
 
----
+## 3. 검증
 
-### 2. 초기 트리 정의가 verbose함
-
-```ts
-{ type: "panel", id: "a", size: 1, component: <A /> }
-```
-매번 `type`, `size`를 반복. 빌더 헬퍼로 간결화 가능.
-
-**검토**:
-```ts
-panel("a", <A />)
-split("horizontal", [panel("a", <A />), panel("b", <B />)])
-```
-
+- [ ] `npm run type-check`
+- [ ] `npm run build`
