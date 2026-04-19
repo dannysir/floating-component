@@ -79,15 +79,16 @@
 
 ---
 
-### Phase E — `TreeLayout` preview 상태 단순화
+### Phase E — `TreeLayout` preview 상태 단순화 ✅ 완료 (2026-04-19)
 
 **Why**: 같은 `DropPreview` 개념을 `dropPreview`(state) + `prevPreviewRef` + `previewRef` 세 군데에서 관리 → 동기화 버그 여지.
 
-- `TreeLayout.tsx:59-83` 세 저장소를 **단일 훅 `useDropPreview`** 로 통합. 내부에서 state + 최신값 ref 한 쌍만 관리.
-- `TreeLayout.tsx:63-76` equality 체크 → 작은 helper `areDropPreviewsEqual(a, b)`.
-- `resizerTheme` 객체 재생성(L96-101) → `useMemo`.
+- [x] `TreeLayout.tsx`의 세 저장소(state + 2 ref)를 **단일 훅 `useDropPreview`** 로 통합. 내부에서 state + `latestRef` 한 쌍만 관리.
+- [x] equality 체크 → 훅 내부 private helper `areDropPreviewsEqual(a, b)`로 흡수(`setPreview`가 같은 값이면 자동 스킵).
+- [x] `resizerTheme` 객체 재생성 → `useMemo` 안정화.
+- 훅은 내부 전용. `src/index.ts` export 변경 없음.
 
-**검증**: type-check + build + 드롭 프리뷰 동작 확인.
+**검증**: `npm run type-check` ✅ · `npm run build` ✅ · 브라우저 드롭 프리뷰 확인은 사용자가 `floating-demo`에서 수행.
 
 ---
 
