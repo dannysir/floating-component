@@ -17,6 +17,7 @@ import { insertPanelIntoTree, insertAtAnchorDepth } from "../utils/treeInsert";
 import { splitPanelAtId } from "../utils/treeSplit";
 import { clampSplitResize } from "../utils/treeResize";
 import { getFirstPanelId, getPanelIds, findPanelWithAncestors } from "../utils/treeQuery";
+import { DEFAULT_SPLIT_RATIO, MOVE_GHOST_ID } from "../constants/tree";
 
 let _idCounter = 0;
 const generatePanelId = (): string => {
@@ -52,14 +53,13 @@ export const computeMoveResult = (
   if (!found) return null;
   const sourcePanel = found.panel;
 
-  const ghostId = "__move_ghost__";
-  const ghost: PanelNode = { type: "panel", id: ghostId, size: 1, component: null };
+  const ghost: PanelNode = { type: "panel", id: MOVE_GHOST_ID, size: 1, component: null };
   const treeWithGhost = insertAtAnchorDepth(tree, ghost, anchorPanelId, position, depth);
 
   const treeWithoutSource = findAndUpdate(treeWithGhost, sourcePanelId, () => null);
   if (!treeWithoutSource) return null;
 
-  const finalTree = findAndUpdate(treeWithoutSource, ghostId, () => ({ ...sourcePanel, size: 1 }));
+  const finalTree = findAndUpdate(treeWithoutSource, MOVE_GHOST_ID, () => ({ ...sourcePanel, size: 1 }));
   return finalTree ?? null;
 };
 
@@ -109,7 +109,7 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
           const newPanel: PanelNode = {
             type: "panel",
             id: newId,
-            size: options?.newPanel?.size ?? 0.5,
+            size: options?.newPanel?.size ?? DEFAULT_SPLIT_RATIO,
             component: options?.newPanel?.component ?? null,
           };
           return splitPanelAtId(t, panelId, direction, newPanel);

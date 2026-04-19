@@ -8,6 +8,7 @@ import {
   RESIZER_CLASS_HOVER_ONLY,
   RESIZER_COLOR_VAR,
 } from "./resizerStyles";
+import { DEFAULT_RESIZER_THICKNESS, DEFAULT_RESIZER_LENGTH } from "../constants/resizer";
 
 interface ResizerProps {
   direction: SplitDirection;
@@ -21,8 +22,8 @@ interface ResizerProps {
 export const Resizer = ({
   direction,
   onResize,
-  thickness = 4,
-  length = "100%",
+  thickness = DEFAULT_RESIZER_THICKNESS,
+  length = DEFAULT_RESIZER_LENGTH,
   color,
   hoverOnly = false,
 }: ResizerProps) => {

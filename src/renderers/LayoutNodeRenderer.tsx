@@ -2,9 +2,7 @@ import React, { useCallback, useRef } from "react";
 import type { CSSProperties } from "react";
 import type { LayoutNode, DropPosition } from "../types";
 import { Resizer } from "./Resizer";
-
-const ROOT_EDGE_RATIO = 0.05;
-const SPLIT_EDGE_RATIO = 0.15;
+import { ROOT_EDGE_RATIO, SPLIT_EDGE_RATIO } from "../constants/dropTarget";
 
 const SHADOW_STYLE: CSSProperties = {
   opacity: 0.5,
