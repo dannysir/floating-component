@@ -1,4 +1,4 @@
-# react-tree-layout
+# @dannysir/floating-components
 
 [한국어 README](./README.ko.md) · [API Reference](./doc/API.md)
 
@@ -24,17 +24,17 @@ Tree-based resizable and reorderable panel layout for React. Split panels horizo
 ## Installation
 
 ```bash
-npm install react-tree-layout
+npm install @dannysir/floating-components
 ```
 
-> **Peer dependencies**: `react >= 17`, `react-dom >= 17`
+> **Peer dependencies**: `react >= 18`
 
 ---
 
 ## Quick Start
 
 ```tsx
-import { TreeLayout, useLayoutTree, type LayoutNode } from "react-tree-layout";
+import { TreeLayout, useLayoutTree, type LayoutNode } from "@dannysir/floating-components";
 
 const initialTree: LayoutNode = {
   type: "split",

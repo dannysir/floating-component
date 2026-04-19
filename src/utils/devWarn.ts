@@ -1,5 +1,5 @@
 export const devWarn = (message: string): void => {
   if (process.env.NODE_ENV !== "production") {
-    console.warn(`[react-tree-layout] ${message}`);
+    console.warn(`[@dannysir/floating-components] ${message}`);
   }
 };

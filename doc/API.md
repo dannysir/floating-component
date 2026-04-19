@@ -2,7 +2,7 @@
 
 [한국어 API 문서](./API.ko.md) · [← Back to README](../README.md)
 
-Complete reference for `react-tree-layout`. For a quick overview and Quick Start, see the [README](../README.md).
+Complete reference for `@dannysir/floating-components`. For a quick overview and Quick Start, see the [README](../README.md).
 
 ---
 
@@ -166,7 +166,7 @@ import {
   getFirstPanelId,
   getPanelIds,
   insertPanelIntoTree,
-} from "react-tree-layout";
+} from "@dannysir/floating-components";
 ```
 
 ### `getFirstPanelId(tree): string | null`

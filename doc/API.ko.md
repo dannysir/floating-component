@@ -2,7 +2,7 @@
 
 [English API doc](./API.md) · [← README로 돌아가기](../README.ko.md)
 
-`react-tree-layout`의 전체 API 레퍼런스입니다. 개요와 Quick Start는 [README](../README.ko.md)를 참고하세요.
+`@dannysir/floating-components`의 전체 API 레퍼런스입니다. 개요와 Quick Start는 [README](../README.ko.md)를 참고하세요.
 
 ---
 
@@ -166,7 +166,7 @@ import {
   getFirstPanelId,
   getPanelIds,
   insertPanelIntoTree,
-} from "react-tree-layout";
+} from "@dannysir/floating-components";
 ```
 
 ### `getFirstPanelId(tree): string | null`

@@ -2,7 +2,7 @@
 
 ## 프로젝트
 
-`react-tree-layout` — VS Code 스타일 트리 기반 패널 레이아웃 React 라이브러리.
+`@dannysir/floating-components` — VS Code 스타일 트리 기반 패널 레이아웃 React 라이브러리.
 
 ## 빌드
 

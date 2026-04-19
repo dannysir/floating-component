@@ -1,4 +1,4 @@
-# react-tree-layout
+# @dannysir/floating-components
 
 [English README](./README.md) · [API 문서](./doc/API.ko.md)
 
@@ -24,17 +24,17 @@ Tree 기반으로 크기 조절과 패널 이동이 가능한 React 레이아웃
 ## 설치
 
 ```bash
-npm install react-tree-layout
+npm install @dannysir/floating-components
 ```
 
-> **Peer dependencies**: `react >= 17`, `react-dom >= 17`
+> **Peer dependencies**: `react >= 18`
 
 ---
 
 ## 빠른 시작
 
 ```tsx
-import { TreeLayout, useLayoutTree, type LayoutNode } from "react-tree-layout";
+import { TreeLayout, useLayoutTree, type LayoutNode } from "@dannysir/floating-components";
 
 const initialTree: LayoutNode = {
   type: "split",
