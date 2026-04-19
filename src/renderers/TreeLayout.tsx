@@ -62,6 +62,10 @@ export const TreeLayout = ({
 
   const clearPreview = useCallback(() => {
     clear();
+  }, [clear]);
+
+  const finishDrag = useCallback(() => {
+    clear();
     if (rootRef.current) delete rootRef.current.dataset.draggingPanelId;
   }, [clear]);
 
@@ -97,9 +101,9 @@ export const TreeLayout = ({
         if (latest && onMovePanel) {
           onMovePanel(latest.sourcePanelId, latest.anchorPanelId, latest.position, latest.depth);
         }
-        clearPreview();
+        finishDrag();
       }}
-      onDragEnd={() => clearPreview()}
+      onDragEnd={() => finishDrag()}
       onDragLeave={(e) => {
         const root = rootRef.current;
         if (!root) return;
