@@ -104,7 +104,7 @@ const togglePanel = (id: string, component: ReactNode) => {
 
 Drag any panel to reorder. A translucent preview of the drop target follows the cursor, and dropping near different regions produces different placements:
 
-<img src="doc/assets/drag-preview.png" alt="Drag preview" width="640" />
+<img width="1280" height="735" alt="ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/6d2ae844-8c40-4c7a-a879-a856741b3160" />
 
 - Drop on the **panel center** → split the hovered panel
 - Drop near the **enclosing split's edge** → place as a sibling of the parent split
