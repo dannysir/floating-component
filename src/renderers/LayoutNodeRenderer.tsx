@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from "react";
 import type { LayoutNode, DropPosition } from "../types";
 import { Resizer } from "./Resizer";
 import { PanelNodeRenderer } from "./PanelNodeRenderer";
+import { HORIZONTAL } from "../constants/layout";
 
 export interface DropPreview {
   sourcePanelId: string;
@@ -48,7 +49,7 @@ export const LayoutNodeRenderer = ({
       if (node.type !== "split") return;
 
       const rect = containerRef.current.getBoundingClientRect();
-      const totalSize = node.direction === "horizontal" ? rect.width : rect.height;
+      const totalSize = node.direction === HORIZONTAL ? rect.width : rect.height;
       if (totalSize === 0) return;
 
       const totalFlex = node.children.reduce((sum, child) => sum + child.size, 0);
@@ -108,7 +109,7 @@ export const LayoutNodeRenderer = ({
       data-layout-split
       style={{
         display: "flex",
-        flexDirection: node.direction === "horizontal" ? "row" : "column",
+        flexDirection: node.direction === HORIZONTAL ? "row" : "column",
         flex: node.size,
         minWidth: 0,
         minHeight: 0,

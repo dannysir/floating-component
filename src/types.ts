@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
+import { HORIZONTAL, VERTICAL, LEFT, RIGHT, TOP, BOTTOM } from "./constants/layout";
 
-export type SplitDirection = "horizontal" | "vertical";
+export type SplitDirection = typeof HORIZONTAL | typeof VERTICAL;
 
 export interface PanelNode {
   type: "panel";
@@ -22,7 +23,7 @@ export interface SplitNode {
 
 export type LayoutNode = PanelNode | SplitNode;
 
-export type DropPosition = "top" | "bottom" | "left" | "right";
+export type DropPosition = typeof TOP | typeof BOTTOM | typeof LEFT | typeof RIGHT;
 
 export interface InsertPanelInit {
   component: ReactNode;

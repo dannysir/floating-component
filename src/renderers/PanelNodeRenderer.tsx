@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from "react";
 import type { CSSProperties } from "react";
 import type { PanelNode, DropPosition } from "../types";
 import { getDropTarget } from "../utils/dropTarget";
+import { createRafScheduler } from "../utils/rafBatch";
 import type { DropPreview } from "./LayoutNodeRenderer";
 
 const SHADOW_STYLE: CSSProperties = {
@@ -28,7 +29,8 @@ export const PanelNodeRenderer = ({
   dragHandleSelector,
 }: PanelNodeRendererProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number>(0);
+  const schedulerRef = useRef<ReturnType<typeof createRafScheduler> | null>(null);
+  if (schedulerRef.current === null) schedulerRef.current = createRafScheduler();
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
@@ -65,9 +67,7 @@ export const PanelNodeRenderer = ({
       const sourcePanelId = root?.dataset.draggingPanelId;
       if (!sourcePanelId || sourcePanelId === node.id) return;
 
-      if (rafRef.current) return;
-      rafRef.current = requestAnimationFrame(() => {
-        rafRef.current = 0;
+      schedulerRef.current!.schedule(() => {
         const { position, depth } = getDropTarget(clientX, clientY, panelEl);
         onDropPreviewChange?.({ sourcePanelId, anchorPanelId: node.id, position, depth });
       });

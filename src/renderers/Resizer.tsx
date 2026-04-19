@@ -1,4 +1,3 @@
-import React, { useCallback, useRef } from "react";
 import type { CSSProperties } from "react";
 import type { SplitDirection } from "../types";
 import {
@@ -9,6 +8,8 @@ import {
   RESIZER_COLOR_VAR,
 } from "./resizerStyles";
 import { DEFAULT_RESIZER_THICKNESS, DEFAULT_RESIZER_LENGTH } from "../constants/resizer";
+import { HORIZONTAL } from "../constants/layout";
+import { useDragResize } from "../hooks/useDragResize";
 
 interface ResizerProps {
   direction: SplitDirection;
@@ -19,6 +20,10 @@ interface ResizerProps {
   hoverOnly?: boolean;
 }
 
+const setCssVar = (style: CSSProperties, name: string, value: string) => {
+  (style as Record<string, string | number>)[name] = value;
+};
+
 export const Resizer = ({
   direction,
   onResize,
@@ -27,54 +32,13 @@ export const Resizer = ({
   color,
   hoverOnly = false,
 }: ResizerProps) => {
-  const isHorizontal = direction === "horizontal";
-  const startPos = useRef(0);
-  const rafId = useRef(0);
-  const pendingDelta = useRef(0);
-
-  const onMouseDown = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      startPos.current = isHorizontal ? e.clientX : e.clientY;
-      pendingDelta.current = 0;
-
-      const onMouseMove = (e: MouseEvent) => {
-        const current = isHorizontal ? e.clientX : e.clientY;
-        const delta = current - startPos.current;
-        if (delta !== 0) {
-          startPos.current = current;
-          pendingDelta.current += delta;
-          if (!rafId.current) {
-            rafId.current = requestAnimationFrame(() => {
-              onResize(pendingDelta.current);
-              pendingDelta.current = 0;
-              rafId.current = 0;
-            });
-          }
-        }
-      };
-
-      const onMouseUp = () => {
-        if (rafId.current) {
-          cancelAnimationFrame(rafId.current);
-          if (pendingDelta.current !== 0) onResize(pendingDelta.current);
-          rafId.current = 0;
-          pendingDelta.current = 0;
-        }
-        document.removeEventListener("mousemove", onMouseMove);
-        document.removeEventListener("mouseup", onMouseUp);
-      };
-
-      document.addEventListener("mousemove", onMouseMove);
-      document.addEventListener("mouseup", onMouseUp);
-    },
-    [isHorizontal, onResize]
-  );
+  const isHorizontal = direction === HORIZONTAL;
+  const onMouseDown = useDragResize(direction, onResize);
 
   const style: CSSProperties = isHorizontal
     ? { width: thickness, height: length }
     : { width: length, height: thickness };
-  if (color) (style as Record<string, string | number>)[RESIZER_COLOR_VAR] = color;
+  if (color) setCssVar(style, RESIZER_COLOR_VAR, color);
 
   const directionClass = isHorizontal ? RESIZER_CLASS_HORIZONTAL : RESIZER_CLASS_VERTICAL;
   const className = hoverOnly

@@ -2,6 +2,7 @@ import type { LayoutNode, PanelNode, SplitNode, SplitDirection, DropPosition, In
 import { updateAtPath } from "./treeHelpers";
 import { findPanelWithAncestors } from "./treeQuery";
 import { devWarn } from "./devWarn";
+import { HORIZONTAL, VERTICAL, LEFT, RIGHT, TOP } from "../constants/layout";
 
 type Ancestor = { split: SplitNode; childIndex: number };
 
@@ -12,7 +13,7 @@ const appendToRoot = (tree: LayoutNode, panel: PanelNode): LayoutNode => {
   }
   return {
     type: "split",
-    direction: "horizontal",
+    direction: HORIZONTAL,
     size: tree.size,
     children: [{ ...tree, size: 1 }, insert],
   };
@@ -141,8 +142,8 @@ export const insertAtAnchorDepth = (
   depth: number = 0,
 ): LayoutNode => {
   const direction: SplitDirection =
-    position === "left" || position === "right" ? "horizontal" : "vertical";
-  const insertBefore = position === "left" || position === "top";
+    position === LEFT || position === RIGHT ? HORIZONTAL : VERTICAL;
+  const insertBefore = position === LEFT || position === TOP;
   const insert: PanelNode = { ...panelToInsert, size: 1 };
 
   const result = findPanelWithAncestors(tree, anchorPanelId);
