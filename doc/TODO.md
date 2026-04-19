@@ -64,15 +64,18 @@
 
 ---
 
-### Phase D — `Resizer` 드래그 로직 훅화 + rAF 유틸 공유
+### Phase D — `Resizer` 드래그 로직 훅화 + rAF 유틸 공유 ✅ 완료 (2026-04-19)
 
-**Why**: `Resizer`의 mouseDown/move/up + rAF 배치(L34-71)와 `LayoutNodeRenderer`의 onDragOver rAF(L164-169)가 같은 패턴의 중복.
+**Why**: `Resizer`의 mouseDown/move/up + rAF 배치와 `PanelNodeRenderer.handleDragOver`의 rAF가 같은 "프레임당 한 번 실행" 패턴의 중복.
 
-- **`src/utils/rafBatch.ts`** (또는 `useRafBatch` 훅) 신규 — rAF 한 프레임당 한 번 콜백 실행하는 헬퍼.
-- `Resizer.tsx:34-71` `onMouseDown` → **`useDragResize({ direction, onResize })`** 훅으로 추출.
-- `Resizer.tsx:76` `style as Record<...>` 캐스트 → `setCssVar(style, name, value)` 작은 헬퍼로 정리.
+- [x] **`src/utils/rafBatch.ts`** 신규 — `createRafScheduler()` 팩토리. `schedule/cancel/isPending` 3개 메서드로 coalesce 패턴 캡슐화.
+- [x] **`src/hooks/useDragResize.ts`** 신규 — `Resizer`의 mouseDown + document mousemove/up + rAF 배치 + mouseup flush를 훅으로 추출.
+- [x] `Resizer.tsx` 본체 축소 — 드래그 상태 머신 제거, `useDragResize(direction, onResize)` 호출 1줄로 대체. CSS var 대입은 module-level `setCssVar` 헬퍼로 분리.
+- [x] `PanelNodeRenderer.tsx` `rafRef` → `schedulerRef.current = createRafScheduler()`로 공유 유틸 사용.
 
-**검증**: type-check + build + resize/drag 동작 확인 (Phase C와 묶어서 브라우저 확인 권장).
+**추가 작업 (Phase D 세션에 포함)**: 유니온 리터럴 중앙화. `src/constants/layout.ts` 신규 (`HORIZONTAL`/`VERTICAL`/`LEFT`/`RIGHT`/`TOP`/`BOTTOM`). `types.ts`의 `SplitDirection`/`DropPosition`을 `typeof` 기반으로 재정의해 값·타입 단일 소스화. `as const` 없이도 `const x = "literal"`은 리터럴 타입으로 추론됨을 확인. 비교 사용처(`treeInsert.ts`, `LayoutNodeRenderer.tsx`, `Resizer.tsx`, `useDragResize.ts`) 모두 상수로 치환. `LayoutNode.type` 태그는 discriminated union narrowing을 위해 리터럴 유지.
+
+**검증**: `npm run type-check` ✅ · `npm run build` ✅ · 공개 API 불변 · 브라우저 확인은 사용자가 `floating-demo`에서 수행.
 
 ---
 
