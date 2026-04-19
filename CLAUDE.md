@@ -15,7 +15,6 @@
 - arrow function만 사용. `function` 선언 금지. 단일 JSX 반환 시 `=> ()` 사용
 - named export만 사용. default export 금지
 - 타입은 `import type { ... }`으로 분리
-- 인라인 스타일만 사용 (CSS 파일 없음)
 - 불변 업데이트 — spread로 새 객체 생성, 직접 mutation 금지
 - 외부 라이브러리 추가 금지 (React peer dep만 허용)
 

@@ -1,0 +1,2 @@
+export const DEFAULT_RESIZER_THICKNESS = 4;
+export const DEFAULT_RESIZER_LENGTH = "100%";

@@ -1,6 +1,23 @@
-import { useState, useCallback } from "react";
-import type { LayoutNode, PanelNode, SplitNode, SplitDirection, DropPosition } from "../types";
+import { useState, useCallback, useMemo } from "react";
+import type {
+  LayoutNode,
+  PanelNode,
+  SplitDirection,
+  DropPosition,
+  InsertPanelInit,
+  InsertAt,
+} from "../types";
 import { devWarn } from "../utils/devWarn";
+import {
+  getNodeAtPath,
+  updateAtPath,
+  findAndUpdate,
+} from "../utils/treeHelpers";
+import { insertPanelIntoTree, insertAtAnchorDepth } from "../utils/treeInsert";
+import { splitPanelAtId } from "../utils/treeSplit";
+import { clampSplitResize } from "../utils/treeResize";
+import { getFirstPanelId, getPanelIds, findPanelWithAncestors } from "../utils/treeQuery";
+import { DEFAULT_SPLIT_RATIO, MOVE_GHOST_ID } from "../constants/tree";
 
 let _idCounter = 0;
 const generatePanelId = (): string => {
@@ -10,178 +27,17 @@ const generatePanelId = (): string => {
   return `panel-${++_idCounter}-${Math.random().toString(36).slice(2, 9)}`;
 };
 
-const getNodeAtPath = (root: LayoutNode, path: number[]): LayoutNode | null => {
-  let node = root;
-  for (const idx of path) {
-    if (node.type !== "split" || idx >= node.children.length) return null;
-    node = node.children[idx];
-  }
-  return node;
-};
-
-const updateAtPath = (
-  root: LayoutNode,
-  path: number[],
-  updater: (node: LayoutNode) => LayoutNode
-): LayoutNode => {
-  if (path.length === 0) return updater(root);
-  if (root.type !== "split") return root;
-
-  const [idx, ...rest] = path;
-  return {
-    ...root,
-    children: root.children.map((child, i) =>
-      i === idx ? updateAtPath(child, rest, updater) : child
-    ),
-  };
-};
-
-const findPanelWithAncestors = (
-  root: LayoutNode,
+const withPanelCheck = (
+  prev: LayoutNode,
   panelId: string,
-): { panel: PanelNode; ancestors: { split: SplitNode; childIndex: number }[] } | null => {
-  const ancestors: { split: SplitNode; childIndex: number }[] = [];
-
-  const search = (node: LayoutNode): PanelNode | null => {
-    if (node.type === "panel") return node.id === panelId ? node : null;
-    for (let i = 0; i < node.children.length; i++) {
-      ancestors.push({ split: node, childIndex: i });
-      const found = search(node.children[i]);
-      if (found) return found;
-      ancestors.pop();
-    }
-    return null;
-  };
-
-  const panel = search(root);
-  return panel ? { panel, ancestors: [...ancestors] } : null;
-};
-
-const findAndUpdate = (
-  node: LayoutNode,
-  panelId: string,
-  updater: (node: LayoutNode, parent: SplitNode | null, index: number) => LayoutNode | null,
-  parent: SplitNode | null = null,
-  index: number = 0
-): LayoutNode | null => {
-  if (node.type === "panel" && node.id === panelId) {
-    return updater(node, parent, index);
-  }
-  if (node.type === "split") {
-    const newChildren = node.children
-      .map((child, i) => findAndUpdate(child, panelId, updater, node, i))
-      .filter((child): child is LayoutNode => child !== null);
-
-    if (newChildren.length === 0) return null;
-    if (newChildren.length === 1) return newChildren[0];
-    return { ...node, children: newChildren };
-  }
-  return node;
-};
-
-const GHOST_ID = "__move_ghost__";
-
-const insertPanelAtPosition = (
-  tree: LayoutNode,
-  panelToInsert: PanelNode,
-  anchorPanelId: string,
-  position: DropPosition,
-  depth: number,
+  label: string,
+  fn: (prev: LayoutNode) => LayoutNode,
 ): LayoutNode => {
-  const direction: SplitDirection =
-    position === "left" || position === "right" ? "horizontal" : "vertical";
-  const insertBefore = position === "left" || position === "top";
-  const insert: PanelNode = { ...panelToInsert, size: 1 };
-
-  const result = findPanelWithAncestors(tree, anchorPanelId);
-  if (!result) return tree;
-
-  const { ancestors } = result;
-  const clampedDepth = Math.min(depth, ancestors.length);
-
-  const insertAtRoot = (root: LayoutNode): LayoutNode => {
-    if (root.type === "split" && root.direction === direction) {
-      const newChildren = insertBefore
-        ? [insert, ...root.children]
-        : [...root.children, insert];
-      return { ...root, children: newChildren };
-    }
-    const children = insertBefore
-      ? [insert, { ...root, size: 1 }]
-      : [{ ...root, size: 1 }, insert];
-    return { type: "split" as const, direction, size: 1, children };
-  };
-
-  if (clampedDepth >= ancestors.length) {
-    return insertAtRoot(tree);
+  if (!findPanelWithAncestors(prev, panelId)) {
+    devWarn(`${label}: panel "${panelId}" not found`);
+    return prev;
   }
-
-  if (clampedDepth === 0) {
-    const insertAtTarget = (
-      node: LayoutNode,
-      parent: SplitNode | null = null,
-    ): LayoutNode => {
-      if (node.type === "panel" && node.id === anchorPanelId) {
-        if (parent && parent.direction === direction) return node;
-        const children = insertBefore
-          ? [insert, { ...node, size: 1 }]
-          : [{ ...node, size: 1 }, insert];
-        return { type: "split", direction, size: node.size, children };
-      }
-      if (node.type === "split") {
-        const targetIndex = node.children.findIndex(
-          (c) => c.type === "panel" && c.id === anchorPanelId,
-        );
-        if (targetIndex !== -1 && node.direction === direction) {
-          const newChildren = [...node.children];
-          const insertIdx = insertBefore ? targetIndex : targetIndex + 1;
-          newChildren.splice(insertIdx, 0, insert);
-          return { ...node, children: newChildren };
-        }
-        return {
-          ...node,
-          children: node.children.map((child) => insertAtTarget(child, node)),
-        };
-      }
-      return node;
-    };
-    return insertAtTarget(tree);
-  }
-
-  const ancestorIdx = ancestors.length - clampedDepth;
-  const parentInfo = ancestorIdx > 0 ? ancestors[ancestorIdx - 1] : null;
-
-  if (!parentInfo) {
-    return insertAtRoot(tree);
-  }
-
-  const targetChildIdx = parentInfo.childIndex;
-  const pathToParent = ancestors.slice(0, ancestorIdx - 1).map((a) => a.childIndex);
-
-  return updateAtPath(tree, pathToParent, (node) => {
-    if (node.type !== "split") return node;
-
-    if (node.direction === direction) {
-      const newChildren = [...node.children];
-      const insertIdx = insertBefore ? targetChildIdx : targetChildIdx + 1;
-      newChildren.splice(insertIdx, 0, insert);
-      return { ...node, children: newChildren };
-    }
-
-    const target = node.children[targetChildIdx];
-    const wrappedChildren = insertBefore
-      ? [insert, { ...target, size: 1 }]
-      : [{ ...target, size: 1 }, insert];
-
-    return {
-      ...node,
-      children: node.children.map((child, i) =>
-        i === targetChildIdx
-          ? { type: "split" as const, direction, size: target.size, children: wrappedChildren }
-          : child,
-      ),
-    };
-  });
+  return fn(prev);
 };
 
 export const computeMoveResult = (
@@ -193,29 +49,29 @@ export const computeMoveResult = (
 ): LayoutNode | null => {
   if (sourcePanelId === anchorPanelId) return null;
 
-  let sourcePanel: PanelNode | null = null;
-  const findPanel = (node: LayoutNode): void => {
-    if (node.type === "panel" && node.id === sourcePanelId) {
-      sourcePanel = node;
-    } else if (node.type === "split") {
-      node.children.forEach(findPanel);
-    }
-  };
-  findPanel(tree);
-  if (!sourcePanel) return null;
+  const found = findPanelWithAncestors(tree, sourcePanelId);
+  if (!found) return null;
+  const sourcePanel = found.panel;
 
-  const ghost: PanelNode = { type: "panel", id: GHOST_ID, size: 1, component: null };
-  const treeWithGhost = insertPanelAtPosition(tree, ghost, anchorPanelId, position, depth);
+  const ghost: PanelNode = { type: "panel", id: MOVE_GHOST_ID, size: 1, component: null };
+  const treeWithGhost = insertAtAnchorDepth(tree, ghost, anchorPanelId, position, depth);
 
   const treeWithoutSource = findAndUpdate(treeWithGhost, sourcePanelId, () => null);
   if (!treeWithoutSource) return null;
 
-  const finalTree = findAndUpdate(treeWithoutSource, GHOST_ID, () => ({ ...sourcePanel!, size: 1 }));
+  const finalTree = findAndUpdate(treeWithoutSource, MOVE_GHOST_ID, () => ({ ...sourcePanel, size: 1 }));
   return finalTree ?? null;
 };
 
 export const useLayoutTree = (initialTree: LayoutNode) => {
   const [tree, setTree] = useState<LayoutNode>(initialTree);
+
+  const firstPanelId = useMemo(() => getFirstPanelId(tree), [tree]);
+  const panelIds = useMemo(() => getPanelIds(tree), [tree]);
+  const hasPanel = useCallback(
+    (panelId: string) => findPanelWithAncestors(tree, panelId) !== null,
+    [tree],
+  );
 
   const resizeBorder = useCallback(
     (path: number[], borderIndex: number, delta: number, totalPixels?: number) => {
@@ -226,31 +82,15 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
 
         const left = split.children[borderIndex];
         const right = split.children[borderIndex + 1];
-        const totalSize = left.size + right.size;
-
-        const toFlex = (px: number) =>
-          totalPixels && totalPixels > 0
-            ? (px / totalPixels) * totalSize
-            : 0;
-
-        const leftMin = left.minSize !== undefined ? toFlex(left.minSize) : 0.05;
-        const leftMax = left.maxSize !== undefined ? toFlex(left.maxSize) : totalSize - 0.05;
-        const rightMin = right.minSize !== undefined ? toFlex(right.minSize) : 0.05;
-        const rightMax = right.maxSize !== undefined ? toFlex(right.maxSize) : totalSize - 0.05;
-
-        const clampedLeftMin = Math.max(leftMin, totalSize - rightMax);
-        const clampedLeftMax = Math.min(leftMax, totalSize - rightMin);
-
-        const newLeftSize = Math.max(clampedLeftMin, Math.min(clampedLeftMax, left.size + delta));
-        const newRightSize = totalSize - newLeftSize;
+        const { leftSize, rightSize } = clampSplitResize(left, right, delta, totalPixels);
 
         return updateAtPath(prev, path, (node) => {
           if (node.type !== "split") return node;
           return {
             ...node,
             children: node.children.map((child, i) => {
-              if (i === borderIndex) return { ...child, size: newLeftSize };
-              if (i === borderIndex + 1) return { ...child, size: newRightSize };
+              if (i === borderIndex) return { ...child, size: leftSize };
+              if (i === borderIndex + 1) return { ...child, size: rightSize };
               return child;
             }),
           };
@@ -264,48 +104,17 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
     (panelId: string, direction: SplitDirection, options?: { newPanel?: Partial<Omit<PanelNode, "type">> }): string => {
       const newId = options?.newPanel?.id ?? generatePanelId();
 
-      setTree((prev) => {
-        if (!findPanelWithAncestors(prev, panelId)) {
-          devWarn(`splitPanel: panel "${panelId}" not found`);
-          return prev;
-        }
-        const newPanel: PanelNode = {
-          type: "panel",
-          id: newId,
-          size: options?.newPanel?.size ?? 0.5,
-          component: options?.newPanel?.component ?? null,
-        };
-
-        const result = findAndUpdate(prev, panelId, (node, parent) => {
-          if (parent && parent.direction === direction) {
-            return node;
-          }
-          return {
-            type: "split",
-            direction,
-            size: node.size,
-            children: [{ ...node, size: 1 }, { ...newPanel, size: 1 }],
+      setTree((prev) =>
+        withPanelCheck(prev, panelId, "splitPanel", (t) => {
+          const newPanel: PanelNode = {
+            type: "panel",
+            id: newId,
+            size: options?.newPanel?.size ?? DEFAULT_SPLIT_RATIO,
+            component: options?.newPanel?.component ?? null,
           };
-        });
-
-        const insertSibling = (root: LayoutNode): LayoutNode => {
-          if (root.type === "split") {
-            const targetIndex = root.children.findIndex(
-              (c) => c.type === "panel" && c.id === panelId
-            );
-            if (targetIndex !== -1 && root.direction === direction) {
-              const newChildren = [...root.children];
-              newChildren.splice(targetIndex + 1, 0, newPanel);
-              return { ...root, children: newChildren };
-            }
-            return { ...root, children: root.children.map(insertSibling) };
-          }
-          return root;
-        };
-
-        if (result === prev) return prev;
-        return result ? insertSibling(result) : prev;
-      });
+          return splitPanelAtId(t, panelId, direction, newPanel);
+        }),
+      );
 
       return newId;
     },
@@ -313,32 +122,54 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
   );
 
   const removePanel = useCallback((panelId: string) => {
-    setTree((prev) => {
-      if (!findPanelWithAncestors(prev, panelId)) {
-        devWarn(`removePanel: panel "${panelId}" not found`);
-        return prev;
-      }
-      const result = findAndUpdate(prev, panelId, () => null);
-      return result ?? prev;
-    });
+    setTree((prev) =>
+      withPanelCheck(prev, panelId, "removePanel", (t) => findAndUpdate(t, panelId, () => null) ?? t),
+    );
   }, []);
 
   const movePanel = useCallback(
     (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number = 0) => {
-      setTree((prev) => {
-        if (!findPanelWithAncestors(prev, sourcePanelId)) {
-          devWarn(`movePanel: source panel "${sourcePanelId}" not found`);
-          return prev;
-        }
-        if (!findPanelWithAncestors(prev, anchorPanelId)) {
-          devWarn(`movePanel: anchor panel "${anchorPanelId}" not found`);
-          return prev;
-        }
-        return computeMoveResult(prev, sourcePanelId, anchorPanelId, position, depth) ?? prev;
-      });
+      setTree((prev) =>
+        withPanelCheck(prev, sourcePanelId, "movePanel: source", (t1) =>
+          withPanelCheck(t1, anchorPanelId, "movePanel: anchor", (t2) =>
+            computeMoveResult(t2, sourcePanelId, anchorPanelId, position, depth) ?? t2,
+          ),
+        ),
+      );
     },
     [],
   );
 
-  return { tree, setTree, resizeBorder, splitPanel, removePanel, movePanel };
+  const insertPanel = useCallback(
+    (options: { panel: InsertPanelInit; at?: InsertAt }): string => {
+      const { panel, at } = options;
+      const newId = panel.id ?? generatePanelId();
+      const newPanel: PanelNode = {
+        type: "panel",
+        id: newId,
+        size: panel.size ?? 1,
+        component: panel.component,
+        minSize: panel.minSize,
+        maxSize: panel.maxSize,
+      };
+
+      setTree((prev) => insertPanelIntoTree(prev, newPanel, at));
+
+      return newId;
+    },
+    [],
+  );
+
+  return {
+    tree,
+    setTree,
+    firstPanelId,
+    panelIds,
+    hasPanel,
+    resizeBorder,
+    splitPanel,
+    removePanel,
+    movePanel,
+    insertPanel,
+  };
 };

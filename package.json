@@ -41,9 +41,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
     "type-check": "tsc --noEmit"
   },
   "engines": {

@@ -1,6 +1,6 @@
 # react-tree-layout
 
-[English README](./README.md)
+[English README](./README.md) · [API 문서](./doc/API.ko.md)
 
 Tree 기반으로 크기 조절과 패널 이동이 가능한 React 레이아웃 라이브러리입니다. VS Code나 IDE처럼 패널을 수평/수직으로 분할하고, 경계선 드래그로 크기를 조절하고, 드래그 앤 드롭으로 패널을 이동할 수 있습니다.
 
@@ -82,151 +82,48 @@ const App = () => {
 
 ---
 
-## 설계 개요
+## 레시피
 
-레이아웃 상태를 **N-ary 트리**로 표현합니다.
-
-- **Leaf 노드 (`PanelNode`)** — 실제 콘텐츠가 렌더링되는 패널. `id`와 `component`를 가짐
-- **Branch 노드 (`SplitNode`)** — 자식 노드들을 수평 또는 수직으로 분할하는 컨테이너. `id` 없음
-
-```
-root (SplitNode, horizontal)
-├── panel-a (PanelNode, size: 1)
-├── panel-b (PanelNode, size: 1)
-└── (SplitNode, vertical)
-    ├── panel-c (PanelNode, size: 1)
-    └── panel-d (PanelNode, size: 1)
-```
-
-### 아키텍처
-
-```
-src/
-├── types.ts                    # LayoutNode, PanelNode, SplitNode 타입
-├── hooks/
-│   └── useLayoutTree.ts        # 트리 상태 관리 훅
-├── renderers/
-│   ├── TreeLayout.tsx           # 루트 레이아웃 컴포넌트
-│   ├── LayoutNodeRenderer.tsx   # 재귀 노드 렌더러 + 드래그 앤 드롭
-│   └── Resizer.tsx              # 경계선 리사이즈 핸들
-└── index.ts                    # public API export
-```
-
----
-
-## API
-
-### `<TreeLayout />`
-
-레이아웃 트리를 재귀적으로 렌더링하는 컴포넌트입니다. flexbox 기반으로 패널을 배치합니다.
-
-| Prop | Type | 필수 | 설명 |
-|------|------|:----:|------|
-| `tree` | `LayoutNode` | O | 렌더링할 트리 루트 노드 |
-| `onResizeBorder` | `(path, borderIndex, delta) => void` | | 경계선 리사이즈 콜백 |
-| `onMovePanel` | `(sourceId, anchorId, position, depth) => void` | | 드래그 앤 드롭 이동 콜백 |
-| `className` | `string` | | 최상위 div의 className |
-| `style` | `CSSProperties` | | 최상위 div의 인라인 스타일 |
-| `resizerClassName` | `string` | | 경계선 div에 적용할 className |
-
-### `useLayoutTree(initialTree)`
-
-레이아웃 트리 상태를 관리하는 훅입니다.
-
-```ts
-const { tree, setTree, resizeBorder, splitPanel, removePanel, movePanel } = useLayoutTree(initialTree);
-```
-
-| 반환값 | 타입 | 설명 |
-|--------|------|------|
-| `tree` | `LayoutNode` | 현재 레이아웃 트리 상태 |
-| `setTree` | `(tree: LayoutNode) => void` | 트리 직접 설정 |
-| `resizeBorder` | `(path, borderIndex, delta) => void` | 경계선 기반 리사이즈 |
-| `splitPanel` | `(panelId, direction) => void` | 패널 분할 |
-| `removePanel` | `(panelId) => void` | 패널 제거 |
-| `movePanel` | `(sourceId, anchorId, position, depth?) => void` | 패널 이동 |
-
----
-
-## 타입
-
-```ts
-type SplitDirection = "horizontal" | "vertical";
-
-interface PanelNode {
-  type: "panel";
-  id: string;
-  size: number;         // flex 비율
-  component: ReactNode; // 렌더링할 콘텐츠
-}
-
-interface SplitNode {
-  type: "split";
-  direction: SplitDirection;
-  size: number;             // flex 비율
-  children: LayoutNode[];   // 2개 이상의 자식
-}
-
-type LayoutNode = PanelNode | SplitNode;
-
-type DropPosition = "top" | "bottom" | "left" | "right";
-```
-
----
-
-## 커스터마이징
-
-### 리사이저 스타일
-
-`resizerClassName`으로 경계선 스타일을 CSS로 완전히 제어할 수 있습니다.
+### 패널 표시/숨김 토글
 
 ```tsx
-// styles.css
-// .my-resizer { background: #6366f1; width: 2px; }
-// .my-resizer:hover { background: #4f46e5; }
+const { panelIds, removePanel, insertPanel } = useLayoutTree(initialTree);
 
-<TreeLayout
-  tree={tree}
-  onResizeBorder={resizeBorder}
-  resizerClassName="my-resizer"
-/>
+const togglePanel = (id: string, component: ReactNode) => {
+  if (panelIds.includes(id)) {
+    removePanel(id);
+  } else {
+    insertPanel({ panel: { id, component } });
+  }
+};
 ```
-
-기본 인라인 스타일(너비 4px, `#e0e0e0` 배경)은 베이스로 유지되며, `className`으로 CSS 우선순위 또는 원하는 스타일링 방식을 통해 덮어쓸 수 있습니다.
-
-<img src="doc/assets/resize-demo.png" alt="경계선 리사이즈" width="640" />
-
-### 드래그 앤 드롭
-
-<img src="doc/assets/drag-drop-demo.png" alt="드래그 앤 드롭" width="640" />
-
-`movePanel(sourceId, anchorId, position, depth)` — 패널을 다른 위치로 이동합니다.
-
-- `position`: 앵커 패널 기준 드롭 위치 (`top` / `bottom` / `left` / `right`)
-- `depth`: 드롭 깊이 (0 = 패널 레벨, 1 = 부모 split 레벨, ...)
-
-**드롭 타겟 감지 우선순위:**
-1. 루트 가장자리 (외곽 5%) — 최상위 레벨에 배치
-2. 부모 split 가장자리 (외곽 15%) — 상위 split에 배치
-3. 패널 중앙 — 패널 레벨에서 분할
 
 ---
 
-## 빌드
+## 드래그 앤 드롭
 
-```bash
-npm run build       # dist/ 생성 (ESM + CJS + .d.ts)
-npm run dev         # Vite 개발 서버
-npm run type-check  # 타입 검사
+패널을 드래그해서 위치를 바꿀 수 있습니다. 드롭 타겟의 미리보기가 반투명 shadow로 커서를 따라다니며, 드롭 영역에 따라 배치 방식이 달라집니다.
+
+<img src="doc/assets/drag-preview.png" alt="드래그 미리보기" width="640" />
+
+- **패널 중앙**에 드롭 → 해당 패널을 분할
+- **부모 split 가장자리**에 드롭 → 부모 split의 형제로 배치
+- **루트 가장자리**에 드롭 → 최상위 레벨에 배치
+
+`useLayoutTree`의 `movePanel`과 연결하여 사용합니다.
+
+```tsx
+<TreeLayout tree={tree} onResizeBorder={resizeBorder} onMovePanel={movePanel} />
 ```
 
-### 출력물
+전체 배치 규칙과 `depth` 파라미터는 [API 문서 → 드래그 앤 드롭](./doc/API.ko.md#드래그-앤-드롭)을 참고하세요.
 
-| 파일 | 용도 |
-|------|------|
-| `dist/index.js` | ESM 번들 |
-| `dist/index.cjs` | CommonJS 번들 |
-| `dist/index.d.ts` | TypeScript 타입 선언 |
+---
+
+## 문서
+
+- **[API 레퍼런스](./doc/API.ko.md)** — 전체 props, 훅 반환값, 트리 유틸, 타입
+- **[CHANGELOG](./CHANGELOG.md)**
 
 ---
 

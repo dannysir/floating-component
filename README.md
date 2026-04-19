@@ -1,6 +1,6 @@
 # react-tree-layout
 
-[한국어 README](./README.ko.md)
+[한국어 README](./README.ko.md) · [API Reference](./doc/API.md)
 
 Tree-based resizable and reorderable panel layout for React. Split panels horizontally or vertically, resize borders by dragging, and reorder panels via drag and drop — just like VS Code or any modern IDE.
 
@@ -82,101 +82,48 @@ const App = () => {
 
 ---
 
-## API
+## Recipes
 
-### `<TreeLayout />`
-
-Recursively renders the layout tree using flexbox.
-
-| Prop | Type | Required | Description |
-|------|------|:--------:|-------------|
-| `tree` | `LayoutNode` | Yes | Root node of the layout tree |
-| `onResizeBorder` | `(path, borderIndex, delta) => void` | | Border resize callback |
-| `onMovePanel` | `(sourceId, anchorId, position, depth) => void` | | Drag-and-drop move callback |
-| `className` | `string` | | className for the root div |
-| `style` | `CSSProperties` | | Inline style for the root div |
-| `resizerClassName` | `string` | | className applied to every resizer border div |
-
-### `useLayoutTree(initialTree)`
-
-Hook for managing layout tree state.
-
-```ts
-const { tree, setTree, resizeBorder, splitPanel, removePanel, movePanel } = useLayoutTree(initialTree);
-```
-
-| Return | Type | Description |
-|--------|------|-------------|
-| `tree` | `LayoutNode` | Current layout tree state |
-| `setTree` | `(tree: LayoutNode) => void` | Directly set the tree |
-| `resizeBorder` | `(path, borderIndex, delta) => void` | Resize by border index |
-| `splitPanel` | `(panelId, direction) => void` | Split a panel |
-| `removePanel` | `(panelId) => void` | Remove a panel |
-| `movePanel` | `(sourceId, anchorId, position, depth?) => void` | Move a panel |
-
----
-
-## Types
-
-```ts
-type SplitDirection = "horizontal" | "vertical";
-
-interface PanelNode {
-  type: "panel";
-  id: string;
-  size: number;          // flex ratio
-  component: ReactNode;  // content to render
-}
-
-interface SplitNode {
-  type: "split";
-  direction: SplitDirection;
-  size: number;            // flex ratio
-  children: LayoutNode[];  // two or more children
-}
-
-type LayoutNode = PanelNode | SplitNode;
-
-type DropPosition = "top" | "bottom" | "left" | "right";
-```
-
----
-
-## Customization
-
-### Resizer style
-
-Use `resizerClassName` to fully control the border appearance via CSS:
+### Toggle panel visibility
 
 ```tsx
-// styles.css
-// .my-resizer { background: #6366f1; width: 2px; }
-// .my-resizer:hover { background: #4f46e5; }
+const { panelIds, removePanel, insertPanel } = useLayoutTree(initialTree);
 
-<TreeLayout
-  tree={tree}
-  onResizeBorder={resizeBorder}
-  resizerClassName="my-resizer"
-/>
+const togglePanel = (id: string, component: ReactNode) => {
+  if (panelIds.includes(id)) {
+    removePanel(id);
+  } else {
+    insertPanel({ panel: { id, component } });
+  }
+};
 ```
 
-The default inline styles (4 px wide, `#e0e0e0` background) are still applied as a base; `className` lets you override them via CSS specificity or your preferred styling solution.
+---
 
-<img src="doc/assets/resize-demo.png" alt="Border resize" width="640" />
+## Drag & Drop
 
-### Drag-and-drop
+Drag any panel to reorder. A translucent preview of the drop target follows the cursor, and dropping near different regions produces different placements:
 
-<img src="doc/assets/drag-drop-demo.png" alt="Drag and drop" width="640" />
+<img src="doc/assets/drag-preview.png" alt="Drag preview" width="640" />
 
-`movePanel(sourceId, anchorId, position, depth)` — moves a panel to another location.
+- Drop on the **panel center** → split the hovered panel
+- Drop near the **enclosing split's edge** → place as a sibling of the parent split
+- Drop near the **root's edge** → place at the top level
 
-- `position`: drop side relative to the anchor panel (`top` / `bottom` / `left` / `right`)
-- `depth`: 0 = panel level, 1 = parent split level, higher = ancestor split level
+Wire it up with `useLayoutTree`'s `movePanel`:
 
-**Drop target priority:**
-1. Root edge (outer 5%) — places at the top level
-2. Parent split edge (outer 15%) — places at the enclosing split level
-3. Panel center — splits at the panel level
+```tsx
+<TreeLayout tree={tree} onResizeBorder={resizeBorder} onMovePanel={movePanel} />
+```
+
+See [API Reference → Drag & Drop](./doc/API.md#drag--drop) for the full placement rules and the `depth` parameter.
+
+---
+
+## Documentation
+
+- **[API Reference](./doc/API.md)** — full props, hook return values, tree utilities, types
+- **[CHANGELOG](./CHANGELOG.md)**
 
 ---
 
