@@ -34,16 +34,19 @@
 
 ---
 
-### Phase B — `useLayoutTree` 얇게 만들기
+### Phase B — `useLayoutTree` 얇게 만들기 ✅ 완료 (2026-04-19)
 
 **Why**: 훅은 "상태 + 검증 + 디스패치"만 해야 함. 지금은 트리 변환 로직이 섞여 있어 테스트·재사용이 어렵다.
 
-- `useLayoutTree.ts:113-163` `splitPanel` 내부의 `insertSibling` 재귀와 래핑 분기를 **순수 함수 `splitPanelAtId(tree, panelId, direction, newPanel)`** 으로 추출 (→ `treeInsert.ts` 또는 새 `treeSplit.ts`).
-- `useLayoutTree.ts:70-111` `resizeBorder`의 min/max clamp 계산을 **순수 함수 `clampSplitResize`** 로 추출.
-- 반복되는 검증 패턴 (`findPanelWithAncestors + devWarn + return prev`, L118-121/167-170/179-186) → 작은 wrapper `withPanelCheck(prev, id, label, fn)` 로 통일.
-- `computeMoveResult`(L30-58) 내부의 `findPanel`은 이미 있는 `findPanelWithAncestors` 재사용.
+- [x] `splitPanel` 내부의 `findAndUpdate` + `insertSibling` 2단계를 **순수 함수 `splitPanelAtId`** (단일 재귀)로 추출 → `src/utils/treeSplit.ts` 신규.
+- [x] `resizeBorder`의 min/max clamp 계산을 **순수 함수 `clampSplitResize`** 로 추출 → `src/utils/treeResize.ts` 신규.
+- [x] 반복되는 `findPanelWithAncestors + devWarn + return prev` 패턴을 훅 내부 `withPanelCheck(prev, id, label, fn)` 헬퍼로 통일 (splitPanel/removePanel/movePanel 3곳).
+- [x] `computeMoveResult` 내부 자체 `findPanel` 재귀 제거, `findPanelWithAncestors` 재사용.
+- [x] `GHOST_ID` 파일 전역 상수 → `computeMoveResult` 지역 상수(후속 상수 중앙화에서 `MOVE_GHOST_ID`로 이동).
 
-**검증**: type-check + build. `splitPanel`/`resizeBorder`/`movePanel` 동작 브라우저 확인은 **사용자 요청 시**만 (별도 데모 없으므로 consumer 프로젝트에서 확인해야 함).
+**추가 작업 (Phase B 세션에 포함)**: 흩어진 매직 넘버를 `src/constants/` 도메인별 3파일(`tree.ts`, `dropTarget.ts`, `resizer.ts`)로 중앙화. 값·동작 불변.
+
+**검증**: `npm run type-check` ✅ · `npm run build` ✅ · 공개 API 불변.
 
 ---
 
