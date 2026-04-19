@@ -14,12 +14,12 @@
 
 모든 컴포넌트에서 **파일 상단에 `interface XxxProps`** 로 선언하고, 함수 시그니처에서는 `({ ... }: XxxProps) =>` 형태로 사용한다.
 
-- [ ] `src/renderers/LayoutNodeRenderer.tsx` — 인라인 타입(L94-104)을 상단 `interface LayoutNodeRendererProps`로 추출
-- [ ] `src/renderers/TreeLayout.tsx` — 이미 준수 (확인만)
-- [ ] `src/renderers/Resizer.tsx` — 이미 준수 (확인만)
-- [ ] `DropPreview`, `ResizerTheme`(LayoutNodeRenderer.tsx L15-27)은 props가 아닌 재사용 타입 — 현 위치 유지
+- [x] `src/renderers/LayoutNodeRenderer.tsx` — 인라인 타입(L94-104)을 상단 `interface LayoutNodeRendererProps`로 추출
+- [x] `src/renderers/TreeLayout.tsx` — 이미 준수 (확인만)
+- [x] `src/renderers/Resizer.tsx` — 이미 준수 (확인만)
+- [x] `DropPreview`, `ResizerTheme`(LayoutNodeRenderer.tsx L15-27)은 props가 아닌 재사용 타입 — 현 위치 유지
 
 ## 3. 검증
 
-- [ ] `npm run type-check`
-- [ ] `npm run build`
+- [x] `npm run type-check`
+- [x] `npm run build`
