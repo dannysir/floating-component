@@ -15,6 +15,7 @@ export interface ResizerTheme {
   thickness?: number | string;
   length?: number | string;
   color?: string;
+  hoverColor?: string;
   hoverOnly?: boolean;
 }
 
@@ -97,6 +98,7 @@ export const LayoutNodeRenderer = ({
           thickness={resizerTheme?.thickness}
           length={resizerTheme?.length}
           color={resizerTheme?.color}
+          hoverColor={resizerTheme?.hoverColor}
           hoverOnly={resizerTheme?.hoverOnly}
         />
       );

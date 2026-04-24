@@ -6,6 +6,28 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
+## [0.2.2] - 2026-04-24
+
+### 추가
+
+- `TreeLayout`에 `resizerHoverColor` prop, `Resizer`에 `--ftl-resizer-hover-color` CSS 변수 추가 — hover 상태 색상을 기본 색과 별도로 지정 가능
+
+### 변경
+
+- `Resizer` 기본 스타일을 모던한 hover-reveal 디자인으로 재설계:
+  - `resizerThickness` 기본값: `4` → `8` (히트 영역; 실제 보이는 바는 중앙 4px, 교차축 양쪽 2px는 투명 inset)
+  - `resizerColor` 기본값: `#e0e0e0` → `#0078d4` (VS Code 스타일 블루)
+  - `resizerHoverOnly` 기본값: `false` → `true` (평소 숨김, hover 시 200ms 페이드인)
+  - 내부 CSS: `padding` + `background-clip: content-box`로 교차축 inset, `mask-image` 그라데이션 (transparent → #000 50% → transparent)으로 길이축 페이드, hover 시 `opacity` transition
+- 드래그 preview shadow outline 색상을 새 resizer 블루와 통일: `rgba(59, 130, 246, 0.6)` → `rgba(0, 120, 212, 0.6)`
+
+### 마이그레이션 안내
+
+- v0.2.1의 flat-line 느낌을 유지하려면 `resizerHoverOnly={false}`, `resizerThickness={4}` 지정
+- 기존에 지정된 `resizerColor`는 그대로 유효 — 중앙 4px 바 색상에 적용됨
+
+---
+
 ## [0.2.1] - 2026-04-19
 
 ### 수정
