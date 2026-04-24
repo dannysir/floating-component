@@ -6,8 +6,13 @@ import {
   RESIZER_CLASS_VERTICAL,
   RESIZER_CLASS_HOVER_ONLY,
   RESIZER_COLOR_VAR,
+  RESIZER_HOVER_COLOR_VAR,
 } from "./resizerStyles";
-import { DEFAULT_RESIZER_THICKNESS, DEFAULT_RESIZER_LENGTH } from "../constants/resizer";
+import {
+  DEFAULT_RESIZER_THICKNESS,
+  DEFAULT_RESIZER_LENGTH,
+  DEFAULT_RESIZER_HOVER_ONLY,
+} from "../constants/resizer";
 import { HORIZONTAL } from "../constants/layout";
 import { useDragResize } from "../hooks/useDragResize";
 
@@ -17,6 +22,7 @@ interface ResizerProps {
   thickness?: number | string;
   length?: number | string;
   color?: string;
+  hoverColor?: string;
   hoverOnly?: boolean;
 }
 
@@ -30,7 +36,8 @@ export const Resizer = ({
   thickness = DEFAULT_RESIZER_THICKNESS,
   length = DEFAULT_RESIZER_LENGTH,
   color,
-  hoverOnly = false,
+  hoverColor,
+  hoverOnly = DEFAULT_RESIZER_HOVER_ONLY,
 }: ResizerProps) => {
   const isHorizontal = direction === HORIZONTAL;
   const onMouseDown = useDragResize(direction, onResize);
@@ -39,6 +46,7 @@ export const Resizer = ({
     ? { width: thickness, height: length }
     : { width: length, height: thickness };
   if (color) setCssVar(style, RESIZER_COLOR_VAR, color);
+  if (hoverColor) setCssVar(style, RESIZER_HOVER_COLOR_VAR, hoverColor);
 
   const directionClass = isHorizontal ? RESIZER_CLASS_HORIZONTAL : RESIZER_CLASS_VERTICAL;
   const className = hoverOnly

@@ -7,7 +7,7 @@ import type { DropPreview } from "./LayoutNodeRenderer";
 
 const SHADOW_STYLE: CSSProperties = {
   opacity: 0.5,
-  outline: "2px dashed rgba(59, 130, 246, 0.6)",
+  outline: "2px dashed rgba(0, 120, 212, 0.6)",
   outlineOffset: -2,
 };
 

@@ -1,2 +1,5 @@
-export const DEFAULT_RESIZER_THICKNESS = 4;
+export const DEFAULT_RESIZER_THICKNESS = 8;
 export const DEFAULT_RESIZER_LENGTH = "100%";
+export const DEFAULT_RESIZER_COLOR = "#0078d4";
+export const DEFAULT_RESIZER_HOVER_COLOR = "#0078d4";
+export const DEFAULT_RESIZER_HOVER_ONLY = true;

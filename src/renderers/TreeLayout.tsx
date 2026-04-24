@@ -28,6 +28,7 @@ interface TreeLayoutProps {
   resizerThickness?: number | string;
   resizerLength?: number | string;
   resizerColor?: string;
+  resizerHoverColor?: string;
   resizerHoverOnly?: boolean;
 }
 
@@ -42,6 +43,7 @@ export const TreeLayout = ({
   resizerThickness,
   resizerLength,
   resizerColor,
+  resizerHoverColor,
   resizerHoverOnly,
 }: TreeLayoutProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -85,9 +87,10 @@ export const TreeLayout = ({
       thickness: resizerThickness,
       length: resizerLength,
       color: resizerColor,
+      hoverColor: resizerHoverColor,
       hoverOnly: resizerHoverOnly,
     }),
-    [resizerThickness, resizerLength, resizerColor, resizerHoverOnly],
+    [resizerThickness, resizerLength, resizerColor, resizerHoverColor, resizerHoverOnly],
   );
 
   return (
