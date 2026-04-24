@@ -33,14 +33,17 @@
 | `backgroundColor` | `string` | | — | 루트 컨테이너 배경색 |
 | `margin` | `number \| string` | | — | 루트 컨테이너 마진 |
 | `padding` | `number \| string` | | — | 루트 컨테이너 패딩 |
-| `resizerThickness` | `number \| string` | | `4` | 리사이저 두께 (패널 간 gap) |
+| `resizerThickness` | `number \| string` | | `8` | 히트 영역 두께. 실제 보이는 바는 중앙 4px (교차축 양쪽 2px는 투명 inset) |
 | `resizerLength` | `number \| string` | | `"100%"` | 리사이저 교차축 길이 |
-| `resizerColor` | `string` | | `"#e0e0e0"` | 리사이저 색상 |
-| `resizerHoverOnly` | `boolean` | | `false` | hover 시에만 표시 (평소 투명) |
+| `resizerColor` | `string` | | `"#0078d4"` | 중앙 바 색상. 기본적으로 hover 시 그라데이션 마스크와 함께 페이드인 |
+| `resizerHoverColor` | `string` | | `"#0078d4"` | hover 시 색상 (150ms transition). 미지정 시 `resizerColor`로 fallback |
+| `resizerHoverOnly` | `boolean` | | `true` | hover 시에만 페이드인. `false` 지정 시 항상 표시 |
 
 ### 스타일 커스터마이징
 
 `resizer*` props와 루트 컨테이너 props로 외관을 제어합니다.
+
+기본값만으로도 모던한 hover-reveal 라인이 렌더됩니다. 필요한 것만 오버라이드하세요:
 
 ```tsx
 <TreeLayout
@@ -48,18 +51,18 @@
   onResizeBorder={resizeBorder}
   backgroundColor="#1e1e1e"
   padding={4}
-  resizerThickness={6}
-  resizerColor="#3b82f6"
-  resizerHoverOnly
+  resizerHoverColor="#ef4444"   // hover 시 파랑 대신 빨강
+  resizerHoverOnly={false}       // 항상 표시 (양 끝 그라데이션은 유지)
 />
 ```
 
 | Prop | 기본값 | 설명 |
 |------|--------|------|
-| `resizerThickness` | `4` | 두께 (px 숫자 또는 `"0.5rem"` 같은 CSS 단위 문자열) |
+| `resizerThickness` | `8` | 히트 영역 두께. 실제 바는 중앙 4px (양쪽 2px inset) |
 | `resizerLength` | `"100%"` | 교차축 길이 — 짧게 설정하면 중앙 핸들 느낌 |
-| `resizerColor` | `"#e0e0e0"` | 경계선 색상 |
-| `resizerHoverOnly` | `false` | hover 시에만 표시 |
+| `resizerColor` | `"#0078d4"` | 중앙 바 색상 (VS Code 스타일 블루) |
+| `resizerHoverColor` | `"#0078d4"` | hover 시 색상 (150ms transition). 기본은 `resizerColor`와 동일 |
+| `resizerHoverOnly` | `true` | 평소 숨김, hover 시 200ms 페이드인. `false`면 항상 표시 |
 
 <img src="./assets/resize-demo.png" alt="경계선 리사이즈" width="640" />
 

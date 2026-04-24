@@ -6,6 +6,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.2.2] - 2026-04-24
+
+### Added
+
+- `resizerHoverColor` prop on `TreeLayout` and `--ftl-resizer-hover-color` CSS variable on `Resizer` — customize the hover-state color independently from the base color
+
+### Changed
+
+- Default `Resizer` visual redesigned for a modern hover-reveal look:
+  - `resizerThickness` default: `4` → `8` (hit area; visible bar is a 4px strip centered inside, with 2px transparent inset on each cross-axis side)
+  - `resizerColor` default: `#e0e0e0` → `#0078d4` (VS Code-style blue)
+  - `resizerHoverOnly` default: `false` → `true` (bar is hidden by default, fades in on hover over 200ms)
+  - Internal CSS: cross-axis inset via `padding` + `background-clip: content-box`, length-axis fade via `mask-image` gradient (transparent → opaque 50% → transparent), `opacity` transition on hover
+- Drag-preview shadow outline color aligned with new resizer blue: `rgba(59, 130, 246, 0.6)` → `rgba(0, 120, 212, 0.6)`
+
+### Migration notes
+
+- To keep the v0.2.1 flat-line look, set `resizerHoverOnly={false}` and `resizerThickness={4}`
+- Existing `resizerColor` overrides still work — the color is applied to the visible 4px center bar
+
+---
+
 ## [0.2.1] - 2026-04-19
 
 ### Fixed

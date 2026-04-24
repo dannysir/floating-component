@@ -33,14 +33,17 @@ Recursively renders the layout tree using flexbox.
 | `backgroundColor` | `string` | | — | Background color of the root container |
 | `margin` | `number \| string` | | — | Margin of the root container |
 | `padding` | `number \| string` | | — | Padding of the root container |
-| `resizerThickness` | `number \| string` | | `4` | Resizer width (horizontal) or height (vertical). Also acts as the gap between panels |
+| `resizerThickness` | `number \| string` | | `8` | Hit area width/height. Visible bar is a 4px strip centered inside this area (2px transparent inset on each cross-axis side) |
 | `resizerLength` | `number \| string` | | `"100%"` | Resizer cross-axis size (height when horizontal, width when vertical) |
-| `resizerColor` | `string` | | `"#e0e0e0"` | Resizer background color |
-| `resizerHoverOnly` | `boolean` | | `false` | Show resizer only on hover (transparent otherwise) |
+| `resizerColor` | `string` | | `"#0078d4"` | Color of the visible center bar. By default it fades in on hover via gradient mask |
+| `resizerHoverColor` | `string` | | `"#0078d4"` | Hover-state color (transitions 150ms). Falls back to `resizerColor` if unset |
+| `resizerHoverOnly` | `boolean` | | `true` | Fade the bar in only on hover. Set `false` to always show the bar |
 
 ### Styling customization
 
 Use the `resizer*` props and root container props to control the appearance.
+
+Defaults already produce a modern hover-reveal line. Override only what you want to change:
 
 ```tsx
 <TreeLayout
@@ -48,18 +51,18 @@ Use the `resizer*` props and root container props to control the appearance.
   onResizeBorder={resizeBorder}
   backgroundColor="#1e1e1e"
   padding={4}
-  resizerThickness={6}
-  resizerColor="#3b82f6"
-  resizerHoverOnly
+  resizerHoverColor="#ef4444"   // hover turns red instead of default blue
+  resizerHoverOnly={false}       // always show the bar (still with gradient fade at ends)
 />
 ```
 
 | Prop | Default | Description |
 |------|---------|-------------|
-| `resizerThickness` | `4` | Border width/height in px or CSS unit string (e.g. `"0.5rem"`) |
+| `resizerThickness` | `8` | Hit area width/height. Visible bar is 4px centered (2px inset each side) |
 | `resizerLength` | `"100%"` | Cross-axis size — shorter values produce a centered handle look |
-| `resizerColor` | `"#e0e0e0"` | Border color |
-| `resizerHoverOnly` | `false` | Transparent until hovered |
+| `resizerColor` | `"#0078d4"` | Visible bar color (VS Code-style blue) |
+| `resizerHoverColor` | `"#0078d4"` | Hover color. Transitions over 150ms. Defaults to same as `resizerColor` |
+| `resizerHoverOnly` | `true` | Bar is hidden at rest and fades in on hover (200ms). Set `false` to keep it visible |
 
 <img src="./assets/resize-demo.png" alt="Border resize" width="640" />
 
