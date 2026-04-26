@@ -128,3 +128,34 @@
 1. `npm run type-check`
 2. `npm run build`
 3. 관련 문서 업데이트 후 커밋 분리 (`refactor:` / `docs:`)
+
+---
+
+# 향후 기능 후보
+
+리팩토링 Phase A~F 완료 이후 신규 기능 아이디어. 착수 시 별도 플랜 모드로 진입해 네이밍·정책을 재확정하고 진행.
+
+## `TreeLayout` 방향 옵션 (`direction` prop, 가칭)
+
+**Why**: 현재 `TreeLayout`은 split/move가 양방향 자유라, 사용처(예: 사이드 패널 컨테이너)에서 의도치 않은 가로 분할이 발생할 수 있다. 레이아웃 방향을 호스트 앱이 강제할 수단이 필요하다.
+
+**의도된 API (착수 시 재확정)**:
+
+- 새 prop: `direction?: "vertical" | "horizontal" | "complex"` (기본 `"complex"`)
+- `"vertical"` → 패널 split·이동을 수직(상하) 방향으로만 허용
+- `"horizontal"` → 가로(좌우) 방향으로만 허용
+- `"complex"` → 현재 동작 유지(기본값, breaking change 없음)
+
+**영향 추정 지점** (구현 단계에서 재확인):
+
+- `src/renderers/TreeLayout.tsx` — prop 추가 + 하위로 전달(context 또는 prop drilling)
+- `src/renderers/PanelNodeRenderer.tsx` — drop target 계산 시 허용 방향 필터
+- `src/utils/dropTarget.ts` — 방향 제한 처리
+- `src/hooks/useLayoutTree.ts` — `splitPanel` / `movePanel`이 제한 방향과 충돌하는 요청을 받았을 때 거부 vs 자동 매핑 정책 결정 필요
+
+**열린 질문** (착수 시 사용자와 합의):
+
+- prop 이름 (`direction` vs `mode` vs `orientation`)
+- 값 이름 (`"complex"` vs `"both"` vs `"free"`)
+- 제한 방향과 충돌하는 split·move 요청을 **무시**할지 / **자동 변환**할지
+- Resizer 표시 방향도 본 prop에 묶을지 / 별도 유지할지
