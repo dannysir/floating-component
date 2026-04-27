@@ -1,10 +1,12 @@
 import React, { useRef, useCallback, useMemo, useEffect, useId } from "react";
-import type { LayoutNode, DropPosition } from "../types";
+import type { LayoutNode, DropPosition, LayoutDirection } from "../types";
+import { COMPLEX } from "../constants/layout";
 import { computeMoveResult } from "../hooks/useLayoutTree";
 import { LayoutNodeRenderer } from "./LayoutNodeRenderer";
 import type { ResizerTheme } from "./LayoutNodeRenderer";
 import { useDropPreview } from "../hooks/useDropPreview";
 import { devWarn } from "../utils/devWarn";
+import { normalizeTreeDirection } from "../utils/treeDirection";
 
 const collectPanelIds = (node: LayoutNode, ids: string[] = []): string[] => {
   if (node.type === "panel") {
@@ -20,6 +22,7 @@ interface TreeLayoutProps {
   onResizeBorder?: (path: number[], borderIndex: number, delta: number, totalPixels?: number) => void;
   onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
   dragHandleSelector?: string;
+  direction?: LayoutDirection;
 
   backgroundColor?: string;
   margin?: number | string;
@@ -37,6 +40,7 @@ export const TreeLayout = ({
   onResizeBorder,
   onMovePanel,
   dragHandleSelector,
+  direction = COMPLEX,
   backgroundColor,
   margin,
   padding,
@@ -71,16 +75,30 @@ export const TreeLayout = ({
     if (rootRef.current) delete rootRef.current.dataset.draggingPanelId;
   }, [clear]);
 
+  const { tree: normalizedTree, changed: directionChanged } = useMemo(
+    () => normalizeTreeDirection(tree, direction),
+    [tree, direction],
+  );
+
+  useEffect(() => {
+    if (directionChanged) {
+      devWarn(
+        `Tree contains splits that don't match direction="${direction}". ` +
+        `These splits were normalized to match. Update your initial tree to avoid this warning.`,
+      );
+    }
+  }, [directionChanged, direction]);
+
   const previewTree = useMemo(() => {
     if (!preview) return null;
     return computeMoveResult(
-      tree,
+      normalizedTree,
       preview.sourcePanelId,
       preview.anchorPanelId,
       preview.position,
       preview.depth,
     );
-  }, [tree, preview]);
+  }, [normalizedTree, preview]);
 
   const resizerTheme = useMemo<ResizerTheme>(
     () => ({
@@ -117,7 +135,7 @@ export const TreeLayout = ({
       }}
     >
       <LayoutNodeRenderer
-        node={previewTree ?? tree}
+        node={previewTree ?? normalizedTree}
         onResizeBorder={onResizeBorder}
         onMovePanel={onMovePanel}
         onDropPreviewChange={setPreview}
@@ -125,6 +143,7 @@ export const TreeLayout = ({
         isPreviewActive={!!previewTree}
         resizerTheme={resizerTheme}
         dragHandleSelector={dragHandleSelector}
+        direction={direction}
       />
     </div>
   );

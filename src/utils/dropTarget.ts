@@ -1,10 +1,22 @@
-import type { DropPosition } from "../types";
+import type { DropPosition, LayoutDirection } from "../types";
 import { ROOT_EDGE_RATIO, SPLIT_EDGE_RATIO } from "../constants/dropTarget";
+import { COMPLEX, HORIZONTAL, VERTICAL, LEFT, RIGHT, TOP, BOTTOM } from "../constants/layout";
+
+const ALL_EDGES: readonly DropPosition[] = [LEFT, RIGHT, TOP, BOTTOM];
+const HORIZONTAL_EDGES: readonly DropPosition[] = [LEFT, RIGHT];
+const VERTICAL_EDGES: readonly DropPosition[] = [TOP, BOTTOM];
+
+const allowedEdgesFor = (direction: LayoutDirection): readonly DropPosition[] => {
+  if (direction === HORIZONTAL) return HORIZONTAL_EDGES;
+  if (direction === VERTICAL) return VERTICAL_EDGES;
+  return ALL_EDGES;
+};
 
 const getNearestEdge = (
   clientX: number,
   clientY: number,
   el: HTMLElement,
+  allowed: readonly DropPosition[],
 ): { position: DropPosition; dist: number } => {
   const rect = el.getBoundingClientRect();
   const dists: Record<DropPosition, number> = {
@@ -13,17 +25,19 @@ const getNearestEdge = (
     top: (clientY - rect.top) / rect.height,
     bottom: (rect.bottom - clientY) / rect.height,
   };
-  const position = (Object.keys(dists) as DropPosition[]).reduce((a, b) =>
-    dists[a] < dists[b] ? a : b,
+  return allowed.reduce(
+    (acc, pos) => (dists[pos] < acc.dist ? { position: pos, dist: dists[pos] } : acc),
+    { position: allowed[0], dist: dists[allowed[0]] },
   );
-  return { position, dist: dists[position] };
 };
 
 export const getDropTarget = (
   clientX: number,
   clientY: number,
   panelEl: HTMLElement,
+  direction: LayoutDirection = COMPLEX,
 ): { position: DropPosition; depth: number } => {
+  const allowed = allowedEdgesFor(direction);
   const splitEls: HTMLElement[] = [];
   let rootEl: HTMLElement | null = null;
   let cur: HTMLElement | null = panelEl.parentElement;
@@ -39,19 +53,19 @@ export const getDropTarget = (
   }
 
   if (rootEl) {
-    const { position, dist } = getNearestEdge(clientX, clientY, rootEl);
+    const { position, dist } = getNearestEdge(clientX, clientY, rootEl, allowed);
     if (dist < ROOT_EDGE_RATIO) {
       return { position, depth: splitEls.length + 1 };
     }
   }
 
   for (let i = splitEls.length - 1; i >= 0; i--) {
-    const { position, dist } = getNearestEdge(clientX, clientY, splitEls[i]);
+    const { position, dist } = getNearestEdge(clientX, clientY, splitEls[i], allowed);
     if (dist < SPLIT_EDGE_RATIO) {
       return { position, depth: i + 1 };
     }
   }
 
-  const { position } = getNearestEdge(clientX, clientY, panelEl);
+  const { position } = getNearestEdge(clientX, clientY, panelEl, allowed);
   return { position, depth: 0 };
 };

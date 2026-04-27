@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from "react";
-import type { LayoutNode, DropPosition } from "../types";
+import type { LayoutNode, DropPosition, LayoutDirection } from "../types";
 import { Resizer } from "./Resizer";
 import { PanelNodeRenderer } from "./PanelNodeRenderer";
 import { HORIZONTAL } from "../constants/layout";
@@ -29,6 +29,7 @@ interface LayoutNodeRendererProps {
   isPreviewActive?: boolean;
   resizerTheme?: ResizerTheme;
   dragHandleSelector?: string;
+  direction: LayoutDirection;
 }
 
 export const LayoutNodeRenderer = ({
@@ -41,6 +42,7 @@ export const LayoutNodeRenderer = ({
   isPreviewActive,
   resizerTheme,
   dragHandleSelector,
+  direction,
 }: LayoutNodeRendererProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -69,6 +71,7 @@ export const LayoutNodeRenderer = ({
         shadowPanelId={shadowPanelId}
         isPreviewActive={isPreviewActive}
         dragHandleSelector={dragHandleSelector}
+        direction={direction}
       />
     );
   }
@@ -87,6 +90,7 @@ export const LayoutNodeRenderer = ({
         isPreviewActive={isPreviewActive}
         resizerTheme={resizerTheme}
         dragHandleSelector={dragHandleSelector}
+        direction={direction}
       />
     );
     if (i < node.children.length - 1) {

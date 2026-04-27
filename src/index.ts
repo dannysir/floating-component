@@ -4,6 +4,7 @@ export type {
   PanelNode,
   SplitNode,
   SplitDirection,
+  LayoutDirection,
   DropPosition,
   InsertPanelInit,
   InsertAt,
