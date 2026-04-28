@@ -6,12 +6,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.2.3] - 2026-04-28
 
 ### Added
 
 - `direction` prop on `TreeLayout` (`"vertical" | "horizontal" | "complex"`, default `"complex"`) — restricts drag-drop to a single axis. In `"vertical"` mode the entire panel is split into top/bottom drop zones by the Y midline; `"horizontal"` divides left/right by the X midline. `"complex"` keeps the default 4-edge classification. When the input tree contains splits whose direction conflicts with the prop, those splits are auto-normalized and a dev-mode console warning is emitted. `useLayoutTree.splitPanel(...)` direct calls are not constrained.
 - `LayoutDirection` type exported from the package entry point.
+
+---
 
 ## [0.2.2] - 2026-04-24
 

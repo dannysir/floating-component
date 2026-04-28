@@ -110,6 +110,27 @@ const togglePanel = (id: string, component: ReactNode) => {
 - **부모 split 가장자리**에 드롭 → 부모 split의 형제로 배치
 - **루트 가장자리**에 드롭 → 최상위 레벨에 배치
 
+### 단일 축으로 제한
+
+`TreeLayout`은 기본적으로 4-edge 분류(`direction="complex"`)를 사용합니다. `direction` prop을 지정하면 레이아웃을 한 축으로 고정할 수 있습니다.
+
+```tsx
+<TreeLayout
+  tree={tree}
+  direction="vertical"
+  onResizeBorder={resizeBorder}
+  onMovePanel={movePanel}
+/>
+```
+
+- `"vertical"` — Y 중앙선 기준 상/하 드롭만 분류, vertical split만 생성
+- `"horizontal"` — X 중앙선 기준 좌/우 드롭만 분류, horizontal split만 생성
+- `"complex"` *(기본)* — 4-edge 분류로 양 축 모두 허용
+
+입력 `tree`에 prop과 충돌하는 split이 있으면 자동으로 정규화되고 dev 모드에서 콘솔 경고가 출력됩니다. `useLayoutTree.splitPanel(...)` 직접 호출은 제약하지 않습니다.
+
+자세한 내용은 [API 문서 → `direction`](./doc/API.ko.md#props)을 참고하세요.
+
 `useLayoutTree`의 `movePanel`과 연결하여 사용합니다.
 
 ```tsx

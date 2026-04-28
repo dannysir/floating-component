@@ -110,6 +110,27 @@ Drag any panel to reorder. A translucent preview of the drop target follows the 
 - Drop near the **enclosing split's edge** → place as a sibling of the parent split
 - Drop near the **root's edge** → place at the top level
 
+### Restrict to a single axis
+
+By default `TreeLayout` uses 4-edge classification (`direction="complex"`). Pass `direction` to lock the layout to one axis:
+
+```tsx
+<TreeLayout
+  tree={tree}
+  direction="vertical"
+  onResizeBorder={resizeBorder}
+  onMovePanel={movePanel}
+/>
+```
+
+- `"vertical"` — drops classified by the Y midline (top/bottom only); only vertical splits are produced
+- `"horizontal"` — drops classified by the X midline (left/right only); only horizontal splits are produced
+- `"complex"` *(default)* — 4-edge classification with both axes
+
+If the input `tree` contains splits whose direction conflicts with the prop, they are auto-normalized and a dev-mode console warning is emitted. `useLayoutTree.splitPanel(...)` direct calls are not constrained.
+
+See [API Reference → `direction`](./doc/API.md#props).
+
 Wire it up with `useLayoutTree`'s `movePanel`:
 
 ```tsx
