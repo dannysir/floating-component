@@ -1,6 +1,8 @@
 import type { DropPosition, LayoutDirection } from "../tree/types";
-import { ROOT_EDGE_RATIO, SPLIT_EDGE_RATIO } from "../constants/dropTarget";
 import { COMPLEX, HORIZONTAL, VERTICAL, LEFT, RIGHT, TOP, BOTTOM } from "../tree/constants";
+
+const ROOT_EDGE_RATIO = 0.05;
+const SPLIT_EDGE_RATIO = 0.15;
 
 const ALL_EDGES: readonly DropPosition[] = [LEFT, RIGHT, TOP, BOTTOM];
 const HORIZONTAL_EDGES: readonly DropPosition[] = [LEFT, RIGHT];
