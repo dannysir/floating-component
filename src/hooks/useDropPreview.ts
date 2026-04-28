@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import type { DropPreview } from "../renderers/LayoutNodeRenderer";
+import type { DropPreview } from "../components/LayoutNodeRenderer";
 
 const areDropPreviewsEqual = (
   a: DropPreview | null,

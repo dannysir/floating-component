@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from "react";
 import type { CSSProperties } from "react";
-import type { PanelNode, DropPosition } from "../types";
-import { getDropTarget } from "../utils/dropTarget";
-import { createRafScheduler } from "../utils/rafBatch";
+import type { PanelNode, DropPosition, LayoutDirection } from "../tree/types";
+import { getDropTarget } from "../dnd/dropTarget";
+import { createRafScheduler } from "../utils/rafScheduler";
 import type { DropPreview } from "./LayoutNodeRenderer";
 
 const SHADOW_STYLE: CSSProperties = {
@@ -18,6 +18,7 @@ interface PanelNodeRendererProps {
   shadowPanelId?: string;
   isPreviewActive?: boolean;
   dragHandleSelector?: string;
+  direction: LayoutDirection;
 }
 
 export const PanelNodeRenderer = ({
@@ -27,6 +28,7 @@ export const PanelNodeRenderer = ({
   shadowPanelId,
   isPreviewActive,
   dragHandleSelector,
+  direction,
 }: PanelNodeRendererProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const schedulerRef = useRef<ReturnType<typeof createRafScheduler> | null>(null);
@@ -68,11 +70,11 @@ export const PanelNodeRenderer = ({
       if (!sourcePanelId || sourcePanelId === node.id) return;
 
       schedulerRef.current!.schedule(() => {
-        const { position, depth } = getDropTarget(clientX, clientY, panelEl);
+        const { position, depth } = getDropTarget(clientX, clientY, panelEl, direction);
         onDropPreviewChange?.({ sourcePanelId, anchorPanelId: node.id, position, depth });
       });
     },
-    [node.id, onDropPreviewChange]
+    [node.id, onDropPreviewChange, direction]
   );
 
   const handleDrop = useCallback(
@@ -83,10 +85,10 @@ export const PanelNodeRenderer = ({
       onDropPreviewChange?.(null);
       const sourcePanelId = e.dataTransfer.getData("text/panel-id");
       if (!sourcePanelId || sourcePanelId === node.id || !onMovePanel) return;
-      const { position, depth } = getDropTarget(e.clientX, e.clientY, e.currentTarget as HTMLElement);
+      const { position, depth } = getDropTarget(e.clientX, e.clientY, e.currentTarget as HTMLElement, direction);
       onMovePanel(sourcePanelId, node.id, position, depth);
     },
-    [node.id, isPreviewActive, onDropPreviewChange, onMovePanel]
+    [node.id, isPreviewActive, onDropPreviewChange, onMovePanel, direction]
   );
 
   const isShadow = node.id === shadowPanelId;

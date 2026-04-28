@@ -1,4 +1,4 @@
-import type { LayoutNode, PanelNode, SplitDirection } from "../types";
+import type { LayoutNode, PanelNode, SplitDirection } from "./types";
 
 export const splitPanelAtId = (
   tree: LayoutNode,

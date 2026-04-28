@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
-import { HORIZONTAL, VERTICAL, LEFT, RIGHT, TOP, BOTTOM } from "./constants/layout";
+import { HORIZONTAL, VERTICAL, COMPLEX, LEFT, RIGHT, TOP, BOTTOM } from "./constants";
 
 export type SplitDirection = typeof HORIZONTAL | typeof VERTICAL;
+
+export type LayoutDirection = typeof HORIZONTAL | typeof VERTICAL | typeof COMPLEX;
 
 export interface PanelNode {
   type: "panel";

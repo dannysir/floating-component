@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { SplitDirection } from "../types";
+import type { SplitDirection } from "../tree/types";
 import {
   RESIZER_CLASS,
   RESIZER_CLASS_HORIZONTAL,
@@ -12,8 +12,8 @@ import {
   DEFAULT_RESIZER_THICKNESS,
   DEFAULT_RESIZER_LENGTH,
   DEFAULT_RESIZER_HOVER_ONLY,
-} from "../constants/resizer";
-import { HORIZONTAL } from "../constants/layout";
+} from "./resizerConstants";
+import { HORIZONTAL } from "../tree/constants";
 import { useDragResize } from "../hooks/useDragResize";
 
 interface ResizerProps {

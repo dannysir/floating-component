@@ -30,6 +30,7 @@ Recursively renders the layout tree using flexbox.
 | `onResizeBorder` | `(path: number[], borderIndex: number, delta: number, totalPixels?: number) => void` | | — | Border resize callback |
 | `onMovePanel` | `(sourceId: string, anchorId: string, position: DropPosition, depth: number) => void` | | — | Drag-and-drop move callback |
 | `dragHandleSelector` | `string` | | — | CSS selector for drag handle. Omit to make the entire panel draggable |
+| `direction` | `"vertical" \| "horizontal" \| "complex"` | | `"complex"` | Restricts drag-drop to a single axis. In `"vertical"` mode the entire panel is divided into top/bottom drop zones by the Y midline (X is ignored); `"horizontal"` divides left/right by the X midline. `"complex"` keeps the default 4-edge classification (X-pattern). If the input `tree` contains splits whose direction conflicts with this prop, they are auto-normalized to match and a dev-mode console warning is emitted. Does **not** constrain `useLayoutTree.splitPanel(...)` direct calls |
 | `backgroundColor` | `string` | | — | Background color of the root container |
 | `margin` | `number \| string` | | — | Margin of the root container |
 | `padding` | `number \| string` | | — | Padding of the root container |

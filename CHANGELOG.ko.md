@@ -6,6 +6,13 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
+## [Unreleased]
+
+### 추가
+
+- `TreeLayout`에 `direction` prop 추가 (`"vertical" | "horizontal" | "complex"`, 기본 `"complex"`) — 드래그·드롭을 단일 축으로 제한. `"vertical"`은 패널 전체를 Y 중앙선 기준 상/하 두 영역으로 분할, `"horizontal"`은 X 중앙선 기준 좌/우 분할. `"complex"`는 기본 4-edge 분류 유지. 입력 트리에 prop과 충돌하는 split이 있으면 자동 정규화되고 dev 모드에서 콘솔 경고 출력. `useLayoutTree.splitPanel(...)` 직접 호출은 제약하지 않음.
+- 패키지 엔트리에 `LayoutDirection` 타입 export.
+
 ## [0.2.2] - 2026-04-24
 
 ### 추가

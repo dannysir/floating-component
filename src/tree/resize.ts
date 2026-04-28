@@ -1,4 +1,4 @@
-import { MIN_FLEX_SIZE } from "../constants/tree";
+import { MIN_FLEX_SIZE } from "./constants";
 
 type ResizeChild = {
   size: number;
