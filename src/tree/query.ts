@@ -1,4 +1,4 @@
-import type { LayoutNode, PanelNode, SplitNode } from "../types";
+import type { LayoutNode, PanelNode, SplitNode } from "./types";
 
 export const getFirstPanelId = (tree: LayoutNode): string | null => {
   if (tree.type === "panel") return tree.id;

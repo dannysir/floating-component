@@ -1,4 +1,4 @@
-import type { LayoutNode, SplitNode } from "../types";
+import type { LayoutNode, SplitNode } from "./types";
 
 export const getNodeAtPath = (root: LayoutNode, path: number[]): LayoutNode | null => {
   let node = root;

@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from "react";
-import type { SplitDirection } from "../types";
+import type { SplitDirection } from "../tree/types";
 import { createRafScheduler } from "../utils/rafBatch";
-import { HORIZONTAL } from "../constants/layout";
+import { HORIZONTAL } from "../tree/constants";
 
 export const useDragResize = (
   direction: SplitDirection,

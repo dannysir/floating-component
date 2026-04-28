@@ -1,5 +1,5 @@
-import type { LayoutNode, LayoutDirection, SplitDirection } from "../types";
-import { COMPLEX, HORIZONTAL, VERTICAL } from "../constants/layout";
+import type { LayoutNode, LayoutDirection, SplitDirection } from "./types";
+import { COMPLEX, HORIZONTAL, VERTICAL } from "./constants";
 
 export const normalizeTreeDirection = (
   tree: LayoutNode,

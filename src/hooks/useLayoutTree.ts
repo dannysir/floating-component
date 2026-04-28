@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import {useState, useCallback, useMemo} from "react";
 import type {
   LayoutNode,
   PanelNode,
@@ -6,18 +6,14 @@ import type {
   DropPosition,
   InsertPanelInit,
   InsertAt,
-} from "../types";
-import { devWarn } from "../utils/devWarn";
-import {
-  getNodeAtPath,
-  updateAtPath,
-  findAndUpdate,
-} from "../utils/treeHelpers";
-import { insertPanelIntoTree, insertAtAnchorDepth } from "../utils/treeInsert";
-import { splitPanelAtId } from "../utils/treeSplit";
-import { clampSplitResize } from "../utils/treeResize";
-import { getFirstPanelId, getPanelIds, findPanelWithAncestors } from "../utils/treeQuery";
-import { DEFAULT_SPLIT_RATIO, MOVE_GHOST_ID } from "../constants/tree";
+} from "../tree/types";
+import {devWarn} from "../utils/devWarn";
+import {getNodeAtPath, updateAtPath, findAndUpdate} from "../tree/helpers";
+import {insertPanelIntoTree, insertAtAnchorDepth} from "../tree/insert";
+import {splitPanelAtId} from "../tree/split";
+import {clampSplitResize} from "../tree/resize";
+import {getFirstPanelId, getPanelIds, findPanelWithAncestors} from "../tree/query";
+import {DEFAULT_SPLIT_RATIO, MOVE_GHOST_ID} from "../tree/constants";
 
 let _idCounter = 0;
 const generatePanelId = (): string => {
@@ -53,13 +49,13 @@ export const computeMoveResult = (
   if (!found) return null;
   const sourcePanel = found.panel;
 
-  const ghost: PanelNode = { type: "panel", id: MOVE_GHOST_ID, size: 1, component: null };
+  const ghost: PanelNode = {type: "panel", id: MOVE_GHOST_ID, size: 1, component: null};
   const treeWithGhost = insertAtAnchorDepth(tree, ghost, anchorPanelId, position, depth);
 
   const treeWithoutSource = findAndUpdate(treeWithGhost, sourcePanelId, () => null);
   if (!treeWithoutSource) return null;
 
-  const finalTree = findAndUpdate(treeWithoutSource, MOVE_GHOST_ID, () => ({ ...sourcePanel, size: 1 }));
+  const finalTree = findAndUpdate(treeWithoutSource, MOVE_GHOST_ID, () => ({...sourcePanel, size: 1}));
   return finalTree ?? null;
 };
 
@@ -82,15 +78,15 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
 
         const left = split.children[borderIndex];
         const right = split.children[borderIndex + 1];
-        const { leftSize, rightSize } = clampSplitResize(left, right, delta, totalPixels);
+        const {leftSize, rightSize} = clampSplitResize(left, right, delta, totalPixels);
 
         return updateAtPath(prev, path, (node) => {
           if (node.type !== "split") return node;
           return {
             ...node,
             children: node.children.map((child, i) => {
-              if (i === borderIndex) return { ...child, size: leftSize };
-              if (i === borderIndex + 1) return { ...child, size: rightSize };
+              if (i === borderIndex) return {...child, size: leftSize};
+              if (i === borderIndex + 1) return {...child, size: rightSize};
               return child;
             }),
           };
@@ -142,7 +138,7 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
 
   const insertPanel = useCallback(
     (options: { panel: InsertPanelInit; at?: InsertAt }): string => {
-      const { panel, at } = options;
+      const {panel, at} = options;
       const newId = panel.id ?? generatePanelId();
       const newPanel: PanelNode = {
         type: "panel",

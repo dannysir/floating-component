@@ -1,12 +1,12 @@
 import React, { useRef, useCallback, useMemo, useEffect, useId } from "react";
-import type { LayoutNode, DropPosition, LayoutDirection } from "../types";
-import { COMPLEX } from "../constants/layout";
+import type { LayoutNode, DropPosition, LayoutDirection } from "../tree/types";
+import { COMPLEX } from "../tree/constants";
 import { computeMoveResult } from "../hooks/useLayoutTree";
 import { LayoutNodeRenderer } from "./LayoutNodeRenderer";
 import type { ResizerTheme } from "./LayoutNodeRenderer";
 import { useDropPreview } from "../hooks/useDropPreview";
 import { devWarn } from "../utils/devWarn";
-import { normalizeTreeDirection } from "../utils/treeDirection";
+import { normalizeTreeDirection } from "../tree/normalize";
 
 const collectPanelIds = (node: LayoutNode, ids: string[] = []): string[] => {
   if (node.type === "panel") {

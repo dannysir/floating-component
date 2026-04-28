@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from "react";
-import type { LayoutNode, DropPosition, LayoutDirection } from "../types";
+import type { LayoutNode, DropPosition, LayoutDirection } from "../tree/types";
 import { Resizer } from "./Resizer";
 import { PanelNodeRenderer } from "./PanelNodeRenderer";
-import { HORIZONTAL } from "../constants/layout";
+import { HORIZONTAL } from "../tree/constants";
 
 export interface DropPreview {
   sourcePanelId: string;

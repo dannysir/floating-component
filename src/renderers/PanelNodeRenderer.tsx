@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react";
 import type { CSSProperties } from "react";
-import type { PanelNode, DropPosition, LayoutDirection } from "../types";
+import type { PanelNode, DropPosition, LayoutDirection } from "../tree/types";
 import { getDropTarget } from "../utils/dropTarget";
 import { createRafScheduler } from "../utils/rafBatch";
 import type { DropPreview } from "./LayoutNodeRenderer";

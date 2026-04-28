@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { HORIZONTAL, VERTICAL, COMPLEX, LEFT, RIGHT, TOP, BOTTOM } from "./constants/layout";
+import { HORIZONTAL, VERTICAL, COMPLEX, LEFT, RIGHT, TOP, BOTTOM } from "./constants";
 
 export type SplitDirection = typeof HORIZONTAL | typeof VERTICAL;
 
