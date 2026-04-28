@@ -1,4 +1,4 @@
-import { DEFAULT_RESIZER_COLOR, DEFAULT_RESIZER_HOVER_COLOR } from "../constants/resizer";
+import { DEFAULT_RESIZER_COLOR, DEFAULT_RESIZER_HOVER_COLOR } from "./resizerConstants";
 
 export const RESIZER_CLASS = "ftl-resizer";
 export const RESIZER_CLASS_HORIZONTAL = "ftl-resizer--horizontal";

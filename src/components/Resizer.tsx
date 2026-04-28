@@ -12,7 +12,7 @@ import {
   DEFAULT_RESIZER_THICKNESS,
   DEFAULT_RESIZER_LENGTH,
   DEFAULT_RESIZER_HOVER_ONLY,
-} from "../constants/resizer";
+} from "./resizerConstants";
 import { HORIZONTAL } from "../tree/constants";
 import { useDragResize } from "../hooks/useDragResize";
 

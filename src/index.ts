@@ -9,7 +9,7 @@ export type {
   InsertAt,
 } from "./tree/types";
 
-export { TreeLayout } from "./renderers/TreeLayout";
+export { TreeLayout } from "./components/TreeLayout";
 
 export { useLayoutTree } from "./hooks/useLayoutTree";
 
