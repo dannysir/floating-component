@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from "react";
 import type { CSSProperties } from "react";
 import type { PanelNode, DropPosition, LayoutDirection } from "../tree/types";
 import { getDropTarget } from "../dnd/dropTarget";
-import { createRafScheduler } from "../utils/rafBatch";
+import { createRafScheduler } from "../utils/rafScheduler";
 import type { DropPreview } from "./LayoutNodeRenderer";
 
 const SHADOW_STYLE: CSSProperties = {

@@ -9,11 +9,12 @@ import type {
 } from "../tree/types";
 import {devWarn} from "../utils/devWarn";
 import {getNodeAtPath, updateAtPath, findAndUpdate} from "../tree/helpers";
-import {insertPanelIntoTree, insertAtAnchorDepth} from "../tree/insert";
+import {insertPanelIntoTree} from "../tree/insert";
 import {splitPanelAtId} from "../tree/split";
 import {clampSplitResize} from "../tree/resize";
 import {getFirstPanelId, getPanelIds, findPanelWithAncestors} from "../tree/query";
-import {DEFAULT_SPLIT_RATIO, MOVE_GHOST_ID} from "../tree/constants";
+import {DEFAULT_SPLIT_RATIO} from "../tree/constants";
+import {computeMoveResult} from "../tree/move";
 
 let _idCounter = 0;
 const generatePanelId = (): string => {
@@ -34,29 +35,6 @@ const withPanelCheck = (
     return prev;
   }
   return fn(prev);
-};
-
-export const computeMoveResult = (
-  tree: LayoutNode,
-  sourcePanelId: string,
-  anchorPanelId: string,
-  position: DropPosition,
-  depth: number,
-): LayoutNode | null => {
-  if (sourcePanelId === anchorPanelId) return null;
-
-  const found = findPanelWithAncestors(tree, sourcePanelId);
-  if (!found) return null;
-  const sourcePanel = found.panel;
-
-  const ghost: PanelNode = {type: "panel", id: MOVE_GHOST_ID, size: 1, component: null};
-  const treeWithGhost = insertAtAnchorDepth(tree, ghost, anchorPanelId, position, depth);
-
-  const treeWithoutSource = findAndUpdate(treeWithGhost, sourcePanelId, () => null);
-  if (!treeWithoutSource) return null;
-
-  const finalTree = findAndUpdate(treeWithoutSource, MOVE_GHOST_ID, () => ({...sourcePanel, size: 1}));
-  return finalTree ?? null;
 };
 
 export const useLayoutTree = (initialTree: LayoutNode) => {
