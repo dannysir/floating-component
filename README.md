@@ -80,6 +80,8 @@ const App = () => {
 };
 ```
 
+> `TreeLayout` fills its parent by default (`width: 100%`, `height: 100%`). Use a sized parent as above, or pass `width`/`height` props to set explicit dimensions.
+
 ---
 
 ## Recipes

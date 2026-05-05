@@ -31,6 +31,8 @@
 | `onMovePanel` | `(sourceId: string, anchorId: string, position: DropPosition, depth: number) => void` | | — | 드래그 앤 드롭 이동 콜백 |
 | `dragHandleSelector` | `string` | | — | 드래그 핸들 CSS 선택자. 미지정 시 패널 전체가 드래그 가능 |
 | `direction` | `"vertical" \| "horizontal" \| "complex"` | | `"complex"` | 드래그·드롭을 단일 축으로 제한. `"vertical"`은 패널 전체를 Y 중앙선 기준 상/하 두 영역으로 분할(X 무시), `"horizontal"`은 X 중앙선 기준 좌/우 분할. `"complex"`는 기본 4-edge 분류(X자 패턴) 유지. 입력 `tree`에 본 prop과 충돌하는 split이 있으면 자동으로 일치 방향으로 정규화되고 dev 모드에서 콘솔 경고 출력. `useLayoutTree.splitPanel(...)` 직접 호출은 **제약하지 않음** |
+| `width` | `number \| string` | | `"100%"` | 루트 컨테이너 너비. 기본값은 부모를 가득 채움. 명시적으로 지정하면 오버라이드 |
+| `height` | `number \| string` | | `"100%"` | 루트 컨테이너 높이. 기본값은 부모를 가득 채움. 명시적으로 지정하면 오버라이드 |
 | `backgroundColor` | `string` | | — | 루트 컨테이너 배경색 |
 | `margin` | `number \| string` | | — | 루트 컨테이너 마진 |
 | `padding` | `number \| string` | | — | 루트 컨테이너 패딩 |
@@ -39,6 +41,10 @@
 | `resizerColor` | `string` | | `"#0078d4"` | 중앙 바 색상. 기본적으로 hover 시 그라데이션 마스크와 함께 페이드인 |
 | `resizerHoverColor` | `string` | | `"#0078d4"` | hover 시 색상 (150ms transition). 미지정 시 `resizerColor`로 fallback |
 | `resizerHoverOnly` | `boolean` | | `true` | hover 시에만 페이드인. `false` 지정 시 항상 표시 |
+
+### 크기
+
+`TreeLayout`은 기본적으로 부모를 가득 채웁니다 (`width: 100%`, `height: 100%`). 부모는 명시 크기를 가져야 합니다 — 부모 높이가 콘텐츠 크기로 무너지면 레이아웃 높이는 0이 됩니다. `width`/`height` props로 직접 지정하거나, 명시 크기를 가진 부모(예: `100vw`/`100vh`)로 감싸세요.
 
 ### 스타일 커스터마이징
 
