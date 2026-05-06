@@ -6,6 +6,23 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
+## [0.2.4] - 2026-05-06
+
+### 추가
+
+- `TreeLayout`에 `width` / `height` props 추가 (`number | string`) — 루트 컨테이너 크기를 명시적으로 지정하며 기본 채움 동작을 오버라이드
+
+### 변경
+
+- `TreeLayout` 루트 컨테이너가 기본적으로 부모를 가득 채우도록 변경 (`width: 100%`, `height: 100%`, `min-width: 0`, `min-height: 0`, `box-sizing: border-box`) — flex/grid 부모 안에서 자연스럽게 합성됨
+
+### 마이그레이션 노트
+
+- 부모에 명시 크기가 이미 지정되어 있던 경우: 영향 없음
+- `TreeLayout`이 콘텐츠 크기로 무너지길 기대했던 경우: `width` / `height` props로 명시 지정 필요
+
+---
+
 ## [0.2.3] - 2026-04-28
 
 ### 추가
