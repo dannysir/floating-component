@@ -6,6 +6,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.2.4] - 2026-05-06
+
+### Added
+
+- `width` / `height` props on `TreeLayout` (`number | string`) — explicitly size the root container, overriding the default fill behavior
+
+### Changed
+
+- `TreeLayout` root container now fills its parent by default (`width: 100%`, `height: 100%`, `min-width: 0`, `min-height: 0`, `box-sizing: border-box`) so it composes cleanly inside flex/grid parents
+
+### Migration notes
+
+- Parents that already had an explicit size are unaffected
+- If you relied on `TreeLayout` collapsing to content size, pass explicit `width` / `height` props to restore prior behavior
+
+---
+
 ## [0.2.3] - 2026-04-28
 
 ### Added
