@@ -31,6 +31,8 @@ Recursively renders the layout tree using flexbox.
 | `onMovePanel` | `(sourceId: string, anchorId: string, position: DropPosition, depth: number) => void` | | — | Drag-and-drop move callback |
 | `dragHandleSelector` | `string` | | — | CSS selector for drag handle. Omit to make the entire panel draggable |
 | `direction` | `"vertical" \| "horizontal" \| "complex"` | | `"complex"` | Restricts drag-drop to a single axis. In `"vertical"` mode the entire panel is divided into top/bottom drop zones by the Y midline (X is ignored); `"horizontal"` divides left/right by the X midline. `"complex"` keeps the default 4-edge classification (X-pattern). If the input `tree` contains splits whose direction conflicts with this prop, they are auto-normalized to match and a dev-mode console warning is emitted. Does **not** constrain `useLayoutTree.splitPanel(...)` direct calls |
+| `width` | `number \| string` | | `"100%"` | Root container width. Defaults to filling the parent. Pass an explicit value to override |
+| `height` | `number \| string` | | `"100%"` | Root container height. Defaults to filling the parent. Pass an explicit value to override |
 | `backgroundColor` | `string` | | — | Background color of the root container |
 | `margin` | `number \| string` | | — | Margin of the root container |
 | `padding` | `number \| string` | | — | Padding of the root container |
@@ -39,6 +41,10 @@ Recursively renders the layout tree using flexbox.
 | `resizerColor` | `string` | | `"#0078d4"` | Color of the visible center bar. By default it fades in on hover via gradient mask |
 | `resizerHoverColor` | `string` | | `"#0078d4"` | Hover-state color (transitions 150ms). Falls back to `resizerColor` if unset |
 | `resizerHoverOnly` | `boolean` | | `true` | Fade the bar in only on hover. Set `false` to always show the bar |
+
+### Sizing
+
+`TreeLayout` fills its parent by default (`width: 100%`, `height: 100%`). The parent must have a defined size — if the parent collapses to its content height, the layout resolves to 0. Pass `width`/`height` props for explicit sizes, or wrap with a sized parent (e.g. `100vw`/`100vh`).
 
 ### Styling customization
 

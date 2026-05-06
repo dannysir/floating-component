@@ -24,6 +24,8 @@ interface TreeLayoutProps {
   dragHandleSelector?: string;
   direction?: LayoutDirection;
 
+  width?: number | string;
+  height?: number | string;
   backgroundColor?: string;
   margin?: number | string;
   padding?: number | string;
@@ -41,6 +43,8 @@ export const TreeLayout = ({
   onMovePanel,
   dragHandleSelector,
   direction = COMPLEX,
+  width,
+  height,
   backgroundColor,
   margin,
   padding,
@@ -115,7 +119,17 @@ export const TreeLayout = ({
     <div
       ref={rootRef}
       data-tree-root={instanceId}
-      style={{ display: "flex", backgroundColor, margin, padding }}
+      style={{
+        display: "flex",
+        width: width ?? "100%",
+        height: height ?? "100%",
+        minWidth: 0,
+        minHeight: 0,
+        boxSizing: "border-box",
+        backgroundColor,
+        margin,
+        padding,
+      }}
       onDrop={(e) => {
         e.preventDefault();
         const latest = latestRef.current;
