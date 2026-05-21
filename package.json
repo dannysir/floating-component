@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/dannysir/floating-component/issues"
   },
-  "homepage": "https://github.com/dannysir/floating-component#readme",
+  "homepage": "https://dannysir-labs.vercel.app/en/libraries/floating-components",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
