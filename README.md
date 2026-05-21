@@ -1,6 +1,6 @@
 # @dannysir/floating-components
 
-[한국어 README](./README.ko.md) · [API Reference](./doc/API.md)
+[한국어 README](./README.ko.md) · [Live Demo](https://dannysir-labs.vercel.app/en/libraries/floating-components) · [API Reference](./doc/API.md)
 
 Tree-based resizable and reorderable panel layout for React. Split panels horizontally or vertically, resize borders by dragging, and reorder panels via drag and drop — just like VS Code or any modern IDE.
 
