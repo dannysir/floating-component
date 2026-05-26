@@ -34,36 +34,34 @@ npm install @dannysir/floating-components
 ## 빠른 시작
 
 ```tsx
-import { TreeLayout, useLayoutTree, type LayoutNode } from "@dannysir/floating-components";
+import {
+  TreeLayout,
+  useLayoutTree,
+  createComponentStore,
+  type LayoutNode,
+} from "@dannysir/floating-components";
 
+// 1. 문자열 key를 렌더링할 React 노드에 매핑
+const store = createComponentStore({
+  "panel-a": <div style={{ padding: 16, background: "#dbeafe", height: "100%" }}>Panel A</div>,
+  "panel-b": <div style={{ padding: 16, background: "#dcfce7", height: "100%" }}>Panel B</div>,
+  "panel-c": <div style={{ padding: 16, background: "#ffedd5", height: "100%" }}>Panel C</div>,
+});
+
+// 2. 트리에는 React 엘리먼트 없이 문자열 componentKey만 저장
 const initialTree: LayoutNode = {
   type: "split",
   direction: "horizontal",
   size: 1,
   children: [
-    {
-      type: "panel",
-      id: "panel-a",
-      size: 1,
-      component: <div style={{ padding: 16, background: "#dbeafe", height: "100%" }}>Panel A</div>,
-    },
+    { type: "panel", id: "panel-a", size: 1, componentKey: "panel-a" },
     {
       type: "split",
       direction: "vertical",
       size: 1,
       children: [
-        {
-          type: "panel",
-          id: "panel-b",
-          size: 1,
-          component: <div style={{ padding: 16, background: "#dcfce7", height: "100%" }}>Panel B</div>,
-        },
-        {
-          type: "panel",
-          id: "panel-c",
-          size: 1,
-          component: <div style={{ padding: 16, background: "#ffedd5", height: "100%" }}>Panel C</div>,
-        },
+        { type: "panel", id: "panel-b", size: 1, componentKey: "panel-b" },
+        { type: "panel", id: "panel-c", size: 1, componentKey: "panel-c" },
       ],
     },
   ],
@@ -74,13 +72,15 @@ const App = () => {
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <TreeLayout tree={tree} onResizeBorder={resizeBorder} onMovePanel={movePanel} />
+      <TreeLayout tree={tree} components={store} onResizeBorder={resizeBorder} onMovePanel={movePanel} />
     </div>
   );
 };
 ```
 
 > `TreeLayout`은 기본적으로 부모를 가득 채웁니다 (`width: 100%`, `height: 100%`). 위 예제처럼 명시 크기를 가진 부모로 감싸거나, `width`/`height` props를 직접 전달해 크기를 지정할 수 있습니다.
+
+> 트리에는 원시값(`id`, `size`, `direction`, `componentKey`)만 들어가므로 `JSON.stringify(tree)`로 그대로 직렬화됩니다. 아래 [persistence](#persistence) 참고.
 
 ---
 
@@ -91,14 +91,48 @@ const App = () => {
 ```tsx
 const { panelIds, removePanel, insertPanel } = useLayoutTree(initialTree);
 
-const togglePanel = (id: string, component: ReactNode) => {
+const togglePanel = (id: string, componentKey: string) => {
   if (panelIds.includes(id)) {
     removePanel(id);
   } else {
-    insertPanel({ panel: { id, component } });
+    insertPanel({ panel: { id, componentKey } });
   }
 };
 ```
+
+---
+
+## Persistence
+
+트리가 원시값만 담기 때문에 별도 serializer 없이 `JSON.stringify` / `JSON.parse`만으로 레이아웃을 저장·복원할 수 있습니다. key ↔ React 노드 매핑인 `ComponentStore`는 코드 쪽에 따로 존재하므로 직렬화 대상이 아닙니다.
+
+```tsx
+const store = createComponentStore({
+  sidebar: <Sidebar />,
+  editor: <Editor />,
+});
+
+const STORAGE_KEY = "my-layout";
+
+const load = (): LayoutNode => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  return saved ? (JSON.parse(saved) as LayoutNode) : defaultTree;
+};
+
+const App = () => {
+  const { tree, resizeBorder, movePanel } = useLayoutTree(load());
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tree));
+  }, [tree]);
+
+  return <TreeLayout tree={tree} components={store} onResizeBorder={resizeBorder} onMovePanel={movePanel} />;
+};
+```
+
+복원 시 트리의 `componentKey`로 store를 조회합니다. 등록되지 않은 key면 패널이 빈 상태로 렌더되고 dev 모드 콘솔 경고가 출력되므로, store key는 릴리스 간 안정적으로 유지하세요.
+
+> store는 한 번만 생성해 안정적인 참조를 유지하세요(module-level 또는 `useMemo`). `register`/`unregister`는 내부 `Map`을 변경하지만 리렌더를 일으키지 **않습니다** — 화면을 동적으로 바꾸려면 store 변경에 의존하지 말고 트리를 교체(`setTree` 등)하세요.
 
 ---
 

@@ -27,6 +27,7 @@
 | Prop | 타입 | 필수 | 기본값 | 설명 |
 |------|------|:----:|--------|------|
 | `tree` | `LayoutNode` | O | — | 렌더링할 트리 루트 노드 |
+| `components` | `ComponentStore` | O | — | 각 패널의 `componentKey`를 실제 React 노드로 매핑하는 레지스트리. [`createComponentStore`](#createcomponentstoreinitial)로 생성 |
 | `onResizeBorder` | `(path: number[], borderIndex: number, delta: number, totalPixels?: number) => void` | | — | 경계선 리사이즈 콜백 |
 | `onMovePanel` | `(sourceId: string, anchorId: string, position: DropPosition, depth: number) => void` | | — | 드래그 앤 드롭 이동 콜백 |
 | `dragHandleSelector` | `string` | | — | 드래그 핸들 CSS 선택자. 미지정 시 패널 전체가 드래그 가능 |
@@ -75,6 +76,48 @@
 
 ---
 
+## ComponentStore
+
+트리는 패널마다 React 엘리먼트가 아니라 문자열 `componentKey`만 저장합니다. `ComponentStore`는 이 key를 실제 React 노드로 매핑하며, `TreeLayout`의 필수 `components` prop으로 전달됩니다. 덕분에 트리가 완전히 직렬화 가능해집니다([persistence](#persistence) 참고).
+
+### `createComponentStore(initial?)`
+
+store를 생성하며, `Record<string, ReactNode>`로 초기값을 지정할 수 있습니다.
+
+```ts
+const store = createComponentStore({
+  sidebar: <Sidebar />,
+  editor: <Editor />,
+});
+```
+
+| 메서드 | 타입 | 설명 |
+|--------|------|------|
+| `register` | `(key: string, node: ReactNode) => void` | 매핑 추가/교체 |
+| `unregister` | `(key: string) => void` | 매핑 제거 |
+| `get` | `(key: string) => ReactNode \| undefined` | key에 해당하는 노드 조회 |
+| `has` | `(key: string) => boolean` | key 등록 여부 |
+
+- store는 **한 번만** 생성하고 안정적인 참조를 유지하세요(module-level 또는 `useMemo`).
+- `register`/`unregister`는 내부 `Map`을 변경하지만 리렌더를 **일으키지 않습니다**. 화면을 동적으로 바꾸려면 store 변경 대신 트리를 교체(`setTree`)하세요.
+- 패널의 `componentKey`가 등록되지 않으면 패널은 빈 상태(`null`)로 렌더되고 dev 모드 콘솔 경고가 출력됩니다.
+
+### Persistence
+
+트리의 모든 값이 원시값이므로 별도 serializer 없이 `JSON.stringify` / `JSON.parse`로 레이아웃을 왕복할 수 있습니다. store는 코드 쪽에 존재하며 직렬화되지 않습니다.
+
+```tsx
+// 저장
+localStorage.setItem("layout", JSON.stringify(tree));
+
+// 복원
+const tree = JSON.parse(localStorage.getItem("layout")!) as LayoutNode;
+```
+
+복원된 트리가 컴포넌트를 찾을 수 있도록 store key는 릴리스 간 안정적으로 유지하세요.
+
+---
+
 ## `useLayoutTree(initialTree)`
 
 레이아웃 트리 상태를 관리하는 훅. 현재 트리와 셀렉터, 조작 헬퍼를 반환합니다.
@@ -110,10 +153,10 @@ const {
 
 ```ts
 splitPanel("editor", "vertical");
-// 자동 생성 id + 빈 component
+// 자동 생성 id + 빈 componentKey ("")
 
 splitPanel("editor", "horizontal", {
-  newPanel: { id: "preview", component: <Preview /> },
+  newPanel: { id: "preview", componentKey: "preview" },
 });
 // => "preview"
 ```
@@ -122,7 +165,7 @@ splitPanel("editor", "horizontal", {
 - 다르면 대상 패널을 새 split으로 감싸서 기존 + 새 패널을 담음
 - `newPanel.id` 생략 시 `crypto.randomUUID()`로 자동 생성
 - `newPanel.size` 기본값 `0.5`
-- `newPanel.component` 기본값 `null`
+- `newPanel.componentKey` 기본값 `""` (key를 지정하기 전까지 빈 패널로 렌더)
 
 #### `removePanel(panelId)`
 
@@ -141,16 +184,16 @@ splitPanel("editor", "horizontal", {
 
 ```ts
 // 루트에 append
-insertPanel({ panel: { component: <Editor /> } });
+insertPanel({ panel: { componentKey: "editor" } });
 
 // 기존 패널의 형제로 삽입
 insertPanel({
-  panel: { id: "preview", component: <Preview /> },
+  panel: { id: "preview", componentKey: "preview" },
   at: { anchorId: "editor", position: "right" },
 });
 ```
 
-- `panel.component`는 **필수**
+- `panel.componentKey`는 **필수** (`ComponentStore`에 등록되어 있어야 함)
 - `panel.id` 생략 시 자동 생성
 - `panel.size` 기본값 `1`
 - `at` 생략 시 루트에 append (규칙은 [트리 유틸](#트리-유틸) 참조)
@@ -246,10 +289,10 @@ type SplitDirection = "horizontal" | "vertical";
 interface PanelNode {
   type: "panel";
   id: string;
-  size: number;          // flex 비율
-  component: ReactNode;  // 렌더링할 콘텐츠
-  minSize?: number;      // 픽셀 최소값 (resizeBorder 클램핑용)
-  maxSize?: number;      // 픽셀 최대값
+  size: number;            // flex 비율
+  componentKey: string;    // ComponentStore의 key
+  minSize?: number;        // 픽셀 최소값 (resizeBorder 클램핑용)
+  maxSize?: number;        // 픽셀 최대값
 }
 
 interface SplitNode {
@@ -267,11 +310,18 @@ type DropPosition = "top" | "bottom" | "left" | "right";
 
 // insertPanel / insertPanelIntoTree 용
 interface InsertPanelInit {
-  component: ReactNode;  // 필수
+  componentKey: string;  // 필수
   id?: string;           // 미지정 시 자동 생성
   size?: number;
   minSize?: number;
   maxSize?: number;
+}
+
+interface ComponentStore {
+  register: (key: string, node: ReactNode) => void;
+  unregister: (key: string) => void;
+  get: (key: string) => ReactNode | undefined;
+  has: (key: string) => boolean;
 }
 
 interface InsertAt {

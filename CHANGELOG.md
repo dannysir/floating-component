@@ -6,6 +6,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+
+- `createComponentStore(initial?)` factory and `ComponentStore` type — a registry mapping string keys to React nodes, passed to `TreeLayout` via the new required `components` prop
+- Layout persistence: because the tree now holds only primitive values, it round-trips through `JSON.stringify` / `JSON.parse` with no custom serializer
+
+### Changed
+
+- **BREAKING**: `PanelNode.component` (`ReactNode`) replaced by `PanelNode.componentKey` (`string`). The same applies to `InsertPanelInit` and the `newPanel` option of `splitPanel`. Components are now resolved through the `ComponentStore` instead of being embedded in the tree
+- **BREAKING**: `TreeLayout` now requires a `components: ComponentStore` prop
+- When a panel's `componentKey` is not registered in the store, the panel renders empty and a dev-mode console warning is emitted
+
+### Migration notes
+
+- Create a store from your existing components and key them:
+
+  ```tsx
+  const store = createComponentStore({ editor: <Editor />, sidebar: <Sidebar /> });
+  ```
+
+- Replace each `component: <X />` in the tree with `componentKey: "x"`, and pass `components={store}` to `TreeLayout`
+- `insertPanel({ panel: { component } })` → `insertPanel({ panel: { componentKey } })`
+- `splitPanel(id, dir, { newPanel: { component } })` → `splitPanel(id, dir, { newPanel: { componentKey } })`
+
+---
+
 ## [0.2.5] - 2026-05-21
 
 ### Added

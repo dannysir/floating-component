@@ -34,36 +34,34 @@ npm install @dannysir/floating-components
 ## Quick Start
 
 ```tsx
-import { TreeLayout, useLayoutTree, type LayoutNode } from "@dannysir/floating-components";
+import {
+  TreeLayout,
+  useLayoutTree,
+  createComponentStore,
+  type LayoutNode,
+} from "@dannysir/floating-components";
 
+// 1. Map string keys to the React nodes they render.
+const store = createComponentStore({
+  "panel-a": <div style={{ padding: 16, background: "#dbeafe", height: "100%" }}>Panel A</div>,
+  "panel-b": <div style={{ padding: 16, background: "#dcfce7", height: "100%" }}>Panel B</div>,
+  "panel-c": <div style={{ padding: 16, background: "#ffedd5", height: "100%" }}>Panel C</div>,
+});
+
+// 2. The tree stores only string componentKeys — no React elements.
 const initialTree: LayoutNode = {
   type: "split",
   direction: "horizontal",
   size: 1,
   children: [
-    {
-      type: "panel",
-      id: "panel-a",
-      size: 1,
-      component: <div style={{ padding: 16, background: "#dbeafe", height: "100%" }}>Panel A</div>,
-    },
+    { type: "panel", id: "panel-a", size: 1, componentKey: "panel-a" },
     {
       type: "split",
       direction: "vertical",
       size: 1,
       children: [
-        {
-          type: "panel",
-          id: "panel-b",
-          size: 1,
-          component: <div style={{ padding: 16, background: "#dcfce7", height: "100%" }}>Panel B</div>,
-        },
-        {
-          type: "panel",
-          id: "panel-c",
-          size: 1,
-          component: <div style={{ padding: 16, background: "#ffedd5", height: "100%" }}>Panel C</div>,
-        },
+        { type: "panel", id: "panel-b", size: 1, componentKey: "panel-b" },
+        { type: "panel", id: "panel-c", size: 1, componentKey: "panel-c" },
       ],
     },
   ],
@@ -74,13 +72,15 @@ const App = () => {
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <TreeLayout tree={tree} onResizeBorder={resizeBorder} onMovePanel={movePanel} />
+      <TreeLayout tree={tree} components={store} onResizeBorder={resizeBorder} onMovePanel={movePanel} />
     </div>
   );
 };
 ```
 
 > `TreeLayout` fills its parent by default (`width: 100%`, `height: 100%`). Use a sized parent as above, or pass `width`/`height` props to set explicit dimensions.
+
+> The tree holds only primitive values (`id`, `size`, `direction`, `componentKey`), so `JSON.stringify(tree)` round-trips cleanly. See [Persistence](#persistence) below.
 
 ---
 
@@ -91,14 +91,48 @@ const App = () => {
 ```tsx
 const { panelIds, removePanel, insertPanel } = useLayoutTree(initialTree);
 
-const togglePanel = (id: string, component: ReactNode) => {
+const togglePanel = (id: string, componentKey: string) => {
   if (panelIds.includes(id)) {
     removePanel(id);
   } else {
-    insertPanel({ panel: { id, component } });
+    insertPanel({ panel: { id, componentKey } });
   }
 };
 ```
+
+---
+
+## Persistence
+
+Because the tree contains only primitive values, you can save and restore the layout with plain `JSON.stringify` / `JSON.parse` — no custom serializer needed. The `ComponentStore` (the key → React node mapping) lives separately in your code, so it never needs to be serialized.
+
+```tsx
+const store = createComponentStore({
+  sidebar: <Sidebar />,
+  editor: <Editor />,
+});
+
+const STORAGE_KEY = "my-layout";
+
+const load = (): LayoutNode => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  return saved ? (JSON.parse(saved) as LayoutNode) : defaultTree;
+};
+
+const App = () => {
+  const { tree, resizeBorder, movePanel } = useLayoutTree(load());
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tree));
+  }, [tree]);
+
+  return <TreeLayout tree={tree} components={store} onResizeBorder={resizeBorder} onMovePanel={movePanel} />;
+};
+```
+
+On restore, the tree's `componentKey`s are looked up in the store. If a key isn't registered, the panel renders empty and a dev-mode console warning is emitted — so keep your store keys stable across releases.
+
+> Create the store once and keep a stable reference (module-level or `useMemo`). Calling `register`/`unregister` mutates the internal `Map` but does **not** trigger a re-render — to change what's on screen dynamically, swap the tree (e.g. `setTree`) rather than relying on store mutation.
 
 ---
 
