@@ -1,5 +1,6 @@
 import React, { useRef, useCallback, useMemo, useEffect, useId } from "react";
 import type { LayoutNode, DropPosition, LayoutDirection } from "../tree/types";
+import type { ComponentStore } from "../tree/componentStore";
 import { COMPLEX } from "../tree/constants";
 import { computeMoveResult } from "../tree/move";
 import { LayoutNodeRenderer } from "./LayoutNodeRenderer";
@@ -19,6 +20,7 @@ const collectPanelIds = (node: LayoutNode, ids: string[] = []): string[] => {
 
 interface TreeLayoutProps {
   tree: LayoutNode;
+  components: ComponentStore;
   onResizeBorder?: (path: number[], borderIndex: number, delta: number, totalPixels?: number) => void;
   onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
   dragHandleSelector?: string;
@@ -39,6 +41,7 @@ interface TreeLayoutProps {
 
 export const TreeLayout = ({
   tree,
+  components,
   onResizeBorder,
   onMovePanel,
   dragHandleSelector,
@@ -150,6 +153,7 @@ export const TreeLayout = ({
     >
       <LayoutNodeRenderer
         node={previewTree ?? normalizedTree}
+        components={components}
         onResizeBorder={onResizeBorder}
         onMovePanel={onMovePanel}
         onDropPreviewChange={setPreview}

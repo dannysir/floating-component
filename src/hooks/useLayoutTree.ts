@@ -84,7 +84,7 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
             type: "panel",
             id: newId,
             size: options?.newPanel?.size ?? DEFAULT_SPLIT_RATIO,
-            component: options?.newPanel?.component ?? null,
+            componentKey: options?.newPanel?.componentKey ?? "",
           };
           return splitPanelAtId(t, panelId, direction, newPanel);
         }),
@@ -122,7 +122,7 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
         type: "panel",
         id: newId,
         size: panel.size ?? 1,
-        component: panel.component,
+        componentKey: panel.componentKey,
         minSize: panel.minSize,
         maxSize: panel.maxSize,
       };

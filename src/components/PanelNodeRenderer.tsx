@@ -1,8 +1,10 @@
 import React, { useCallback, useRef } from "react";
 import type { CSSProperties } from "react";
 import type { PanelNode, DropPosition, LayoutDirection } from "../tree/types";
+import type { ComponentStore } from "../tree/componentStore";
 import { getDropTarget } from "../dnd/dropTarget";
 import { createRafScheduler } from "../utils/rafScheduler";
+import { devWarn } from "../utils/devWarn";
 import type { DropPreview } from "./LayoutNodeRenderer";
 
 const SHADOW_STYLE: CSSProperties = {
@@ -13,6 +15,7 @@ const SHADOW_STYLE: CSSProperties = {
 
 interface PanelNodeRendererProps {
   node: PanelNode;
+  components: ComponentStore;
   onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
   onDropPreviewChange?: (preview: DropPreview | null) => void;
   shadowPanelId?: string;
@@ -23,6 +26,7 @@ interface PanelNodeRendererProps {
 
 export const PanelNodeRenderer = ({
   node,
+  components,
   onMovePanel,
   onDropPreviewChange,
   shadowPanelId,
@@ -93,6 +97,12 @@ export const PanelNodeRenderer = ({
 
   const isShadow = node.id === shadowPanelId;
 
+  let content = components.get(node.componentKey);
+  if (!components.has(node.componentKey)) {
+    devWarn(`No component registered for componentKey "${node.componentKey}" (panel "${node.id}").`);
+    content = null;
+  }
+
   return (
     <div
       ref={panelRef}
@@ -109,7 +119,7 @@ export const PanelNodeRenderer = ({
         ...(isShadow ? SHADOW_STYLE : undefined),
       }}
     >
-      {node.component}
+      {content}
     </div>
   );
 };

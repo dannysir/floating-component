@@ -13,5 +13,8 @@ export { TreeLayout } from "./components/TreeLayout";
 
 export { useLayoutTree } from "./hooks/useLayoutTree";
 
+export { createComponentStore } from "./tree/componentStore";
+export type { ComponentStore } from "./tree/componentStore";
+
 export { getFirstPanelId, getPanelIds } from "./tree/query";
 export { insertPanelIntoTree } from "./tree/insert";

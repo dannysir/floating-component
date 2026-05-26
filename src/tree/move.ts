@@ -17,7 +17,7 @@ export const computeMoveResult = (
   if (!found) return null;
   const sourcePanel = found.panel;
 
-  const ghost: PanelNode = {type: "panel", id: MOVE_GHOST_ID, size: 1, component: null};
+  const ghost: PanelNode = {type: "panel", id: MOVE_GHOST_ID, size: 1, componentKey: ""};
   const treeWithGhost = insertAtAnchorDepth(tree, ghost, anchorPanelId, position, depth);
 
   const treeWithoutSource = findAndUpdate(treeWithGhost, sourcePanelId, () => null);

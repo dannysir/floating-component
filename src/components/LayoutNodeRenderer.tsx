@@ -1,5 +1,6 @@
 import React, { useCallback, useRef } from "react";
 import type { LayoutNode, DropPosition, LayoutDirection } from "../tree/types";
+import type { ComponentStore } from "../tree/componentStore";
 import { Resizer } from "./Resizer";
 import { PanelNodeRenderer } from "./PanelNodeRenderer";
 import { HORIZONTAL } from "../tree/constants";
@@ -21,6 +22,7 @@ export interface ResizerTheme {
 
 interface LayoutNodeRendererProps {
   node: LayoutNode;
+  components: ComponentStore;
   path?: number[];
   onResizeBorder?: (path: number[], borderIndex: number, delta: number, totalPixels?: number) => void;
   onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
@@ -34,6 +36,7 @@ interface LayoutNodeRendererProps {
 
 export const LayoutNodeRenderer = ({
   node,
+  components,
   path = [],
   onResizeBorder,
   onMovePanel,
@@ -66,6 +69,7 @@ export const LayoutNodeRenderer = ({
     return (
       <PanelNodeRenderer
         node={node}
+        components={components}
         onMovePanel={onMovePanel}
         onDropPreviewChange={onDropPreviewChange}
         shadowPanelId={shadowPanelId}
@@ -82,6 +86,7 @@ export const LayoutNodeRenderer = ({
       <LayoutNodeRenderer
         key={child.type === "panel" ? child.id : `split-${i}`}
         node={child}
+        components={components}
         path={[...path, i]}
         onResizeBorder={onResizeBorder}
         onMovePanel={onMovePanel}
