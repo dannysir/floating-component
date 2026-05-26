@@ -6,7 +6,7 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
-## [Unreleased]
+## [0.3.0] - 2026-05-26
 
 ### 추가
 
