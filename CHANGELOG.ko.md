@@ -6,6 +6,33 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
+## [0.3.0] - 2026-05-26
+
+### 추가
+
+- `createComponentStore(initial?)` 팩토리와 `ComponentStore` 타입 — 문자열 key를 React 노드에 매핑하는 레지스트리. `TreeLayout`의 새 필수 `components` prop으로 전달
+- 레이아웃 persistence: 트리가 이제 원시값만 담으므로 별도 serializer 없이 `JSON.stringify` / `JSON.parse`로 왕복 가능
+
+### 변경
+
+- **BREAKING**: `PanelNode.component`(`ReactNode`)를 `PanelNode.componentKey`(`string`)로 교체. `InsertPanelInit`과 `splitPanel`의 `newPanel` 옵션도 동일. 컴포넌트는 트리에 직접 담는 대신 `ComponentStore`를 통해 조회됨
+- **BREAKING**: `TreeLayout`에 `components: ComponentStore` prop이 필수가 됨
+- 패널의 `componentKey`가 store에 등록되지 않은 경우 빈 패널로 렌더되고 dev 모드 콘솔 경고 출력
+
+### 마이그레이션 안내
+
+- 기존 컴포넌트로 store를 만들고 key를 부여하세요:
+
+  ```tsx
+  const store = createComponentStore({ editor: <Editor />, sidebar: <Sidebar /> });
+  ```
+
+- 트리의 각 `component: <X />`를 `componentKey: "x"`로 바꾸고, `TreeLayout`에 `components={store}` 전달
+- `insertPanel({ panel: { component } })` → `insertPanel({ panel: { componentKey } })`
+- `splitPanel(id, dir, { newPanel: { component } })` → `splitPanel(id, dir, { newPanel: { componentKey } })`
+
+---
+
 ## [0.2.5] - 2026-05-21
 
 ### 추가

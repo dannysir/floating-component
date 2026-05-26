@@ -27,6 +27,7 @@ Recursively renders the layout tree using flexbox.
 | Prop | Type | Required | Default | Description |
 |------|------|:--------:|---------|-------------|
 | `tree` | `LayoutNode` | Yes | — | Root node of the layout tree |
+| `components` | `ComponentStore` | Yes | — | Registry mapping each panel's `componentKey` to the React node it renders. Create with [`createComponentStore`](#createcomponentstoreinitial) |
 | `onResizeBorder` | `(path: number[], borderIndex: number, delta: number, totalPixels?: number) => void` | | — | Border resize callback |
 | `onMovePanel` | `(sourceId: string, anchorId: string, position: DropPosition, depth: number) => void` | | — | Drag-and-drop move callback |
 | `dragHandleSelector` | `string` | | — | CSS selector for drag handle. Omit to make the entire panel draggable |
@@ -75,6 +76,48 @@ Defaults already produce a modern hover-reveal line. Override only what you want
 
 ---
 
+## ComponentStore
+
+The tree stores only a string `componentKey` per panel, never a React element. The `ComponentStore` maps those keys to the actual React nodes and is passed to `TreeLayout` via the required `components` prop. This keeps the tree fully serializable (see [Persistence](#persistence)).
+
+### `createComponentStore(initial?)`
+
+Creates a store, optionally seeded from a `Record<string, ReactNode>`.
+
+```ts
+const store = createComponentStore({
+  sidebar: <Sidebar />,
+  editor: <Editor />,
+});
+```
+
+| Method | Type | Description |
+|--------|------|-------------|
+| `register` | `(key: string, node: ReactNode) => void` | Add or replace a mapping |
+| `unregister` | `(key: string) => void` | Remove a mapping |
+| `get` | `(key: string) => ReactNode \| undefined` | Look up the node for a key |
+| `has` | `(key: string) => boolean` | Whether a key is registered |
+
+- Create the store **once** and keep a stable reference (module-level or `useMemo`).
+- `register`/`unregister` mutate the internal `Map` but do **not** trigger a re-render. To change what's rendered dynamically, swap the tree (`setTree`) instead of relying on store mutation.
+- When a panel's `componentKey` is not registered, the panel renders empty (`null`) and a dev-mode console warning is emitted.
+
+### Persistence
+
+Because every value in the tree is primitive, the layout round-trips through `JSON.stringify` / `JSON.parse` with no custom serializer. The store lives in your code and is never serialized.
+
+```tsx
+// save
+localStorage.setItem("layout", JSON.stringify(tree));
+
+// restore
+const tree = JSON.parse(localStorage.getItem("layout")!) as LayoutNode;
+```
+
+Keep store keys stable across releases so restored trees resolve their components.
+
+---
+
 ## `useLayoutTree(initialTree)`
 
 Hook for managing layout tree state. Returns the current tree plus selectors and mutating helpers.
@@ -110,10 +153,10 @@ Splits a panel by adding a sibling in the given `direction`. Returns the new pan
 
 ```ts
 splitPanel("editor", "vertical");
-// Panel auto-generated id, empty component
+// Panel auto-generated id, empty componentKey ("")
 
 splitPanel("editor", "horizontal", {
-  newPanel: { id: "preview", component: <Preview /> },
+  newPanel: { id: "preview", componentKey: "preview" },
 });
 // => "preview"
 ```
@@ -122,7 +165,7 @@ splitPanel("editor", "horizontal", {
 - Otherwise the target panel is wrapped in a new split containing the old and new panels
 - `newPanel.id` — auto-generated via `crypto.randomUUID()` when omitted
 - `newPanel.size` — defaults to `0.5`
-- `newPanel.component` — defaults to `null`
+- `newPanel.componentKey` — defaults to `""` (renders empty until a key is set)
 
 #### `removePanel(panelId)`
 
@@ -141,16 +184,16 @@ Inserts a new panel. Returns the new panel's id.
 
 ```ts
 // Append to the root
-insertPanel({ panel: { component: <Editor /> } });
+insertPanel({ panel: { componentKey: "editor" } });
 
 // Insert as sibling of an existing panel
 insertPanel({
-  panel: { id: "preview", component: <Preview /> },
+  panel: { id: "preview", componentKey: "preview" },
   at: { anchorId: "editor", position: "right" },
 });
 ```
 
-- `panel.component` is **required**
+- `panel.componentKey` is **required** (must be registered in the `ComponentStore`)
 - `panel.id` is auto-generated when omitted
 - `panel.size` defaults to `1`
 - Omit `at` to append at the root level (see [Tree utilities](#tree-utilities) for root-append rules)
@@ -246,10 +289,10 @@ type SplitDirection = "horizontal" | "vertical";
 interface PanelNode {
   type: "panel";
   id: string;
-  size: number;          // flex ratio
-  component: ReactNode;  // content to render
-  minSize?: number;      // pixel minimum (for resizeBorder clamping)
-  maxSize?: number;      // pixel maximum
+  size: number;            // flex ratio
+  componentKey: string;    // key into the ComponentStore
+  minSize?: number;        // pixel minimum (for resizeBorder clamping)
+  maxSize?: number;        // pixel maximum
 }
 
 interface SplitNode {
@@ -267,11 +310,18 @@ type DropPosition = "top" | "bottom" | "left" | "right";
 
 // insertPanel / insertPanelIntoTree helpers
 interface InsertPanelInit {
-  component: ReactNode;  // required
+  componentKey: string;  // required
   id?: string;           // auto-generated when omitted
   size?: number;
   minSize?: number;
   maxSize?: number;
+}
+
+interface ComponentStore {
+  register: (key: string, node: ReactNode) => void;
+  unregister: (key: string) => void;
+  get: (key: string) => ReactNode | undefined;
+  has: (key: string) => boolean;
 }
 
 interface InsertAt {
