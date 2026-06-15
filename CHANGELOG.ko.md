@@ -6,6 +6,23 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
+## [Unreleased]
+
+### 추가
+
+- `PanelNode`·`SplitNode`·`InsertPanelInit`에 `minWidth`/`minHeight`/`maxWidth`/`maxHeight`(픽셀) — 패널이 속한 split 방향 축(main-axis)의 최소·최대 크기. 윈도우 리사이즈·경계선 드래그 모두에서 동일한 px로 일관 적용
+- 패널 wrapper `overflow: auto` — 콘텐츠가 패널보다 크면 잘리지 않고 스크롤되어 컴포넌트 디자인 무결성 보존
+
+### 변경
+
+- **BREAKING**: `PanelNode`/`SplitNode`/`InsertPanelInit`의 `minSize`/`maxSize` 제거 → `minWidth`/`minHeight`/`maxWidth`/`maxHeight`로 교체. 크기 제약은 패널이 속한 split 방향 축에만 적용되고, 반대 축은 overflow 스크롤로 처리됨
+
+### 마이그레이션 안내
+
+- 가로 split의 자식: `minSize` → `minWidth`, `maxSize` → `maxWidth`
+- 세로 split의 자식: `minSize` → `minHeight`, `maxSize` → `maxHeight`
+- 반대 축(cross-axis) 최소 크기가 필요했다면, 그 축이 main-axis가 되도록 트리 구조를 조정 (예: 최소 높이가 필요한 패널은 세로 split 안에 배치)
+
 ## [0.3.0] - 2026-05-26
 
 ### 추가

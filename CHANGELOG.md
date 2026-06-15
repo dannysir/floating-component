@@ -6,6 +6,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+
+- `minWidth`/`minHeight`/`maxWidth`/`maxHeight` (pixels) on `PanelNode`·`SplitNode`·`InsertPanelInit` — min/max size on the panel's split-direction axis (main-axis), honored consistently by both window resize and border drag
+- Panel wrapper `overflow: auto` — content larger than the panel scrolls instead of being clipped, preserving component design integrity
+
+### Changed
+
+- **BREAKING**: removed `minSize`/`maxSize` from `PanelNode`/`SplitNode`/`InsertPanelInit` → replaced by `minWidth`/`minHeight`/`maxWidth`/`maxHeight`. Size constraints now apply only on the panel's split-direction axis; the cross-axis is handled by overflow scrolling
+
+### Migration notes
+
+- Child of a horizontal split: `minSize` → `minWidth`, `maxSize` → `maxWidth`
+- Child of a vertical split: `minSize` → `minHeight`, `maxSize` → `maxHeight`
+- If you relied on a cross-axis minimum, restructure the tree so that axis is the main-axis (e.g. place a panel needing a min height inside a vertical split)
+
 ## [0.3.0] - 2026-05-26
 
 ### Added
