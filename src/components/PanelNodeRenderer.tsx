@@ -1,11 +1,12 @@
 import React, { useCallback, useRef } from "react";
 import type { CSSProperties } from "react";
-import type { PanelNode, DropPosition, LayoutDirection } from "../tree/types";
+import type { PanelNode, DropPosition, LayoutDirection, SplitDirection } from "../tree/types";
 import type { ComponentStore } from "../tree/componentStore";
 import { getDropTarget } from "../dnd/dropTarget";
 import { createRafScheduler } from "../utils/rafScheduler";
 import { devWarn } from "../utils/devWarn";
 import type { DropPreview } from "./LayoutNodeRenderer";
+import { panelSizeStyle } from "./panelSizeStyle";
 
 const SHADOW_STYLE: CSSProperties = {
   opacity: 0.5,
@@ -22,6 +23,7 @@ interface PanelNodeRendererProps {
   isPreviewActive?: boolean;
   dragHandleSelector?: string;
   direction: LayoutDirection;
+  parentDirection?: SplitDirection;
 }
 
 export const PanelNodeRenderer = ({
@@ -33,6 +35,7 @@ export const PanelNodeRenderer = ({
   isPreviewActive,
   dragHandleSelector,
   direction,
+  parentDirection,
 }: PanelNodeRendererProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const schedulerRef = useRef<ReturnType<typeof createRafScheduler> | null>(null);
@@ -113,9 +116,8 @@ export const PanelNodeRenderer = ({
       onDrop={handleDrop}
       style={{
         flex: node.size,
-        minWidth: 0,
-        minHeight: 0,
-        overflow: "hidden",
+        ...panelSizeStyle(parentDirection, node.minWidth, node.minHeight, node.maxWidth, node.maxHeight),
+        overflow: "auto",
         ...(isShadow ? SHADOW_STYLE : undefined),
       }}
     >

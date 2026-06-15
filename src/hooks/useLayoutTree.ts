@@ -13,7 +13,7 @@ import {insertPanelIntoTree} from "../tree/insert";
 import {splitPanelAtId} from "../tree/split";
 import {clampSplitResize} from "../tree/resize";
 import {getFirstPanelId, getPanelIds, findPanelWithAncestors} from "../tree/query";
-import {DEFAULT_SPLIT_RATIO} from "../tree/constants";
+import {DEFAULT_SPLIT_RATIO, HORIZONTAL} from "../tree/constants";
 import {computeMoveResult} from "../tree/move";
 
 let _idCounter = 0;
@@ -56,7 +56,13 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
 
         const left = split.children[borderIndex];
         const right = split.children[borderIndex + 1];
-        const {leftSize, rightSize} = clampSplitResize(left, right, delta, totalPixels);
+        const horiz = split.direction === HORIZONTAL;
+        const pick = (n: LayoutNode) => ({
+          size: n.size,
+          minSize: horiz ? n.minWidth : n.minHeight,
+          maxSize: horiz ? n.maxWidth : n.maxHeight,
+        });
+        const {leftSize, rightSize} = clampSplitResize(pick(left), pick(right), delta, totalPixels);
 
         return updateAtPath(prev, path, (node) => {
           if (node.type !== "split") return node;
@@ -123,8 +129,10 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
         id: newId,
         size: panel.size ?? 1,
         componentKey: panel.componentKey,
-        minSize: panel.minSize,
-        maxSize: panel.maxSize,
+        minWidth: panel.minWidth,
+        minHeight: panel.minHeight,
+        maxWidth: panel.maxWidth,
+        maxHeight: panel.maxHeight,
       };
 
       setTree((prev) => insertPanelIntoTree(prev, newPanel, at));
