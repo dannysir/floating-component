@@ -8,6 +8,16 @@ Tree 기반으로 크기 조절과 패널 이동이 가능한 React 레이아웃
 
 ---
 
+## 최근 변경 (0.4.0)
+
+- 패널 크기 제약: `minWidth`/`minHeight`/`maxWidth`/`maxHeight`(px) — split 방향 축에 적용
+- 콘텐츠가 패널을 넘치면 자동 스크롤 (`overflow: auto`)
+- ⚠️ BREAKING: `minSize`/`maxSize` 제거
+
+전체 이력은 [CHANGELOG](./CHANGELOG.ko.md) 참고.
+
+---
+
 ## 특징
 
 - **N-ary 트리 구조** — SplitNode가 2개 이상의 자식을 가질 수 있어 불필요한 중첩 없이 flat한 트리 유지

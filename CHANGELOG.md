@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.4.0] - 2026-06-17
 
 ### Added
 
@@ -22,6 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Child of a horizontal split: `minSize` → `minWidth`, `maxSize` → `maxWidth`
 - Child of a vertical split: `minSize` → `minHeight`, `maxSize` → `maxHeight`
 - If you relied on a cross-axis minimum, restructure the tree so that axis is the main-axis (e.g. place a panel needing a min height inside a vertical split)
+
+---
 
 ## [0.3.0] - 2026-05-26
 

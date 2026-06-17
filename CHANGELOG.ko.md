@@ -6,7 +6,7 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
-## [Unreleased]
+## [0.4.0] - 2026-06-17
 
 ### 추가
 
@@ -22,6 +22,8 @@
 - 가로 split의 자식: `minSize` → `minWidth`, `maxSize` → `maxWidth`
 - 세로 split의 자식: `minSize` → `minHeight`, `maxSize` → `maxHeight`
 - 반대 축(cross-axis) 최소 크기가 필요했다면, 그 축이 main-axis가 되도록 트리 구조를 조정 (예: 최소 높이가 필요한 패널은 세로 split 안에 배치)
+
+---
 
 ## [0.3.0] - 2026-05-26
 

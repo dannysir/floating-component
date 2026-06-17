@@ -8,6 +8,16 @@ Tree-based resizable and reorderable panel layout for React. Split panels horizo
 
 ---
 
+## What's New (0.4.0)
+
+- Panel size constraints: `minWidth`/`minHeight`/`maxWidth`/`maxHeight` (px) on the split-direction axis
+- Content scrolls when it overflows the panel (`overflow: auto`)
+- ⚠️ BREAKING: `minSize`/`maxSize` removed
+
+See the full history in the [changelog](./CHANGELOG.md).
+
+---
+
 ## Features
 
 - **N-ary tree structure** — `SplitNode` can hold two or more children, keeping the tree flat without unnecessary nesting
