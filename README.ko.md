@@ -12,6 +12,7 @@ Tree 기반으로 크기 조절과 패널 이동이 가능한 React 레이아웃
 
 - **N-ary 트리 구조** — SplitNode가 2개 이상의 자식을 가질 수 있어 불필요한 중첩 없이 flat한 트리 유지
 - **경계선 드래그 리사이즈** — 패널 사이 경계선을 드래그해서 크기 조절 (requestAnimationFrame 최적화)
+- **패널 크기 제약** — `minWidth`/`minHeight`/`maxWidth`/`maxHeight`(px)로 최소·최대 크기 지정, 콘텐츠가 넘치면 자동 스크롤
 - **드래그 앤 드롭 패널 이동** — HTML5 Drag & Drop API로 패널을 다른 위치로 이동
 - **다단계 드롭 타겟 감지** — 패널 가장자리, 부모 split 가장자리, 루트 가장자리를 구분하여 depth 기반 배치
 - **불변 상태 관리** — 모든 트리 업데이트가 immutable하게 처리
@@ -99,6 +100,15 @@ const togglePanel = (id: string, componentKey: string) => {
   }
 };
 ```
+
+### 패널 최소/최대 크기
+
+```tsx
+// 사이드바(가로 split의 자식)에 최소/최대 너비
+{ type: "panel", id: "sidebar", size: 1, componentKey: "sidebar", minWidth: 240, maxWidth: 400 }
+```
+
+`minWidth`/`minHeight`/`maxWidth`/`maxHeight`(px)는 패널이 **속한 split 방향 축**에만 적용됩니다(가로 split → width, 세로 split → height). 콘텐츠가 패널보다 커지면 잘리지 않고 스크롤됩니다. 자세한 내용은 [API → 패널 크기 제약](./doc/API.ko.md#패널-크기-제약).
 
 ---
 

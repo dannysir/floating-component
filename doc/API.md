@@ -118,6 +118,20 @@ Keep store keys stable across releases so restored trees resolve their component
 
 ---
 
+## Panel size constraints
+
+Set a panel's min/max size with `minWidth`/`minHeight`/`maxWidth`/`maxHeight` (pixels) on `PanelNode`·`SplitNode`.
+
+- Each value applies **only on the split-direction axis (main-axis)** of the panel. A child of a horizontal split uses `minWidth`/`maxWidth`; a child of a vertical split uses `minHeight`/`maxHeight`. **The cross-axis value is ignored.**
+- An applied constraint is honored consistently by both **window/container resize** (CSS) and **border drag** (`resizeBorder`), using the same px value.
+- If you need a minimum on a specific axis, structure the tree so that axis is the main-axis (e.g. place a panel that needs a min height inside a vertical split).
+
+### Content overflow
+
+The panel wrapper uses `overflow: auto`. When your component is larger than the panel, it **scrolls instead of being clipped**, preserving the component's design integrity. Components should use `width: 100%` / `height: 100%` to fill the panel.
+
+---
+
 ## `useLayoutTree(initialTree)`
 
 Hook for managing layout tree state. Returns the current tree plus selectors and mutating helpers.
@@ -200,7 +214,7 @@ insertPanel({
 
 #### `resizeBorder(path, borderIndex, delta, totalPixels?)`
 
-Resizes the border between two adjacent children of a split at `path`. Honors `minSize`/`maxSize` of the adjacent children. Usually wired to `<TreeLayout onResizeBorder={resizeBorder} />`.
+Resizes the border between two adjacent children of a split at `path`. Honors the adjacent children's split-axis min/max (`minWidth`/`maxWidth` in a horizontal split, `minHeight`/`maxHeight` in a vertical split). Usually wired to `<TreeLayout onResizeBorder={resizeBorder} />`.
 
 #### Selector tips
 
@@ -291,8 +305,10 @@ interface PanelNode {
   id: string;
   size: number;            // flex ratio
   componentKey: string;    // key into the ComponentStore
-  minSize?: number;        // pixel minimum (for resizeBorder clamping)
-  maxSize?: number;        // pixel maximum
+  minWidth?: number;       // pixel min width (applies when child of a horizontal split)
+  minHeight?: number;      // pixel min height (applies when child of a vertical split)
+  maxWidth?: number;       // pixel max width
+  maxHeight?: number;      // pixel max height
 }
 
 interface SplitNode {
@@ -300,8 +316,10 @@ interface SplitNode {
   direction: SplitDirection;
   size: number;            // flex ratio
   children: LayoutNode[];  // two or more children
-  minSize?: number;
-  maxSize?: number;
+  minWidth?: number;
+  minHeight?: number;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
 type LayoutNode = PanelNode | SplitNode;
@@ -313,8 +331,10 @@ interface InsertPanelInit {
   componentKey: string;  // required
   id?: string;           // auto-generated when omitted
   size?: number;
-  minSize?: number;
-  maxSize?: number;
+  minWidth?: number;
+  minHeight?: number;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
 interface ComponentStore {

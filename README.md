@@ -12,6 +12,7 @@ Tree-based resizable and reorderable panel layout for React. Split panels horizo
 
 - **N-ary tree structure** — `SplitNode` can hold two or more children, keeping the tree flat without unnecessary nesting
 - **Border drag resize** — drag panel borders to resize (requestAnimationFrame optimized)
+- **Panel size constraints** — set min/max with `minWidth`/`minHeight`/`maxWidth`/`maxHeight` (px); content scrolls when it overflows
 - **Drag-and-drop panel move** — reorder panels via HTML5 Drag & Drop API
 - **Multi-level drop target** — distinguishes panel edge, parent split edge, and root edge for depth-aware placement
 - **Immutable state** — all tree updates produce new objects via spread
@@ -99,6 +100,15 @@ const togglePanel = (id: string, componentKey: string) => {
   }
 };
 ```
+
+### Panel min/max size
+
+```tsx
+// min/max width for a sidebar (child of a horizontal split)
+{ type: "panel", id: "sidebar", size: 1, componentKey: "sidebar", minWidth: 240, maxWidth: 400 }
+```
+
+`minWidth`/`minHeight`/`maxWidth`/`maxHeight` (px) apply **only on the panel's split-direction axis** (horizontal split → width, vertical split → height). When content is larger than the panel it scrolls instead of being clipped. See [API → Panel size constraints](./doc/API.md#panel-size-constraints).
 
 ---
 

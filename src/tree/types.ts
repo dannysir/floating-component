@@ -9,8 +9,10 @@ export interface PanelNode {
   id: string;
   size: number;
   componentKey: string;
-  minSize?: number;
-  maxSize?: number;
+  minWidth?: number;
+  minHeight?: number;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
 export interface SplitNode {
@@ -18,8 +20,10 @@ export interface SplitNode {
   direction: SplitDirection;
   size: number;
   children: LayoutNode[];
-  minSize?: number;
-  maxSize?: number;
+  minWidth?: number;
+  minHeight?: number;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
 export type LayoutNode = PanelNode | SplitNode;
@@ -30,8 +34,10 @@ export interface InsertPanelInit {
   componentKey: string;
   id?: string;
   size?: number;
-  minSize?: number;
-  maxSize?: number;
+  minWidth?: number;
+  minHeight?: number;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
 export interface InsertAt {

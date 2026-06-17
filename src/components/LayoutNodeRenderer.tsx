@@ -1,9 +1,10 @@
 import React, { useCallback, useRef } from "react";
-import type { LayoutNode, DropPosition, LayoutDirection } from "../tree/types";
+import type { LayoutNode, DropPosition, LayoutDirection, SplitDirection } from "../tree/types";
 import type { ComponentStore } from "../tree/componentStore";
 import { Resizer } from "./Resizer";
 import { PanelNodeRenderer } from "./PanelNodeRenderer";
 import { HORIZONTAL } from "../tree/constants";
+import { panelSizeStyle } from "./panelSizeStyle";
 
 export interface DropPreview {
   sourcePanelId: string;
@@ -32,6 +33,7 @@ interface LayoutNodeRendererProps {
   resizerTheme?: ResizerTheme;
   dragHandleSelector?: string;
   direction: LayoutDirection;
+  parentDirection?: SplitDirection;
 }
 
 export const LayoutNodeRenderer = ({
@@ -46,6 +48,7 @@ export const LayoutNodeRenderer = ({
   resizerTheme,
   dragHandleSelector,
   direction,
+  parentDirection,
 }: LayoutNodeRendererProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -76,6 +79,7 @@ export const LayoutNodeRenderer = ({
         isPreviewActive={isPreviewActive}
         dragHandleSelector={dragHandleSelector}
         direction={direction}
+        parentDirection={parentDirection}
       />
     );
   }
@@ -96,6 +100,7 @@ export const LayoutNodeRenderer = ({
         resizerTheme={resizerTheme}
         dragHandleSelector={dragHandleSelector}
         direction={direction}
+        parentDirection={node.direction}
       />
     );
     if (i < node.children.length - 1) {
@@ -122,8 +127,7 @@ export const LayoutNodeRenderer = ({
         display: "flex",
         flexDirection: node.direction === HORIZONTAL ? "row" : "column",
         flex: node.size,
-        minWidth: 0,
-        minHeight: 0,
+        ...panelSizeStyle(parentDirection, node.minWidth, node.minHeight, node.maxWidth, node.maxHeight),
       }}
     >
       {elements}

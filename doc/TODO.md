@@ -48,9 +48,12 @@
 
 ---
 
-## 2. PanelNode CSS sizing constraint
+## 2. 패널 크기 제약 ✅ 완료 (브랜치 `feat/panel-sizing`)
 
-> 작업 브랜치: `feat/sizing-and-panel-lock`
+> **최종 구현은 아래 초기 플랜과 다름.** `minWidth`/`minHeight`/`maxWidth`/`maxHeight`(px)를
+> 패널이 속한 split 방향 축(main-axis)에만 적용 + 콘텐츠 `overflow:auto` 스크롤로 무결성 보존.
+> cross-axis min/max는 제거(스크롤로 대체). 드래그·윈도우 리사이즈가 같은 px로 일관 보장.
+> 상세는 README / doc/API 문서 참고. 아래는 폐기된 초기 접근(자식 CSS min 자동 보호) 기록.
 
 ### 배경
 

@@ -118,6 +118,20 @@ const tree = JSON.parse(localStorage.getItem("layout")!) as LayoutNode;
 
 ---
 
+## 패널 크기 제약
+
+`PanelNode`·`SplitNode`의 `minWidth`/`minHeight`/`maxWidth`/`maxHeight`(픽셀)로 패널의 최소·최대 크기를 지정합니다.
+
+- 각 값은 패널이 **속한 split 방향 축(main-axis)에만** 적용됩니다. 가로 split의 자식이면 `minWidth`/`maxWidth`가, 세로 split의 자식이면 `minHeight`/`maxHeight`가 작동하며 **반대 축 값은 무시**됩니다.
+- 적용된 제약은 **윈도우/컨테이너 리사이즈**(CSS)와 **경계선 드래그**(`resizeBorder`)에서 동일한 px로 일관되게 보장됩니다.
+- 특정 축의 최소 크기가 꼭 필요하면, 그 축이 main-axis가 되도록 트리를 구성하세요 (예: 최소 높이가 필요한 패널은 세로 split 안에 배치).
+
+### 콘텐츠 오버플로우
+
+패널 wrapper는 `overflow: auto`입니다. 사용자 컴포넌트가 패널보다 커지면 **잘리지 않고 스크롤**되어 컴포넌트의 디자인 무결성이 보존됩니다. 컴포넌트는 부모를 채우도록 `width: 100%`/`height: 100%`를 권장합니다.
+
+---
+
 ## `useLayoutTree(initialTree)`
 
 레이아웃 트리 상태를 관리하는 훅. 현재 트리와 셀렉터, 조작 헬퍼를 반환합니다.
@@ -200,7 +214,7 @@ insertPanel({
 
 #### `resizeBorder(path, borderIndex, delta, totalPixels?)`
 
-`path`의 split 내부에서 인접한 두 자식 사이의 경계선을 리사이즈. 인접 자식의 `minSize`/`maxSize`를 준수합니다. 보통 `<TreeLayout onResizeBorder={resizeBorder} />`에 연결.
+`path`의 split 내부에서 인접한 두 자식 사이의 경계선을 리사이즈. 인접 자식의 split 방향 축 min/max(가로 split이면 `minWidth`/`maxWidth`, 세로 split이면 `minHeight`/`maxHeight`)를 준수합니다. 보통 `<TreeLayout onResizeBorder={resizeBorder} />`에 연결.
 
 #### 셀렉터 팁
 
@@ -291,8 +305,10 @@ interface PanelNode {
   id: string;
   size: number;            // flex 비율
   componentKey: string;    // ComponentStore의 key
-  minSize?: number;        // 픽셀 최소값 (resizeBorder 클램핑용)
-  maxSize?: number;        // 픽셀 최대값
+  minWidth?: number;       // 픽셀 최소 너비 (가로 split의 자식일 때 적용)
+  minHeight?: number;      // 픽셀 최소 높이 (세로 split의 자식일 때 적용)
+  maxWidth?: number;       // 픽셀 최대 너비
+  maxHeight?: number;      // 픽셀 최대 높이
 }
 
 interface SplitNode {
@@ -300,8 +316,10 @@ interface SplitNode {
   direction: SplitDirection;
   size: number;             // flex 비율
   children: LayoutNode[];   // 2개 이상의 자식
-  minSize?: number;
-  maxSize?: number;
+  minWidth?: number;
+  minHeight?: number;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
 type LayoutNode = PanelNode | SplitNode;
@@ -313,8 +331,10 @@ interface InsertPanelInit {
   componentKey: string;  // 필수
   id?: string;           // 미지정 시 자동 생성
   size?: number;
-  minSize?: number;
-  maxSize?: number;
+  minWidth?: number;
+  minHeight?: number;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
 interface ComponentStore {
