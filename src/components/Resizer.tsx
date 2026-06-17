@@ -40,7 +40,7 @@ export const Resizer = ({
   hoverOnly = DEFAULT_RESIZER_HOVER_ONLY,
 }: ResizerProps) => {
   const isHorizontal = direction === HORIZONTAL;
-  const onMouseDown = useDragResize(direction, onResize);
+  const onPointerDown = useDragResize(direction, onResize);
 
   const style: CSSProperties = isHorizontal
     ? { width: thickness, height: length }
@@ -53,5 +53,5 @@ export const Resizer = ({
     ? `${RESIZER_CLASS} ${directionClass} ${RESIZER_CLASS_HOVER_ONLY}`
     : `${RESIZER_CLASS} ${directionClass}`;
 
-  return <div onMouseDown={onMouseDown} className={className} style={style} />;
+  return <div onPointerDown={onPointerDown} className={className} style={style} />;
 };

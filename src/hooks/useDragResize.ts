@@ -10,17 +10,27 @@ export const useDragResize = (
   const isHorizontal = direction === HORIZONTAL;
   const startPos = useRef(0);
   const pendingDelta = useRef(0);
+  const activePointerId = useRef<number | null>(null);
   const schedulerRef = useRef<ReturnType<typeof createRafScheduler> | null>(null);
   if (schedulerRef.current === null) schedulerRef.current = createRafScheduler();
 
   return useCallback(
-    (e: React.MouseEvent) => {
+    (e: React.PointerEvent<HTMLElement>) => {
+      if (activePointerId.current !== null) return;
       e.preventDefault();
+      const el = e.currentTarget;
+      const pointerId = e.pointerId;
+      el.setPointerCapture(pointerId);
+      activePointerId.current = pointerId;
       startPos.current = isHorizontal ? e.clientX : e.clientY;
       pendingDelta.current = 0;
       const scheduler = schedulerRef.current!;
 
-      const onMouseMove = (ev: MouseEvent) => {
+      const prevUserSelect = document.body.style.userSelect;
+      document.body.style.userSelect = "none";
+
+      const onPointerMove = (ev: PointerEvent) => {
+        if (ev.pointerId !== activePointerId.current) return;
         const current = isHorizontal ? ev.clientX : ev.clientY;
         const delta = current - startPos.current;
         if (delta === 0) return;
@@ -32,18 +42,24 @@ export const useDragResize = (
         });
       };
 
-      const onMouseUp = () => {
+      const finish = (ev: PointerEvent) => {
+        if (ev.pointerId !== activePointerId.current) return;
         if (scheduler.isPending()) {
           scheduler.cancel();
           if (pendingDelta.current !== 0) onResize(pendingDelta.current);
           pendingDelta.current = 0;
         }
-        document.removeEventListener("mousemove", onMouseMove);
-        document.removeEventListener("mouseup", onMouseUp);
+        document.body.style.userSelect = prevUserSelect;
+        el.removeEventListener("pointermove", onPointerMove);
+        el.removeEventListener("pointerup", finish);
+        el.removeEventListener("pointercancel", finish);
+        if (el.hasPointerCapture(pointerId)) el.releasePointerCapture(pointerId);
+        activePointerId.current = null;
       };
 
-      document.addEventListener("mousemove", onMouseMove);
-      document.addEventListener("mouseup", onMouseUp);
+      el.addEventListener("pointermove", onPointerMove);
+      el.addEventListener("pointerup", finish);
+      el.addEventListener("pointercancel", finish);
     },
     [isHorizontal, onResize]
   );
