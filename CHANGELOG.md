@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.5.0] - 2026-06-24
+
+### Added
+
+- Border resize migrated to Pointer Events — mouse, touch, and pen are handled through a single path. A multi-touch guard plus `setPointerCapture` and `pointercancel` handling keep the drag stable even if the pointer target unmounts mid-drag
+- Touch panel drag — starts from the drag handle (`dragHandleSelector`), or via **long-press (450ms)** when no handle is set. A translucent floating ghost follows the finger, and the panel under the release point is resolved with `elementFromPoint`. A hybrid path that runs alongside desktop HTML5 Drag & Drop
+- Touch-device resizer visibility — resizers are always shown under `@media (hover: none)` (fixing them being invisible on touch devices, since `resizerHoverOnly` defaults to `true`), with `touch-action: none` to separate dragging from scroll gestures
+
+---
+
 ## [0.4.0] - 2026-06-17
 
 ### Added

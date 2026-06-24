@@ -12,7 +12,7 @@
 
 | 구성요소 | 파일 | 역할 |
 |---------|------|------|
-| `<TreeLayout />` | 렌더러 | 패널/스플릿 트리를 flexbox로 렌더링하고 경계선 리사이즈와 HTML5 드래그 앤 드롭 제공 |
+| `<TreeLayout />` | 렌더러 | 패널/스플릿 트리를 flexbox로 렌더링하고 포인터 기반 경계선 리사이즈(마우스·터치·펜)와 드래그 앤 드롭(데스크톱 HTML5 + 터치) 제공 |
 | `useLayoutTree` | 훅 | 트리 상태를 관리하고 `setTree`에 바인딩된 조작 헬퍼 반환 |
 | 트리 유틸 | 순수 함수 | 훅 바깥에서 트리를 조회/변환할 때 사용 (`setTree`와 함께) |
 
@@ -30,7 +30,7 @@
 | `components` | `ComponentStore` | O | — | 각 패널의 `componentKey`를 실제 React 노드로 매핑하는 레지스트리. [`createComponentStore`](#createcomponentstoreinitial)로 생성 |
 | `onResizeBorder` | `(path: number[], borderIndex: number, delta: number, totalPixels?: number) => void` | | — | 경계선 리사이즈 콜백 |
 | `onMovePanel` | `(sourceId: string, anchorId: string, position: DropPosition, depth: number) => void` | | — | 드래그 앤 드롭 이동 콜백 |
-| `dragHandleSelector` | `string` | | — | 드래그 핸들 CSS 선택자. 미지정 시 패널 전체가 드래그 가능 |
+| `dragHandleSelector` | `string` | | — | 드래그 핸들 CSS 선택자. 미지정 시 패널 전체가 드래그 가능. 터치에서는 핸들(또는 패널)을 **롱프레스**(450ms)해 드래그 시작 |
 | `direction` | `"vertical" \| "horizontal" \| "complex"` | | `"complex"` | 드래그·드롭을 단일 축으로 제한. `"vertical"`은 패널 전체를 Y 중앙선 기준 상/하 두 영역으로 분할(X 무시), `"horizontal"`은 X 중앙선 기준 좌/우 분할. `"complex"`는 기본 4-edge 분류(X자 패턴) 유지. 입력 `tree`에 본 prop과 충돌하는 split이 있으면 자동으로 일치 방향으로 정규화되고 dev 모드에서 콘솔 경고 출력. `useLayoutTree.splitPanel(...)` 직접 호출은 **제약하지 않음** |
 | `width` | `number \| string` | | `"100%"` | 루트 컨테이너 너비. 기본값은 부모를 가득 채움. 명시적으로 지정하면 오버라이드 |
 | `height` | `number \| string` | | `"100%"` | 루트 컨테이너 높이. 기본값은 부모를 가득 채움. 명시적으로 지정하면 오버라이드 |
@@ -214,7 +214,7 @@ insertPanel({
 
 #### `resizeBorder(path, borderIndex, delta, totalPixels?)`
 
-`path`의 split 내부에서 인접한 두 자식 사이의 경계선을 리사이즈. 인접 자식의 split 방향 축 min/max(가로 split이면 `minWidth`/`maxWidth`, 세로 split이면 `minHeight`/`maxHeight`)를 준수합니다. 보통 `<TreeLayout onResizeBorder={resizeBorder} />`에 연결.
+`path`의 split 내부에서 인접한 두 자식 사이의 경계선을 리사이즈. 인접 자식의 split 방향 축 min/max(가로 split이면 `minWidth`/`maxWidth`, 세로 split이면 `minHeight`/`maxHeight`)를 준수합니다. 보통 `<TreeLayout onResizeBorder={resizeBorder} />`에 연결. 내부 리사이즈 핸들은 Pointer Events(`setPointerCapture`)로 동작하므로 마우스·터치·펜에서 모두 사용할 수 있습니다.
 
 #### 셀렉터 팁
 
@@ -267,6 +267,8 @@ insertPanelIntoTree(tree, panelNode, { anchorId: "editor", position: "right" });
 ## 드래그 앤 드롭
 
 렌더러가 각 패널에 HTML5 드래그 앤 드롭 리스너를 등록합니다. 사용자가 패널을 드래그하면 호버한 영역으로부터 드롭 타겟을 계산한 뒤 `onMovePanel(sourceId, anchorId, position, depth)`이 호출됩니다.
+
+**터치 기기**에서는 HTML5 DnD가 발화하지 않으므로 별도 경로를 사용합니다. 핸들(`dragHandleSelector`)을 누르거나, 핸들이 없으면 패널을 **롱프레스**(450ms)하면 드래그가 시작되고 반투명 ghost가 손가락을 따라갑니다. 손을 뗀 지점을 `elementFromPoint`로 판정해 아래와 동일한 드롭 규칙으로 `onMovePanel`을 호출합니다. 좌표 계산이 동일하므로 드롭 타겟 우선순위·`position`·`depth`는 마우스와 똑같이 적용됩니다.
 
 <img src="./assets/drag-drop-demo.png" alt="드래그 앤 드롭" width="640" />
 

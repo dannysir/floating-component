@@ -8,11 +8,11 @@ Tree-based resizable and reorderable panel layout for React. Split panels horizo
 
 ---
 
-## What's New (0.4.0)
+## What's New (0.5.0)
 
-- Panel size constraints: `minWidth`/`minHeight`/`maxWidth`/`maxHeight` (px) on the split-direction axis
-- Content scrolls when it overflows the panel (`overflow: auto`)
-- ⚠️ BREAKING: `minSize`/`maxSize` removed
+- Border resize migrated to Pointer Events — a single path for mouse, touch, and pen
+- Touch panel drag — start from a handle or long-press (450ms), with a floating ghost tracking the finger
+- Resizers always shown on touch devices (`@media (hover: none)`)
 
 See the full history in the [changelog](./CHANGELOG.md).
 
@@ -21,9 +21,10 @@ See the full history in the [changelog](./CHANGELOG.md).
 ## Features
 
 - **N-ary tree structure** — `SplitNode` can hold two or more children, keeping the tree flat without unnecessary nesting
-- **Border drag resize** — drag panel borders to resize (requestAnimationFrame optimized)
+- **Border drag resize** — drag panel borders to resize (Pointer Events based, requestAnimationFrame optimized)
 - **Panel size constraints** — set min/max with `minWidth`/`minHeight`/`maxWidth`/`maxHeight` (px); content scrolls when it overflows
-- **Drag-and-drop panel move** — reorder panels via HTML5 Drag & Drop API
+- **Drag-and-drop panel move** — reorder panels via HTML5 Drag & Drop on desktop, and a long-press-based path on touch
+- **Touch & pen support** — both border resize and panel drag work with touch and pen input (Pointer Events + a touch drag path)
 - **Multi-level drop target** — distinguishes panel edge, parent split edge, and root edge for depth-aware placement
 - **Immutable state** — all tree updates produce new objects via spread
 - **View / State separation** — `TreeLayout` (rendering) and `useLayoutTree` (state) can be used independently
@@ -165,6 +166,10 @@ Drag any panel to reorder. A translucent preview of the drop target follows the 
 - Drop on the **panel center** → split the hovered panel
 - Drop near the **enclosing split's edge** → place as a sibling of the parent split
 - Drop near the **root's edge** → place at the top level
+
+### Touch devices
+
+On touch, start a drag by **long-pressing (~0.45s)** a panel or pressing the handle set via `dragHandleSelector`. A translucent ghost follows your finger and the panel under the release point becomes the drop target. Border resize is Pointer Events based too, so it works with touch and pen.
 
 ### Restrict to a single axis
 

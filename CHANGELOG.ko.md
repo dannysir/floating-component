@@ -6,6 +6,16 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
+## [0.5.0] - 2026-06-24
+
+### 추가
+
+- 경계선 리사이즈를 Pointer Events 기반으로 전환 — 마우스·터치·펜을 단일 경로로 처리. 멀티터치 가드, `setPointerCapture`, `pointercancel`로 드래그 중 포인터 타겟이 사라져도 안정적으로 동작
+- 터치 패널 드래그 — 드래그 핸들(`dragHandleSelector`)에서, 핸들 미지정 시 **롱프레스**(450ms)로 시작. 반투명 floating ghost가 손가락을 따라다니고, 손을 뗀 위치의 패널을 `elementFromPoint`로 판정해 이동. 데스크톱 HTML5 Drag & Drop과 병행하는 하이브리드 경로
+- 터치 기기 리사이저 가시성 — `@media (hover: none)` 환경에서 리사이저를 항상 표시(`resizerHoverOnly` 기본값이 `true`라 터치 기기에서 보이지 않던 문제 해결), `touch-action: none`으로 스크롤 제스처와 분리
+
+---
+
 ## [0.4.0] - 2026-06-17
 
 ### 추가
