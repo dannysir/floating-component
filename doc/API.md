@@ -12,7 +12,7 @@ The library is split into three concerns:
 
 | Piece | File | Purpose |
 |-------|------|---------|
-| `<TreeLayout />` | renderer | Renders a tree of panels and splits as flexbox with resizable borders and HTML5 drag-and-drop |
+| `<TreeLayout />` | renderer | Renders a tree of panels and splits as flexbox with pointer-based resizable borders (mouse/touch/pen) and drag-and-drop (desktop HTML5 + touch) |
 | `useLayoutTree` | hook | Manages tree state and returns mutating helpers bound to `setTree` |
 | Tree utilities | pure functions | Inspect or transform a tree outside the hook (e.g. with `setTree` directly) |
 
@@ -30,7 +30,7 @@ Recursively renders the layout tree using flexbox.
 | `components` | `ComponentStore` | Yes | — | Registry mapping each panel's `componentKey` to the React node it renders. Create with [`createComponentStore`](#createcomponentstoreinitial) |
 | `onResizeBorder` | `(path: number[], borderIndex: number, delta: number, totalPixels?: number) => void` | | — | Border resize callback |
 | `onMovePanel` | `(sourceId: string, anchorId: string, position: DropPosition, depth: number) => void` | | — | Drag-and-drop move callback |
-| `dragHandleSelector` | `string` | | — | CSS selector for drag handle. Omit to make the entire panel draggable |
+| `dragHandleSelector` | `string` | | — | CSS selector for drag handle. Omit to make the entire panel draggable. On touch, **long-press (450ms)** the handle (or panel) to start dragging |
 | `direction` | `"vertical" \| "horizontal" \| "complex"` | | `"complex"` | Restricts drag-drop to a single axis. In `"vertical"` mode the entire panel is divided into top/bottom drop zones by the Y midline (X is ignored); `"horizontal"` divides left/right by the X midline. `"complex"` keeps the default 4-edge classification (X-pattern). If the input `tree` contains splits whose direction conflicts with this prop, they are auto-normalized to match and a dev-mode console warning is emitted. Does **not** constrain `useLayoutTree.splitPanel(...)` direct calls |
 | `width` | `number \| string` | | `"100%"` | Root container width. Defaults to filling the parent. Pass an explicit value to override |
 | `height` | `number \| string` | | `"100%"` | Root container height. Defaults to filling the parent. Pass an explicit value to override |
@@ -214,7 +214,7 @@ insertPanel({
 
 #### `resizeBorder(path, borderIndex, delta, totalPixels?)`
 
-Resizes the border between two adjacent children of a split at `path`. Honors the adjacent children's split-axis min/max (`minWidth`/`maxWidth` in a horizontal split, `minHeight`/`maxHeight` in a vertical split). Usually wired to `<TreeLayout onResizeBorder={resizeBorder} />`.
+Resizes the border between two adjacent children of a split at `path`. Honors the adjacent children's split-axis min/max (`minWidth`/`maxWidth` in a horizontal split, `minHeight`/`maxHeight` in a vertical split). Usually wired to `<TreeLayout onResizeBorder={resizeBorder} />`. The internal resize handle runs on Pointer Events (`setPointerCapture`), so it works with mouse, touch, and pen alike.
 
 #### Selector tips
 
@@ -267,6 +267,8 @@ If the anchor is not found in the tree, the original tree is returned unchanged 
 ## Drag & Drop
 
 The renderer registers HTML5 drag-and-drop listeners on each panel. When a user drags a panel, the drop target is computed from the hovered region, then `onMovePanel(sourceId, anchorId, position, depth)` is called.
+
+**On touch devices**, HTML5 DnD doesn't fire, so a separate path is used. Press the handle (`dragHandleSelector`), or **long-press (450ms)** the panel when there's no handle, to start dragging; a translucent ghost follows the finger. The panel under the release point is resolved with `elementFromPoint`, and `onMovePanel` is called with the same drop rules below. Because the coordinate math is identical, the drop-target priority, `position`, and `depth` behave exactly as with the mouse.
 
 <img src="./assets/drag-drop-demo.png" alt="Drag and drop" width="640" />
 

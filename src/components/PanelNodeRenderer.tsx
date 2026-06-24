@@ -7,6 +7,7 @@ import { createRafScheduler } from "../utils/rafScheduler";
 import { devWarn } from "../utils/devWarn";
 import type { DropPreview } from "./LayoutNodeRenderer";
 import { panelSizeStyle } from "./panelSizeStyle";
+import { useTouchDrag } from "../hooks/useTouchDrag";
 
 const SHADOW_STYLE: CSSProperties = {
   opacity: 0.5,
@@ -40,6 +41,15 @@ export const PanelNodeRenderer = ({
   const panelRef = useRef<HTMLDivElement>(null);
   const schedulerRef = useRef<ReturnType<typeof createRafScheduler> | null>(null);
   if (schedulerRef.current === null) schedulerRef.current = createRafScheduler();
+
+  useTouchDrag({
+    panelRef,
+    nodeId: node.id,
+    direction,
+    dragHandleSelector,
+    onDropPreviewChange,
+    onMovePanel,
+  });
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
@@ -109,6 +119,7 @@ export const PanelNodeRenderer = ({
   return (
     <div
       ref={panelRef}
+      data-panel-id={node.id}
       draggable={!dragHandleSelector}
       onMouseDown={handleMouseDown}
       onDragStart={handleDragStart}

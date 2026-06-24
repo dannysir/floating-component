@@ -8,11 +8,11 @@ Tree 기반으로 크기 조절과 패널 이동이 가능한 React 레이아웃
 
 ---
 
-## 최근 변경 (0.4.0)
+## 최근 변경 (0.5.0)
 
-- 패널 크기 제약: `minWidth`/`minHeight`/`maxWidth`/`maxHeight`(px) — split 방향 축에 적용
-- 콘텐츠가 패널을 넘치면 자동 스크롤 (`overflow: auto`)
-- ⚠️ BREAKING: `minSize`/`maxSize` 제거
+- 경계선 리사이즈 Pointer Events 전환 — 마우스·터치·펜 단일 경로
+- 터치 패널 드래그 — 핸들 또는 롱프레스(450ms)로 시작, floating ghost가 손가락 추적
+- 터치 기기에서 리사이저 항상 표시 (`@media (hover: none)`)
 
 전체 이력은 [CHANGELOG](./CHANGELOG.ko.md) 참고.
 
@@ -21,9 +21,10 @@ Tree 기반으로 크기 조절과 패널 이동이 가능한 React 레이아웃
 ## 특징
 
 - **N-ary 트리 구조** — SplitNode가 2개 이상의 자식을 가질 수 있어 불필요한 중첩 없이 flat한 트리 유지
-- **경계선 드래그 리사이즈** — 패널 사이 경계선을 드래그해서 크기 조절 (requestAnimationFrame 최적화)
+- **경계선 드래그 리사이즈** — 패널 사이 경계선을 드래그해서 크기 조절 (Pointer Events 기반, requestAnimationFrame 최적화)
 - **패널 크기 제약** — `minWidth`/`minHeight`/`maxWidth`/`maxHeight`(px)로 최소·최대 크기 지정, 콘텐츠가 넘치면 자동 스크롤
-- **드래그 앤 드롭 패널 이동** — HTML5 Drag & Drop API로 패널을 다른 위치로 이동
+- **드래그 앤 드롭 패널 이동** — 데스크톱은 HTML5 Drag & Drop, 터치는 롱프레스 기반 경로로 패널을 다른 위치로 이동
+- **터치·펜 지원** — 경계선 리사이즈와 패널 드래그 모두 터치·펜 입력에서 동작 (Pointer Events + 터치 드래그 경로)
 - **다단계 드롭 타겟 감지** — 패널 가장자리, 부모 split 가장자리, 루트 가장자리를 구분하여 depth 기반 배치
 - **불변 상태 관리** — 모든 트리 업데이트가 immutable하게 처리
 - **View / State 분리** — `TreeLayout` (렌더링)과 `useLayoutTree` (상태 관리)를 독립적으로 사용 가능
@@ -165,6 +166,10 @@ const App = () => {
 - **패널 중앙**에 드롭 → 해당 패널을 분할
 - **부모 split 가장자리**에 드롭 → 부모 split의 형제로 배치
 - **루트 가장자리**에 드롭 → 최상위 레벨에 배치
+
+### 터치 기기
+
+터치 환경에서는 패널을 **롱프레스**(약 0.45초)하거나 `dragHandleSelector`로 지정한 핸들을 눌러 드래그를 시작합니다. 반투명 ghost가 손가락을 따라다니고, 손을 떼면 그 위치의 패널로 이동합니다. 경계선 리사이즈도 Pointer Events 기반이라 터치·펜에서 그대로 동작합니다.
 
 ### 단일 축으로 제한
 

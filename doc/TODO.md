@@ -138,7 +138,13 @@ feat: PanelNode에 draggable/droppable/resizable 옵션 추가
 
 ---
 
-## 4. 휴대폰 사용자를 위한 이벤트 추가
+## 4. 휴대폰 사용자를 위한 이벤트 추가  ✅ 완료 (브랜치 `feat/touch-support`)
+
+> 채택: 접근 **(a) Pointer Events resize + 터치 패널 드래그 경로 병행**. **0.5.0**에 포함.
+> - `6ca069d` 경계선 resize mouse → **Pointer Events**(`useDragResize`/`Resizer`/`resizerStyles`): `setPointerCapture`·`pointercancel`·멀티터치 가드, `touch-action:none` + `@media(hover:none)` 가시성
+> - `7e7c318` **터치 패널 드래그**(`src/hooks/useTouchDrag.ts` 신규 + `PanelNodeRenderer`에 `data-panel-id`): 핸들/롱프레스(450ms) 시작, floating ghost가 손가락 추적, `elementFromPoint`로 드롭 판정. 데스크톱 HTML5 DnD와 하이브리드
+> - 설계 원칙 "HTML5 DnD만 사용"은 터치 경로 병행으로 갱신([CLAUDE.md](../CLAUDE.md)). 외부 라이브러리 없이 직접 구현
+> - 아래는 착수 전 플랜 기록(역사적 참고).
 
 ### 배경
 

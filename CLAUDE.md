@@ -23,7 +23,8 @@
 - SplitNode에 ID 추가하지 않음 — path(number[])로 식별
 - 경계선 resize는 인접 두 노드만 조정
 - 단일 자식 SplitNode는 자동 언래핑
-- HTML5 Drag & Drop API만 사용
+- 패널 드래그: 데스크톱은 HTML5 Drag & Drop, 터치는 별도 경로(`useTouchDrag` — 롱프레스 + floating ghost) 병행
+- 경계선 resize는 Pointer Events(`setPointerCapture`)로 마우스·터치·펜 단일 처리
 
 ## 검증
 
