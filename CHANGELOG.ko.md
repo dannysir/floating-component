@@ -6,6 +6,15 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
+## [0.5.1] - 2026-08-11
+
+### 변경
+
+- 배포를 GitHub Actions **Trusted Publishing**(OIDC) 기반으로 전환 — 이 버전부터 모든 릴리스에 npm [provenance 증명](https://docs.npmjs.com/generating-provenance-statements)이 함께 게시되어, 패키지가 어떤 소스 커밋·빌드 워크플로우에서 만들어졌는지 검증 가능. 라이브러리 코드 변경 없음
+- README: npm 버전 / 다운로드 / 라이선스 뱃지 추가
+
+---
+
 ## [0.5.0] - 2026-06-24
 
 ### 추가

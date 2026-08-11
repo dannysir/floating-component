@@ -1,5 +1,9 @@
 # @dannysir/floating-components
 
+[![npm version](https://img.shields.io/npm/v/@dannysir/floating-components)](https://www.npmjs.com/package/@dannysir/floating-components)
+[![npm downloads](https://img.shields.io/npm/dm/@dannysir/floating-components)](https://www.npmjs.com/package/@dannysir/floating-components)
+[![license](https://img.shields.io/npm/l/@dannysir/floating-components)](./LICENSE)
+
 [English README](./README.md) · [라이브 데모](https://dannysir-labs.vercel.app/en/libraries/floating-components) · [API 문서](./doc/API.ko.md)
 
 Tree 기반으로 크기 조절과 패널 이동이 가능한 React 레이아웃 라이브러리입니다. VS Code나 IDE처럼 패널을 수평/수직으로 분할하고, 경계선 드래그로 크기를 조절하고, 드래그 앤 드롭으로 패널을 이동할 수 있습니다.
