@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - `splitPanel` ignored `minWidth`/`minHeight`/`maxWidth`/`maxHeight` in its `newPanel` option — they are now applied to the new panel along with the lock options
+- When the drag preview moved the source panel into another split and remounted it, a touch drag froze and blocked later touch drags, and a mouse drag that ended without a drop (Esc, non-droppable target) left the preview behind — end-of-drag listeners are now attached directly to the node that started the drag
 
 ---
 
