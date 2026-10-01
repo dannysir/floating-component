@@ -6,6 +6,19 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
+## [Unreleased]
+
+### 추가
+
+- `PanelNode`·`InsertPanelInit`에 잠금 옵션 `draggable`/`droppable`/`resizable`(기본 `true`) — 패널 단위로 드래그(마우스·핸들·터치 롱프레스), 드롭, 경계선 리사이즈를 차단. 드롭 불가 패널 위에서는 직전 미리보기를 유지하면서 불가 표시(마우스 `not-allowed` 커서, 터치 ghost 빨간 테두리)를 하고, 놓으면 이동 취소
+- `useLayoutTree`의 `movePanel`/`resizeBorder`가 잠금을 준수 — 위반 호출은 무시되고 dev 모드 경고 출력
+
+### 수정
+
+- `splitPanel`의 `newPanel` 옵션에서 `minWidth`/`minHeight`/`maxWidth`/`maxHeight`가 무시되던 문제 — 이제 잠금 옵션과 함께 새 패널에 적용
+
+---
+
 ## [0.5.1] - 2026-08-11
 
 ### 변경

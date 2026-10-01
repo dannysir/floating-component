@@ -27,6 +27,7 @@ See the full history in the [changelog](./CHANGELOG.md).
 - **N-ary tree structure** — `SplitNode` can hold two or more children, keeping the tree flat without unnecessary nesting
 - **Border drag resize** — drag panel borders to resize (Pointer Events based, requestAnimationFrame optimized)
 - **Panel size constraints** — set min/max with `minWidth`/`minHeight`/`maxWidth`/`maxHeight` (px); content scrolls when it overflows
+- **Panel locking** — block drag, drop, and border resize per panel with `draggable`/`droppable`/`resizable` (e.g. a fixed sidebar)
 - **Drag-and-drop panel move** — reorder panels via HTML5 Drag & Drop on desktop, and a long-press-based path on touch
 - **Touch & pen support** — both border resize and panel drag work with touch and pen input (Pointer Events + a touch drag path)
 - **Multi-level drop target** — distinguishes panel edge, parent split edge, and root edge for depth-aware placement
@@ -124,6 +125,18 @@ const togglePanel = (id: string, componentKey: string) => {
 ```
 
 `minWidth`/`minHeight`/`maxWidth`/`maxHeight` (px) apply **only on the panel's split-direction axis** (horizontal split → width, vertical split → height). When content is larger than the panel it scrolls instead of being clipped. See [API → Panel size constraints](./doc/API.md#panel-size-constraints).
+
+### Fixed sidebar
+
+```tsx
+{
+  type: "panel", id: "sidebar", size: 1, componentKey: "sidebar",
+  draggable: false, droppable: false, resizable: false,
+  minWidth: 240, maxWidth: 240,
+}
+```
+
+A 240px sidebar that can't be dragged, can't be dropped onto, and has no adjacent borders. Dragging over a non-droppable panel shows a "can't drop" indicator, and releasing there cancels the move. See [API → Panel locking](./doc/API.md#panel-locking).
 
 ---
 

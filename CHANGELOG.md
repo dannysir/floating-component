@@ -6,6 +6,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+
+- Lock options `draggable`/`droppable`/`resizable` (default `true`) on `PanelNode`·`InsertPanelInit` — block dragging (mouse, handle, touch long-press), dropping, and border resizing per panel. Over a non-droppable panel the previous preview is kept while a "can't drop" indicator is shown (mouse `not-allowed` cursor, red outline on the touch ghost); releasing there cancels the move
+- `movePanel`/`resizeBorder` from `useLayoutTree` honor locks — violating calls are ignored with a dev-mode warning
+
+### Fixed
+
+- `splitPanel` ignored `minWidth`/`minHeight`/`maxWidth`/`maxHeight` in its `newPanel` option — they are now applied to the new panel along with the lock options
+
+---
+
 ## [0.5.1] - 2026-08-11
 
 ### Changed
