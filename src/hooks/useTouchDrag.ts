@@ -7,6 +7,9 @@ import { createRafScheduler } from "../utils/rafScheduler";
 
 const LONG_PRESS_MS = 450;
 const MOVE_THRESHOLD = 8;
+const GHOST_OPACITY = "0.7";
+const GHOST_BLOCKED_OPACITY = "0.4";
+const GHOST_BLOCKED_OUTLINE = "2px solid rgba(232, 17, 35, 0.8)";
 
 interface DragSession {
   el: HTMLElement;
@@ -29,6 +32,8 @@ interface DragSession {
   grabOffsetX: number;
   grabOffsetY: number;
   lastDrop: { anchorPanelId: string; position: DropPosition; depth: number } | null;
+  // 드롭 불가 패널 위에 있는지. true인 채로 손을 떼면 이동을 취소한다.
+  blocked: boolean;
 }
 
 // 드래그 세션을 컴포넌트 생명주기와 분리: 드래그 중 소스 패널이 preview 리렌더로
@@ -60,7 +65,7 @@ const createGhost = (x: number, y: number) => {
   s.height = `${rect.height}px`;
   s.boxSizing = "border-box";
   s.pointerEvents = "none";
-  s.opacity = "0.7";
+  s.opacity = GHOST_OPACITY;
   s.zIndex = "9999";
   s.transform = `translate(${x - session.grabOffsetX}px, ${y - session.grabOffsetY}px)`;
   document.body.appendChild(ghost);
@@ -73,6 +78,17 @@ const moveGhost = (x: number, y: number) => {
   }
 };
 
+// 터치에는 커서가 없으므로 ghost 스타일로 드롭 불가를 표시한다.
+const setBlocked = (blocked: boolean) => {
+  if (!session || session.blocked === blocked) return;
+  session.blocked = blocked;
+  if (session.ghost) {
+    session.ghost.style.opacity = blocked ? GHOST_BLOCKED_OPACITY : GHOST_OPACITY;
+    session.ghost.style.outline = blocked ? GHOST_BLOCKED_OUTLINE : "";
+    session.ghost.style.outlineOffset = blocked ? "-2px" : "";
+  }
+};
+
 const updateDrag = (x: number, y: number) => {
   if (!session) return;
   moveGhost(x, y);
@@ -81,9 +97,17 @@ const updateDrag = (x: number, y: number) => {
     const { nodeId, direction, onDropPreviewChange } = session;
     const hit = document.elementFromPoint(x, y);
     const anchorEl = hit?.closest("[data-panel-id]") as HTMLElement | null;
-    if (!anchorEl) return;
-    const anchorId = anchorEl.dataset.panelId;
-    if (!anchorId || anchorId === nodeId) return;
+    const anchorId = anchorEl?.dataset.panelId;
+    if (!anchorEl || !anchorId || anchorId === nodeId) {
+      setBlocked(false);
+      return;
+    }
+    // 드롭 불가 패널: 직전 미리보기(lastDrop)는 유지하고 표시만 바꾼다.
+    if (anchorEl.dataset.panelDroppable === "false") {
+      setBlocked(true);
+      return;
+    }
+    setBlocked(false);
     const { position, depth } = getDropTarget(x, y, anchorEl, direction);
     session.lastDrop = { anchorPanelId: anchorId, position, depth };
     onDropPreviewChange?.({ sourcePanelId: nodeId, anchorPanelId: anchorId, position, depth });
@@ -130,7 +154,7 @@ const onDocMove = (e: TouchEvent) => {
 const onDocEnd = (e: TouchEvent) => {
   if (!session) return;
   if (!findTouch(e, session.touchId)) return;
-  endSession(session.dragging);
+  endSession(session.dragging && !session.blocked);
 };
 
 const onDocCancel = (e: TouchEvent) => {
@@ -164,6 +188,7 @@ interface UseTouchDragOptions {
   nodeId: string;
   direction: LayoutDirection;
   dragHandleSelector?: string;
+  draggable?: boolean;
   onDropPreviewChange?: (preview: DropPreview | null) => void;
   onMovePanel?: (
     sourcePanelId: string,
@@ -185,8 +210,9 @@ export const useTouchDrag = (options: UseTouchDragOptions) => {
       if (session) return;
       const touch = e.changedTouches[0];
       if (!touch) return;
-      const { nodeId, direction, dragHandleSelector, onDropPreviewChange, onMovePanel } =
+      const { nodeId, direction, dragHandleSelector, draggable, onDropPreviewChange, onMovePanel } =
         optionsRef.current;
+      if (draggable === false) return;
       if (dragHandleSelector) {
         const target = e.target as HTMLElement | null;
         if (!target || !target.closest(dragHandleSelector)) return;
@@ -207,6 +233,7 @@ export const useTouchDrag = (options: UseTouchDragOptions) => {
         grabOffsetX: 0,
         grabOffsetY: 0,
         lastDrop: null,
+        blocked: false,
       };
       document.addEventListener("touchmove", onDocMove, { passive: false });
       document.addEventListener("touchend", onDocEnd);
