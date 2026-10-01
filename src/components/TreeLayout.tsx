@@ -141,7 +141,13 @@ export const TreeLayout = ({
         }
         finishDrag();
       }}
-      onDragEnd={() => finishDrag()}
+      onDragStart={(e) => {
+        // 패널 handleDragStart가 먼저 실행돼 draggingPanelId를 설정한 경우(=패널 드래그)만 처리.
+        if (!rootRef.current?.dataset.draggingPanelId) return;
+        // dragend는 드래그를 시작한 원본 노드로 온다. 미리보기 중 소스 패널이 리마운트돼
+        // 원본이 문서에서 분리되면 루트까지 버블링되지 않으므로, 원본 노드에 직접 건다.
+        e.target.addEventListener("dragend", finishDrag, { once: true });
+      }}
       onDragLeave={(e) => {
         const root = rootRef.current;
         if (!root) return;
