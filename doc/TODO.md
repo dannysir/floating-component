@@ -131,6 +131,7 @@ root(H)                           root(H)
 
 - [ ] **직렬화 (0.3.0)** — 저장→새로고침→복원 시 레이아웃+컴포넌트 복구 / 미등록 키 시 dev 경고+빈 패널 / DnD·split·insert 후 정상
 - [ ] **패널 크기 제약 (0.4.0)** — `minWidth`/`maxWidth`(가로 split), `minHeight`/`maxHeight`(세로 split)가 윈도우 리사이즈·경계선 드래그 모두에서 같은 px로 지켜지는지 / 패널보다 큰 콘텐츠가 `overflow:auto`로 스크롤되는지
+- MFA 픽스처로 실입력 검수하는 계획과 결과는 [doc/qa/](./qa/README.md) 참고 (위 두 항목은 run 01의 R19에서 확인)
 
 ---
 

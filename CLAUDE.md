@@ -17,6 +17,7 @@
 - 타입은 `import type { ... }`으로 분리
 - 불변 업데이트 — spread로 새 객체 생성, 직접 mutation 금지
 - 외부 라이브러리 추가 금지 (React peer dep만 허용)
+- 예외: mfa-lab/ 아래 픽스처·테스트 도구는 각 프로젝트의 package.json에 한해 외부 의존성을 둘 수 있다(루트 package.json·package-lock.json·src/는 변경 금지). 도구·플랫폼이 강제하는 default export와 class는 허용한다.
 
 ## 설계 원칙
 

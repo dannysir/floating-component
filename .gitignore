@@ -5,3 +5,7 @@ dist/
 .idea
 .claude/settings.local.json
 .claude/worktrees/
+mfa-lab/.run/
+mfa-lab/e2e/.artifacts/
+mfa-lab/e2e/test-results/
+mfa-lab/**/dist-*/
