@@ -52,9 +52,15 @@ export const Panel = ({ slot }: PanelProps) => {
   const typesOf = (e: DragEvent) => Array.from(e.dataTransfer.types);
   const onDragEnd = (e: DragEvent) => patchDnd({ lastDragend: { dropEffect: e.dataTransfer.dropEffect, effectAllowed: e.dataTransfer.effectAllowed } });
 
+  // 드롭이 성공하면 카드가 다른 열로 옮겨져 원본 노드가 분리되고, 분리된 노드의 dragend는 React 루트까지 오지 않는다.
+  // 그래서 원본 노드 자체에 네이티브 리스너를 건다(React onDragEnd만으로는 lastDragend가 null로 남는다).
   const onCardDragStart = (id: string) => (e: DragEvent) => {
     e.dataTransfer.setData(CARD_TYPE, id);
     e.dataTransfer.effectAllowed = 'move';
+    e.currentTarget.addEventListener('dragend', (ev) => {
+      const dt = (ev as globalThis.DragEvent).dataTransfer;
+      if (!(ev.target as Node).isConnected && dt) patchDnd({ lastDragend: { dropEffect: dt.dropEffect, effectAllowed: dt.effectAllowed } });
+    }, { once: true });
   };
   const onColDragOver = (e: DragEvent) => {
     const types = typesOf(e);
