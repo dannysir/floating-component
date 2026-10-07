@@ -1,6 +1,6 @@
 // 증거와 기준선. 규칙: doc/qa/mfa/HARNESS.md 「evidence.ts」, 「증거와 라벨」
 import type { Locator, Page, TestInfo } from '@playwright/test';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { harnessError } from './errors';
@@ -79,17 +79,21 @@ export const writeObservation = async (obs: Observation): Promise<string> => {
   return file;
 };
 
-// caseDir에서 고른 파일만 doc/qa/<run>/evidence/<findingId>/로 복사한다. 대상 디렉터리를 비우고 다시 쓴다.
-export const promote = async (opts: { run: string; findingId: string; caseDir: string; images: string[] }): Promise<string> => {
-  if (opts.images.length > 6) throw harnessError(`promote: ${opts.images.length} images > 6`);
+// caseDir에서 고른 파일만 doc/qa/<run>/evidence/<findingId>/로 복사한다. 여러 시나리오가 한 발견에 증거를 더할 때는 prefix(예: 'R05-')를 준다.
+// prefix가 없으면 접두어 없는 파일만, 있으면 그 접두어 파일만 지우고 다시 쓴다(여러 번 실행해도 결과가 같다).
+export const promote = async (opts: { run: string; findingId: string; caseDir: string; images: string[]; prefix?: string }): Promise<string> => {
+  const prefix = opts.prefix ?? '';
   const dest = path.join(repoRoot, 'doc', 'qa', opts.run, 'evidence', opts.findingId);
-  rmSync(dest, { recursive: true, force: true });
   mkdirSync(dest, { recursive: true });
-  opts.images.forEach((img) => copyFileSync(path.join(opts.caseDir, img), path.join(dest, path.basename(img))));
+  const existing = readdirSync(dest).filter((f) => (prefix ? f.startsWith(prefix) : !/^R\d\d[a-z]?-/.test(f)));
+  const imagesAlready = readdirSync(dest).filter((f) => f.endsWith('.png') && !existing.includes(f)).length;
+  if (opts.images.length + imagesAlready > 6) throw harnessError(`promote: ${opts.images.length + imagesAlready} images > 6`);
+  existing.forEach((f) => rmSync(path.join(dest, f), { force: true }));
+  opts.images.forEach((img) => copyFileSync(path.join(opts.caseDir, img), path.join(dest, `${prefix}${path.basename(img)}`)));
   const renames: Record<string, string> = { '01-before.snapshot.json': 'tree-before.json', '03-after.snapshot.json': 'tree-after.json', '02-mid.snapshot.json': '02-mid.snapshot.json', 'events.json': 'events.json', 'console.txt': 'console.txt' };
   Object.entries(renames).forEach(([from, to]) => {
     const src = path.join(opts.caseDir, from);
-    if (existsSync(src)) copyFileSync(src, path.join(dest, to));
+    if (existsSync(src)) copyFileSync(src, path.join(dest, `${prefix}${to}`));
   });
   return dest;
 };
