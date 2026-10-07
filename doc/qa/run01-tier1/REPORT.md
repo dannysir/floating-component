@@ -102,8 +102,8 @@
 | R17 (사다리) | workbench | `telemetry\|telemetry-x` ±120, `--site-per-process` 유무 | mouse | fail(FC-QA-008) | OOPIF 쪽(+120)만 캡처 유실, same-site 쪽(-120)·사이트 격리 없음은 정상 | explore/r17b-oopif-resize-{spp,nospp}.spec.ts 로그 |
 | R17 | workbench | Nav에서 board 닫기·다시 열기 (`removePanel`/`insertPanel`) | mouse | fail(FC-QA-001) | as-predicted(메커니즘) — `removePanel`·`insertPanel` 각 1건, 닫기 `H[nav,telemetry-x,V[orders,billing],telemetry]`(V[board,telemetry-x] 풀림 → telemetry-x frame +1·`loads` +1), 열기 `H[nav,telemetry-x,V[orders,H[board,billing]],telemetry]`(billing이 새 split에 감싸여 frame +1·`mountCalls`·`unmountCalls` +1, board mounts +1). 표의 트리·슬롯 예측은 M1 대체로 무효. 콘솔 에러 0, I1~I7 통과 | obs/R17-nav-toggle-run{1,2}.json |
 | R17 | workbench | 전·후 PNG 시각 점검 (잘림, 넘침·스크롤바, 리사이저, shadow, ghost, 에러 카드) | — | pass | as-predicted (점검표 이상 없음. 좁은 패널의 "잘린" 내용은 body 가로 스크롤(DOM 확인), 스크롤바는 `--hide-scrollbars`로 PNG 판정 불가. orders `minWidth 320`은 세로 split 안에서 무시 = 문서대로 → 6절) | obs/R17-visual-run1.json |
-| R18 | workbench | 탐색 동작 약 30회 | mouse | not-run | | |
-| R18 | workbench | 탐색 동작 (터치) | touch-cdp-handle | not-run | | |
+| R18 | workbench | 탐색 동작 약 30회 | mouse | fail(FC-QA-009, FC-QA-001, FC-QA-005) | 22회. 불변식 실패 0(제스처 직후 기준). 이상 4건 → 재현 스펙: #13 → `r18-x01` 2회×2: nudge 뒤 놓으면 stale preview 시그니처 = **FC-QA-009**(새 발견), nudge 없으면 하네스 취소(#17). #6·#8 루트 띠가 iframe 본문(FC-QA-005), #7 루트 왼쪽 띠는 전부 잠긴 nav(설계), #17 800x600에서 폭 0 패널은 핸들을 누를 수 없음(`r18-x02` 축소 재현 not-reproduced, 설계상 결과 → 6절). Resizer·상단 바·여백 위 릴리스는 예측대로 취소. 매 커밋·hover의 리마운트는 FC-QA-001 | obs/R18-log.json (n 1~22) |
+| R18 | workbench | 탐색 동작 (터치) | touch-cdp-handle | fail(FC-QA-001, FC-QA-005) | 10회. 불변식 실패 0. touchCancel·5px 미만 이동·본문 끌기 모두 깨끗(ghost 없음/제거). iframe 본문 위 터치 드롭은 커밋(FC-QA-005의 터치 쪽). 터치 뒤 마우스 드래그 정상. Chromium CDP touch emulation, headless; not a real device | obs/R18-log.json (n 101~110) |
 | R19 | control 패널 (`persist=1`) | 저장 → 새로고침 → 복원 | mouse | not-run | | |
 | R19 | control 패널 (`persist=1`) | 미등록 키 → 빈 패널 | mouse | not-run | | |
 | R19 | control 패널 (`persist=1`) | 복원 후 드래그 앤 드롭 | mouse | not-run | | |
@@ -159,6 +159,7 @@
 | [FC-QA-005](../findings/FC-QA-005-iframe-panel-not-mouse-drop-target.md) | iframe 패널은 마우스 드롭 대상이 되지 않는데 터치에서는 된다 (경로 불일치) | sev-3 | library-bug | open | 2/2 | R12 | iframe-drop-target-mouse |
 | [FC-QA-007](../findings/FC-QA-007-handle-touch-starts-without-long-press.md) | 핸들 모드 터치 드래그가 문서와 달리 롱프레스 없이 8px 이동으로 시작 | sev-4 | spec-question | needs-user-confirmation | 2/2 | S7a·R12·R14 | docs-touch-handle-start |
 | [FC-QA-008](../findings/FC-QA-008-resize-capture-loss-leaks-user-select.md) | 경계선 리사이즈가 포인터 캡처를 잃으면 userSelect가 none으로 남고 그 Resizer를 다시 잡을 수 없다 | sev-1 | library-bug | open | 2/2 | R17 | resize-capture-cleanup |
+| [FC-QA-009](../findings/FC-QA-009-stale-preview-after-drop.md) | 드롭 직전 dragover의 rAF가 드래그 뒤 실행돼 소스 shadow가 남는다 (stale preview) | sev-3 | library-bug (`harness_amplified`) | open | 2/2 | R18 | raf-not-cancelled-on-drop |
 | [FC-QA-006](../findings/FC-QA-006-oopif-release-no-dragend-harness.md) | (하네스) OOPIF 위 마우스 릴리스에서 dragend가 오지 않고 CDP 드래그 세션이 멈춘다 | sev-4 | harness-artifact | open | 2/2 | R12 | harness-cdp-drag-oopif |
 
 `predicted`였던 발견의 결과: FC-QA-001 — 관찰됨(R01에서 `open`으로 변경)
@@ -231,6 +232,8 @@
 | iframe 내용 안에서는 패널 드래그를 시작할 수 없다 (결정 D4) | <R12, R13> | 핸들을 host가 그리고 `dragHandleSelector="[data-drag-handle]"`를 쓴다 | <확인 \| 미확인> |
 | iframe 패널 위에서는 마우스 드롭 대상 판정이 되지 않는다 (FC-QA-005가 고쳐질 때까지) | R12: shield 없이 마우스 미리보기 없음(`obs/R12-ladder-control-iframe-run1.json`), `iframeShield=1`이면 커밋(`obs/R12-shield-p-b-run1.json`, `R12-shield-p-c-run1.json`) | 드래그 중 `[data-dragging-panel-id] iframe { pointer-events: none }` | 확인 |
 | 패널을 다른 방향의 split으로 옮기면 그 패널의 `minWidth`(또는 `minHeight`)가 꺼진다 | R17: orders `minWidth 320`이 `V[orders,billing]` 안에서 262→208px(`obs/R17-visual-run1.json`). `doc/API.ko.md` "패널 크기 제약"의 반대 축 무시 규정대로 | 최소 크기가 중요한 패널은 `droppable`/`draggable` 잠금이나 split 수준 제약으로 배치를 고정하거나, 이동 뒤 제약을 다시 지정한다 | 확인 |
+| 최소 크기가 없는 패널은 형제의 최소·고정 크기에 밀려 폭 0까지 접힐 수 있고, 그러면 핸들을 잡을 수 없다 | R18 #17: 800x600에서 nav 200 고정 + orders `minWidth 320` 사이의 board·billing 폭 0px(스냅샷), 드래그 시작 불가(`obs/R18-log.json` n=17) | 모든 패널(특히 핸들이 유일한 이동 수단인 패널)에 `minWidth`/`minHeight`를 준다. 고정 폭 패널(nav)과 큰 최소 폭 패널의 합이 가능한 최소 창 폭을 넘지 않게 한다 | 확인 |
+| 루트 가장자리 드롭은 그 띠를 덮는 패널이 iframe이거나 잠겨 있으면 쓸 수 없다 | R18 #6~#8(telemetry·telemetry-x iframe, 잠긴 nav 위 루트 띠는 미리보기 없음), #21·#22(일반 패널 앵커는 동작) | 루트 가장자리에 닿는 패널에 iframe·잠금 패널만 두지 않는다(또는 FC-QA-005 수정·shield) | 확인 |
 | remote가 죽어도 레이아웃이 유지되려면 경계가 패널 안에 있어야 한다 | R16: 픽스처의 패널별 `RemoteErrorBoundary`로 orders만 에러 카드, 나머지 조작 가능, 죽은 패널도 host 핸들로 이동(`obs/R16-*.json`). 라이브러리에는 경계가 없다(`PanelNodeRenderer.tsx:155`) | 패널 내용마다 에러 경계·Suspense를 두고, `TreeLayout` 바깥에는 두지 않는다. 핸들은 경계 밖에 둔다 | 확인 |
 
 ---

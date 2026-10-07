@@ -1,0 +1,570 @@
+[
+  {
+    "n": 1,
+    "input": "mouse",
+    "description": "billing을 orders 왼쪽 미리보기까지 끈 뒤 Resizer(orders|V) 위에서 놓기",
+    "helper": "begin, teleport, mouse.move(resizer), release(settled)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "orders:reinserted(f+0 c+0 m+1) board:remounted(f+2 c+2 m+0) billing:remounted(f+2 c+2 m+0) telemetry:remounted(f+2 c+0 m+0 l+2) telemetry-x:remounted(f+2 c+0 m+0 l+2)",
+    "note": "under=outside drop=false dropEffect=none tree H[nav,orders,V[H[board,billing],H[telemetry,telemetry-x]]]",
+    "result": "ok"
+  },
+  {
+    "n": 2,
+    "input": "mouse",
+    "description": "orders를 board 위 미리보기 뒤 상단 바(y=20)에서 놓기",
+    "helper": "begin, teleport, teleport(top bar), release(settled)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "orders:remounted(f+2 c+2 m+0) board:remounted(f+2 c+2 m+0) billing:remounted(f+2 c+2 m+0) telemetry:remounted(f+2 c+0 m+0 l+2) telemetry-x:remounted(f+2 c+0 m+0 l+2)",
+    "note": "under=outside drop=false tree H[nav,orders,V[H[board,billing],H[telemetry,telemetry-x]]]",
+    "result": "ok"
+  },
+  {
+    "n": 3,
+    "input": "mouse",
+    "description": "board 드래그 시작 직후 이동 없이 Esc",
+    "helper": "begin, cancelEsc",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "all untouched",
+    "note": "dropEffect=none tree H[nav,orders,V[H[board,billing],H[telemetry,telemetry-x]]]",
+    "result": "ok"
+  },
+  {
+    "n": 4,
+    "input": "mouse",
+    "description": "billing을 glide(30단계)로 workbench를 가로질러 orders 왼쪽까지 → overShadow 커밋",
+    "helper": "begin, glide(30), release(overShadow)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "board:remounted(f+1 c+1 m+1) billing:remounted(f+1 c+1 m+0) telemetry:remounted(f+1 c+0 m+0 l+1) telemetry-x:remounted(f+1 c+0 m+0 l+1)",
+    "note": "under=source tree H[nav,orders,billing,V[board,H[telemetry,telemetry-x]]]",
+    "result": "ok"
+  },
+  {
+    "n": 5,
+    "input": "mouse",
+    "description": "orders를 루트 top 가장자리(5% 띠)에 놓기",
+    "helper": "begin, teleport(dropPoint 최대 depth), release(overShadow)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "billing:remounted(f+1 c+1 m+0) board:remounted(f+1 c+1 m+0) telemetry:remounted(f+1 c+0 m+0 l+1) telemetry-x:remounted(f+1 c+0 m+0 l+1) nav:remounted(f+1 c+0 m+0)",
+    "note": "orders→(board,top,3) hover V[orders,H[nav,billing,V[board,H[telemetry,telemetry-x]]]] under=source tree V[orders,H[nav,billing,V[board,H[telemetry,telemetry-x]]]]",
+    "result": "ok"
+  },
+  {
+    "n": 6,
+    "input": "mouse",
+    "description": "orders를 루트 bottom 가장자리(5% 띠)에 놓기",
+    "helper": "begin, teleport(dropPoint 최대 depth), release(overShadow)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "all untouched",
+    "note": "board→(telemetry,bottom,5) hover V[orders,H[nav,billing,V[board,H[telemetry,telemetry-x]]]] under=source tree V[orders,H[nav,billing,V[board,H[telemetry,telemetry-x]]]] || 후속: 미리보기 없음 → 원인: 루트 띠 점이 telemetry iframe 본문 위(FC-QA-005). 앵커를 orders로 바꾼 #21은 동작",
+    "result": "anomaly"
+  },
+  {
+    "n": 7,
+    "input": "mouse",
+    "description": "orders를 루트 left 가장자리(5% 띠)에 놓기",
+    "helper": "begin, teleport(dropPoint 최대 depth), release(overShadow)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "all untouched",
+    "note": "orders→(nav,left,3) hover V[orders,H[nav,billing,V[board,H[telemetry,telemetry-x]]]] under=source tree V[orders,H[nav,billing,V[board,H[telemetry,telemetry-x]]]] || 후속: 미리보기 없음 → 원인: 루트 왼쪽 5% 띠(63px)는 전부 잠긴 nav(droppable:false) 위라 workbench에서는 루트 왼쪽 드롭이 불가능하다(설계대로. 6절 가이드 후보)",
+    "result": "ok"
+  },
+  {
+    "n": 8,
+    "input": "mouse",
+    "description": "orders를 루트 right 가장자리(5% 띠)에 놓기",
+    "helper": "begin, teleport(dropPoint 최대 depth), release(overShadow)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "all untouched",
+    "note": "board→(telemetry-x,right,5) hover V[orders,H[nav,billing,V[board,H[telemetry,telemetry-x]]]] under=source tree V[orders,H[nav,billing,V[board,H[telemetry,telemetry-x]]]] || 후속: 미리보기 없음 → 원인: telemetry-x iframe 본문(FC-QA-005, 부작용 #7). 앵커를 billing으로 바꾼 #22는 동작",
+    "result": "anomaly"
+  },
+  {
+    "n": 9,
+    "input": "mouse",
+    "description": "orders|V 경계선을 +600으로 끝까지 밀었다 -600으로 되돌리기",
+    "helper": "resizeBorder ×2",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "all untouched",
+    "note": "+600: orders 364→710, board 178→0; -600: orders →116, board →302; us \"\"",
+    "result": "ok"
+  },
+  {
+    "n": 10,
+    "input": "mouse",
+    "description": "리사이즈 직후 board를 billing 위쪽으로 드래그 커밋",
+    "helper": "resizeBorder(board|billing +60), begin, teleport, release",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "billing:remounted(f+1 c+1 m+0) board:remounted(f+1 c+1 m+0) telemetry:remounted(f+1 c+0 m+0 l+1) telemetry-x:remounted(f+1 c+0 m+0 l+1)",
+    "note": "under=source tree V[orders,H[nav,V[board,billing],H[telemetry,telemetry-x]]]",
+    "result": "ok"
+  },
+  {
+    "n": 11,
+    "input": "mouse",
+    "description": "orders Esc 취소 직후 바로 새 드래그로 board 아래쪽에 커밋",
+    "helper": "begin, cancelEsc, begin, teleport, release",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "orders:remounted(f+3 c+3 m+0) board:remounted(f+3 c+3 m+0) billing:remounted(f+3 c+3 m+0) telemetry:remounted(f+3 c+0 m+0 l+3) telemetry-x:remounted(f+3 c+0 m+0 l+3) nav:remounted(f+3 c+0 m+0)",
+    "note": "under=source tree H[nav,V[board,orders,billing],H[telemetry,telemetry-x]]",
+    "result": "ok"
+  },
+  {
+    "n": 12,
+    "input": "mouse",
+    "description": "billing을 telemetry iframe 본문에 들어갔다 나와 orders 오른쪽에 놓기",
+    "helper": "begin, teleport(iframe 중앙), teleport(dropPoint), release",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "orders:remounted(f+1 c+1 m+0) billing:remounted(f+1 c+1 m+0)",
+    "note": "iframe 위 H[nav,V[board,orders,billing],H[telemetry,telemetry-x]] → hover H[nav,V[board,H[orders,billing]],H[telemetry,telemetry-x]] under=source tree H[nav,V[board,H[orders,billing]],H[telemetry,telemetry-x]]",
+    "result": "ok"
+  },
+  {
+    "n": 13,
+    "input": "mouse",
+    "description": "telemetry-x를 telemetry 헤더 위에 놓기",
+    "helper": "begin, teleport(handlePoint telemetry), release(settled)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "board:remounted(f+2 c+2 m+0) orders:remounted(f+2 c+2 m+0) billing:remounted(f+2 c+2 m+0) telemetry:remounted(f+2 c+0 m+0 l+2) telemetry-x:remounted(f+2 c+0 m+0 l+2) nav:remounted(f+2 c+0 m+0)",
+    "note": "hover V[telemetry-x,H[nav,V[board,H[orders,billing]],telemetry]] under=outside drop=false tree H[nav,V[board,H[orders,billing]],H[telemetry,telemetry-x]] || 후속: 재현 스펙 explore/r18-x01-header-release-after-root-preview.spec.ts 2회×2: (a) nudge 없이 놓으면 미리보기 리플로로 대상 요소가 바뀌어 release의 dragover가 미뤄지고 drop 없이 취소 = harness-artifact(부작용 #2·#17, 발견 없음) (b) 멈춘 커서의 주기적 dragover를 nudge 4회로 흉내 낸 뒤 놓으면 마지막 dragover(telemetry)→drop 0.5~2.2ms, 커밋 뒤 board에 shadow 잔존(I2 실패) = stale preview 시그니처 → FC-QA-009",
+    "result": "anomaly"
+  },
+  {
+    "n": 14,
+    "input": "mouse",
+    "description": "Nav 토글 닫기·열기 직후(board 로딩 중) orders를 billing 왼쪽으로 드래그",
+    "helper": "click×2, begin, teleport, release",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "board:remounted(f+1 c+1 m+0) orders:remounted(f+1 c+1 m+1) billing:remounted(f+1 c+1 m+0)",
+    "note": "토글 직후 loading-board 0; under=source tree H[nav,H[board,orders,billing],H[telemetry,telemetry-x]]",
+    "result": "ok"
+  },
+  {
+    "n": 15,
+    "input": "mouse",
+    "description": "orders 입력창에 글자를 치고 billing을 다른 곳으로 드래그한 뒤 orders 값 확인",
+    "helper": "fill, begin, teleport, release",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "orders:reinserted(f+0 c+0 m+1)",
+    "note": "orders-input \"typed-r18\" tree H[nav,H[board,billing,orders],H[telemetry,telemetry-x]]",
+    "result": "ok"
+  },
+  {
+    "n": 16,
+    "input": "mouse",
+    "description": "board 목록을 스크롤(300)한 뒤 orders를 드래그하고 board scrollTop 확인",
+    "helper": "scrollTop, begin, teleport, release",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "all untouched",
+    "note": "board scrollTop 300 tree H[nav,H[board,billing,orders],H[telemetry,telemetry-x]]",
+    "result": "ok"
+  },
+  {
+    "n": 17,
+    "input": "mouse",
+    "description": "뷰포트 800x600에서 billing 드래그와 orders|board 리사이즈",
+    "helper": "setViewportSize, begin, teleport, release, resizeBorder",
+    "invariants": [],
+    "diff": "",
+    "note": " ERROR begin: no trusted dragstart for billing (started=false, probe=false) || 후속: 원인: 800x600에서 이 트리(H[nav,H[board,billing,orders],...])는 nav 200 고정 + orders minWidth 320 때문에 board·billing 폭 0px(스냅샷) → 핸들을 누를 수 없다. 재현 스펙 explore/r18-x02-small-viewport-begin.spec.ts(초기 트리에서 orders를 넓혀 짜냄)는 폭 10px에서 멈춰 드래그가 시작됨 → 축소 재현 not-reproduced. 폭 0 자체는 최소 크기 없는 패널의 설계상 결과(6절 가이드 후보)",
+    "result": "anomaly"
+  },
+  {
+    "n": 18,
+    "input": "mouse",
+    "description": "뷰포트 1280x800 복귀 뒤 board 드래그",
+    "helper": "setViewportSize, begin, teleport, release",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "orders:reinserted(f+0 c+0 m+1) board:remounted(f+1 c+1 m+0) billing:remounted(f+1 c+1 m+0) telemetry:remounted(f+1 c+0 m+0 l+1) telemetry-x:remounted(f+1 c+0 m+0 l+1)",
+    "note": "under=source tree H[nav,board,orders,V[billing,H[telemetry,telemetry-x]]] widths {\"nav\":200,\"board\":149,\"orders\":446,\"billing\":446,\"telemetry\":219,\"telemetry-x\":219}",
+    "result": "ok"
+  },
+  {
+    "n": 19,
+    "input": "mouse",
+    "description": "드래그 시작 후 이동 없이 소스 위에서 바로 놓기",
+    "helper": "begin, release(settled)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "all untouched",
+    "note": "under=source drop=true tree H[nav,board,orders,V[billing,H[telemetry,telemetry-x]]]",
+    "result": "ok"
+  },
+  {
+    "n": 20,
+    "input": "mouse",
+    "description": "연속 두 번 커밋(board → orders 위, 곧바로 board → 원래 근처)",
+    "helper": "begin, teleport, release ×2",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "board:remounted(f+2 c+2 m+0) orders:remounted(f+2 c+2 m+0) billing:remounted(f+2 c+2 m+0) telemetry:remounted(f+1 c+0 m+0 l+1) telemetry-x:remounted(f+1 c+0 m+0 l+1)",
+    "note": "tree H[nav,orders,V[H[board,billing],H[telemetry,telemetry-x]]]",
+    "result": "ok"
+  },
+  {
+    "n": 21,
+    "input": "mouse",
+    "description": "board를 루트 bottom 가장자리(5% 띠, 앵커 orders)에 놓기",
+    "helper": "begin, teleport(dropPoint 최대 depth), release(overShadow)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "orders:remounted(f+1 c+1 m+0) board:remounted(f+1 c+1 m+0) billing:remounted(f+1 c+1 m+0) telemetry:remounted(f+1 c+0 m+0 l+1) telemetry-x:remounted(f+1 c+0 m+0 l+1) nav:remounted(f+1 c+0 m+0)",
+    "note": "board→(orders,bottom,2) hover V[H[nav,orders,V[billing,H[telemetry,telemetry-x]]],board] under=source tree V[H[nav,orders,V[billing,H[telemetry,telemetry-x]]],board]",
+    "result": "ok"
+  },
+  {
+    "n": 22,
+    "input": "mouse",
+    "description": "orders를 루트 right 가장자리(5% 띠, 앵커 billing)에 놓기",
+    "helper": "begin, teleport(dropPoint 최대 depth), release(overShadow)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "orders:remounted(f+1 c+1 m+0) billing:remounted(f+1 c+1 m+0) board:remounted(f+1 c+1 m+0) telemetry:remounted(f+1 c+0 m+0 l+1) telemetry-x:remounted(f+1 c+0 m+0 l+1) nav:remounted(f+1 c+0 m+0)",
+    "note": "orders→(billing,right,4) hover H[V[H[nav,V[billing,H[telemetry,telemetry-x]]],board],orders] under=source tree H[V[H[nav,V[billing,H[telemetry,telemetry-x]]],board],orders]",
+    "result": "ok"
+  },
+  {
+    "n": 101,
+    "input": "touch-cdp-handle",
+    "description": "orders 핸들 터치 드래그로 billing 위쪽에 놓기",
+    "helper": "handleDrag(end)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "orders:remounted(f+1 c+1 m+0) board:remounted(f+1 c+1 m+0) billing:remounted(f+1 c+1 m+0) telemetry:remounted(f+1 c+0 m+0 l+1) telemetry-x:remounted(f+1 c+0 m+0 l+1)",
+    "note": "started=true ghosts=1/1 after=0 under=source moves=1 dragstart=false touchcancel=false tree H[nav,V[H[board,V[orders,billing]],H[telemetry,telemetry-x]]]",
+    "result": "ok"
+  },
+  {
+    "n": 102,
+    "input": "touch-cdp-handle",
+    "description": "board 핸들 터치 드래그로 orders 왼쪽에 놓기",
+    "helper": "handleDrag(end)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "board:remounted(f+1 c+1 m+0) orders:remounted(f+1 c+1 m+0) billing:remounted(f+1 c+1 m+0)",
+    "note": "started=true ghosts=1/1 after=0 under=other-droppable moves=1 dragstart=false touchcancel=false tree H[nav,V[V[H[board,orders],billing],H[telemetry,telemetry-x]]]",
+    "result": "ok"
+  },
+  {
+    "n": 103,
+    "input": "touch-cdp-handle",
+    "description": "billing 핸들 터치 드래그 중 touchCancel로 끊기",
+    "helper": "handleDrag(cancel)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "board:remounted(f+2 c+2 m+0) orders:remounted(f+2 c+2 m+0)",
+    "note": "started=true ghosts=1/1 after=0 under=source moves=0 dragstart=false touchcancel=true tree H[nav,V[V[H[board,orders],billing],H[telemetry,telemetry-x]]]",
+    "result": "ok"
+  },
+  {
+    "n": 104,
+    "input": "touch-cdp-handle",
+    "description": "orders 터치 드래그를 잠긴 nav 위에서 떼기",
+    "helper": "handleDrag(end, nav handle)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "board:remounted(f+1 c+1 m+0) orders:remounted(f+1 c+1 m+0) billing:remounted(f+1 c+1 m+0) telemetry:remounted(f+1 c+0 m+0 l+1) telemetry-x:remounted(f+1 c+0 m+0 l+1) nav:remounted(f+1 c+0 m+0)",
+    "note": "started=true ghosts=1/1/1 after=0 under=source moves=1 dragstart=false touchcancel=false tree V[orders,H[nav,V[V[board,billing],H[telemetry,telemetry-x]]]] || 후속: nav 핸들 점은 미리보기 전에 계산됐다. orders가 루트 위쪽으로 미리보기 되며 그 점이 소스 shadow 위가 되어 커밋됨(기하. 결함 아님)",
+    "result": "ok"
+  },
+  {
+    "n": 105,
+    "input": "touch-cdp-handle",
+    "description": "telemetry(iframe) 핸들 터치 드래그로 telemetry-x 본문 위에 놓기",
+    "helper": "handleDrag(end)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "telemetry:reloaded(f+0 c+0 m+1 l+2)",
+    "note": "started=true ghosts=1/1 after=0 under=iframe moves=1 dragstart=false touchcancel=false tree V[orders,H[nav,V[V[board,billing],H[telemetry-x,telemetry]]]] || 후속: 터치는 iframe 패널(telemetry-x 본문)을 대상으로 잡아 커밋 — FC-QA-005의 터치 쪽과 같다. 소스 telemetry loads +2는 D3b(소스 자신) + ghost 복제(R13 주제)",
+    "result": "ok"
+  },
+  {
+    "n": 106,
+    "input": "touch-cdp-handle",
+    "description": "연속 두 번 터치 드래그(board → billing 오른쪽, 곧바로 billing → board 왼쪽)",
+    "helper": "handleDrag ×2",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "board:reinserted(f+0 c+0 m+1)",
+    "note": "1: started=true ghosts=1/1 after=0 under=source moves=1 dragstart=false touchcancel=false; 2: started=true ghosts=1/1 after=0 under=other-droppable moves=1 dragstart=false touchcancel=false; tree V[orders,H[nav,V[H[billing,board],H[telemetry-x,telemetry]]]]",
+    "result": "ok"
+  },
+  {
+    "n": 107,
+    "input": "touch-cdp-handle",
+    "description": "터치 드래그 직후 마우스 드래그(orders → board 아래)",
+    "helper": "handleDrag, begin, teleport, release",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "orders:remounted(f+2 c+2 m+0) billing:remounted(f+2 c+2 m+0) board:remounted(f+2 c+2 m+0) telemetry-x:remounted(f+1 c+0 m+0 l+1) telemetry:remounted(f+1 c+0 m+0 l+1) nav:remounted(f+1 c+0 m+0)",
+    "note": "touch started=true ghosts=1/1 after=0 under=iframe moves=1 dragstart=false touchcancel=false; mouse under=source; tree H[nav,V[H[billing,V[board,orders]],H[telemetry-x,telemetry]]]",
+    "result": "ok"
+  },
+  {
+    "n": 108,
+    "input": "touch-cdp-handle",
+    "description": "터치 드래그를 여러 waypoint로 패널들을 가로질러 orders 오른쪽에 놓기",
+    "helper": "handleDrag(end, 4 waypoints)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "billing:remounted(f+1 c+1 m+0) board:remounted(f+1 c+1 m+0) orders:remounted(f+1 c+1 m+0) telemetry-x:remounted(f+1 c+0 m+0 l+1) telemetry:remounted(f+1 c+0 m+0 l+1) nav:remounted(f+1 c+0 m+0)",
+    "note": "started=true ghosts=1/1/1/1/1 after=0 under=source moves=1 dragstart=false touchcancel=false tree V[billing,H[nav,V[V[board,orders],H[telemetry-x,telemetry]]]]",
+    "result": "ok"
+  },
+  {
+    "n": 109,
+    "input": "touch-cdp-handle",
+    "description": "핸들에서 터치 시작 후 8px 미만(5px)만 움직이고 떼기",
+    "helper": "openTouch(start, move 5, end)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "all untouched",
+    "note": "ghost during 0, after 0; tree V[billing,H[nav,V[V[board,orders],H[telemetry-x,telemetry]]]]",
+    "result": "ok"
+  },
+  {
+    "n": 110,
+    "input": "touch-cdp-handle",
+    "description": "패널 본문(핸들 밖)에서 터치로 끌기(스크롤 의도)",
+    "helper": "openTouch(start body, move 40, end)",
+    "invariants": [
+      "I1=pass",
+      "I2=pass",
+      "I3=pass",
+      "I4=pass",
+      "I5=pass",
+      "I6=pass",
+      "I7=pass"
+    ],
+    "diff": "all untouched",
+    "note": "ghost during 0; tree V[billing,H[nav,V[V[board,orders],H[telemetry-x,telemetry]]]]",
+    "result": "ok"
+  }
+]
