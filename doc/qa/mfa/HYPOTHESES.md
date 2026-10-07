@@ -131,7 +131,7 @@ root H                           root H
 | H-FOREIGN-DRAG | 패널 내용에서 시작한 네이티브 드래그가 패널 이동이 된다 | run 01 | R09, R10 | — | `library-bug` |
 | H-DROP-HIJACK | 패널이 모든 dragover를 받아들이고 drop 전파를 막는다 | run 01 | R09, R11, R08(b) | — | `spec-question` (버그 권고) |
 | H-IFRAME-DEAD | iframe 위에서는 마우스 드롭이 안 되는데 터치는 된다 | run 01 | R12, R07 | S9 | `library-bug`(경로 불일치) + 통합 가이드 (D4) |
-| H-GHOST-CLONE | 터치 ghost가 패널을 통째로 복제한다 | run 01 | R13 | S7a | `library-bug` 후보 |
+| H-GHOST-CLONE | 터치 ghost가 패널을 통째로 복제한다 | run 01 | R13 | S7a | `spec-question` (오라클 가정. 권고 library-bug) |
 | H-RESIZE | 경계선 리사이즈의 포인터 캡처와 `userSelect` 복원 | run 01 | R15, R17 | S6 | 누수·캡처 유실 시 `library-bug` |
 | H-BOUNDARY | 라이브러리에 경계가 없고 픽스처가 패널마다 둔다 | run 01 | R16 | — | 통과 예상 |
 | H-HANDLE-STALE | 핸들 모드에서 `draggable`이 `true`로 남는다 | P1 | B2-P1 | — | `library-bug` 후보 |
@@ -340,7 +340,7 @@ R17(workbench 순회)과 R18(탐색)은 특정 가설에 묶이지 않는다. �
   - control / orders: 정적인 복제본. 부작용 없음.
 - **관측 방법**: ghost는 `body > [style*="z-index: 9999"]`로 따로 읽는다. 내용 조회는 반드시 `[data-tree-root]` 아래로 한정한다(ghost가 `data-testid`를 전부 복제한다). `__fc.frames[slot].mirror`, 문서 요청 로그, ghost 요소 스크린샷, 계산된 스타일.
 - **오라클**: 가정 — 드래그를 시작하는 것만으로 패널 내용에 부작용이 없어야 한다.
-- **기본 분류**: `library-bug` 후보. `input: touch-cdp-handle`과 "Chromium CDP 터치 에뮬레이션, 실기기 아님" 문구를 붙인다.
+- **기본 분류**: `spec-question`, `status: needs-user-confirmation`, 본문에 "권고: library-bug". 오라클이 가정뿐이기 때문이다([../README.md](../README.md) 6절 4번). `input: touch-cdp-handle`과 문장 `Chromium CDP touch emulation, headless; not a real device`를 그대로 붙인다.
 - **단계·시나리오**: run 01 / R13. 스파이크 S7a가 ghost 1개 생성·제거를 확인한다.
 
 ### H-RESIZE

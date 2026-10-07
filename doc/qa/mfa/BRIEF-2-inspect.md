@@ -141,8 +141,9 @@ STATE.md 행 `B2-00`. 저장소 루트에서 실행한다. Bash timeout은 괄�
 ### S7a (터치 게이트)의 시점
 
 - 첫 터치 시나리오(실행 순서상 **R14**) 직전에 `node mfa-lab/scripts/ctl.mjs test spike/s07a --project touch` (600000)를 실행한다. 통과하면 env.json `preflight.s07a`에 `pass`.
-- 3회 시도 뒤에도 실패하면 터치를 `env-limit`으로 적고(STATE.md 환경 사실, REPORT.md 1절·8절) R13·R14 전체, R18의 터치 동작, P1 롱프레스 항목을 `blocked(터치 env-limit)`로 바꾼다. 세션 1에서는 통과했는데 지금 실패하면 REPORT.md 8절에 "세션 1과 다름"을 적는다.
-- GO 줄에 이미 `터치: env-limit`이 있으면 S7a를 실행하지 않는다.
+- 3회 시도 뒤에도 실패하면 터치를 `env-limit`으로 적고(STATE.md 환경 사실, REPORT.md 1절·8절) R13·R14 전체, R18의 터치 동작, P1 롱프레스 항목, **R12의 입력 교체(터치) 사다리 단계**를 `blocked(터치 env-limit)`로 바꾼다. 세션 1에서는 통과했는데 지금 실패하면 REPORT.md 8절에 "세션 1과 다름"을 적는다.
+- GO 줄에 이미 `터치: env-limit`이 있으면 S7a를 실행하지 않고 위와 같은 행을 막는다. R12의 터치 사다리 단계는 [BRIEF-1-build.md](./BRIEF-1-build.md) 「GO 기준」 표에 없으므로 이 문서가 **더해서** 적용한다.
+- 터치가 `env-limit`이면 H-IFRAME-DEAD의 핵심 관찰(iframe 패널 위 드롭에서 마우스와 터치의 결과 차이)은 확인되지 않은 것이다. R12의 마우스 관찰이 기대와 다르면 발견은 낸다(오라클 `doc/API.ko.md` "드래그 앤 드롭"). 단, 그 발견의 제목·분류 근거에 "경로 불일치"(마우스 대 터치)를 쓰지 않고, front matter `blocked_by`에 `터치 env-limit`, "대조 실험" 표의 3단계에 `blocked(터치 env-limit)`를 적는다. REPORT.md 4절 H-IFRAME-DEAD 판정에 "터치 비교 미실행", 8절 수동 확인 항목에 "터치가 되는 환경(실기기 또는 S7a 통과 레인)에서 iframe 패널 위 핸들 터치 드롭이 커밋되는지"를 넣고, 최종 보고의 환경 한계에 그 발견 ID를 올린다. 마우스 결과만으로 그 발견을 터치 비교까지 끝난 것처럼 보고하지 않는다.
 - VM(세션)이 바뀐 뒤 터치 시나리오가 남아 있으면 그 세션에서 S7a를 다시 돌린다.
 
 ---
@@ -275,7 +276,7 @@ B를 `orders`, `billing`, `telemetry`, `telemetry-x`로 바꿔 가며 R01(hover 
 | `R12-telemetry-x` | 같은 절차를 `p-c`(`dropPoint('p-c','left',0)`)로 | 같다. S9의 OOPIF 결과와 하네스 충실도 단서를 라벨로 |
 | `R12-shield` | `...&iframeShield=1`에서 `p-b`, `p-c` 각각: 같은 hover → `02-mid` → `a.release()` (`overShadow`) → 불변식 | hover 중 `domTree`(`p-b` 오른쪽과 `p-c` 왼쪽 모두 `H[p-b,p-a,p-c]`가 예측), 커밋된 트리, `calls` |
 
-대조 사다리: `b=control-iframe`(srcdoc). 입력 교체(사다리 3단계): `touch` 프로젝트에서 `handleDrag(page, 'control-a', [dropPoint('p-b','right',0)], 'end')` → 터치 경로가 iframe 패널을 대상으로 잡는지(예측: 커밋). 마우스와 다르면 그 차이가 H-IFRAME-DEAD의 핵심 관찰이다.
+대조 사다리: `b=control-iframe`(srcdoc). 입력 교체(사다리 3단계): `touch` 프로젝트에서 `handleDrag(page, 'control-a', [dropPoint('p-b','right',0)], 'end')` → 터치 경로가 iframe 패널을 대상으로 잡는지(예측: 커밋). 마우스와 다르면 그 차이가 H-IFRAME-DEAD의 핵심 관찰이다. 이 단계는 `R12-telemetry`가 기대와 다를 때 **반드시** 실행한다(터치 라벨을 붙인 추가 행). 터치가 `env-limit`이면 실행하지 않고 `blocked(터치 env-limit)` 행으로 적는다(「S7a (터치 게이트)의 시점」의 규칙을 따른다).
 
 ### R14 locks — 터치 취소와 두 번째 드래그
 
@@ -308,7 +309,7 @@ B를 `orders`, `billing`, `telemetry`, `telemetry-x`로 바꿔 가며 R01(hover 
 |---|---|---|
 | `R17-resize` | `seedContent` 전 슬롯 → `01-before`(뷰포트) → 4개 경계선을 순서대로 `+120`, 다시 `-120`: `between: ['orders','board']`, `['board','billing']`, `['telemetry','telemetry-x']`, `['board','telemetry']`(세로). 각각 뒤 불변식 → 마지막에 `begin(page, 'nav', { expectStart: false })`로 `nav`가 시작되지 않음을 확인 | 각 `ResizeResult`(방향, 3px 오차, `gotpointercapture`, `userSelect` 복원), `calls`의 `onResizeBorder` 8건, `nav` 폭 200±1 유지, `orders` 폭 ≥ 320, 아래 행 높이 ≥ 160, `.ftl-resizer` 개수 4, 각 패널 `scrollWidth <= clientWidth`(넘침 없음) |
 | `R17-moves` | 아래 M1~M5를 순서대로. 각 이동: `begin` → `teleport(dropPoint(...))` → 전제: 미리보기 `domTree`가 아래 표의 값 → `02-mid-M<n>`(뷰포트) → `release()` → `settle` → 불변식 → `03-after-M<n>` | 이동마다 커밋된 트리 표기, `calls`, 슬롯별 카운터 증가분(`diff`)과 iframe `loads`, 내용 상태 유지 여부 |
-| `R17-nav-toggle` | `nav-toggle-board` 클릭(`page.click`) → `settle` → 불변식 → 다시 클릭 → `settle` → 불변식 | `calls`의 `removePanel`·`insertPanel`, 트리 표기(아래), `__mfe.board.mounts` +1(새 패널은 새로 마운트되는 것이 정상), 다른 슬롯 카운터 변화 없음, 콘솔 에러 0 |
+| `R17-nav-toggle` | `nav-toggle-board` 클릭(`page.click`) → `settle` → 불변식 → `03-after-close` → 다시 클릭 → `settle` → 불변식 → `03-after-open` | `calls`의 `removePanel`·`insertPanel`, 트리 표기(아래), `__mfe.board.mounts` +1(새 패널은 새로 마운트되는 것이 정상), 슬롯별 카운터 증가분(닫기·열기 각각 `diff`. 예측 표 참고), 콘솔 에러 0 |
 | `R17-visual` | `01-before`, 각 `02-mid-M<n>`, `03-after-M<n>`, 토글 전후 PNG를 Read 도구로 연다. 아래 점검표의 항목마다 "이상 없음 / 이상(설명)"을 관찰 기록에 적는다 | 점검표 결과. 이상이 있으면 R18 규칙대로 explore 스펙으로 재현한 뒤 발견 |
 
 이동 표 (코드 리딩으로 계산한 예측 트리. 미실행). 소스 전부 `overShadow`로 커밋.
@@ -378,6 +379,94 @@ B를 `orders`, `billing`, `telemetry`, `telemetry-x`로 바꿔 가며 R01(hover 
 | `R19-size-1280` | `row3-size` 주입 → `?layout=row3&persist=1` → 1280x800에서 `panelRect` 3개 → `resizeBorder({ between:['p-a','p-b'], delta:+400, steps:20 })` → `p-a` 폭 → `resizeBorder(delta:-600)` → `p-a` 폭 → `resizeBorder(delta:+50)` → `p-a` 폭. 같은 순서를 `pair-size`(`?layout=pair&persist=1`)에서. 세로: `census-vsize`(`?layout=census&persist=1`)에서 `between:['p-b','p-c']`로 `+300`, `-500`, `+50`하며 `p-b` 높이 | 각 단계의 px(기대 상한 400 / 하한 200, 세로 300 / 120, 허용 오차 3px), 그 시점의 `getTree()` `size` 비율과 실제 폭의 관계(상태가 CSS 한계 아래로 내려갔는지), 되돌릴 때 경계선이 즉시 따라오는지 |
 | `R19-size-800` | 위 세 트리 각각: 1280에서 `p-a`(세로는 `p-b`)를 하한까지 민 상태로 `page.setViewportSize({ width:800, height:600 })` → `settle` → `panelRect` → 다시 `resizeBorder(delta:+300)` → px → `page.setViewportSize({ width:1280, height:800 })` → `panelRect` | 창 크기 변경 뒤 하한(200 / 150 / 120)이 지켜지는지, 800 폭에서 경계선 드래그의 상한 px, 1280으로 돌아온 뒤의 px. 창 크기 변경(CSS)과 경계선 드래그(`resizeBorder`)의 한계 px가 같은지 |
 | `R19-overflow` | `row3-size`에서 `p-a`를 하한 200까지 민 상태에서 `control-a-scroll`의 `scrollHeight > clientHeight`, `[data-panel-id="p-a"]`의 `scrollWidth`·`clientWidth`·`scrollHeight`·`clientHeight`, PanelFrame body(`body-control-a`)의 같은 값, 요소 스크린샷 | 내용이 잘리지 않고 스크롤되는지, 스크롤바가 어느 요소에 생기는지(이중 스크롤바 여부) |
+
+### 둘째 묶음
+
+실행 순서 14~19(R04, R06, R08, R11, R13, R15). 시간이 모자라면 이 묶음의 **끝(R15)에서부터** `not-run(시간 부족)`으로 줄인다(「여러 세션에 걸칠 때」). 절차 표기와 허용 목록 규칙은 필수 묶음과 같다.
+
+### R04 census, 슬롯 A = remote — 재삽입
+
+R01과 같은 제스처(`p-d` → `(p-a, left, 1)`, hover + Esc)를 슬롯 A만 바꿔 반복한다. 보는 것은 `p-a`의 **재삽입**(fiber 유지, DOM 노드만 이동)이다. `p-b`·`p-c`의 리마운트도 함께 기록한다(FC-QA-001 증거). 시작 트리 `H[p-a,V[p-b,p-c],p-d]`.
+
+| 케이스 | URL | 절차 | 기록할 것 |
+|---|---|---|---|
+| `R04-orders` | `?layout=census&a=orders` | `seedContent` 4슬롯 → `01-before` → `d = begin(page, 'control-d')` → `d.teleport(dropPoint(page, 'p-a', 'left', 1))` → 전제: `domTree === 'H[p-d,p-a,V[p-b,p-c]]'` → `02-mid` → `d.cancelEsc()` → `03-after` → 불변식 | `p-a`의 `diff` 분류(`reinserted`가 예측. `remounted`면 H-REMOUNT로 넘긴다), `domMoves['p-a']`, `__fc.frames.orders.frameMounts`(+0)와 `__mfe.orders.mounts`(+0), 내용 상태(`orders-input`·`orders-counter` 유지, `orders-scroll`의 `scrollTop` 0), `p-b`·`p-c`의 frame·content 증가분 |
+| `R04-billing` | `?layout=census&a=billing` | 같다 | 위와 같되 `__mfe.billing.mountCalls`·`unmountCalls`(+0), `rootsAlive`(1), `billing-scroll`의 `scrollTop`, `__fc.frames.billing.lateResolves`(0) |
+| `R04-telemetry` | `?layout=census&a=telemetry` | 같다(`seedContent`는 프레임 안 `tele-input`·`tele-scroll`) | `__fc.frames.telemetry.frameMounts`(+0)인데 프레임 안 `loads`(+1)·`docId` 변경·`mirror.loads`(+1)·`:4304` 문서 요청(+1)인지, 프레임 안 상태 초기화, `diff` 분류(`reloaded`) |
+
+허용 목록: 없음. 대조 사다리(기대와 다를 때): orders → `a=orders-local` → `a=control-a`(= R01) → `a=bare-0`. billing → `a=billing-local` → `a=control-mount`. telemetry → `a=control-iframe` → `a=control-a`. `MF: degraded`면 `R04-orders`에 라벨을 붙이고 twin 비교는 `blocked(MF degraded)`. `blocked(<remote>)`면 그 변형 행은 `blocked`.
+
+### R06 row3, B = telemetry — 재삽입의 방향
+
+`?layout=row3&b=telemetry`(`a=control-a`, `c=control-c` 기본). 시작 트리 `H[p-a,p-b,p-c]`. 리마운트가 없는 이동(루트 split 안에서 순서만 바뀐다)에서 어느 패널이 DOM 재삽입되는지, 그래서 iframe이 **언제** 재로드되는지(hover 때인지 취소 때인지) 본다. 한 케이스 안에서 hover + Esc 뒤 같은 페이지에서 hover + 드롭을 이어서 한다. 카운터는 **구간별 증가분**으로 적는다: `diff(01-before, 02-mid)`, `diff(02-mid, 03-after)`, `diff(03-after, 04-mid-drop)`, `diff(04-mid-drop, 05-after-drop)`.
+
+| 케이스 | 절차 | 기록할 것 |
+|---|---|---|
+| `R06-a` | `seedContent` 3슬롯(`p-b`는 프레임 안) → `01-before` → `c = begin(page, 'control-c')` → `c.teleport(dropPoint(page, 'p-a', 'left', 1))`(depth 0과 같은 트리를 만든다. depth 1의 띠가 더 넓다) → 전제: `domTree === 'H[p-c,p-a,p-b]'` → `02-mid` → `c.cancelEsc()` → `03-after` → 불변식 → 같은 페이지에서 `c2 = begin(page, 'control-c')` → 같은 teleport → 전제 확인 → `04-mid-drop` → `c2.release()` → `05-after-drop` → 불변식 | 구간별 `domMoves`(`p-a`, `p-b`, `p-c`), 프레임 안 `loads`·`docId`·`mirror.loads`·문서 요청 수(어느 구간에서 +1인지), 모든 슬롯의 frame·content 증가분(+0이어야 재삽입이다), 내용 상태(`scrollTop`, 프레임 안 값), 커밋된 트리 `H[p-c,p-a,p-b]`, `calls`에 `onMovePanel('p-c','p-a','left',1)` 1건 |
+| `R06-b` | 새 페이지. 같은 순서를 `a = begin(page, 'control-a')` → `a.teleport(dropPoint(page, 'p-c', 'right', 1))` → 전제 `domTree === 'H[p-b,p-c,p-a]'`로 | 같다. 커밋된 트리 `H[p-b,p-c,p-a]`, `onMovePanel('p-a','p-c','right',1)` 1건 |
+
+허용 목록: 없음. 대조 사다리: `b=control-iframe` → `b=control-b`.
+
+### R08 census bare — stale preview와 후속 영향
+
+`?layout=census&a=bare-0&b=bare-1&c=bare-2&d=bare-3`. 시작 트리 `H[p-a,V[p-b,p-c],p-d]`. `bare-*`는 PanelFrame이 없다(`__fc.frames`에 키 없음, 핸들 testid `handle-bare-<n>`, 내용 카운터는 `__mfe['bare-<n>'].mounts`). 메커니즘과 시그니처는 [HARNESS.md](./HARNESS.md) 「stale preview 판정 규칙」. 릴리스 모드 `immediate`는 이 시나리오에서만 쓴다.
+
+stale 유도 절차(세 케이스 공통. 예측은 전부 미실행)
+
+1. `seedContent` 4슬롯(bare는 input만 있다) → `01-before`.
+2. `d = begin(page, 'bare-3')` → `pt = dropPoint(page, 'p-b', 'left', 0)` → `d.teleport(pt)`.
+3. 전제: `domTree === 'H[p-a,V[H[p-d,p-b],p-c]]'`(앵커 `p-b`가 새 H로 감싸이고 소스 `p-d`가 그 안으로 들어간다. 소스 자신이 리마운트되는 이동이다: `src/tree/insert.ts:66-71`) **그리고** `underCursor(page, pt.x, pt.y).panelId === 'p-a'`(미리보기 DOM에서 커서가 소스가 아닌 `p-a` 위에 있다. 루트 split이 세 칸에서 두 칸이 되면서 `p-a`가 넓어져 커서 자리를 덮는다는 계산이다. 아니면 `HarnessError`: 이 지점으로는 stale을 유도할 수 없다).
+4. `02-mid` → `r = d.release({ mode: 'immediate' })` → `03-after` → `checkInvariants`(허용 목록 없음. 실패가 곧 관찰이다).
+5. 예측: `mouse.up`의 `dragover`가 `p-a`에 떨어져 `(p-a, right, 0)` 미리보기를 rAF로 예약하고(`src/components/PanelNodeRenderer.tsx:103-106`), 이어진 `drop`이 `(p-b, left, 0)` 이동을 커밋해 트리가 `H[p-a,V[H[p-d,p-b],p-c]]`가 되며(`src/components/TreeLayout.tsx:136-143`), 커밋 뒤 실행된 rAF가 미리보기 `H[p-a,p-d,V[p-b,p-c]]`를 켠다. 시그니처: `r.underCursorAtDrop === 'other-droppable'`, I1 통과, I2 실패(`p-d`에 shadow), I5 실패(`domTree !== treeNotation(getTree())`), 마지막 `dragover`(대상 `p-a`)가 `drop`·`dragend`와 한 프레임 안.
+6. 시그니처가 나오지 않으면 같은 케이스를 새 컨텍스트에서 다시 한다. run1·run2를 포함해 최대 5회. 5회 모두 안 나오면 `R08-stale`은 `pass`(관찰 기록에 `not-reproduced`, `repro_rate 0/5`), `R08-chip`·`R08-resize`는 `not-run(R08-stale 미재현)`.
+
+| 케이스 | 절차 | 기록할 것 |
+|---|---|---|
+| `R08-stale` | 위 1~6 | `r.underCursorAtDrop`, I1·I2·I5 결과, `dom.panels['p-d'].shadow`, `domTree`와 `treeNotation(getTree())`, 마지막 `dragover`와 `drop`·`dragend`의 `t` 차이(이벤트 로그), `calls`(`onMovePanel('p-d','p-b','left',0)` 1건은 정상 커밋이다), `treeVersion`, 카운터(이 구간은 `contaminated`로 표시한다. 리마운트 측정은 R01~R05가 한다) |
+| `R08-chip` | 새 컨텍스트에서 stale 유도(1~5. 시그니처가 나올 때까지 최대 5회 새 페이지) → `01-before`(stale 상태) → ext-chip 드래그를 `page.mouse`로 직접(`begin`은 패널 핸들 전용이다): `[data-testid="ext-chip"]` 중앙으로 `mouse.move` → `mouse.down` → 오른쪽으로 6px `mouse.move` → `settle` → 전제: 프로브에 신뢰된 `dragstart`(대상 testid `ext-chip`, `types`에 `application/x-harbor-chip`), `dom.draggingPanelId === null` → `panelRect(page, 'p-c')` 중앙으로 `mouse.move` 1회 → `settle` → `02-mid` → `mouse.up` → `settle` → `03-after` → 불변식 | `calls`의 `onMovePanel`(패널 드래그 없이 생긴 호출. 예측: `onMovePanel('p-d','p-a','right',0)` 1건), 커밋된 트리(예측 `H[p-a,p-d,V[p-b,p-c]]`), `treeVersion` 증가, `drop` 레코드(대상 `p-c`. `stopped`가 없어야 루트까지 버블된 것이다), `dragend`의 `dropEffect`, `03-after`의 I1·I2·I5(예측: `finishDrag`가 stale을 지워 전부 통과) |
+| `R08-resize` | 새 컨텍스트에서 stale 유도(1~5) → `01-before`(stale 상태. 렌더된 트리 `H[p-a,p-d,V[p-b,p-c]]`, 커밋된 트리 `H[p-a,V[H[p-d,p-b],p-c]]`) → `r1 = resizeBorder(page, { between: ['p-a','p-d'], delta: 120, steps: 10 })` → `02-mid` → `r2 = resizeBorder(page, { between: ['p-d','p-b'], delta: 120, steps: 10 })` → `03-after` → 불변식 | `calls`의 `onResizeBorder`(`path`, `borderIndex`), `treeVersion`(예측: `r1` +1, `r2` 그대로), `getTree()`에서 `size`가 바뀐 노드(예측 `r1`: 커밋 트리의 `p-a`와 `V`. `p-d`는 아님), `r1`·`r2`의 `ResizeResult`(끈 경계선 양쪽 rect 변화. 예측 `r1`: `p-a` 커짐, `p-d` 폭 그대로, `V` 작아짐. `r2`: 변화 없음 — 렌더 트리의 `borderIndex 1`이 커밋 트리에는 없다 `src/hooks/useLayoutTree.ts:56`), 리사이즈 뒤 `domTree`·I5, I4 |
+
+허용 목록: 없음. 대조(기대와 다를 때, 또는 stale이 유도되지 않을 때): stale 없는 새 페이지에서 `R08-chip`의 chip 드롭만(예측: `calls` 비어 있음, `drop` 레코드 `stopped: true` — 미리보기가 없으면 패널 `handleDrop`이 전파를 막는다 `src/components/PanelNodeRenderer.tsx:119-120`). 시그니처가 나오면 발견 1건(`library-bug`, `harness_amplified: true`), 이후 같은 시그니처는 `dup_of`(「분류 기본값」).
+
+### R11 board 안의 copy 드래그 — `dropEffect` 덮어쓰기
+
+`?layout=row3&a=board`(`b=control-b`, `c=control-c` 기본). 시작 트리 `H[p-a,p-b,p-c]`. board의 copy 전용 쌍(소스 `board-copy-src`: `effectAllowed = 'copy'`, 타입 `application/x-harbor-copy`. 존 `board-copy-zone`: `dropEffect = 'copy'`)을 같은 패널 안에서 끌어다 놓는다. `begin`은 패널 핸들 전용이므로 R09처럼 `page.mouse`를 직접 쓴다(헬퍼를 바꾸지 않는다).
+
+공통 절차: `01-before` → `board-copy-src` 중앙으로 `mouse.move` → `mouse.down` → 오른쪽으로 6px `mouse.move` → `settle` → 전제: 프로브에 신뢰된 `dragstart`(대상 testid `board-copy-src`, `types`에 `application/x-harbor-copy`) → `02-mid` → `board-copy-zone` 중앙으로 `mouse.move` 1회 → `settle` → `mouse.up` → `settle` → `03-after` → 불변식.
+
+| 케이스 | 열기 | 기록할 것 |
+|---|---|---|
+| `R11-board` | `lab.open({ layout: 'row3', slots: { a: 'board' } })` | `dragstart` bubble 레코드의 `effectAllowed`(예측 `'move'`)·`types`(`text/panel-id`가 더해지는지), 드래그 중 `dom.draggingPanelId`(예측 `'p-a'`), 존 위 `dragover` bubble 레코드의 `dropEffect`(예측 `'move'`), `drop` 레코드 유무와 `stopped`, `__mfe.board.dnd.copyDrops`(예측 +1)·`lastDragend.dropEffect`(예측 `'move'`)·`lastTypes`, `calls` 비어 있음, 트리 불변, hover 중 `domTree` 불변(소스 패널 안이라 미리보기 없음) |
+| `R11-locked` | `lab.open({ layout: 'row3', slots: { a: 'board' }, lock: 'p-a:draggable' })` | 같다. 예측: `effectAllowed 'copy'` 유지, `dom.draggingPanelId === null`, `drop` 레코드 없음, `copyDrops` +0, `lastDragend.dropEffect 'none'` |
+| `R11-standalone` | `lab.openStandalone('board')` | 같다(레이아웃 없음). 예측: `dropEffect 'copy'`, `copyDrops` +1, `drop` 레코드가 bubble까지 있음 |
+
+허용 목록: 없음. 귀속 사다리 5단계(단독 페이지)가 `R11-standalone`으로 표에 들어 있다. `MF: degraded`면 `R11-board`·`R11-locked`에 라벨 `MF degraded (빌드 타임 통합)`. `blocked(board)`면 R11 전체 `blocked(board)`.
+
+### R13 pair — 터치 ghost
+
+`?layout=pair&a=<slot>&b=control-b`, `touch` 프로젝트(`--project touch`). S7a 통과가 전제다(「S7a (터치 게이트)의 시점」). 시작 트리 `H[p-a,p-b]`. ghost는 소스 패널을 `cloneNode(true)`로 복제해 `body`에 붙인 것이다(`src/hooks/useTouchDrag.ts:60-74`). 복제 직후와 500 ms 뒤를 보고, 그다음 `p-b` 오른쪽으로 커밋한다. 복합 헬퍼 `handleDrag`에는 중간 대기가 없으므로 `touch.ts`의 기본 동작(`openTouch`)을 스펙에서 직접 조합한다(헬퍼를 바꾸지 않는다). ghost는 `body > [style*="z-index: 9999"]`로만 읽고 내용 질의는 `[data-tree-root]` 아래로 한정한다.
+
+공통 절차: `seedContent` 2슬롯 → `01-before` → `t = openTouch(page)` → `h = handlePoint(page, '<slot>')` → `t.touchStart(h)` → `t.touchMove({ x: h.x + 12, y: h.y })`(8px 초과 이동으로 드래그 시작. 아직 `p-a` 안이라 미리보기 없음) → 전제: `dom.ghosts.length === 1`, `domTree === 'H[p-a,p-b]'` → `capture('02-ghost-0')`(뷰포트)와 ghost 요소 스크린샷 `capture('02-ghost-0-el', { element: page.locator('body > [style*="z-index: 9999"]') })` → `t.hold(500)` → `snapshot('02-ghost-500')` → `t.touchMove(dropPoint(page, 'p-b', 'right', 0))` → 전제: `domTree === 'H[p-b,p-a]'` → `02-mid` → `t.touchEnd()` → `03-after` → 불변식.
+
+| 케이스 | 슬롯 A | 추가로 기록할 것 |
+|---|---|---|
+| `R13-control` | `control-a` | (전 케이스 공통) ghost의 `rect`·`opacity`(`0.7`)·`outline`(없음)·`iframeCount`, ghost와 트리 안 원본의 `getComputedStyle(el).getPropertyValue('--hb-fg')`·`('--hb-bg')` 비교(예측: ghost에서 빈 문자열), `02-ghost-0`과 `02-ghost-500` 사이의 모든 카운터 변화(예측: 없음), 소스 `p-a`의 `domMoves`(미리보기 `H[p-b,p-a]`에서 +1. D3b), 커밋된 트리 `H[p-b,p-a]`, `calls`에 `onMovePanel('p-a','p-b','right',0)` 1건, I3(ghost 제거), 프로브의 `touchend` 레코드(`phase`, `isConnected`), 신뢰된 `dragstart`가 **없음**(핸들 모드는 `draggable=false`) |
+| `R13-orders` | `orders` | `__mfe.orders.mounts`(+0), 내용 상태 유지(`scrollTop`은 재삽입으로 0) |
+| `R13-billing` | `billing` | ghost 안 `[data-testid="billing-canvas"]`의 `toDataURL()`이 같은 크기의 빈 canvas와 같은지(트리 안 원본은 다르다), `mountCalls`·`unmountCalls`(+0), `rootsAlive` 1 |
+| `R13-telemetry` | `telemetry` | `02-ghost-0`→`02-ghost-500` 구간의 `mirror.loads`(예측 +1)·`docIds`(새 값)·`:4304` 문서 요청 수(+1), `dom.ghosts[0].iframeCount`(1), 프레임 안 `__mfe.telemetry.loads`(ghost 문서가 같은 sessionStorage 키를 올려 다음 재로드 때 2 뛴다 — 관찰 기록에 적는다), 미리보기 구간(`02-ghost-500`→`02-mid`)의 실제 iframe 재로드(`loads`·`docId`·문서 요청. D3b), `frameMounts`(+0) |
+
+허용 목록: 없음. 터치 라벨(「공통 규칙」)을 모든 관찰 기록에 넣는다. 대조 사다리: telemetry → `a=control-iframe`. billing → `a=billing-local` → `a=control-mount`. orders → `a=orders-local`. `MF: degraded`면 `R13-orders`에 라벨. 터치 `env-limit`이면 R13 전체 `blocked(터치 env-limit)`.
+
+### R15 iframe 옆 경계선 리사이즈
+
+`?layout=row3&a=control-a&b=telemetry&c=telemetry-x`. 시작 트리 `H[p-a,p-b,p-c]`, Resizer 2개(`p-a|p-b`, `p-b|p-c`). 포인터를 iframe 쪽으로 150px 끌고 iframe 본문 위에서 놓는다(`releaseOver`). 그다음 같은 경계선을 반대로 끌어 Resizer가 다시 잡히는지 본다. `telemetry`는 same-site(같은 프로세스), `telemetry-x`는 cross-site(OOPIF 여부는 S9가 기록했다). 중앙 = `panelRect`의 `{ x: left + width / 2, y: top + height / 2 }`(리사이즈 전에 계산한다. 150px 이동 뒤에도 iframe 안이다).
+
+| 케이스 | 절차 | 기록할 것 |
+|---|---|---|
+| `R15-telemetry` | `seedContent`(프레임 안 포함) → `01-before` → `c = panelRect(page, 'p-b')의 중앙` → `r1 = resizeBorder(page, { between: ['p-a','p-b'], delta: 150, steps: 15, releaseOver: c })` → `02-mid` → 불변식 → `r2 = resizeBorder(page, { between: ['p-a','p-b'], delta: -150, steps: 15 })` → `03-after` → 불변식 | `r1`·`r2`의 `ResizeResult`(방향, 3px 오차, `gotpointercapture`·`lostpointercapture` 유무, 릴리스 뒤 `userSelect`), 프로브의 `pointerup` 레코드가 어느 프레임(`top`)에 찍혔는지, 캡처 중 프레임 안 `__mfe.telemetry.seen.pointermove` 증가량(예측 0), `calls`의 `onResizeBorder` 수와 `path`, `p-b`의 `loads` 변화 없음(리사이즈는 재로드가 아니다), I4, `r2`가 방향대로 움직였는지(= Resizer가 다시 잡힘) |
+| `R15-telemetry-x` | 새 페이지. `c = panelRect(page, 'p-c')의 중앙` → `r1 = resizeBorder(page, { between: ['p-b','p-c'], delta: 150, steps: 15, releaseOver: c })` → `02-mid` → 불변식 → `r2 = resizeBorder(page, { between: ['p-b','p-c'], delta: -150, steps: 15 })` → `03-after` → 불변식 | 같다. 캡처 유실의 징후를 따로 적는다: `lostpointercapture` 레코드, top 프레임에 `pointerup` 없음, `r2`의 크기 변화 0(Resizer가 다시 잡히지 않음. `activePointerId` 잔존 `src/hooks/useDragResize.ts:19`. sev-1 후보), `body.style.userSelect === 'none'` 잔존(I4 실패). S9의 OOPIF 결과를 라벨로 붙인다 |
+
+허용 목록: 없음. 대조 사다리(`R15-telemetry`가 기대와 다를 때): `b=control-iframe`. `telemetry-x: env-limit`이면 `R15-telemetry-x`는 `blocked(telemetry-x env-limit)`.
 
 ---
 
@@ -477,7 +566,7 @@ B를 `orders`, `billing`, `telemetry`, `telemetry-x`로 바꿔 가며 R01(hover 
 |---|---|---|---|---|
 | `R17-resize` | 8번 모두 방향대로 3px 안에서 변한다. `userSelect` 복원. `nav` 200 유지, `orders` ≥ 320, 하단 ≥ 160. `nav`는 드래그가 시작되지 않는다 | `doc/API.ko.md` `resizeBorder`, "패널 크기 제약", "패널 잠금" | 통과. 패널은 포인터보다 조금 덜 움직인다(Resizer 8px 포함 환산) | `src/components/LayoutNodeRenderer.tsx:61-66`, `src/components/resizerConstants.ts:1`, `src/hooks/useLayoutTree.ts:60-63` |
 | `R17-moves` | 커밋 = 미리보기, I1~I7 통과, 드래그하지 않은 패널의 상태 유지 | D3, D3a, `doc/API.ko.md` "드롭 타겟 우선순위" | 트리는 위 이동 표대로. 매 이동에서 드래그하지 않은 패널의 리마운트(frame·content·`mountCalls`·`loads` 증가)와 재삽입(moves, scrollTop 0)이 나온다. 어느 패널이 어느 쪽인지는 이동마다 다르므로 관찰로 적는다. 전부 FC-QA-001과 D3a 발견의 증거다. I1~I7은 통과 | `src/components/LayoutNodeRenderer.tsx:92`, `src/tree/insert.ts:49-52, 66-71`, `src/tree/helpers.ts:45` |
-| `R17-nav-toggle` | `removePanel`로 board가 사라지고 split이 풀린다. `insertPanel`로 billing 왼쪽에 다시 생긴다. 다른 패널 상태 유지 | `doc/API.ko.md` `removePanel`, `insertPanel` | 트리는 표대로. `board` content +1(새 마운트). 다른 패널: billing이 새 split `H[board,billing]`으로 감싸이므로 billing `mountCalls`·`unmountCalls` +1(부모가 바뀐 리마운트. 사용자 조작이 아닌 API 호출이지만 같은 메커니즘) | `src/tree/insert.ts:66-71`, `src/components/LayoutNodeRenderer.tsx:92` |
+| `R17-nav-toggle` | `removePanel`로 board가 사라지고 split이 풀린다. `insertPanel`로 billing 왼쪽에 다시 생긴다. 다른 패널 상태 유지 | `doc/API.ko.md` `removePanel`, `insertPanel` | 트리는 표대로. 닫기: `V[V[H[orders,telemetry],billing],board]`가 단일 자식으로 풀려 안쪽 내용이 한 단계 올라오면서(`src/tree/helpers.ts:45`) key `split-0` fiber의 노드가 V→H로 바뀌어 `orders` content +1·frame +1, `telemetry` `loads` +1·frame +1, `billing`은 부모 fiber가 바뀌어 `mountCalls`·`unmountCalls` +1·frame +1. 열기: `board` content +1(새 마운트), `billing`이 새 split `H[board,billing]`으로 감싸여(`src/tree/insert.ts:66-71`) `mountCalls`·`unmountCalls` +1 더(누적 +2). `orders`·`telemetry`는 열기에서 추가 없음. `nav`·`telemetry-x`는 변화 없음. 전부 FC-QA-001 증거(사용자 조작이 아닌 API 호출로 생긴 리마운트지만 같은 메커니즘) | `src/tree/helpers.ts:45`, `src/tree/insert.ts:66-71`, `src/components/LayoutNodeRenderer.tsx:92` |
 | `R17-visual` | 점검표 전 항목 이상 없음 | 가정 | 이상 없음(remote는 계약대로 `width/height 100%`). 상태 배지의 숫자가 리마운트 수만큼 올라 있는 것은 FC-QA-001의 가시화이지 시각 결함이 아니다 | |
 
 ### R18 — 탐색
@@ -580,7 +669,7 @@ D3a(리마운트 없는 재삽입·재로드)는 FC-QA-001이 아니라 **새 �
 | 드래그하지 않은 패널이 리마운트 없이 DOM 재삽입된다(moves 증가, scrollTop 0, iframe `loads` 증가인데 frame +0) | `library-bug` | D3a | **별도 발견 1건**(모든 컨테이너를 `variants`로 묶는다. iframe 재로드는 같은 원인의 결과) | sev-2(iframe 재로드) / sev-3(스크롤만) |
 | 드래그한 패널 자신의 리마운트·재삽입·재로드 | — | D3b | 별도 발견 아님. 위 두 발견의 "실제"에 "하위 관찰(D3b)"로 | — |
 | iframe 내용 안에서 드래그를 시작할 수 없다 | (class 아님) | D4 | 발견 파일 없음. REPORT.md 6절 "통합 가이드 후보" | — |
-| iframe 패널이 마우스 드롭 대상이 되지 않는데 터치는 된다(R12 + 사다리 3단계) | `library-bug`(경로 불일치) | — | 발견 1건. shield CSS와 host가 그리는 핸들을 6절 가이드 후보로 함께 적는다 | sev-3 |
+| iframe 패널이 마우스 드롭 대상이 되지 않는데 터치는 된다(R12 + 사다리 3단계) | `library-bug`(경로 불일치) | — | 발견 1건. shield CSS와 host가 그리는 핸들을 6절 가이드 후보로 함께 적는다. 터치 사다리 단계가 `blocked(터치 env-limit)`면 「S7a (터치 게이트)의 시점」의 규칙(마우스 관찰로 발견은 내되 "경로 불일치"를 주장하지 않고 `blocked_by: 터치 env-limit`) | sev-3 |
 | stale preview 시그니처([HARNESS.md](./HARNESS.md) 「stale preview 판정 규칙」) | `library-bug`, `harness_amplified: true` | — | 발견 **1건**. 이후 같은 시그니처는 `dup_of`. 그 제스처의 카운터는 `contaminated`로 표시하고 `overShadow`로 재측정 | sev-2(`R08-chip`의 stale 커밋이 관찰되면) / sev-3 |
 | 시그니처 밖의 stale preview(`underCursorAtDrop 'source'`, Esc·잠긴 패널 뒤) | 조사 | — | 새 후보. 사다리 4단계(하네스) 먼저 | sev-1 후보 |
 | 취소 뒤 `data-dragging-panel-id`·shadow·ghost 잔존, 터치 세션 미해제(R07, R14) | `library-bug` | — | 발견. 단, stale 시그니처면 위의 중복 | sev-1 |

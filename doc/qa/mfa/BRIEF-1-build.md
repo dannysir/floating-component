@@ -27,7 +27,7 @@
 3. `doc/qa/BLOCKED.md` — 있을 때만. 이전 세션이 멈춘 이유와 재개 방법이 적혀 있다.
 4. [../README.md](../README.md) — 분류(`library-bug` 등)와 신뢰 규칙. 세션 1은 발견을 등록하지 않지만 같은 용어를 쓴다.
 5. [ARCHITECTURE.md](./ARCHITECTURE.md) 전체 — 앱, 슬롯, 계약, 계측, 포트, `ctl.mjs` 명령.
-6. [HARNESS.md](./HARNESS.md) — B1-01 전에 "브라우저 레인"과 "Playwright 설정", B1-03a 전에 나머지 전부.
+6. [HARNESS.md](./HARNESS.md) — B1-01 전에 "브라우저 레인"과 "Playwright 설정", B1-02 전에 "헬퍼"의 공통 규칙과 `fixtures.ts` 절, B1-03a 전에 나머지 전부.
 7. [RECIPES.md](./RECIPES.md) — 각 단계 직전에 그 단계가 가리키는 레시피만.
 8. [HYPOTHESES.md](./HYPOTHESES.md) — B1-03a 전에. S5, S7b, S8의 배경이다.
 
@@ -150,17 +150,10 @@ Bash 도구는 기본 2분(120000 ms), 최대 10분(600000 ms)이다. 한도를 
 - `doc/qa/run00-spike/env.json` — 필드는 [SPIKE.md 작성 규칙](#spikemd-작성-규칙).
 - STATE.md의 작업 브랜치, 시작 커밋, Node 버전, shallow clone 여부.
 
-`doctor`가 기록하는 것
+`doctor`가 기록하는 항목(Node·npm 버전, 네트워크, 프록시, 권한, git, 브라우저 목록, 포트, lane 해석)은 [ARCHITECTURE.md](./ARCHITECTURE.md) "실행 모델 → doctor가 기록하는 것"을 따른다. B1-00에서 추가로 정하는 것은 레인 후보 판정 규칙 하나다.
 
 | 항목 | 방법 |
 |---|---|
-| Node, npm 버전 | `node -v`, `npm -v`. Node < 22.12면 메시지를 내고 0이 아닌 코드로 끝난다. 스크립트 안에서 Node를 바꾸지 않는다 |
-| 네트워크 | `curl -sS -o /dev/null -w '%{http_code}' https://<host>/`를 `registry.npmjs.org`, `cdn.playwright.dev`, `playwright.download.prss.microsoft.com`, `storage.googleapis.com`에 대해 실행, 그리고 `npm ping`. Node의 fetch는 프록시 환경 변수를 따르지 않으므로 쓰지 않는다 |
-| 프록시 | `HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY`(소문자 포함)의 설정 여부와 host:port |
-| 권한 | `id -u`, `sudo -n true`의 성공 여부 |
-| 저장소 | `git rev-parse --is-shallow-repository`, `git rev-parse HEAD:src`, `git rev-list -1 HEAD -- src` |
-| 브라우저 | `/opt/pw-browsers` 목록, `PLAYWRIGHT_*` 환경 변수 |
-| 포트 | 4300~4304, 4390이 비어 있는지(Node `net`으로 로컬 확인) |
 | 레인 후보 | `cdn.playwright.dev` 응답 코드가 `000`(연결 불가)이 아니면 B. 403이면 프록시 거부일 수 있으니 `curl -sS https://cdn.playwright.dev/ \| head -c 300`으로 본문에 "Host not allowed"가 있는지 보고, 있으면 B가 아니다. B가 아니고 `/opt/pw-browsers`에 1194 빌드가 있으면 A, 둘 다 아니면 C. 후보일 뿐이고 최종 판정은 B1-01의 실제 설치와 S0이다 |
 
 명령
@@ -227,7 +220,7 @@ PLAYWRIGHT_BROWSERS_PATH="<레인의 browsers path>" \
 
 레인별 보충
 
-- B에서 다운로드가 2회 실패(예: 프록시 뒤 `EAI_AGAIN`)하면: 실패 로그에 찍힌 다운로드 URL을 `curl -fL --retry 2 -o mfa-lab/.run/dl/chromium.zip "<URL>"`로 받아 `mfa-lab/.run/pw-browsers/manual-153/`에 풀고, 그 안의 실행 파일 경로를 `lane.local.json`의 `executablePath`로 쓴다. 로그에 URL이 없으면 이 단을 건너뛴다.
+- B에서 다운로드가 2회 실패(예: 프록시 뒤 `EAI_AGAIN`)하면: 위와 같은 환경 변수로 `node mfa-lab/e2e/node_modules/@playwright/test/cli.js install --dry-run chromium`을 실행해 출력된 다운로드 URL과 설치 위치를 읽고, `curl -fL --retry 2 -o mfa-lab/.run/dl/chromium.zip "<URL>"`로 받아 `unzip -q -d "<설치 위치>" mfa-lab/.run/dl/chromium.zip`으로 그 위치에 푼 뒤 그 디렉터리에 빈 파일 `INSTALLATION_COMPLETE`를 만든다(미검증 절차, [HARNESS.md](./HARNESS.md) "브라우저 레인"). `executablePath`는 건드리지 않는다(레인 C 전용). `--dry-run`이 URL을 내지 않으면 이 단을 건너뛴다.
 - 실행 시 공유 라이브러리가 없다는 오류가 나면: `node mfa-lab/e2e/node_modules/@playwright/test/cli.js install-deps chromium`(timeout 600000). root(`id -u`가 0)이거나 `sudo -n true`가 성공할 때만 가능하다. 불가능하면 SPIKE.md에 "사용자 선택 조치: 환경 setup script에 `npx playwright@<핀> install-deps chromium`"을 적는다.
 - A로 내려갈 때: 핀을 1.56.0으로 바꾸고 `mfa-lab/e2e/node_modules`와 `package-lock.json`을 지운 뒤 다시 `npm install`. browsers path는 `/opt/pw-browsers`.
 - C: `curl -fL -o mfa-lab/.run/dl/cft-141.zip https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.37/linux64/chrome-headless-shell-linux64.zip`를 받아 `mfa-lab/.run/pw-browsers/cft-141/`에 풀고 `executablePath`로 쓴다. URL 형식은 Chrome for Testing 공개 버킷의 규칙이며 미실행이다.
@@ -246,10 +239,10 @@ PLAYWRIGHT_BROWSERS_PATH="<레인의 browsers path>" \
 |---|---|
 | 계약 | `mfa-lab/contract/package.json`, `CONTRACT.md`, `src/{index,probe,bus,style}.ts` — React를 import하지 않는다 |
 | 실행 도구 | `mfa-lab/scripts/ctl.mjs` 전체 명령(`doctor install build serve status stop smoke up test`), `mfa-lab/scripts/lib/*.mjs` |
-| shell | `mfa-lab/apps/shell/{package.json,vite.config.ts,index.html,tsconfig.json}`, `src/main.tsx`, `src/workspace/{Workspace.tsx,store.tsx,layouts.ts,useLoggedLayoutTree.ts,PanelFrame.tsx}`, `src/adapters/RemoteErrorBoundary.tsx`, `src/local/{Bare.tsx,ControlPanel.tsx,NavPanel.tsx}`, `src/{instrumentation.ts,bus.ts,tokens.css}` |
+| shell | `mfa-lab/apps/shell/{package.json,vite.config.ts,index.html,tsconfig.json}`, `src/main.tsx`, `src/lab-env.d.ts`(define 상수 선언), `src/{instrumentation.ts,bus.ts,tokens.css}`, `src/registry/registry.ts`, `src/topbar/{TopBar.tsx,ExtChip.tsx}`, `src/workspace/{Workspace.tsx,store.tsx,layouts.ts,flags.ts,actions.ts,useLoggedLayoutTree.ts,PanelFrame.tsx}`, `src/adapters/{RemoteErrorBoundary.tsx,resetLoader.ts}`, `src/local/{Bare.tsx,ControlPanel.tsx,NavPanel.tsx}`. `flags.ts`는 R19용 `persist`까지 포함해 URL 플래그 전부를 파싱한다 |
 | 슬롯 | `nav`, `bare-0..3`, `control-a..d`, 상단 바의 ext-chip. remote 슬롯은 해당 단계에서 등록한다 |
 | 프리셋 | `census`, `locks`, `row3`, `pair`, `workbench` 전부 `layouts.ts`에 넣는다. `workbench`는 B1-07까지 쓰지 않는다 |
-| 하네스 | `mfa-lab/e2e/helpers/fixtures.ts`(`lab.open`만), `mfa-lab/e2e/smoke/shell.spec.ts` |
+| 하네스 | `mfa-lab/e2e/helpers/fixtures.ts` — B1-02 판: URL 조립, `__fc.ready` 대기, 슬롯 상태 대기, `lib.source` 확인, console/pageerror/request 수집, `bodyUserSelect` 저장까지만([HARNESS.md](./HARNESS.md) "헬퍼"의 `fixtures.ts` 표). 프로브 주입(`installProbe`)은 B1-03a에서, 테스트 종료 시 불변식 첨부(`checkInvariants`)는 B1-03b에서 추가한다. `mfa-lab/e2e/smoke/shell.spec.ts` |
 
 federation 플러그인(`@module-federation/vite`)은 이 단계에서 **설치하지 않는다**. B1-06에서 넣는다.
 
@@ -299,13 +292,13 @@ node mfa-lab/scripts/ctl.mjs test smoke/shell   # timeout 600000
 
 ### B1-03a 프로브와 마우스 드래그 (S1)
 
-만들 것: `mfa-lab/e2e/helpers/{settle,geometry,mouseDrag,probe.init,snapshot}.ts`([HARNESS.md](./HARNESS.md) "헬퍼", "프로브", "스냅샷"), `spike/s01-<slug>.spec.ts`.
+만들 것: `mfa-lab/e2e/helpers/{settle,geometry,mouseDrag,probe.init,snapshot}.ts`([HARNESS.md](./HARNESS.md) "헬퍼", "프로브", "스냅샷"), `fixtures.ts`에 프로브 주입(`installProbe`, 컨텍스트 `addInitScript`) 추가, `spike/s01-<slug>.spec.ts`.
 
 새 변수: `page.mouse`가 만드는 실제(trusted) dragstart~dragend. Chromium의 CDP 드래그 인터셉트에 의존한다. `locator.dragTo`는 쓰지 않는다.
 
 명령: `node mfa-lab/scripts/ctl.mjs test spike/s01 --project mouse` (600000)
 
-게이트: S1. 이 단계에서는 불변식 검사 없이 이벤트 순서·미리보기·커밋만 본다. I1~I7은 B1-03b에서 붙여 다시 실행한다. 통과하면 이벤트 로그를 `doc/qa/run00-spike/evidence/baseline/s01.events.json`에 기준선으로 저장한다(이벤트 종류, 대상 패널, `isTrusted`, 단계만 남기고 시각은 뺀다).
+게이트: S1. 이 단계에서는 불변식 검사 없이 이벤트 순서·미리보기·커밋만 본다. I1~I7은 B1-03b에서 붙여 다시 실행한다. 통과하면 이벤트 로그를 `doc/qa/run00-spike/evidence/baseline/s01.events.json`에 기준선으로 저장한다. 형식: s01 스펙 끝에서 `readProbe` 결과의 `events`를 `events.map(e => ({ type: e.type, phase: e.phase, panelId: e.target.panelId, isTrusted: e.isTrusted, top: e.top }))`로 줄여 `fs.writeFileSync`로 JSON 배열을 쓴다(시각·좌표·`count`는 뺀다). 이후의 기준선(S2~S4, S6)과 B1-06·B1-08의 "기준선과 같다" 비교는 전부 이 축소 형식을 쓴다. 비교 함수 `compareBaseline(a, b)`는 B1-03b의 `evidence.ts`에 둔다.
 
 실패 시
 
@@ -321,7 +314,7 @@ node mfa-lab/scripts/ctl.mjs test smoke/shell   # timeout 600000
 
 ### B1-03b 불변식과 취소 경로 (S2~S4)
 
-만들 것: `helpers/invariants.ts`([HARNESS.md](./HARNESS.md) "불변식"), `helpers/evidence.ts`, `spike/s02-*`, `s03-*`, `s04-*`. S1에 I1~I7 검사를 붙인다.
+만들 것: `helpers/invariants.ts`([HARNESS.md](./HARNESS.md) "불변식"), `helpers/evidence.ts`(여기에 `compareBaseline(a, b)`도 둔다: B1-03a의 축소 형식 두 배열을 순서대로 비교하되, 연속된 같은 `dragover` 레코드는 하나로 본다), `fixtures.ts`에 테스트 종료 시 불변식 검사(`checkInvariants`) 첨부 추가, `spike/s02-*`, `s03-*`, `s04-*`. S1에 I1~I7 검사를 붙인다.
 
 명령: `node mfa-lab/scripts/ctl.mjs test spike/s01`, `spike/s02`, `spike/s03`, `spike/s04` (각 600000)
 
@@ -410,9 +403,9 @@ node mfa-lab/scripts/ctl.mjs test spike/s05           # timeout 600000
 
 | 순서 | 내용 |
 |---|---|
-| a | `apps/shell/src/adapters/RemoteMount.tsx`와 대조군 슬롯 `control-mount`(host 로컬 모듈, host의 React로 `createRoot`). 서버 없이 smoke |
-| b | `mfa-lab/apps/mfe-billing/`: `package.json`(`"type": "module"`), `vite.config.ts`(lib 모드, `fileName: () => 'remote-entry.js'`, `define: { 'process.env.NODE_ENV': JSON.stringify('production') }`), `src/{remote-entry.tsx,App.tsx}`, `public/index.html`(단독 페이지). 슬롯 `billing` 등록. 전문은 [RECIPES.md](./RECIPES.md)의 lib 모드 레시피 |
-| c | twin 슬롯 `billing-local`(`@twin/billing` → `../mfe-billing/src/App.tsx`) |
+| a | `mfa-lab/apps/mfe-billing/`: `package.json`(`"type": "module"`), `vite.config.ts`(lib 모드, `fileName: () => 'remote-entry.js'`, `define: { 'process.env.NODE_ENV': JSON.stringify('production') }`), `src/{remote-entry.tsx,App.tsx}`, `public/index.html`(단독 페이지). 전문은 [RECIPES.md](./RECIPES.md) 5절(lib 모드 레시피). shell은 아직 건드리지 않는다. `node mfa-lab/scripts/ctl.mjs install --only mfe-billing`(600000) → `build --only mfe-billing`(300000) → `serve` → `smoke`로 `/remote-entry.js` 본문 검사까지 통과하면 WIP 커밋 |
+| b | `apps/shell/src/adapters/RemoteMount.tsx`, 대조군 슬롯 `control-mount`(`src/local/controlMount.tsx` — host 로컬 모듈, host의 React로 `createRoot`), 슬롯 `control-mount`·`billing` 등록. **a 뒤에만 빌드된다**: `controlMount.tsx`는 `@twin/billing`을 import하고, 그 alias는 shell `vite.config.ts`가 `../mfe-billing/src/App.tsx`의 존재를 확인했을 때만 켜진다([RECIPES.md](./RECIPES.md) 3.2 `twinAliases`, 3.12). a 전에 b를 하면 shell 빌드가 `Failed to resolve import "@twin/billing"`으로 끝난다. `control-mount`는 billing 서버 없이 `?layout=census&a=control-mount`로 확인한다 |
+| c | twin 슬롯 `billing-local`(`@twin/billing` → `../mfe-billing/src/App.tsx`. alias는 a에서 파일이 생기며 이미 켜졌다) |
 | d | `mfa-lab/e2e/smoke/billing.spec.ts` |
 
 새 변수: lib 모드 빌드에서의 `@harbor/contract` alias, 다른 origin의 ES 모듈을 `import(url)`로 불러 별도 React 루트로 마운트하는 것.
@@ -424,7 +417,7 @@ node mfa-lab/scripts/ctl.mjs test spike/s05           # timeout 600000
 - `ctl smoke`: `http://127.0.0.1:4303/remote-entry.js`가 200이고 본문에 `mount`, `unmount`가 있다. `/`가 `remote-entry.js`를 참조하는 HTML이다.
 - `smoke/billing.spec`
   - `window.__mfe.billing`: `mounts === 1`, `unmounts === 0`, `rootsAlive === 1`, `reactSame === false`.
-  - `window.__fc.frames.billing`: `frameMounts === 1`, `lateResolves === 0`, `state === 'ready'`.
+  - `window.__fc.frames.billing`: `frameMounts === 1`, `(lateResolves ?? 0) === 0`, `state === 'ready'`. `lateResolves` 필드는 첫 late resolve 때 생기고 정상 경로에서는 `undefined`다([RECIPES.md](./RECIPES.md) 3.6 `frameMounted`는 초기화하지 않는다). `=== 0`으로 단언하면 정상 경로가 실패한다.
   - `control-mount`와 `billing-local`: `mounts === 1`, `reactSame === true`.
   - 단독 페이지(`http://127.0.0.1:4303/`)에서 `<slot>-input`이 보인다.
   - 콘솔 에러 0건.
@@ -488,12 +481,12 @@ node mfa-lab/scripts/ctl.mjs test spike/s05           # timeout 600000
 
 | 순서 | 내용 |
 |---|---|
-| 1 | `mfa-lab/apps/mfe-orders/`: `package.json`, `vite.config.ts`, `index.html`(단독 페이지), `src/{Panel.tsx,standalone.tsx}`. 플러그인 없이 빌드 |
-| 2 | twin 슬롯 `orders-local`(`@twin/orders` → `../mfe-orders/src/Panel.tsx`) → `test smoke/shell`로 확인 후 WIP 커밋 |
-| 3 | shell과 `mfe-orders`에 `@module-federation/vite@1.23.0` 추가. 두 프로젝트의 lockfile을 처음부터 다시 만든다 |
+| 1 | `mfa-lab/apps/mfe-orders/`: `package.json`([RECIPES.md](./RECIPES.md) 4.1 그대로, `@module-federation/vite` **포함**), `vite.config.ts`(4.2 그대로. `federation` import는 최상위 정적 import이고 `LAB_MF`가 `on`일 때만 호출된다), `index.html`(단독 페이지), `src/{Panel.tsx,standalone.tsx}`. `install --only mfe-orders` 뒤 `build --only mfe-orders --mf off`로 빌드해 단독 페이지(`/`)만 확인한다. 플러그인을 **설치하지 않고** 빌드하면 import 해석 실패로 끝나므로 "플러그인 없이"가 아니라 "플러그인을 호출하지 않고"다 |
+| 2 | twin 슬롯 `orders-local`(`@twin/orders` → `../mfe-orders/src/Panel.tsx`). `smoke/orders.spec.ts`의 **첫 케이스**로 `?layout=census&b=orders-local`을 열어 `window.__mfe['orders-local']`의 `mounts === 1`, `reactSame === true`, `build === window.__fc.build`(twin은 shell이 번들하므로 스탬프가 shell과 같다)를 확인하는 테스트를 먼저 만들고 `test smoke/orders`로 돌린 뒤 WIP 커밋. `smoke/shell`의 다섯 프리셋 기본값에는 `orders-local`이 없어 그것으로는 twin 렌더를 확인하지 못한다 |
+| 3 | **shell에만** `@module-federation/vite@1.23.0` 추가하고 shell `vite.config.ts`를 2단계 설정([RECIPES.md](./RECIPES.md) 3.5)으로 바꾼다. shell의 lockfile만 처음부터 다시 만든다. `mfe-orders`는 1에서 이미 플러그인째 설치됐다 |
 | 4 | remote 설정: `name: 'orders'`, `filename: 'remoteEntry.js'`, `manifest: true`, `dts: false`, `exposes: { './Panel': './src/Panel.tsx' }`, 절대 `base` + `server.origin`, `build.target: 'chrome89'`, 공유 키 `react`, `'react/'`, `react-dom`, `'react-dom/'`(singleton), **`shareStrategy: 'loaded-first'`** |
 | 5 | shell 설정: `name: 'shell'`, `dts: false`, `remotes`는 `registry.json`에서 만든 manifest URL 문자열, 같은 공유 블록, **`shareStrategy: 'loaded-first'`**. `src/adapters/SameTreeRemote.tsx`, `src/registry/{loaders.ts,remotes.d.ts}`, 슬롯 `orders` |
-| 6 | `mfa-lab/e2e/helpers/faults.ts`(`blockRemote`), `smoke/orders.spec.ts` |
+| 6 | `mfa-lab/e2e/helpers/faults.ts`(`blockRemote`), `smoke/orders.spec.ts`에 federation 케이스((a)~(c)) 추가 |
 
 `shareStrategy`를 명시하는 이유: 플러그인 기본값은 `'version-first'`이고(출처: https://raw.githubusercontent.com/module-federation/vite/main/src/utils/normalizeModuleFederationOptions.ts), 이 전략은 host 시작 시 모든 remote를 불러와 공유 모듈을 협상한다. remote 하나가 죽으면 shell 전체가 빈 화면이 될 수 있다. 미실행 추정이며 게이트 (b)가 확인한다. 설정 전문은 [RECIPES.md](./RECIPES.md)의 MF remote·host 레시피.
 
@@ -502,10 +495,15 @@ node mfa-lab/scripts/ctl.mjs test spike/s05           # timeout 600000
 명령
 
 ```bash
-# 순서 3: 플러그인을 두 package.json에 적은 뒤 lockfile 재생성
-rm -rf mfa-lab/apps/shell/node_modules mfa-lab/apps/shell/package-lock.json \
-       mfa-lab/apps/mfe-orders/node_modules mfa-lab/apps/mfe-orders/package-lock.json
-node mfa-lab/scripts/ctl.mjs install --only shell,mfe-orders   # timeout 600000
+# 순서 1: mfe-orders 설치·빌드. 플러그인은 package.json에 있지만 --mf off라 federation()은 호출되지 않는다
+node mfa-lab/scripts/ctl.mjs install --only mfe-orders          # timeout 600000
+node mfa-lab/scripts/ctl.mjs build --only mfe-orders --mf off   # timeout 300000
+node mfa-lab/scripts/ctl.mjs serve
+node mfa-lab/scripts/ctl.mjs smoke                              # orders는 .run/build.json의 mf가 off이므로 `/`의 harbor-app meta로 준비 판정
+
+# 순서 3: 플러그인을 shell package.json에만 적고 2단계 설정으로 바꾼 뒤 shell lockfile 재생성
+rm -rf mfa-lab/apps/shell/node_modules mfa-lab/apps/shell/package-lock.json
+node mfa-lab/scripts/ctl.mjs install --only shell               # timeout 600000
 
 node mfa-lab/scripts/ctl.mjs up                      # timeout 600000. shell 소스가 바뀌었으므로 dist-051도 다시 빌드된다
 node mfa-lab/scripts/ctl.mjs test smoke/orders       # timeout 600000. EXPECT_ORDERS_STAMP이 없으면 스탬프 단언은 건너뛴다
@@ -564,7 +562,7 @@ node mfa-lab/scripts/ctl.mjs test spike/s01          # s02, s03, s05, s06도 각
 
 - `smoke/board.spec`: `window.__mfe.board`가 `mounts === 1`, `reactSame === true`, `dnd` 필드 존재. `window.__mfe.orders.reactSame === true`도 동시에 참(두 remote가 한 React). 단독 페이지 `http://127.0.0.1:4302/` 렌더.
 - 장애 격리: `:4302`를 끊으면 에러 카드가 board 패널에만, `:4301`을 끊으면 orders 패널에만 있고 나머지는 ready.
-- `smoke/workbench.spec`: `?layout=workbench`에서 제품 슬롯 6개(`nav`, `orders`, `board`, `billing`, `telemetry`, `telemetry-x`)가 모두 ready(blocked·env-limit인 것은 제외하고 그 사실을 적는다). Nav의 토글로 `board`를 닫으면 `getTree()`에서 사라지고 다시 열면 돌아온다. 콘솔 에러 0건.
+- `smoke/workbench.spec`: `?layout=workbench`에서 제품 슬롯 6개(`nav`, `orders`, `board`, `billing`, `telemetry`, `telemetry-x`)가 모두 ready(blocked·env-limit인 것은 제외하고 그 사실을 적는다). Nav의 토글로 `board`를 닫으면 `panelIds`와 `domTree`에서 사라진다. 다시 열면 `panelIds`에 `board`가 있고 `domTree`가 `H[nav,orders,V[H[board,billing],H[telemetry,telemetry-x]]]`다(**size는 비교하지 않는다**: `removePanel`은 `H[board, billing]`을 billing 하나로 풀면서 split의 size 2가 아니라 billing의 size 1을 남기고([src/tree/helpers.ts:45](../../../src/tree/helpers.ts)), `insertPanel`이 다시 만드는 `H[board, billing]`의 size는 그 1이다([src/tree/insert.ts:71](../../../src/tree/insert.ts)). `getTree()` JSON 동등으로 단언하면 실패한다). 토글 전후 `getTree()`의 size 차이는 SPIKE.md 8절(라이브러리 버그 의심 메모)에 적고 판단은 세션 2로 넘긴다. 콘솔 에러 0건.
 
 실패 시: B1-06과 같은 사다리. 3회 실패하면 `blocked(board)`.
 
@@ -610,14 +608,14 @@ git status --short -- src package.json package-lock.json tsconfig.json vite.conf
 |---|---|---|---|---|
 | S0 | B1-01 | 게이트 | 브라우저 | Chromium이 뜬다. 테스트 페이지 PNG를 Read 도구로 열어 확인했다. rAF가 1초에 30회 이상 돈다(기대 약 60, 실측값 기록). `context.newCDPSession(page)`가 열리고 `Browser.getVersion`이 버전을 준다. `touch` 프로젝트에서 CDP `touchStart`가 `isTrusted === true`인 touchstart를 만든다(`mouse` 프로젝트에서의 결과는 기록만) |
 | S1 | B1-03a | 게이트 | 마우스 드래그. `?layout=census&a=bare-0&b=bare-1&c=bare-2&d=bare-3`에서 p-d → (p-a, left, depth 1), hover, `overShadow` 릴리스 | trusted dragstart → dragenter → dragover → drop → dragend 순서. hover 중 `domTree`가 `H[p-d,p-a,V[p-b,p-c]]`이고 p-d에 shadow 스타일. `onMovePanel` 호출 1건. 커밋된 트리 = 미리보기. dragend의 `dropEffect`가 `'move'`. B1-03b부터 I1~I7 포함 |
-| S2 | B1-03b | 게이트 | 잠긴 패널에 놓기, 소스 리마운트 없음. `?layout=locks`에서 editor → 루트 오른쪽 끝(미리보기) → `nav` 위로 이동 → 릴리스 | drop 없음. dragleave + dragend. dragend의 `dropEffect`가 `'none'`. `onMovePanel` 0건, 트리 불변. I1~I7 |
+| S2 | B1-03b | 게이트 | 잠긴 패널에 놓기, 소스 리마운트 없음. `?layout=locks`에서 editor → `dropPoint(output, right, 3)`(루트 rect 오른쪽 5% 띠. `terminal`을 앵커로 써도 같은 depth 3) → 미리보기 `H[nav,V[terminal,output],editor]` 확인 → `handlePoint('nav')`로 teleport → `release({ mode: 'settled' })` | hover 중 `domTree === 'H[nav,V[terminal,output],editor]'`. drop 없음. dragleave + dragend. dragend의 `dropEffect`가 `'none'`. `onMovePanel` 0건, 트리 불변. I1~I7 |
 | S3 | B1-03b | 게이트 | 미리보기가 소스를 리마운트한 뒤 Esc. `?layout=locks`에서 terminal → (editor, left, depth 0) → Esc | 소스 노드에 직접 건 dragend가 `isConnected: false`로 찍힌다. `onMovePanel` 0건, 트리 불변. 브랜치 소스에서 I1~I7 |
 | S4 | B1-03b | 게이트 | S3과 같되 Esc 대신 잠긴 `nav` 위에서 릴리스 | drop 없음, 트리 불변, I1~I7 |
 | S5 | B1-03c | **양성 대조** | S3을 npm 0.5.1로 빌드한 shell(`http://127.0.0.1:4390`)에서 | I1(남은 `data-dragging-panel-id`)과 I2(남은 미리보기 shadow)가 **실패**한다. 아래 설명 참고 |
 | S6 | B1-03d | 게이트 | 경계선 리사이즈. `?layout=row3`에서 p-a와 p-b 사이를 +150 px, 10 step | resizer에 `gotpointercapture`. p-a는 커지고 p-b는 줄어든다(방향). 변화량과 150 px의 차가 3 px 이하. `body.style.userSelect` 복원. `window.__fc.calls`에 `onResizeBorder`. I1~I7 |
 | S7a | B1-03e | 게이트(터치) | 핸들 터치 드래그. (1) `?layout=pair`에서 p-a 핸들 → p-b 오른쪽에 커밋 (2) `?layout=locks`에서 editor 핸들 → terminal 위 미리보기 → `nav` 위로 이동 → 릴리스 | 오라클: 핸들 모드는 **롱프레스 없이 8 px 넘게 움직이면** 시작한다. touch 이벤트가 trusted. 드래그 중 ghost가 정확히 1개이고 끝나면 없다. (1) `onMovePanel` 1건, 트리 변경 (2) `nav` 위에서 ghost가 blocked 스타일, 릴리스 후 `onMovePanel` 0건·트리 불변. 이어서 두 번째 드래그가 시작된다. I1~I7 |
 | S7b | B1-03e | 기록만 | `?drag=panel`에서 550 ms 롱프레스 후 이동·릴리스. 새 컨텍스트에서 실행 | 게이트가 아니다. 사전 등록 결과 — Chromium 141: 커밋. Chromium 153: 네이티브 dragstart나 touchcancel이 나올 수 있다. 나오면 프로브 로그와 함께 가설 H-TOUCH-NATIVE-RACE의 관찰로 적는다(분류 후보 `library-bug`, `env-limit` 아님) |
-| S8 | B1-03f | 기록 | rAF 경합 비율. `census` bare에서 릴리스 모드(`overShadow`, `settled`, `immediate`) × 릴리스 시 커서 아래(`source`, `other-droppable`)마다 10회. 드롭마다 페이지를 새로 연다 | 비율 표 기록. `overShadow`는 0/10 기대 |
+| S8 | B1-03f | 기록 | rAF 경합 비율. `census` bare에서 **5칸**: `overShadow`(커서 아래 `source`만 — 이 모드는 정의상 소스 shadow 헤더에서 놓고 커서 아래가 소스가 아니면 `HarnessError`를 던지므로 `other-droppable` 칸은 만들 수 없다), `settled` × {`source`, `other-droppable`}, `immediate` × {`source`, `other-droppable`}. 칸마다 10회, 드롭마다 페이지를 새로 연다 | 비율 표 기록(5칸). `overShadow`는 0/10 기대 |
 | S9 | B1-05 | 기록만 | iframe 사실 | `telemetry-x`가 별도 CDP 타깃(OOPIF)인가. 패널 드래그 중 커서가 same-site·cross-site iframe 위에 있을 때 dragover가 어느 프레임의 프로브에 찍히는가. cross-site iframe 안에서 `sessionStorage`를 쓸 수 있는가. `localhost`를 썼는가 `crosssite.test`를 썼는가 |
 | S10 | B1-03f | 선택 | S1~S3을 `channel: 'chromium'`으로 | headless shell과 같은 이벤트 순서. 전체 바이너리가 없으면 건너뛴다 |
 
@@ -639,7 +637,7 @@ git status --short -- src package.json package-lock.json tsconfig.json vite.conf
 
 S5 설명
 
-- npm 0.5.1은 dragend를 루트의 React `onDragEnd`로 받는다. 설계 검토 때 `v0.5.1` 태그와 배포 번들(https://unpkg.com/@dannysir/floating-components@0.5.1/dist/index.js )에서 확인한 내용이고, 이 문서를 쓰면서 다시 열어 보지는 않았다. B1-03c에서 `mfa-lab/apps/shell/node_modules/fc-051/dist/index.js`를 열어 `onDragEnd`가 있는지 직접 확인하고 SPIKE.md에 적는다. 미리보기가 소스 패널을 리마운트하면 브라우저는 dragend를 **문서에서 분리된 원본 노드**로 보내고, 그 이벤트는 루트까지 버블링되지 않는다. 그래서 0.5.1에서는 미리보기와 `data-dragging-panel-id`가 남아야 한다. 배경은 `doc/TODO.md`의 "해결: 드래그 중 소스 DOM 교체로 종료 이벤트 유실".
+- npm 0.5.1은 dragend를 루트의 React `onDragEnd`로 받는다. 문서 작성 시점(2026-10-02)에 `v0.5.1` 태그와 배포 번들(https://unpkg.com/@dannysir/floating-components@0.5.1/dist/index.js )에서 확인한 내용이고, 그 뒤로 다시 열어 보지는 않았다. B1-03c에서 `mfa-lab/apps/shell/node_modules/fc-051/dist/index.js`를 열어 `onDragEnd`가 있는지 직접 확인하고 SPIKE.md에 적는다. 미리보기가 소스 패널을 리마운트하면 브라우저는 dragend를 **문서에서 분리된 원본 노드**로 보내고, 그 이벤트는 루트까지 버블링되지 않는다. 그래서 0.5.1에서는 미리보기와 `data-dragging-panel-id`가 남아야 한다. 배경은 `doc/TODO.md`의 "해결: 드래그 중 소스 DOM 교체로 종료 이벤트 유실".
 - S5가 요구대로 실패하면 세 가지가 증명된다: (1) 하네스의 입력이 실제 브라우저처럼 분리된 노드로 dragend를 보낸다 (2) 불변식 I1·I2가 멈춘 상태를 잡아낸다 (3) 같은 동작이 브랜치 소스에서 통과한 것(S3)이 하네스의 무딤 때문이 아니다.
 - 판정: I1과 I2가 둘 다 실패하는 것이 예측이다. 둘 중 하나만 실패해도 "멈춘 상태를 봤다"로 보고 요구 충족으로 적되 어느 쪽인지 기록한다. **둘 다 통과하면** 하네스가 알려진 버그를 못 보는 것이고 BLOCKED-ORACLE이다.
 - S5 스펙은 전제도 단언한다: `window.__fc.lib.source === 'npm051'`, 미리보기 중 소스가 리마운트됨. 전제가 깨지면 S5는 무효(하네스 문제)이지 BLOCKED-ORACLE이 아니다.
@@ -765,7 +763,7 @@ http-only 계속 진행 (BLOCKED-BROWSER일 때만)
 | 2. 레인 | 선택한 레인과 이유, 시도한 레인별 결과, Playwright·Chromium 버전, 바이너리 종류(headless shell / chromium), 설치 방법 |
 | 3. 검사별 결과 | S0~S10 표: 결과(통과 / 실패 / 요구대로 실패 / 기록 / 건너뜀), 시도 횟수, 커밋, 한 줄 메모. rAF 실측값, 터치에 `hasTouch`가 필요한지 포함 |
 | 4. 이벤트 로그 기준선 | S1~S4, S6의 이벤트 순서(종류·대상·`isTrusted`)와 기준선 파일 경로. B1-06 재실행과의 비교 결과 |
-| 5. S8 비율 표 | 릴리스 모드 × 커서 아래 분류별 stale preview 건수/10. `immediate`의 비율은 사용자 체감 빈도가 아니라는 문장 포함 |
+| 5. S8 비율 표 | 5칸(`overShadow`×`source`, `settled`×{`source`, `other-droppable`}, `immediate`×{`source`, `other-droppable`})별 stale preview 건수/10. `overShadow`×`other-droppable` 칸은 없다(만들 수 없는 조합). `immediate`의 비율은 사용자 체감 빈도가 아니라는 문장 포함 |
 | 6. S9 iframe 사실 | OOPIF 여부, dragover가 찍힌 프레임, `sessionStorage` 가능 여부, 사용한 호스트 이름 |
 | 7. S7b 관찰 | 레인, 네이티브 dragstart·touchcancel 유무, 프로브 로그 발췌 |
 | 8. 라이브러리 버그 의심 메모 | 증상, 재현 명령, 관련 스펙. 판단은 세션 2로 넘긴다 |
@@ -773,6 +771,9 @@ http-only 계속 진행 (BLOCKED-BROWSER일 때만)
 | 10. GO / NO-GO 권고 | 필수 조건별 충족 여부, 해당하는 조건부 항목, `blocked`가 되는 run 01 행 목록, 권고 한 줄. 사용자가 세션 2 프롬프트에 붙일 문장 예시 |
 
 `env.json` 필드 (`doc/qa/run00-spike/env.json`). 모르는 값은 `null`. 단계가 진행되면 채운다.
+
+- `doctor --write <경로>`는 결과 JSON을 그 경로에 **덮어쓴다**(병합이 아니다). 그래서 `--write`는 B1-00에서 한 번만 실행한다(세션 2는 `doc/qa/run01-tier1/env.json`에 B2-00에서 한 번). 재개 절차의 `doctor`는 `--write` 없이 실행한다.
+- B1-01 이후 필드(`lane`, `raf_per_second`, `lib_source`, `touch`, `mf`, `durations_s` 등)는 세션이 각 단계의 커밋 직전에 **손으로** 추가하고 `written_at`을 갱신한다. B1-00 필드를 다시 받아야 하면 `doctor`를 `--write` 없이 실행해 출력을 보고 해당 키만 손으로 고친다.
 
 | 필드 | 기록 단계 | 값 |
 |---|---|---|

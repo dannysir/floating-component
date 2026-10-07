@@ -31,7 +31,7 @@
 
 | 순서 | 조건 | 핀 | 브라우저 | 터치 시작 네이티브 드래그 (Linux) |
 |---|---|---|---|---|
-| **B** (우선) | `cdn.playwright.dev`에 닿고, `playwright install chromium`이 2회 시도 안에 성공하고, 실행된다 | `@playwright/test@1.63.0` | Chromium **153** (153.0.8010.12, 리비전 1243), headless shell | **on** |
+| **B** (우선) | `cdn.playwright.dev`에 닿고, `playwright install chromium`이 2회 시도 안에 성공하거나(실패하면 아래 「레인별 조건 상세」의 수동 다운로드로 같은 빌드를 받고), 실행된다 | `@playwright/test@1.63.0` | Chromium **153** (153.0.8010.12, 리비전 1243), headless shell | **on** |
 | **A** | `/opt/pw-browsers`에 빌드 1194가 있고 실행된다. 다운로드 없음 | `@playwright/test@1.56.0` | Chromium **141** (141.0.7390.37, 리비전 1194), headless shell | **off** |
 | **C** (미검증) | B·A 모두 실패. Chrome for Testing headless shell을 curl로 받아 `executablePath`로 지정한다. 버전은 핀과 같은 141.0.7390.x | `@playwright/test@1.56.0` | 받은 빌드 (141) | **off** |
 | 중단 | 셋 다 실행 실패 | — | — | `BLOCKED-BROWSER` ([BRIEF-1-build.md](./BRIEF-1-build.md) 「중단 조건」) |
@@ -44,11 +44,11 @@
 - **B**
   - 설치는 자식 프로세스 환경에서 `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD`를 지우고 `PLAYWRIGHT_BROWSERS_PATH=<repo>/mfa-lab/.run/pw-browsers`(git 무시 경로)로 실행한다.
   - 1차 시도: `playwright install chromium`.
-  - 2차 시도: 호스트는 curl로 닿는데 Playwright 다운로더만 실패하는 경우(프록시 뒤 `EAI_AGAIN`, https://github.com/microsoft/playwright/issues/39934). `playwright install --dry-run chromium`이 출력하는 다운로드 URL과 설치 위치를 읽어, curl로 zip을 받아 그 위치에 풀고 디렉터리에 빈 파일 `INSTALLATION_COMPLETE`를 만든다. 미검증 절차다.
+  - 2차 시도(수동 다운로드): 호스트는 curl로 닿는데 Playwright 다운로더만 실패하는 경우(프록시 뒤 `EAI_AGAIN`, https://github.com/microsoft/playwright/issues/39934). 같은 환경 변수로 `playwright install --dry-run chromium`을 실행해 출력된 **`chromium-headless-shell`의 다운로드 URL**을 읽는다(풀 `chromium` URL은 받지 않는다. 실패 로그에 URL이 찍혀 있으면 그 값과 같아야 한다). `mkdir -p mfa-lab/.run/dl mfa-lab/.run/pw-browsers/manual-153 && curl -fL --retry 2 -o mfa-lab/.run/dl/chromium.zip "<URL>"`로 받아 `unzip -q -d mfa-lab/.run/pw-browsers/manual-153 mfa-lab/.run/dl/chromium.zip`으로 `mfa-lab/.run/pw-browsers/manual-153/`에 풀고, 그 안의 실행 파일(`find mfa-lab/.run/pw-browsers/manual-153 -maxdepth 2 -type f -name headless_shell`로 찾는다. 예상 경로 `chrome-linux/headless_shell`, 미검증)의 절대 경로를 `.run/lane.local.json`의 `executablePath`로 둔다. `browsersPath`는 `null`. Playwright의 레지스트리 디렉터리나 표식 파일은 만들지 않는다(`executablePath`가 지정되면 Playwright는 레지스트리를 보지 않는다. https://playwright.dev/docs/api/class-browsertype). 미실행 절차다.
   - 실행 시 공유 라이브러리 누락 오류가 나면 `playwright install-deps chromium`(apt, root 필요)을 한 번 시도한다.
   - 사용자가 클라우드 환경의 네트워크 허용 목록에 `cdn.playwright.dev`, `playwright.download.prss.microsoft.com`을 추가하지 않았으면 B는 실패한다. 그때는 A로 간다.
 - **A**: `ls /opt/pw-browsers`에 `chromium-1194` 또는 `chromium_headless_shell-1194`가 있어야 한다. 존재 여부는 `ctl doctor`가 B보다 먼저 확인해 둔다. 그래서 B가 실패했을 때 A로 내려가는 데 비용이 들지 않는다.
-- **C**: `https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.37/linux64/chrome-headless-shell-linux64.zip`을 curl로 받아 `mfa-lab/.run/` 아래에 푼다 (`storage.googleapis.com`은 기본 허용 목록에 있다). Playwright는 1.56.0 그대로 두고 `executablePath`만 지정한다.
+- **C**: `https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.37/linux64/chrome-headless-shell-linux64.zip`을 curl로 받아 `mfa-lab/.run/pw-browsers/cft-141/`에 푼다 (`storage.googleapis.com`은 기본 허용 목록에 있다). Playwright는 1.56.0 그대로 두고 `executablePath`만 지정한다. `browsersPath`는 `null`.
 - 구체적인 실행 절차와 시도 횟수 기록은 [BRIEF-1-build.md](./BRIEF-1-build.md) 「단계」 B1-00·B1-01을 따른다.
 
 ### 왜 B가 A보다 먼저인가
@@ -59,7 +59,7 @@
 
 ### 규칙
 
-- **버전을 섞지 않는다.** Playwright 1.56이 153 바이너리를 구동하거나 그 반대인 조합은 금지한다. 레인 C도 Playwright 핀과 같은 141 빌드만 받는다.
+- **버전을 섞지 않는다.** Playwright 1.56이 153 바이너리를 구동하거나 그 반대인 조합은 금지한다. 레인 C도 Playwright 핀과 같은 141 빌드만 받는다. 레인 B의 수동 다운로드도 1.63.0의 `--dry-run`이 출력한 URL(리비전 1243)만 받는다.
 - **레인은 하나만 쓴다.** 세션 1~2에서 두 번째 버전을 겹쳐 설치하지 않는다. 쓰지 않은 Chromium 메이저의 터치 결과는 REPORT.md에 `not-run`(환경 한계)으로 남긴다.
 - **레인을 조용히 바꾸지 않는다.** `ctl doctor`가 커밋된 레인을 더 이상 쓸 수 없다고 판단하면 멈추고 보고한다.
 - 헬퍼는 1.56에도 있는 API만 쓴다: `page.mouse`, `page.keyboard`, `context.newCDPSession`, `browser.newBrowserCDPSession`, `context.addInitScript`, `page.route`, `page.on('console' | 'pageerror' | 'request')`, `frame.evaluate`.
@@ -75,11 +75,14 @@
 // mfa-lab/e2e/lane.json (예시, 미실행)
 { "lane": "B", "playwright": "1.63.0", "chromium": "153.0.8010.12" }
 
-// mfa-lab/.run/lane.local.json (예시, 미실행)
+// mfa-lab/.run/lane.local.json (예시, 미실행. ctl doctor가 resolvedAt도 함께 쓴다)
 { "browsersPath": "/abs/path/mfa-lab/.run/pw-browsers", "executablePath": null }
-// 레인 A: "browsersPath": "/opt/pw-browsers"
-// 레인 C: "executablePath": "/abs/path/mfa-lab/.run/cft/chrome-headless-shell-linux64/chrome-headless-shell"
+// 레인 B 수동 다운로드: { "browsersPath": null, "executablePath": "/abs/path/mfa-lab/.run/pw-browsers/manual-153/chrome-linux/headless_shell" }
+// 레인 A:             { "browsersPath": "/opt/pw-browsers", "executablePath": null }
+// 레인 C:             { "browsersPath": null, "executablePath": "/abs/path/mfa-lab/.run/pw-browsers/cft-141/chrome-headless-shell-linux64/chrome-headless-shell" }
 ```
+
+- 두 필드는 배타적이다. `browsersPath`가 있으면 `ctl test`가 자식 환경에 `PLAYWRIGHT_BROWSERS_PATH`로 넘기고, `executablePath`가 있으면 `playwright.config.ts`가 `launchOptions.executablePath`로 읽는다. 둘 다 있으면 `ctl doctor`가 멈추고 보고한다.
 
 - `native_touch_drag` 라벨은 `lane.json`에 저장하지 않고 `chromium` 메이저에서 유도한다: 153 → `on`, 141 → `off`. 근거가 확인된 버전은 이 둘뿐이다.
 - 하네스는 두 곳에서 버전을 검사한다. (1) 설정 로드 시 설치된 `@playwright/test`의 버전이 `lane.json`의 `playwright`와 다르면 예외. (2) `lab.open`이 `browser.version()`의 메이저를 `lane.json`의 `chromium` 메이저와 비교해 다르면 예외.
@@ -103,7 +106,7 @@
 | `use.viewport` | `{ width: 1280, height: 800 }` | 증거 크기 고정 |
 | `use.deviceScaleFactor` | `1` | 위와 같음 |
 | `use.launchOptions.args` | `['--no-proxy-server']` | 클라우드의 프록시 환경 변수가 로컬 origin 요청에 끼어들지 않게 한다 |
-| `use.launchOptions.executablePath` | `.run/lane.local.json`의 `executablePath` (레인 C만) | |
+| `use.launchOptions.executablePath` | `.run/lane.local.json`의 `executablePath` (레인 C와 레인 B 수동 다운로드만. 그 밖에는 `null`이라 지정하지 않는다) | |
 | `use.trace` | `'retain-on-failure'` | 결과는 무시 경로 `test-results/`에 남는다. 커밋하지 않는다 |
 | `use.video`, `use.screenshot` | 끔 | 스크린샷은 `capture`로 명시적으로만 찍는다 |
 | `reporter` | `line` + `json` (`.artifacts/results.json`) | |
@@ -154,9 +157,9 @@ lab.open(opts: {
   lock?: string;                         // 예: 'p-a:draggable'
   iframeShield?: 0 | 1;
   origin?: 'shell' | 'baseline';         // 기본 'shell' (:4300). 'baseline' = :4390 (npm 0.5.1)
-  expectState?: Record<string, 'ready' | 'error'>;   // 기본: 트리의 모든 슬롯이 'ready'
+  expectState?: Record<string, 'ready' | 'error' | 'unregistered'>;   // 적은 슬롯만 덮어쓴다. 기본: 트리의 모든 슬롯이 'ready'
   flags?: Record<string, string>;        // persist, strict 등 P1 플래그
-}): Promise<{ url: string; lib: { source: string; tree: string; commit: string } }>;
+}): Promise<{ url: string; lib: { source: string; tree: string; commit: string }; skipped: string[] }>;   // skipped = 기다리지 않은 미등록 슬롯
 
 lab.openStandalone(remote: 'orders' | 'board' | 'billing'): Promise<void>;   // remote 단독 페이지 (:4301~:4303)
 ```
@@ -165,7 +168,8 @@ lab.openStandalone(remote: 'orders' | 'board' | 'billing'): Promise<void>;   // 
 |---|---|
 | URL을 만들고 이동한다. 예: `http://127.0.0.1:4300/?layout=census&a=bare-0&b=bare-1&c=bare-2&d=bare-3` | URL 플래그 이름은 [ARCHITECTURE.md](./ARCHITECTURE.md) 「핸들·잠금·URL 플래그」와 「레이아웃 프리셋」을 따른다 |
 | `window.__fc.ready === true`를 기다린다 (최대 15초) | 시작 상태가 확정된 뒤에만 입력을 보낸다 |
-| 트리의 모든 슬롯이 기대 상태에 도달할 때까지 기다린다. PanelFrame이 있는 슬롯은 `__fc.frames[slot].state`, bare 슬롯은 `__mfe[slot].mounts >= 1`, iframe 슬롯은 `mirror.loads >= 1` | remote를 막은 시나리오는 `expectState: { orders: 'error' }`처럼 명시한다 |
+| 트리의 모든 슬롯이 기대 상태에 도달할 때까지 기다린다 (최대 15초, 넘기면 `HarnessError`). PanelFrame이 있는 슬롯은 `__fc.frames[slot].state`, bare 슬롯은 `__mfe[slot].mounts >= 1`, iframe 슬롯은 `mirror.loads >= 1` | `expectState`는 적은 슬롯만 덮어쓰고 나머지는 기본값 `'ready'`다. remote를 막은 시나리오는 `expectState: { orders: 'error' }`처럼 명시한다 |
+| **미등록 슬롯은 기다리지 않고** 반환값 `skipped`에 적는다. 판정은 `__fc.ready === true` 직후 한 번 한다: 그 패널 요소(`[data-tree-root] [data-panel-id="<id>"]`)에 자식 요소가 없고(`childElementCount === 0`) `__fc.frames`와 메인 프레임 `__mfe` 어디에도 그 슬롯 키가 없으면 미등록이다. `expectState`에 `'unregistered'`로 적은 슬롯도 같은 판정을 거치고, 판정이 어긋나면(자식이나 키가 있다) `HarnessError` | 라이브러리는 store에 없는 `componentKey`를 빈 패널로 그린다 (`src/components/PanelNodeRenderer.tsx:132-136`). PanelFrame도 프로브도 없으니 `frames`·`__mfe` 항목이 생기지 않고, 기다리면 시간 초과만 난다. 등록된 슬롯은 첫 커밋의 `useLayoutEffect`에서 항목을 만들므로 `ready` 시점에 키가 있다 ([ARCHITECTURE.md](./ARCHITECTURE.md) 「계측 계약」). 해당 시나리오: B1-06 게이트 (b)의 `workbench`(`board` 미등록 시점), R19 `pair-unregistered`. 스모크·explore 스펙은 `skipped`가 기대 목록(없으면 `[]`)과 같은지 전제로 단언한다 |
 | `__fc.lib.source`가 origin과 맞는지 확인한다 (`shell` → `src` 또는 `dist`, `baseline` → `npm051`) | 다른 빌드를 측정하는 실수를 막는다 |
 | 로드 직후의 `document.body.style.userSelect`를 저장한다 | I4의 기준값 |
 | `page.on('console')`, `page.on('pageerror')`, `page.on('request')` 수집을 시작한다 | I6과 문서 요청 로그의 원천 |
@@ -353,13 +357,26 @@ resetProbe(page): Promise<void>;
 capture(lab, label: string, opts?: { element?: Locator }): Promise<void>;
 writeObservation(obs: Observation): Promise<void>;
 promote(opts: { run: string; findingId: string; caseDir: string; images: string[] }): Promise<void>;
+
+interface Observation {
+  run: string;        // run 디렉터리 이름. 예: 'run01-tier1' (promote의 run과 같은 값)
+  runNo: number;      // 케이스의 실행 번호 N. 1, 2 (3회째를 돌리면 3)
+  scenario: string;   // 시나리오 ID. 예: 'R01'
+  case: string;       // BRIEF-2 시나리오 표의 케이스 이름 그대로. 예: 'R01-hover'
+  expected: string; predicted: string; observed: string;
+  verdict: 'as-ideal' | 'as-predicted' | 'deviates';
+  labels: Record<string, string | boolean>;   // 「증거와 라벨」의 라벨
+  lib: { source: string; tree: string; commit: string };
+  invariants: InvariantResult[];
+  artifacts: string[];                        // mfa-lab/e2e/.artifacts/ 아래 상대 경로
+}
 ```
 
 | 헬퍼 | 동작 | 규칙 |
 |---|---|---|
 | `capture` | `settle` 뒤 `<label>.png`(뷰포트 또는 요소)와 `<label>.snapshot.json`을 `mfa-lab/e2e/.artifacts/<spec>/<case>/`에 쓴다. 케이스가 끝날 때 `events.json`(프로브 덤프)과 `console.txt`도 쓴다. 라벨 관례: `01-before`, `02-mid`, `03-after` | 드래그 중에는 `fullPage` 스크린샷을 찍지 않는다. 드래그 상태는 호출 사이에 유지되므로 이동과 이동 사이에 찍을 수 있다 |
-| `writeObservation` | 관찰 JSON 한 개를 `doc/qa/<run>/obs/<scenario>-<case>.json`에 쓴다. 필드: `run`, `scenario`, `case`, `expected`, `predicted`, `observed`, `verdict`(`as-ideal` \| `as-predicted` \| `deviates`), `labels`, `lib`, `invariants`, `artifacts` | `expected`·`predicted`는 [BRIEF-2-inspect.md](./BRIEF-2-inspect.md) 「기대와 예측」의 사전 등록 문구를 옮겨 적는다. 관찰 뒤에 고치지 않는다 |
-| `promote` | `caseDir`에서 고른 파일만 `doc/qa/<run>/evidence/<findingId>/`로 복사한다. JSON 로그는 제스처 구간으로 잘라낸다. 대상 디렉터리를 비우고 다시 쓰므로 여러 번 실행해도 결과가 같다 | 이미지 6장 초과면 `HarnessError`. 발견 ID를 배정한 뒤, 해당 explore 케이스 끝에 `promote` 호출 한 줄을 추가하고 그 케이스를 다시 실행한다 |
+| `writeObservation` | 관찰 JSON 한 개를 `doc/qa/<run>/obs/<case>-run<runNo>.json`에 쓴다. 예: `doc/qa/run01-tier1/obs/R01-hover-run1.json`. 같은 경로가 있으면 덮어쓴다(재실행). 필드는 위 `Observation` | `case`는 [BRIEF-2-inspect.md](./BRIEF-2-inspect.md) 「시나리오 표」의 케이스 이름(`RNN-<slug>`)이라 파일 이름에 시나리오 ID가 이미 들어 있다. `expected`·`predicted`는 「기대와 예측」의 사전 등록 문구를 옮겨 적는다. 관찰 뒤에 고치지 않는다. REPORT.md 커버리지 표의 "관찰 기록" 열과 발견 파일의 "관련" 절은 이 경로를 그대로 적는다 |
+| `promote` | `caseDir`에서 고른 파일만 `doc/qa/<run>/evidence/<findingId>/`로 복사한다. 이름 규칙: `images`의 PNG는 그대로, `01-before.snapshot.json`은 `tree-before.json`으로, `03-after.snapshot.json`은 `tree-after.json`으로 이름을 바꿔 복사한다 (`02-mid.snapshot.json`은 그대로). `events.json`과 `console.txt`는 이름 그대로 복사하되 JSON 로그는 제스처 구간으로 잘라낸다. 대상 디렉터리를 비우고 다시 쓰므로 여러 번 실행해도 결과가 같다 | 이미지 6장 초과면 `HarnessError`. 발견 ID를 배정한 뒤, 해당 explore 케이스 끝에 `promote` 호출 한 줄을 추가하고 그 케이스를 다시 실행한다. 「발견 하나의 증거 묶음」의 파일 이름은 이 규칙으로만 만든다. 손으로 이름을 바꾸지 않는다 |
 
 ---
 
@@ -621,13 +638,13 @@ test('FC-QA-NNN <증상 한 줄>', { annotation: { type: 'issue', description: '
 |---|---|---|
 | 원본 산출물 (스크린샷, 스냅샷, 이벤트 로그, `results.json`) | `mfa-lab/e2e/.artifacts/<spec>/<case>/` | 무시 |
 | trace, 실패 시 산출물 | `mfa-lab/e2e/test-results/` | 무시. **커밋하지 않는다** |
-| 관찰 JSON | `doc/qa/<run>/obs/` | 커밋 |
+| 관찰 JSON | `doc/qa/<run>/obs/<case>-run<N>.json` (`writeObservation`이 쓴다. 예: `doc/qa/run01-tier1/obs/R01-hover-run1.json`) | 커밋 |
 | 발견의 증거 (선별본) | `doc/qa/<run>/evidence/FC-QA-NNN/` | 커밋 |
 
 ### 발견 하나의 증거 묶음
 
 - `01-before.png`, `02-mid.png`, `03-after.png` (제스처 전, 도중, 후)
-- `events.json` (프로브 덤프), `tree-before.json`, `tree-after.json` (스냅샷), `console.txt`
+- `events.json` (프로브 덤프), `tree-before.json`, `tree-after.json` (스냅샷. `promote`가 `01-before.snapshot.json`·`03-after.snapshot.json`의 이름을 바꿔 만든다), `console.txt`
 - 카운터 변화량 (`diff` 결과)
 
 ### 한도

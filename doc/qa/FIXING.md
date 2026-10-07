@@ -159,7 +159,7 @@
 | `status: predicted` | 아직 실행으로 관찰되지 않았고 회귀 스펙도 없다. 검수 run이 먼저 관찰해 `open`으로 바꿔야 한다. 사용자가 그 전에 고치라고 명시하면: 회귀 스펙을 먼저 쓰고([HARNESS.md](./mfa/HARNESS.md) "스펙 구성"), 예상대로 실패하는 것을 2회 확인하고, 증거를 남기고 `open`으로 바꾼 뒤 F2부터 진행한다 |
 | `status: duplicate` | 따로 고치지 않는다. `dup_of`가 가리키는 발견을 고친다 |
 | `status: wontfix` | 고치지 않는다. 사용자만 되돌릴 수 있다. 회귀 스펙은 `test.fail()`인 채로 남겨 알려진 동작을 기록한다 |
-| `status: needs-user-confirmation` 또는 `class: spec-question` | 무엇이 옳은 동작인지 사용자가 정하기 전에는 고치지 않는다. 선택지를 정리해 묻는다. 결정이 나면 [README.md](./README.md) "결정 로그"에 추가하고, 결함으로 결정되면 `class: library-bug`·`status: open`으로 바꿔 이 절차를 따른다. 문서만 틀린 것으로 결정되면 `src/` 대신 문서를 고치고 `fixed`로 둔다 (`repro_spec: none`이면 F2·F6·F7은 생략) |
+| `status: needs-user-confirmation` 또는 `class: spec-question` | 무엇이 옳은 동작인지 사용자가 정하기 전에는 고치지 않는다. 선택지를 정리해 묻는다. 결정이 나면 사용자(또는 사용자의 로컬 세션)가 [README.md](./README.md) "결정 로그"에 D7부터 추가한 뒤 수정 세션을 시작한다. 수정 세션은 README.md를 고치지 않는다. 결함으로 결정되면 `class: library-bug`·`status: open`으로 바꿔 이 절차를 따른다. 문서만 틀린 것으로 결정되면 `src/` 대신 문서를 고치고 `fixed`로 둔다 (`repro_spec: none`이면 F2·F6·F7은 생략) |
 | `class: fixture-bug` | 라이브러리 수정 대상이 아니다. `mfa-lab/`을 고치는 별도 작업이다. 고친 뒤 스모크와 스파이크 S1·S3·S5·S6을 다시 실행한다 |
 | `class: harness-artifact` | 고칠 것이 없다. [HARNESS.md](./mfa/HARNESS.md) "알려진 하네스 부작용"에 있는지 확인한다 |
 | `class: env-limit` | 수동 확인 항목이다. REPORT.md "환경 한계와 수동 확인" |
@@ -231,5 +231,5 @@
 | 저장소 경로에 한글이 있다 (`C:\SSAFY\서산\...`) | Module Federation 플러그인이 이런 경로에서 동작하는지 확인되지 않았다. 빌드가 경로 때문에 실패하면 영문 경로에 새로 clone해 다시 시도한다 |
 | 포트 충돌 | 4300~4304, 4390을 쓴다. 다른 프로세스가 쓰고 있으면 끈다. 5173·5174·4173은 건드리지 않는다 |
 | F2에서 "예상대로 실패"하지 않는다 | 이 PC에서는 재현되지 않는 것이다. 여기서 고치지 않고 클라우드 세션에서 진행한다 |
-| 결과가 클라우드와 다르다 | OS와 레인을 발견 "관련" 절에 적는다. 터치는 Chromium 153부터 Windows에서도 롱프레스 네이티브 드래그가 켜져 있다 |
+| 결과가 클라우드와 다르다 | OS와 레인을 발견 "관련" 절에 적는다. 터치: Chromium 141에서는 롱프레스 네이티브 드래그가 꺼져 있고 153에서는 Windows·Linux에서도 켜져 있다(그 사이 버전은 미확인. 근거는 [HARNESS.md](./mfa/HARNESS.md) "브라우저 레인"). 사용 중인 Chrome 메이저를 함께 적는다 |
 | 끝난 뒤 | `node mfa-lab/scripts/ctl.mjs stop`으로 서버를 내린다 (`CLAUDE.md` "작업 방식") |

@@ -19,7 +19,10 @@
    - 이유: Playwright가 Chromium을 내려받는 호스트인데 기본 허용 목록에 없다. `registry.npmjs.org`와 `storage.googleapis.com`은 기본 목록에 있다 ([클라우드 환경 문서](https://code.claude.com/docs/en/cloud-environments)).
    - 하지 않으면: 클라우드 이미지에 들어 있다고 보고된(미확인) 구버전 Chromium 141이나 `storage.googleapis.com`에서 직접 받은 빌드만 쓸 수 있고, 터치 결과 일부가 "환경 한계"가 된다. 어느 브라우저를 쓰게 되는지는 세션 1이 확인해 `STATE.md`에 적는다.
    - 설정 스크립트(setup script)는 필요 없다.
-3. **`qa/mfa-lab` 브랜치가 푸시돼 있는지 확인한다.** 클라우드 VM은 로컬 작업 폴더가 아니라 GitHub의 브랜치를 clone한다 ([Claude Code 웹 문서](https://code.claude.com/docs/en/claude-code-on-the-web)).
+3. **로컬 변경이 전부 커밋·푸시됐는지 확인한다.** 클라우드 VM은 로컬 작업 폴더가 아니라 GitHub의 브랜치를 clone한다 ([Claude Code 웹 문서](https://code.claude.com/docs/en/claude-code-on-the-web)). 푸시되지 않은 것은 세션에 없다.
+   - 기준: 저장소 루트에서 `git status --short`가 비어 있고, `git log origin/qa/mfa-lab..HEAD --oneline`도 비어 있다.
+   - 아니면 `doc/qa/`, `.gitignore`(mfa-lab 무시 4줄), `CLAUDE.md`, `doc/TODO.md`를 포함해 남은 변경을 커밋하고 `git push origin qa/mfa-lab`한다.
+   - 그 뒤 GitHub의 `qa/mfa-lab` 브랜치에서 `doc/qa/mfa/BRIEF-1-build.md`가 열리고 `.gitignore`에 `mfa-lab/.run/` 줄이 보이는지 확인한다. 이 둘이 없으면 구축 프롬프트 첫 줄의 브리프를 세션이 찾지 못하고, B1-00의 `.gitignore` 검사가 실패한다.
 
 ### 세션 1 — 구축
 
@@ -76,7 +79,7 @@ doc/qa/mfa/BRIEF-1-build.md를 처음부터 끝까지 읽고 그대로 수행해
 첫 줄의 `...`을 채운다 (1절 8번).
 
 ```
-SPIKE.md를 읽었고 GO(caveat: ...)로 결정했다.
+SPIKE.md를 읽었고 GO(caveat: ...)로 결정했다
 doc/qa/mfa/BRIEF-2-inspect.md를 처음부터 끝까지 읽고 그대로 수행해줘. 판정 규칙은 doc/qa/README.md를 따라.
 - 이 브리프는 내가 승인한 계획이야. 계획 모드나 추가 계획 승인 없이 바로 진행해.
 - 먼저 doc/qa/mfa/STATE.md와 doc/qa/run00-spike/SPIKE.md를 읽고, 브리프의 사전 점검을 통과한 뒤 체크되지 않은 첫 단계부터 이어서 해. 작업 브랜치 이름을 STATE.md와 최종 보고에 적어줘.

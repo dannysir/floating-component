@@ -145,7 +145,7 @@ ext-chip이 `effectAllowed`를 두지 않는 이유: 패널의 dragover 핸들�
 |---|---|
 | 노출 | `/remote-entry.js`의 named export `mount(el, ctx: MountContext)`와 `unmount(el)`. `/`는 단독 페이지 |
 | 내용 | 프로브 표면 + 청구서 편집기: range 슬라이더, 작은 canvas 스파크라인, 선택 가능한 문단, 체크박스 "mousedown/touchstart에서 stopPropagation"(P1 시나리오에서만 켠다), 마지막 `order:selected`를 보여 주는 줄 |
-| 소스 구조 | `src/App.tsx`는 `App: ComponentType<PanelProps>`. `src/remote-entry.tsx`가 `createRoot(el).render(<App slot={ctx.slot} bus={ctx.bus} />)`를 한다. `App`은 `react`, `@harbor/contract`, 상대 경로만 import한다(shell이 twin으로 번들할 수 있어야 한다). 프로브의 `kind: 'mount'`와 `mountCalls`·`unmountCalls`·`rootsAlive`는 mount 모듈(`remote-entry.tsx`)이 `App`을 렌더하기 전에 등록하고, `App`은 `kind`를 넘기지 않는다. 그래서 같은 `App`이 host 트리 안(`billing-local`)에서는 `kind: 'same-tree'`로 기록된다 |
+| 소스 구조 | `src/App.tsx`는 `App: ComponentType<PanelProps>`. `src/remote-entry.tsx`가 `createRoot(el).render(<App slot={ctx.slot} bus={ctx.bus} />)`를 한다. `App`은 `react`, `@harbor/contract`, 상대 경로만 import한다(shell이 twin으로 번들할 수 있어야 한다). 프로브의 `kind: 'mount'`와 `mountCalls`·`unmountCalls`·`rootsAlive`는 mount 모듈(`remote-entry.tsx`)이 `App`을 렌더하기 전에 등록한다. `App`은 선택 prop `kind?: ProbeKind`를 받아 `createProbe`의 `meta`로 그대로 넘긴다. `billing`과 `control-mount`에서는 생략해(`undefined`) 모듈이 먼저 적은 `'mount'`가 유지된다. 같은 `App`을 host 트리 안에서 그리는 `billing-local`(twin)은 래퍼가 `kind: 'local'`을 넘겨 `kind: 'local'`로 기록된다 |
 | 겨냥하는 가설 | H-REMOUNT(미리보기가 바뀔 때마다 `root.unmount` + `createRoot`), H-REINSERT(루트는 유지, 스크롤 초기화), H-GHOST-CLONE(정적 복제, 빈 canvas, 토큰 유실), 어댑터의 "import가 unmount 뒤에 끝나는" 경합(픽스처 수준 확인). P1: stopPropagation 토글로 H-HANDLE-STALE, 슬라이더·텍스트 선택과 패널 전체 드래그의 충돌 |
 | 계측 | `window.__mfe[slot]` (kind `mount`, `mountCalls`·`unmountCalls`·`rootsAlive` 추가, `reactSame` 기대값 `false`). remote 모듈 안에서 쓴다. host 어댑터는 `window.__fc.frames[slot].lateResolves`를 쓴다. testid: `<slot>-input`, `<slot>-scroll`, `<slot>-counter`, `<slot>-range`, `<slot>-canvas`, `<slot>-text`, `<slot>-stopprop`, `<slot>-last-order` |
 | 빌드 요점 | federation 플러그인 없음. Vite lib 모드 ES 빌드: `build.lib.formats ['es']`, `build.lib.fileName: () => 'remote-entry.js'`, `package.json`에 `"type": "module"`, `define: { 'process.env.NODE_ENV': JSON.stringify('production') }`. 단독 페이지는 `public/index.html`(lib 모드는 HTML을 진입점으로 쓸 수 없지만 publicDir는 복사한다)에 두고, 모듈 스크립트가 `./remote-entry.js`를 import해 `mount(el, { slot, bus: stub, contract: 1 })`를 호출한다. `.css` 파일 없음(추가한다면 `?inline`으로 import해 `mount`에서 주입). 근거: https://vite.dev/guide/build (라이브러리 모드) |
@@ -429,6 +429,7 @@ alias와 React 중복: shell은 `<repo>/src/index.ts`와 remote 소스(twin)를 
 </section>
 ```
 
+- props는 `slot`, `kind`(`'local' | 'same-tree' | 'mount' | 'iframe'`), `title`, `team`, `children`이고 전부 필수다. `title`·`team`은 헤더의 "제목 · 팀"에 쓴다.
 - 헤더(핸들)는 경계 **밖**에 둔다. remote가 죽어도 패널을 끌 수 있다(R16).
 - `RemoteErrorBoundary`는 class 컴포넌트다(허용된 예외). `error-<slot>` 카드와 `retry-<slot>` 버튼을 그린다. retry는 실패한 로더 캐시를 버리고 다시 시도한다. `PanelSkeleton`은 `loading-<slot>`을 그린다.
 - `TreeLayout` 바깥에는 Suspense도 에러 경계도 두지 않는다. 바깥 경계가 있으면 remote 하나의 지연·실패가 레이아웃 전체를 내린다.
@@ -486,10 +487,10 @@ testid 전체(패널 관련):
 
 ### store 등록
 
-store는 모듈 스코프에서 한 번 만들고, 모든 키를 처음부터 고정된 엘리먼트로 등록한다. 늦은 등록은 하지 않는다(`register`는 리렌더를 일으키지 않는다: `src/tree/componentStore.ts:13-15`). 미실행:
+store는 모듈 스코프에서 한 번 만들고, 모든 키를 처음부터 고정된 엘리먼트로 등록한다. 늦은 등록은 하지 않는다(`register`는 리렌더를 일으키지 않는다: `src/tree/componentStore.ts:13-15`). 아래는 키와 `kind`만 보여 주는 요약이다. `PanelFrame`의 필수 prop `title`·`team`은 생략했다. 전문(단계별 주석 포함)은 [RECIPES.md](./RECIPES.md) 3.8절. 미실행:
 
 ```tsx
-// apps/shell/src/workspace/store.tsx
+// apps/shell/src/workspace/store.tsx (요약. title·team prop 생략)
 export const components = createComponentStore({
   nav: <PanelFrame slot="nav" kind="local"><NavPanel /></PanelFrame>,
   'bare-0': <Bare slot="bare-0" />,
@@ -716,6 +717,7 @@ window.__fc = {
 - `instanceSeq`는 가장 최근에 마운트된 인스턴스의 순번(1부터)이다.
 - 살아 있는 인스턴스 수는 `mounts - unmounts`다.
 - 기대값: `reactSame`은 `orders`·`board`·twin·`control-*`·`control-mount`에서 `true`, `billing`에서 `false`, 단독 페이지에서 `null`.
+- 기대값: `kind`는 `orders`·`board`에서 `same-tree`, twin(`orders-local`·`board-local`·`billing-local`)·`control-a..d`·`bare-0..3`에서 `local`, `billing`·`control-mount`에서 `mount`, iframe 슬롯(`telemetry`·`telemetry-x`·`control-iframe`)에서 `iframe`. `PanelFrame`이 있는 슬롯은 `window.__fc.frames[slot].kind`(`PanelFrame`의 `kind` prop)와 같은 값이어야 한다. 다르면 픽스처 버그다.
 - iframe 문서의 `__mfe`는 부모에서 직접 읽을 수 없다(cross-origin). 하네스가 프레임별로 읽는다.
 
 ### `window.__probe` (하네스가 모든 프레임에 주입)
@@ -742,17 +744,23 @@ mfa-lab/
     CONTRACT.md                  계약 버전 1, 프로브 표면
     src/{index.ts,probe.ts,bus.ts,style.ts}
   scripts/
-    ctl.mjs                      의존성 없는 CLI (「실행 모델」)
-    lib/{apps,spawn,ready,pins,browser}.mjs
+    ctl.mjs                      의존성 없는 CLI (「실행 모델」). 명령 분기만
+    lib/{apps,spawn,ready,pins,browser,doctor,serve,commands}.mjs
+                                 apps=레지스트리·활성 집합, spawn=프로세스, ready=준비 판정, pins=핀 검사,
+                                 browser=레인 해석, doctor=탐침, serve=serve·status·stop·pid 파일, commands=나머지 명령
   apps/
     shell/
       package.json  package-lock.json  vite.config.ts  index.html  tsconfig.json(편집기용, 게이트 아님)
       src/main.tsx
-      src/{instrumentation.ts,bus.ts,tokens.css}
+      src/{instrumentation.ts,bus.ts,tokens.css,lab-env.d.ts}
+                                 lab-env.d.ts = vite define 전역 상수(__LAB_*) 선언
       src/topbar/{TopBar.tsx,ExtChip.tsx}
       src/workspace/{Workspace.tsx,store.tsx,layouts.ts,flags.ts,actions.ts,useLoggedLayoutTree.ts,PanelFrame.tsx}
-      src/adapters/{SameTreeRemote.tsx,RemoteMount.tsx,IframeRemote.tsx,RemoteErrorBoundary.tsx}
-      src/registry/{loaders.ts,remotes.d.ts}
+      src/adapters/{SameTreeRemote.tsx,RemoteMount.tsx,IframeRemote.tsx,RemoteErrorBoundary.tsx,resetLoader.ts}
+                                 resetLoader.ts = 슬롯별 로더 캐시 비우기 콜백 레지스트리(retry용)
+      src/registry/{registry.ts,loaders.ts,remotes.d.ts}
+                                 registry.ts = registry.json을 타입 붙여 export
+      src/mf/fallbackPlugin.ts   MF 런타임 플러그인(errorLoadRemote). B1-06 사다리 (b)-2에서만 만들고 등록
       src/local/{Bare.tsx,ControlPanel.tsx,NavPanel.tsx,twins.tsx,controlMount.tsx,controlIframe.ts}
     mfe-orders/
       package.json  package-lock.json  vite.config.ts  index.html(단독 페이지)
@@ -824,14 +832,14 @@ mfa-lab/
 
 | 명령 | 하는 일 | Bash timeout |
 |---|---|---|
-| `doctor [--write <path>]` | 환경 탐침(아래). lane 경로를 풀어 `.run/lane.local.json`에 쓴다. `--write`면 결과 JSON을 그 경로에 쓴다(`doc/qa/<run>/env.json`). Node가 22.12 미만이면 메시지를 내고 0이 아닌 코드로 끝난다(스크립트 안에서 Node를 바꾸지 않는다) | 기본 |
-| `install [--only a,b] [--fresh]` | 활성 프로젝트(앱 + `e2e`)마다: lockfile이 있으면 `npm ci`, 없으면 `npm install`(처음. 생긴 lockfile은 커밋한다). `--no-audit --no-fund`, 동시 3개. lockfile 해시 stamp가 같으면 건너뛴다. `--fresh`는 `node_modules`와 lockfile을 지우고 `npm install`한다. 브라우저 설치도 여기서 한다(`PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD`를 자식 환경에서 지우고 `PLAYWRIGHT_BROWSERS_PATH=mfa-lab/.run/pw-browsers`. 레인 규칙은 [HARNESS.md](./HARNESS.md)의 「브라우저 레인」) | 600000 |
+| `doctor [--write <path>]` | 환경 탐침(아래). `e2e/lane.json`이 있으면 그 레인의 Chromium을 찾아 `.run/lane.local.json`에 쓴다. 찾지 못하면 `lane.local.json`을 쓰지 않고 결과에 `lane: "missing"`으로 기록한 뒤 **0으로 끝난다**(실패가 아니다. 설치는 `install`, 판정은 `up`·`test`가 한다). `--write`면 결과 JSON을 그 경로에 쓴다(`doc/qa/<run>/env.json`). Node가 22.12 미만이면 메시지를 내고 0이 아닌 코드로 끝난다(스크립트 안에서 Node를 바꾸지 않는다) | 기본 |
+| `install [--only a,b] [--fresh]` | 활성 프로젝트(앱 + `e2e`)마다: lockfile이 있으면 `npm ci`, 없으면 `npm install`(처음. 생긴 lockfile은 커밋한다). `--no-audit --no-fund`, 동시 3개. lockfile 해시 stamp가 같으면 건너뛴다. `--fresh`는 `node_modules`와 lockfile을 지우고 `npm install`한다. 브라우저 설치도 여기서 한다: `e2e/lane.json`이 있고 `.run/lane.local.json`이 없으면(새 VM. `.run/`은 git 무시 경로라 바이너리가 없다) 그 레인의 브라우저를 설치한다. 레인 A는 다운로드 없음(`/opt/pw-browsers`를 그대로 쓴다). 레인 B는 `node mfa-lab/e2e/node_modules/@playwright/test/cli.js install chromium`(자식 환경에서 `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD`를 지우고 `PLAYWRIGHT_BROWSERS_PATH=<repo>/mfa-lab/.run/pw-browsers`). 레인 C는 `curl -fL --retry 2`로 Chrome for Testing 141.0.7390.37 headless shell zip을 `mfa-lab/.run/dl/cft-141.zip`에 받아 `mfa-lab/.run/pw-browsers/cft-141/`에 푼다. 명령 전문은 [RECIPES.md](./RECIPES.md) 9절, 레인 규칙은 [HARNESS.md](./HARNESS.md)의 「브라우저 레인」. 설치 실패는 0이 아닌 코드로 끝나되 레인을 바꾸지 않는다 | 600000 |
 | `build [--only a,b] [--lib src\|npm051\|dist] [--mf on\|off] [--stamp <s>] [--force]` | 앱별 `vite build`. remote 먼저, shell 나중. 입력이 그대로면 건너뛴다(앱 디렉터리 + `mfa-lab/contract` + shell은 저장소 `src/`·twin 소스·`registry.json`). `--lib npm051`은 shell을 `dist-051`로 빌드한다. `.run/build.json` 기록 | 300000 |
 | `serve [--baseline] [--only a,b] [--foreground]` | 활성 앱마다 `vite preview`를 띄운다. 준비 확인(상태 200 + 본문 검사)에 이미 통과하는 앱은 건너뛴다(멱등). 250ms 간격으로 최대 60초 폴링. `.run/pids.json` 기록. 실패하면 로그 끝부분을 출력하고 0이 아닌 코드. `--baseline`은 :4390도 띄우되 `dist-051`이 없으면 경고만 내고 넘어간다. 활성 앱이 없으면 아무것도 하지 않고 0 | 기본 |
 | `status [--json]` | 활성 앱별 pid 생존 + 준비 확인. 전부 떠 있을 때만 0 | 기본 |
 | `smoke` | 브라우저 없이 하는 검사(아래) | 기본 |
 | `stop [--only a,b]` | Linux `process.kill(-pid, 'SIGTERM')`, Windows `taskkill /pid <pid> /T /F`. `pids.json` 정리 | 기본 |
-| `up` | `doctor` → 필요하면 `install` → 낡았으면 `build`(`--lib src`, 그리고 shell `package.json`에 `fc-051`이 있으면 `--lib npm051`도) → `serve --baseline` → `smoke`. 복구용 단일 명령 | 600000 |
+| `up` | `doctor` → 필요하면 `install`(의존성 + 위 규칙대로 레인 브라우저) → `doctor`의 lane 해석 재실행 → `lane.json`이 있는데 이때도 못 찾으면 **BLOCKED-LANE**(메시지를 내고 0이 아닌 코드로 끝난다. 레인을 조용히 바꾸지 않는다. [BRIEF-1-build.md](./BRIEF-1-build.md)의 「중단 조건」) → 낡았으면 `build`(`--lib src`, 그리고 shell `package.json`에 `fc-051`이 있으면 `--lib npm051`도) → `serve --baseline` → `smoke`. 복구용 단일 명령. `lane.json`이 아직 없으면(B1-01 전) lane 단계는 건너뛴다 | 600000 |
 | `test <filter> [--project mouse\|touch]` | `serve --baseline`을 먼저 실행한 뒤 `node mfa-lab/e2e/node_modules/@playwright/test/cli.js test -c mfa-lab/e2e/playwright.config.ts <filter> --project <p>`를 실행한다. `--project`는 항상 넘긴다(기본 `mouse`). 호출 한 번에 스펙 파일 하나 또는 폴더 하나. 종료 코드는 Playwright의 것 | 600000 |
 
 `--only`에 쓰는 이름: `shell`, `shell-051`, `mfe-orders`, `mfe-board`, `mfe-billing`, `mfe-telemetry`, `e2e`(install만).
@@ -853,9 +861,9 @@ mfa-lab/
 | 런타임 | `node -v`, `npm -v`, 플랫폼 |
 | 브라우저 | `/opt/pw-browsers` 목록, `PLAYWRIGHT_*` 환경 변수, `mfa-lab/.run/pw-browsers` 목록 |
 | 포트 | 4300~4304, 4390의 사용 여부. 로컬 확인은 Node로 한다(프록시를 타지 않아야 한다) |
-| lane | `e2e/lane.json`이 있으면 그 버전의 Chromium을 찾아 `.run/lane.local.json`에 `{ browsersPath, executablePath, resolvedAt }`를 쓴다. 찾지 못하면 멈추고 보고한다. 레인을 조용히 바꾸지 않는다 |
+| lane | `e2e/lane.json`이 있으면 그 레인의 Chromium을 찾아 `.run/lane.local.json`에 `{ browsersPath, executablePath, resolvedAt }`를 쓴다. 찾는 위치: 레인 A `/opt/pw-browsers/chromium-1194` 또는 `chromium_headless_shell-1194` → `browsersPath: "/opt/pw-browsers"`; 레인 B `mfa-lab/.run/pw-browsers/chromium-1243` 또는 `chromium_headless_shell-1243` → `browsersPath: "<repo>/mfa-lab/.run/pw-browsers"`(수동 설치 `manual-153/`이면 그 실행 파일을 `executablePath`로); 레인 C `mfa-lab/.run/pw-browsers/cft-141/chrome-headless-shell-linux64/chrome-headless-shell` → `executablePath`. 찾지 못하면 `lane.local.json`을 쓰지 않고 `lane: "missing"`으로 기록한 뒤 0으로 끝난다. 설치 여부 판단과 BLOCKED-LANE 판정은 `up`·`install`·`test`의 몫이다. 레인을 조용히 바꾸지 않는다 |
 
-`mfa-lab/e2e/lane.json`(커밋)에는 `{ lane, playwright, chromium }`만 둔다. 머신 경로는 `.run/lane.local.json`(무시)에만 둔다. `ctl test`는 `browsersPath`가 있으면 자식 환경에 `PLAYWRIGHT_BROWSERS_PATH`로 넘기고, `executablePath`는 `playwright.config.ts`가 `.run/lane.local.json`에서 읽는다([HARNESS.md](./HARNESS.md)의 「Playwright 설정」). `lane.json`은 있는데 `.run/lane.local.json`이 없으면(새 VM) `ctl test`는 `doctor`의 lane 해석을 먼저 실행한다.
+`mfa-lab/e2e/lane.json`(커밋)에는 `{ lane, playwright, chromium }`만 둔다. 머신 경로는 `.run/lane.local.json`(무시)에만 둔다. `ctl test`는 `browsersPath`가 있으면 자식 환경에 `PLAYWRIGHT_BROWSERS_PATH`로 넘기고, `executablePath`는 `playwright.config.ts`가 `.run/lane.local.json`에서 읽는다([HARNESS.md](./HARNESS.md)의 「Playwright 설정」). `lane.json`은 있는데 `.run/lane.local.json`이 없으면(새 VM) `ctl test`는 `doctor`의 lane 해석을 먼저 실행한다. 그래도 `missing`이면 `test`는 브라우저를 설치하지 않고 "`ctl up` 또는 `ctl install`을 먼저 실행하라"는 메시지를 내고 0이 아닌 코드로 끝난다. `install` 뒤에도 못 찾는 경우만 BLOCKED-LANE이다.
 
 ### smoke가 검사하는 것
 
@@ -918,7 +926,7 @@ Playwright의 `globalSetup`은 쓰지 않는다. 서버 보장은 `ctl test`가 
 4. `node mfa-lab/scripts/ctl.mjs test smoke`
 5. 체크되지 않은 첫 단계부터 계속한다. 푸시하지 않은 작업은 사라진 것으로 본다.
 
-`doctor`가 커밋된 레인을 쓸 수 없다고 하면 멈추고 보고한다.
+새 VM에는 `.run/`이 없으므로 `up`이 레인 브라우저를 다시 설치한다(레인 A는 설치 없음). `install` 뒤에도 커밋된 레인의 브라우저를 찾지 못해 `up`이 BLOCKED-LANE으로 끝나면 멈추고 보고한다. 레인을 조용히 바꾸지 않는다.
 
 ### 커밋 위생
 

@@ -7,7 +7,7 @@ status: predicted
 confidence: code-reading
 repro_rate:            # run 01에서 채운다 (예: 2/2)
 found_in: pre-run
-variants: []           # run 01에서 관측한 컨테이너 종류를 채운다
+variants: []           # run 01에서 재현된 슬롯 이름 목록을 채운다 (예: [control-b, control-c, orders, billing, telemetry])
 input:                 # run 01에서 채운다 (mouse | touch-cdp-handle)
 browser:               # run 01에서 채운다
 playwright:            # run 01에서 채운다
@@ -61,10 +61,10 @@ fix_commit:
 
 1. 새 브라우저 컨텍스트에서 `http://127.0.0.1:4300/?layout=census`를 열고 `window.__fc.ready`를 기다린다.
 2. `p-b`와 `p-c`의 내용에 상태를 만든다: `<slot>-input`에 글자 입력, `<slot>-counter` 클릭, `<slot>-scroll`을 아래로 스크롤.
-3. 스냅샷 `before`를 찍는다.
+3. 스냅샷을 찍는다(`capture` 라벨 `01-before`. 라벨 관례는 [../mfa/HARNESS.md](../mfa/HARNESS.md) 「헬퍼」).
 4. `p-d`의 헤더(`handle-control-d`)에서 마우스를 누르고 6 px 움직여 드래그를 시작한다.
-5. `dropPoint('p-a', 'left', 1)` 지점으로 한 번 이동하고 settle한다. `domTree`가 `H[p-d,p-a,V[p-b,p-c]]`인지 확인하고 스냅샷 `hover`를 찍는다.
-6. Esc를 누르고 settle한다. 스냅샷 `after`를 찍는다.
+5. `dropPoint('p-a', 'left', 1)` 지점으로 한 번 이동하고 settle한다. `domTree`가 `H[p-d,p-a,V[p-b,p-c]]`인지 확인하고 스냅샷을 찍는다(라벨 `02-mid`).
+6. Esc를 누르고 settle한다. 스냅샷을 찍는다(라벨 `03-after`).
 
 변형:
 
@@ -82,7 +82,7 @@ fix_commit:
 
 ### 기대와 예측 (R01, R02 — 전부 control)
 
-카운터는 `window.__fc.frames[slot].frameMounts`/`frameUnmounts`와, 프로브가 있는 슬롯의 `window.__mfe[slot].mounts`/`unmounts`다. 값은 `before` 대비 증가분이다.
+카운터는 `window.__fc.frames[slot].frameMounts`/`frameUnmounts`와, 프로브가 있는 슬롯의 `window.__mfe[slot].mounts`/`unmounts`다. 값은 `01-before` 스냅샷 대비 증가분이다.
 
 | 시점 | 패널 | 기대 | 예측 (미실행) |
 |---|---|---|---|
@@ -128,22 +128,27 @@ fix_commit:
    - front matter를 채운다: `status: open`, `confidence`(관측 기반 값, [../TEMPLATE-finding.md](../TEMPLATE-finding.md) 기준), `repro_rate`, `variants`, `input`, `browser`, `playwright`.
    - `found_in`은 `pre-run`으로 둔다(선등록이었음을 남긴다). 관측한 run은 증거 경로로 알 수 있다.
    - 증거를 `doc/qa/run01-tier1/evidence/FC-QA-001/`로 올린다(아래 "증거").
-   - 회귀 스펙 `mfa-lab/e2e/regression/fc-qa-001-preview-remount-non-dragged-panels.spec.ts`를 `test.fail()`로 추가하고 `repro_spec`에 경로를 적는다. 단언은 이상적 동작으로 쓴다: `census` 전부 control에서 hover + Esc 뒤 `p-b`·`p-c`의 마운트 카운터 증가분이 0.
-4. 리마운트가 **전혀** 관측되지 않으면: 예측이 틀린 것이다. `status: needs-user-confirmation`으로 바꾸고, 관측값과 미리보기 `domTree`를 이 절에 적고, REPORT.md의 가설 판정에 H-REMOUNT를 refuted로 적는다. D3은 사용자 결정이므로 닫는 것도 사용자가 정한다.
+   - 회귀 스펙 `mfa-lab/e2e/regression/fc-qa-001-preview-remount-non-dragged-panels.spec.ts`를 `test.fail()`로 추가하고 `repro_spec`에 경로를 적는다. 단언은 이상적 동작으로 쓰고, 아래 **두 제스처를 각각 케이스로** 둔다(둘 다 기본 `census`, 전부 control, hover + Esc, `01-before` 대비 증가분).
+     - (a) 형제 인덱스 이동(추정 원인 1): `p-d` → `(p-a, left, 1)`. `p-b`·`p-c`의 `frameMounts`·`frameUnmounts` 증가분 0(프로브가 있는 슬롯이면 `mounts`·`unmounts`도 0).
+     - (b) 부모 변경, 루트 감싸기(추정 원인 3): `p-d` → `(p-a, top, 2)`. 미리보기 `V[p-d, H[p-a, V[p-b, p-c]]]`를 전제로 확인한 뒤, `p-a`·`p-b`·`p-c`의 `frameMounts`·`frameUnmounts` 증가분 0.
+     - 두 케이스를 한 스펙에 두는 이유: split key만 안정화하는 수정(아래 "수정 방향 후보" A)은 (a)만 통과시키고 (b)는 계속 실패한다. 수정 세션에서 한 케이스만 "예상과 달리 통과"하면 수정이 부분적이다. 그때는 `test.fail()`을 지우지 않고 `status: fixed`로 바꾸지 않는다. 두 케이스가 모두 통과해야 [../FIXING.md](../FIXING.md) F7로 간다.
+4. 리마운트가 **전혀** 관측되지 않으면: 예측이 틀린 것이다. `status: predicted`를 유지하고 `repro_rate: 0/N`을 적는다([../README.md](../README.md) 10절). 관측값과 미리보기 `domTree`를 이 절에 적고, REPORT.md 4절 가설 판정에 H-REMOUNT를 `refuted`로 올린다. D3은 사용자 결정이므로 닫을지(`wontfix`)는 사용자가 정한다.
 5. 소스 자신의 리마운트(하위 관찰)와 `locks` 예시의 `output` 리마운트를 따로 한 줄씩 적는다.
 
 ## 증거
 
-없음(미실행). run 01이 붙일 것:
+없음(미실행). run 01이 `doc/qa/run01-tier1/evidence/FC-QA-001/`에 붙일 것(이름은 [../mfa/HARNESS.md](../mfa/HARNESS.md) 「증거와 라벨 → 발견 하나의 증거 묶음」 기준):
 
-- 스크린샷: `before`, hover 중(미리보기 + 헤더의 `status-<slot>` 카운터가 보이게), `after`. 발견당 최대 6장, 1280x800.
-- `snapshot-before.json`, `snapshot-hover.json`, `snapshot-after.json` (카운터, `domTree`, 내용 상태 포함).
-- `events.json` (제스처 구간만).
-- R03·R05의 컨테이너별 카운터 증가분 표.
+- `01-before.png`, `02-mid.png`(미리보기 + 헤더의 `status-<slot>` 카운터가 보이게), `03-after.png`. 발견당 최대 6장, 1280x800, 배율 1.
+- `tree-before.json`, `tree-after.json`(카운터, `domTree`, 내용 상태 포함), `console.txt`.
+- `events.json`(제스처 구간만).
+- R03·R05의 컨테이너별 카운터 증가분 표(`diff` 결과).
 
 ## 추정 원인
 
 전부 가설이다. 코드 리딩 결과이고 실행으로 확인하지 않았다.
+
+`root_cause_group: split-index-key`는 아래 1~5를 **모두** 묶는 이름이다. 이름은 가장 눈에 띄는 원인(1, 형제 인덱스 key)에서 땄지만, 부모가 바뀌어 생기는 리마운트(3: R05의 루트 감싸기, 앵커 감싸기, `locks`의 split 풀림)도 같은 그룹이다. 1만 없애는 수정으로는 이 발견이 닫히지 않는다(회귀 스펙 케이스 (b)가 남는다).
 
 1. **split의 React key가 형제 인덱스다.** 패널은 `id`로 key가 정해지지만 split은 위치로 정해진다. 미리보기에서 split 앞에 형제가 하나 끼어들면 key가 `split-1`에서 `split-2`로 바뀌고, React는 그 아래 전체를 다른 컴포넌트로 보고 새로 마운트한다.
    - `src/components/LayoutNodeRenderer.tsx:92` — ``key={child.type === "panel" ? child.id : `split-${i}`}``
@@ -163,7 +168,7 @@ fix_commit:
 
 | 후보 | 내용 | 없어지는 것 | 남는 것 / 비용 |
 |---|---|---|---|
-| A. split key 안정화 | split의 렌더 key를 인덱스 대신 내용에서 유도한다(예: 서브트리의 첫 패널 id). 트리 스키마는 그대로다 | 형제 인덱스가 밀려서 생기는 리마운트(R01~R03 유형) | 부모가 바뀌는 리마운트(R05, 앵커 감싸기, split 풀림)는 남는다. 첫 패널이 빠져나가면 key가 바뀐다. DOM 재삽입(H-REINSERT)은 그대로다 |
+| A. split key 안정화 | split의 렌더 key를 인덱스 대신 내용에서 유도한다(예: 서브트리의 첫 패널 id). 트리 스키마는 그대로다 | 형제 인덱스가 밀려서 생기는 리마운트(R01~R03 유형, 회귀 스펙 케이스 (a)) | 부모가 바뀌는 리마운트(R05, 앵커 감싸기, split 풀림)는 남는다. 회귀 스펙 케이스 (b)가 계속 실패하므로 **A 단독으로는 이 발견이 `fixed`가 되지 않는다.** 첫 패널이 빠져나가면 key가 바뀐다. DOM 재삽입(H-REINSERT)은 그대로다 |
 | B. 리마운트 대신 이동 (평평한 렌더) | 모든 패널을 한 부모 아래 `id` key로 평평하게 렌더하고, 위치는 트리에서 계산한 사각형으로 배치한다 | 부모가 바뀌지 않으므로 리마운트와 DOM 재삽입 둘 다 | flex 중첩 레이아웃과 CSS min/max 제약을 좌표 계산으로 다시 구현해야 한다. 변경 범위가 크다 |
 | C. 리마운트 대신 이동 (패널별 고정 host + portal) | 패널 내용은 패널마다 하나씩 유지하는 host 요소에 portal로 렌더하고, 레이아웃은 host 요소만 옮긴다 | 리마운트 | host 이동은 DOM 재삽입이므로 iframe 재로드는 남는다. 상태를 보존하는 DOM 이동(`Element.moveBefore`)은 브라우저 지원 범위를 확인해야 한다 |
 | D. 미리보기를 오버레이로 | 드래그 중에는 실제 트리를 재구성하지 않고 드롭 위치 표시만 그린다 | hover와 취소에서의 리마운트 전부 | 커밋 때 1회는 남는다(A~C와 조합). 라이브 미리보기라는 현재 UX가 바뀌므로 사용자 결정이 필요하다 |

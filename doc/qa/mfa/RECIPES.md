@@ -47,7 +47,7 @@
 | 2 | `mfa-lab/contract/{package.json, src/index.ts, src/probe.ts, src/bus.ts, src/style.ts}` | B1-02 |
 | 3.1~3.4 | `mfa-lab/apps/shell/{package.json, vite.config.ts, index.html, tsconfig.json}` (1단계: federation 없음) | B1-02 |
 | 3.5 | shell `vite.config.ts` 2단계(federation 추가), `src/mf/fallbackPlugin.ts` | B1-06 |
-| 3.6~3.9 | shell `src/instrumentation.ts`, `src/bus.ts`, `src/registry/registry.ts`, `src/workspace/{store.tsx, useLoggedLayoutTree.ts, PanelFrame.tsx}` | B1-02 |
+| 3.6~3.9 | shell `src/instrumentation.ts`, `src/bus.ts`, `src/registry/registry.ts`, `src/workspace/{store.tsx, useLoggedLayoutTree.ts, PanelFrame.tsx}`, `src/local/twins.tsx`(3.8, B1-04부터) | B1-02 |
 | 3.10 | shell `src/adapters/RemoteErrorBoundary.tsx` | B1-02 |
 | 3.11 | shell `src/local/{Bare.tsx, ControlPanel.tsx}`, `src/topbar/ExtChip.tsx` | B1-02 |
 | 3.12 | shell `src/adapters/RemoteMount.tsx`, `src/local/controlMount.tsx` | B1-04 |
@@ -463,14 +463,16 @@ declare const __LAB_MODE__: 'prod' | 'dev';
     "paths": {
       "@dannysir/floating-components": ["../../../src/index.ts"],
       "@harbor/contract": ["../../contract/src/index.ts"],
-      "@twin/*": ["../mfe-*/src/*"]
+      "@twin/orders": ["../mfe-orders/src/Panel.tsx"],
+      "@twin/board": ["../mfe-board/src/Panel.tsx"],
+      "@twin/billing": ["../mfe-billing/src/App.tsx"]
     }
   },
   "include": ["src", "vite.config.ts"]
 }
 ```
 
-편집기용이다. 게이트가 아니고 `tsc`를 실행하지 않는다(루트 `@types/react`가 클라우드에 없다).
+편집기용이다. 게이트가 아니고 `tsc`를 실행하지 않는다(루트 `@types/react`가 클라우드에 없다). `@twin/*`를 와일드카드로 적지 않는 이유: TS의 `paths`는 `*`에 잡힌 문자열을 그대로 치환하므로 `"@twin/*": ["../mfe-*/src/*"]`는 `@twin/orders`를 `../mfe-orders/src/orders`로 풀어 파일을 찾지 못한다(https://www.typescriptlang.org/tsconfig/#paths). 대상 파일 이름이 remote마다 다르므로(`Panel.tsx`, `App.tsx`) 명시 매핑으로 적는다. `vite.config.ts`의 `twinAliases`(3.2절)와 같은 세 대상이다.
 
 ### 3.4 `mfa-lab/apps/shell/src/main.tsx`
 
@@ -563,22 +565,31 @@ export default defineConfig(({ command }) => ({
 | remote 로드 실패 시 대체 모듈을 돌려줘 shell이 죽지 않게 하는 MF 런타임 플러그인. `runtimePlugins: ['./src/mf/fallbackPlugin.ts']`로 등록 | B1-06 (b)-2 | 미실행 | https://module-federation.io/blog/error-load-remote.html , 상위 예제 https://raw.githubusercontent.com/module-federation/vite/main/examples/vite-vite/vite-host/src/mfPlugins.js (플러그인 파일은 `export default`로 팩토리 함수를 내보낸다 — 플랫폼 강제 예외) |
 
 ```ts
-// 블로그 예제의 모양을 따랐다. errorLoadRemote의 lifecycle 값으로 문서화된 것은 'onLoad'(진입 파일 밖의 모듈 로드 실패)와
-// 'afterResolve'(mf-manifest.json 로드 실패)다. 반환값은 "모듈을 돌려주는 함수"다.
+// 런타임 훅 문서의 모양을 따랐다. errorLoadRemote의 args.lifecycle 값은 네 가지다:
+//   'beforeRequest'(요청 처리 시작 단계) | 'afterResolve'(mf-manifest.json 로드 실패) | 'onLoad'(노출 모듈 로드·실행 실패) | 'beforeLoadShare'(공유 의존성 초기화 중 remoteEntry 로드 실패)
+// 반환값은 lifecycle마다 다르다: 'onLoad'에서만 "모듈을 돌려주는 팩토리 함수"가 유효하고, 'afterResolve'는 매니페스트 객체, 'beforeLoadShare'는 공유 의존성 팩토리를 기대한다.
+// 그래서 'onLoad'가 아니면 undefined를 돌려줘(대체 없음) 원래 오류가 그대로 전파되게 둔다. :4301을 막았을 때 실제로 걸리는 단계는 'afterResolve'다.
+// 이때 shell 전체가 뜨고 error-orders 카드만 남는지는 (b) 게이트가 본다.
 import * as React from 'react';
+
+type ErrorLoadRemoteArgs = { id?: string; error?: unknown; from?: 'build' | 'runtime'; lifecycle?: 'beforeRequest' | 'afterResolve' | 'onLoad' | 'beforeLoadShare' };
 
 const Fallback = ({ slot }: { slot?: string }) =>
   React.createElement('div', { 'data-testid': `mf-fallback${slot ? `-${slot}` : ''}` }, 'remote unavailable');
 
 const fallbackPlugin = () => ({
   name: 'harbor-fallback-plugin',
-  errorLoadRemote: () => () => ({ __esModule: true, default: Fallback, Panel: Fallback }),   // Panel도 넣어야 SameTreeRemote의 m.Panel이 산다
+  errorLoadRemote: (args: ErrorLoadRemoteArgs) => {
+    if (args.lifecycle === 'onLoad') return () => ({ __esModule: true, default: Fallback, Panel: Fallback });   // Panel도 넣어야 SameTreeRemote의 m.Panel이 산다
+    return undefined;   // 'afterResolve' · 'beforeLoadShare' · 'beforeRequest': 처리하지 않는다 (모듈 팩토리를 돌려주면 런타임이 매니페스트로 해석하려다 예외를 낸다)
+  },
 });
 
 export default fallbackPlugin;
 ```
 
-- 훅의 정확한 인자(`args.lifecycle`, `args.id` 등)와 `runtimePlugins` 경로 해석은 설치된 `@module-federation/runtime`의 타입(`node_modules/@module-federation/runtime/dist/*.d.ts`)으로 확인한다. 블로그는 `'onLoad'`·`'afterResolve'` 두 값을 적고 있고, 그 밖의 값(`'beforeLoadShare'` 등)은 1차 자료에서 확인하지 못했다.
+- lifecycle 값은 `beforeRequest | beforeLoadShare | afterResolve | onLoad`이고 모듈 팩토리 반환은 `onLoad`에서만 유효하다(https://module-federation.io/guide/runtime/runtime-hooks 의 `errorLoadRemote`; 예제는 https://module-federation.io/blog/error-load-remote.html). `args`의 나머지 필드는 `id`(remote 식별자), `error`, `from: 'build' | 'runtime'`, `origin`(런타임 인스턴스)이다. 위 `ErrorLoadRemoteArgs`는 그중 쓰는 것만 손으로 적은 최소 타입이다. 정확한 타입과 `runtimePlugins` 경로 해석은 설치된 `@module-federation/runtime`의 `node_modules/@module-federation/runtime/dist/*.d.ts`로 다시 확인한다.
+- `afterResolve`에서 매니페스트 객체를 돌려줘 "가짜 remote"를 만드는 길도 문서에 있지만 쓰지 않는다. 게이트 (b)의 목적은 "remote가 죽어도 shell이 뜬다"이지 "remote가 죽어도 orders가 그려진다"가 아니다.
 
 ### 3.6 `mfa-lab/apps/shell/src/instrumentation.ts`
 
@@ -743,7 +754,49 @@ export const components = createComponentStore({
 ```
 
 - 최종 키는 19개다([ARCHITECTURE.md](./ARCHITECTURE.md) 「store 등록」). 주석 처리된 줄을 그 단계에서 푼다. 그 전에 풀면 alias 대상 파일이 없어 import가 실패한다.
-- twin(`src/local/twins.tsx`)은 `@twin/*` alias를 import해 `kind: 'local'`로 프로브 메타를 덮는 얇은 래퍼다: `export const OrdersTwin = (p: PanelProps) => <Panel {...p} />` 형태. `Panel` 안의 `createProbe`가 `build`를 shell 스탬프로 적는다(shell이 번들했으므로 define 값이 shell의 것이다).
+- twin(`src/local/twins.tsx`)의 전문은 아래에 있다. `Panel`·`App` 안의 `createProbe`가 `build`를 shell 스탬프로 적는다(shell이 번들했으므로 define 값이 shell의 것이다).
+
+#### `src/local/twins.tsx` (B1-04: `BillingTwin`, B1-06: `OrdersTwin`, B1-07: `BoardTwin`)
+
+| 목적 | 처음 쓰는 단계 | 상태 | 출처 |
+|---|---|---|---|
+| remote 소스를 `@twin/*` alias로 host 트리 안에서 그리는 얇은 래퍼. 래퍼의 `createProbe`가 자식보다 **먼저** 실행돼 `kind: 'local'`을 쓰고, `billing-local`은 `reactSame: true`·`reactVersion`도 여기서 적는다(`App`은 계산하지 않는다 — 5.4절) | B1-04 | 미실행 | [ARCHITECTURE.md](./ARCHITECTURE.md) 「앱 목록」 mfe-billing 「소스 구조」, 「계측 계약」 기대값(twin은 `kind: 'local'`, `reactSame: true`); 2.3절 `createProbe`의 "뒤에 온 meta는 정의된 필드만 덮어쓴다" |
+
+```tsx
+// src/local/twins.tsx — import 줄은 그 remote가 생기는 단계에서 푼다 (store.tsx와 같은 규칙. 미리 풀면 alias 대상 파일이 없어 빌드가 실패한다).
+import * as React from 'react';
+import { useState } from 'react';
+import type { PanelProps } from '@harbor/contract';
+import { createProbe } from '@harbor/contract';
+import { App as BillingApp } from '@twin/billing';          // B1-04
+// import { Panel as OrdersPanel } from '@twin/orders';     // B1-06
+// import { Panel as BoardPanel } from '@twin/board';       // B1-07
+
+// 부모(래퍼)의 useState 초기화가 자식의 것보다 먼저 실행된다. 같은 번들(shell) 안이므로 contract의 probes Map도 하나다.
+// 뒤에 오는 Panel의 createProbe는 kind를 넘기지 않으므로 'local'이 유지되고, reactVersion·reactSame은 Panel이 스스로 계산한 값(twin에서는 true)으로 덮인다.
+const localMeta = (remote: string) => ({ remote, kind: 'local' as const, build: __LAB_BUILD_STAMP__ });
+
+export const BillingTwin = (p: PanelProps) => {
+  // App은 reactSame·reactVersion을 계산하지 않는다(5.4절). twin은 shell이 번들하므로 host의 React와 같다 → 여기서 true로 적는다 (B1-04 게이트: billing-local reactSame === true).
+  useState(() => createProbe(p.slot, { ...localMeta('billing'), reactVersion: React.version, reactSame: true }));
+  return <BillingApp {...p} kind="local" />;   // App의 선택 prop kind를 'local'로 넘긴다 (ARCHITECTURE 「앱 목록」 mfe-billing 「소스 구조」)
+};
+
+// B1-06
+// export const OrdersTwin = (p: PanelProps) => {
+//   useState(() => createProbe(p.slot, localMeta('orders')));
+//   return <OrdersPanel {...p} />;
+// };
+
+// B1-07
+// export const BoardTwin = (p: PanelProps) => {
+//   useState(() => createProbe(p.slot, localMeta('board')));
+//   return <BoardPanel {...p} />;
+// };
+```
+
+- 래퍼는 `mounted()`/`unmounted()`를 부르지 않는다. 카운터는 안쪽 `Panel`·`App`의 `useLayoutEffect`가 올린다. 래퍼가 리마운트돼도 `createProbe`는 기존 프로브를 돌려주므로(2.3절) 카운터는 슬롯별로 누적된다.
+- `kind`를 래퍼가 쓰지 않고 `<Panel {...p} />`만 하면 `orders-local`·`board-local`의 `kind`는 `createProbe` 기본값 `'same-tree'`가 되어 `window.__fc.frames[slot].kind`(`'local'`)와 어긋난다 — [ARCHITECTURE.md](./ARCHITECTURE.md) 「계측 계약」은 이를 픽스처 버그로 본다.
 
 ### 3.9 `src/workspace/useLoggedLayoutTree.ts`
 
@@ -947,7 +1000,7 @@ export const ExtChip = () => (
   <span
     draggable
     data-testid="ext-chip"
-    onDragStart={(e) => { e.dataTransfer.setData('application/x-harbor-chip', 'chip'); }}
+    onDragStart={(e) => { e.dataTransfer.setData('application/x-harbor-chip', '1'); }}   // 값 '1'은 ARCHITECTURE 「앱 목록」 ext-chip 행의 정의
     style={{ padding: '2px 8px', border: '1px solid #999', borderRadius: 10, cursor: 'grab', userSelect: 'none' }}
   >
     chip
@@ -1054,7 +1107,7 @@ export const mount = (el: HTMLElement, ctx: MountContext) => {
   roots.set(el, root);
   slotOf.set(el, ctx.slot);
   probe.bump('rootsAlive');
-  root.render(<App slot={ctx.slot} bus={ctx.bus} kind="mount" />);
+  root.render(<App slot={ctx.slot} bus={ctx.bus} />);   // kind는 넘기지 않는다: probeFor가 먼저 적은 'mount'가 유지된다 (ARCHITECTURE 「앱 목록」 mfe-billing 「소스 구조」)
 };
 
 export const unmount = (el: HTMLElement) => {
@@ -1266,6 +1319,8 @@ export const SameTreeRemote = ({ slot }: { slot: string }) => {
   }
 }
 ```
+
+B1-06 순서 1~2(플러그인 없이 빌드, [BRIEF-1-build.md](./BRIEF-1-build.md) B1-06 「만들 것」)에서는 위 `@module-federation/vite` 줄과 4.2의 `import { federation } from '@module-federation/vite'` 줄, `federation({...})` 블록(`...(mf === 'on' ? [...] : [])` 전체)을 **빼고** 쓴다. ESM import는 조건부가 아니라서 패키지가 없으면 `mf` 값과 무관하게 설정 로드가 실패한다. 이 단계의 빌드는 `node mfa-lab/scripts/ctl.mjs build --mf off`로 한다(shell 포함): 그러면 `.run/build.json`에 `mf: off`가 기록돼 `mfe-orders`의 준비 판정이 `/`의 `harbor-app` meta로 바뀌고(8.3절, [ARCHITECTURE.md](./ARCHITECTURE.md) 「포트와 origin」 "MF off면 `/`"), `ctl smoke`의 매니페스트 검사도 건너뛴다. 순서 3까지는 `ctl up`을 부르지 않는다(`up`은 기본값 `--mf on`으로 다시 빌드할 수 있다). 순서 3~4에서 세 조각을 다시 넣고 두 프로젝트의 lockfile을 처음부터 다시 만든 뒤(`rm -rf node_modules package-lock.json && npm install`) `--mf on`(기본)으로 빌드한다. 미실행.
 
 ### 4.2 `mfa-lab/apps/mfe-orders/vite.config.ts`
 
@@ -1824,15 +1879,28 @@ test('S0 browser gate', async ({ page, browser, browserName }, testInfo) => {
   expect(version.product).toContain('Chrome');                  // 예: "HeadlessChrome/153.0.8010.12"
   console.log(`[S0] ${version.product} raf/s=${rafPerSecond}`);
 
-  // CDP touchStart가 trusted touchstart를 만드는가 (touch 프로젝트에서 통과해야 한다. mouse 프로젝트 결과는 기록만)
+  // CDP touchStart가 trusted touchstart를 만드는가. touch 프로젝트에서는 단언, mouse 프로젝트에서는 기록만 (BRIEF-1 S0 행).
+  // 터치 에뮬레이션이 꺼진 타깃(mouse 프로젝트)에서 Chromium이 Input.dispatchTouchEvent를 거부할 수 있다(미확인, 7.7절 함정).
+  // 거부되면 예외가 나므로 try/catch로 감싼다. 감싸지 않으면 B1-01의 `--project mouse` 실행이 먼저 실패해 S0 게이트가 레인마다 헛되이 실패한다.
   await page.evaluate(() => { (window as unknown as { __ts: unknown[] }).__ts = []; window.addEventListener('touchstart', (e) => (window as unknown as { __ts: unknown[] }).__ts.push(e.isTrusted), { passive: true }); });
-  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 140, y: 200, id: 1 }] });
-  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-  const trusted = await page.evaluate(() => (window as unknown as { __ts: boolean[] }).__ts);
-  console.log(`[S0] touchstart trusted: ${JSON.stringify(trusted)} (project ${testInfo.project.name}, browser ${browser.version()})`);
-  if (testInfo.project.name === 'touch') expect(trusted).toEqual([true]);
+  let trusted: unknown = null;
+  let cdpError: string | null = null;
+  try {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 140, y: 200, id: 1 }] });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    trusted = await page.evaluate(() => (window as unknown as { __ts: boolean[] }).__ts);
+  } catch (e) {
+    cdpError = String(e);
+  }
+  console.log(`[S0] touchstart trusted: ${JSON.stringify(trusted)} cdpError: ${cdpError ?? 'none'} (project ${testInfo.project.name}, browser ${browser.version()})`);
+  if (testInfo.project.name === 'touch') {
+    expect(cdpError).toBeNull();
+    expect(trusted).toEqual([true]);
+  }
 });
 ```
+
+`env.json`([BRIEF-1-build.md](./BRIEF-1-build.md) 「SPIKE.md 작성 규칙」의 B1-01 필드)에는 두 프로젝트의 `[S0]` 줄에서 값을 옮겨 적는다: `cdp_touch_trusted` = touch 프로젝트에서 `trusted`가 `[true]`인가; `cdp_touch_needs_hasTouch` = mouse 프로젝트에서 `cdpError !== null`이거나 `trusted`가 `[true]`가 아닌가(둘 중 하나면 `true`).
 
 ### 7.4 `helpers/settle.ts`
 
@@ -1857,7 +1925,8 @@ const readAll = async (page: Page): Promise<string> => {
   const tree = await page.evaluate(readDomTree);
   const frames = await Promise.all(
     page.frames().filter((f) => f !== page.mainFrame()).map((f) =>
-      f.evaluate(() => JSON.stringify((window as unknown as { __mfe?: unknown }).__mfe ?? null)).catch(() => 'LOADING'),   // 읽을 수 없는 프레임은 "다름"으로 친다
+      f.evaluate(() => JSON.stringify((window as unknown as { __mfe?: unknown }).__mfe ?? null))
+        .catch(() => `LOADING:${Date.now()}:${Math.random()}`),   // 읽을 수 없는 프레임은 "다름"으로 친다 (HARNESS 「헬퍼」 settle). 매번 다른 값이어야 연속 두 번 로딩 중일 때 stable: true로 잘못 끝나지 않는다
     ),
   );
   return `${tree}|${main}|${frames.join('|')}`;
@@ -2170,7 +2239,7 @@ export const longPressDrag = async (page: Page, panelId: string, waypoints: Poin
 - 터치 경로는 `data-dragging-panel-id`를 설정하지 않는다(마우스 경로만, `PanelNodeRenderer.tsx:78`). 터치 드래그 중인지는 ghost(`body > [style*="z-index: 9999"]`, `useTouchDrag.ts:72-74`)로 안다.
 - 터치 드래그 중에는 ghost가 패널을 통째로 복제해 같은 `data-testid`가 둘이다(`useTouchDrag.ts:60`). 질의는 `[data-tree-root]` 아래로 한정한다.
 - 레인 B(Chromium 153)에서 `longPressDrag`는 네이티브 `dragstart`나 `touchcancel`을 낼 수 있다(10절). 그것은 H-TOUCH-NATIVE-RACE의 **관찰**이지 하네스 실패가 아니다.
-- `Input.dispatchTouchEvent`가 `hasTouch` 없이도 trusted 이벤트를 만드는지는 S0가 두 프로젝트에서 확인해 `env.json`의 `cdp_touch_needs_hasTouch`에 적는다.
+- `Input.dispatchTouchEvent`가 `hasTouch` 없이도 trusted 이벤트를 만드는지, 아니면 터치 에뮬레이션이 꺼진 타깃에서 거부(예외)되는지는 S0가 두 프로젝트에서 확인해 `env.json`의 `cdp_touch_needs_hasTouch`에 적는다(판정 규칙은 7.3절 끝). 그래서 S0의 `cdp.send`는 try/catch 안에 있다.
 
 ### 7.8 `helpers/probe.init.ts`
 
@@ -2324,15 +2393,31 @@ export const blockRemote = async (page: Page, origin: string): Promise<() => Pro
 |---|---|---|---|
 | 의존성 없는 Node CLI: `doctor install build serve status stop smoke up test`. 명령 명세는 [ARCHITECTURE.md](./ARCHITECTURE.md) 「실행 모델」. 여기에는 **틀리기 쉬운 부분**(spawn, 준비 판정, pid, 종료, 탐침, 테스트 래퍼)만 적는다 | B1-00 (`doctor`만), B1-02 (전체) | 미실행 | https://nodejs.org/api/child_process.html (`detached`, `shell`, `.cmd` 실행), https://nodejs.org/api/process.html (`process.kill`), https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/taskkill (`/pid /t /f`), https://vite.dev/guide/cli (`vite preview --host --port --strictPort --outDir`), https://docs.npmjs.com/cli/v11/commands/npm-ping |
 
-파일 분할: `ctl.mjs`(명령 분기) + `lib/apps.mjs`(레지스트리·활성 집합) + `lib/spawn.mjs`(프로세스) + `lib/ready.mjs`(준비 판정) + `lib/pins.mjs`(핀 검사) + `lib/browser.mjs`(레인 해석). 전부 arrow function, named export, `import type` 없음(`.mjs`).
+파일 분할([ARCHITECTURE.md](./ARCHITECTURE.md) 「저장소 구조」와 같다): `ctl.mjs`(명령 분기만) + `lib/{apps,spawn,ready,pins,browser,doctor,serve,commands}.mjs`.
+
+| 파일 | 내용 | 이 문서의 절 |
+|---|---|---|
+| `lib/apps.mjs` | 레지스트리 읽기, 활성 집합, 경로 상수 | 8.1 |
+| `lib/spawn.mjs` | `vite preview`·npm spawn, `execText` | 8.2 |
+| `lib/ready.mjs` | 준비 판정(200 + 본문) | 8.3 |
+| `lib/serve.mjs` | pid 파일, `killTree`, `serve`·`status`·`stop` 명령 | 8.4 |
+| `lib/doctor.mjs` | `doctor` 명령, 외부 탐침 | 8.5 |
+| `lib/pins.mjs` | 핀 검사(`smoke`가 쓴다) | 없음 — [ARCHITECTURE.md](./ARCHITECTURE.md) 「smoke가 검사하는 것」 「핀」 행대로 |
+| `lib/browser.mjs` | 레인 해석(`doctor`·`install`·`test`가 쓴다) | 없음 — [ARCHITECTURE.md](./ARCHITECTURE.md) 「doctor가 기록하는 것」 「lane」 행대로 |
+| `lib/commands.mjs` | `install`·`build`·`smoke`·`up`·`test` 명령 | 8.6(`test`) |
+
+전부 arrow function, named export, `import type` 없음(`.mjs`). `lib/` 안의 파일끼리는 같은 디렉터리의 상대 경로(`./serve.mjs`)로 import하고, `ctl.mjs`만 `./lib/...`로 import한다.
 
 ### 8.1 `ctl.mjs` 분기와 `lib/apps.mjs`
+
+B1-00에서는 `doctor`만 만든다([BRIEF-1-build.md](./BRIEF-1-build.md) B1-00 「만들 것」). 그 단계의 `ctl.mjs`는 아래에서 `./lib/doctor.mjs` import와 `commands` 객체의 `doctor` 항목만 두고, 나머지 두 import 줄과 항목은 B1-02에서 추가한다(없는 모듈을 정적으로 import하면 스크립트가 시작조차 못 한다).
 
 ```js
 #!/usr/bin/env node
 // mfa-lab/scripts/ctl.mjs
 import { doctor } from './lib/doctor.mjs';
-import { install, build, serve, status, stop, smoke, up, test } from './lib/commands.mjs';
+import { serve, status, stop } from './lib/serve.mjs';                 // B1-02 부터
+import { install, build, smoke, up, test } from './lib/commands.mjs';   // B1-02 부터
 
 // 값을 갖는 플래그만 여기 적는다. 나머지(--baseline, --foreground, --json, --fresh, --force)는 boolean이다.
 const VALUE_FLAGS = new Set(['only', 'lib', 'mf', 'stamp', 'project', 'write']);
@@ -2346,7 +2431,7 @@ const parseArgs = (argv) => argv.reduce((acc, arg) => {
 const [cmd, ...rest] = process.argv.slice(2);
 const { flags, positional } = parseArgs(rest);
 
-const commands = { doctor, install, build, serve, status, stop, smoke, up, test };
+const commands = { doctor, install, build, serve, status, stop, smoke, up, test };   // B1-00: { doctor } 만
 const run = commands[cmd];
 if (!run) {
   console.error('usage: node mfa-lab/scripts/ctl.mjs <doctor|install|build|serve|status|stop|smoke|up|test> [...]');
@@ -2475,9 +2560,10 @@ export const waitReady = async (target, { timeoutMs = 60000, intervalMs = 250 } 
 - 로컬 요청은 Node 내장 `fetch`로 한다. Node는 `NODE_USE_ENV_PROXY=1`(22.21 이상) 없이는 프록시 환경 변수를 **무시**하므로 127.0.0.1에 직접 붙는다(https://github.com/nodejs/node/pull/57165). 외부 탐침에는 반대로 쓰면 안 된다(8.5절).
 - `LAB_MF=off` 빌드에서는 same-tree remote의 `ready.fallback`(HTML meta)으로 판정한다. 어느 쪽을 쓸지는 `.run/build.json`의 `mf` 값으로 정한다.
 
-### 8.4 pid 파일과 `stop`
+### 8.4 `lib/serve.mjs` — pid 파일, `killTree`, `serve`·`status`·`stop`
 
 ```js
+// mfa-lab/scripts/lib/serve.mjs — serve·status·stop 명령과 pid 파일. (ARCHITECTURE 「저장소 구조」: serve = serve·status·stop·pid 파일)
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { runDir } from './apps.mjs';
@@ -2498,14 +2584,15 @@ export const killTree = async (pid) => {
   if (isWin) { await execText('taskkill', ['/pid', String(pid), '/T', '/F']); return; }   // /T 자식까지, /F 강제
   try { process.kill(pid, 'SIGTERM'); } catch { /* 이미 없음 */ }
   // vite preview는 자식을 만들지 않으므로 pid 하나면 충분하다. 프로세스 그룹 전체(-pid)는 보조 수단이다.
-  // Node 문서: 음수 pid의 프로세스 그룹 전달은 v24.0.0에서 "POSIX 의미대로" 정리됐다. Node 22에서의 동작은 확인하지 못했다 → try/catch.
-  try { process.kill(-pid, 'SIGTERM'); } catch { /* 그룹 kill 미지원이거나 이미 없음 */ }
+  // Node 문서(process.kill, https://nodejs.org/api/process.html)에는 음수 pid에 대한 변경 이력이 없고 "On Windows, killing a process group is not supported."만 적혀 있다.
+  // 즉 음수 pid = 프로세스 그룹은 POSIX kill(2) 의미 그대로이고 Linux에서는 지원된다. 그룹이 이미 없을 수 있으므로 try/catch. (Windows 분기는 위에서 taskkill로 끝났다)
+  try { process.kill(-pid, 'SIGTERM'); } catch { /* 그룹이 이미 없음 */ }
   for (let i = 0; i < 20 && alive(pid); i++) await new Promise((r) => setTimeout(r, 250));
   if (alive(pid)) { try { process.kill(pid, 'SIGKILL'); } catch { /* */ } }
 };
 ```
 
-`serve`의 흐름: 활성 앱마다 `checkReady` → 이미 통과하면 건너뜀(멱등) → `spawnVitePreview` → `waitReady`(60초) → `pids.json`에 `{ pid, port, outDir, startedAt }` 기록. 실패하면 `.run/logs/<app>.log` 끝 40줄을 출력하고 0이 아닌 코드. `--baseline`이고 `dist-051/index.html`이 없으면 경고만 내고 넘어간다.
+같은 파일에 두는 `serve`의 흐름(`export const serve = async ({ flags }) => ...`): 활성 앱마다 `checkReady` → 이미 통과하면 건너뜀(멱등) → `spawnVitePreview` → `waitReady`(60초) → `pids.json`에 `{ pid, port, outDir, startedAt }` 기록. 실패하면 `.run/logs/<app>.log` 끝 40줄을 출력하고 0이 아닌 코드. `--baseline`이고 `dist-051/index.html`이 없으면 경고만 내고 넘어간다. `status`는 pid 생존(`alive`) + `checkReady`, `stop`은 `pids.json`의 항목마다 `killTree` 뒤 파일 정리([ARCHITECTURE.md](./ARCHITECTURE.md) 「실행 모델」 명령 표).
 
 ### 8.5 `lib/doctor.mjs` — 외부 탐침은 curl과 npm으로
 
@@ -2542,15 +2629,16 @@ export const doctor = async ({ flags }) => {
 };
 ```
 
-### 8.6 `test` 래퍼
+### 8.6 `test` 래퍼 (`lib/commands.mjs`의 일부)
 
 ```js
+// mfa-lab/scripts/lib/commands.mjs — install·build·smoke·up·test. 아래는 test만. 같은 lib/ 디렉터리 안이므로 './serve.mjs'처럼 상대 경로다 ('./lib/...'가 아니다).
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { labRoot, runDir } from './apps.mjs';
-import { serve } from './serve.mjs';      // 8.4절의 serve 흐름
-import { doctor } from './doctor.mjs';    // 8.5절
+import { serve } from './serve.mjs';      // 8.4절 lib/serve.mjs
+import { doctor } from './doctor.mjs';    // 8.5절 lib/doctor.mjs
 
 export const test = async ({ flags, positional }) => {
   await serve({ flags: { baseline: true }, positional: [] });                     // 서버 보장. 이미 떠 있으면 건너뛴다
@@ -2667,6 +2755,6 @@ mkdir -p mfa-lab/.run/pw-browsers/cft-141 && unzip -q -d mfa-lab/.run/pw-browser
 
 ## 부록: 이 문서가 확인한 것과 확인하지 못한 것 (2026-10-06)
 
-확인한 것(1차 자료를 열어 봄): 위 핀 표의 모든 버전과 호환 범위; `shareStrategy`가 `@module-federation/vite`의 최상위 옵션이고 기본값이 `'version-first'`라는 것(플러그인 소스)과 두 값의 뜻(module-federation.io 설정 페이지); 플러그인 기본값 `filename: 'remoteEntry-[hash]'`, `manifest` 없음; 상위 예제의 host remotes가 매니페스트 URL 문자열이고 React 네 키(`react`, `react/`(긴 형태), `react-dom`, `react-dom/`)를 `singleton: true, requiredVersion: '^19.2.4'`로 공유하며 `build.target: 'chrome89'`라는 것; MF 매니페스트 최상위 필드(`id, name, metaData, shared, remotes, exposes`); `errorLoadRemote` 훅의 블로그 예제와 lifecycle `'onLoad'`·`'afterResolve'`; 런타임 플러그인 파일이 `export default` 팩토리라는 것; Vite `build.lib.fileName` 함수 형태, `publicDir`→`outDir` 복사(`copyPublicDir` 기본 true), lib 모드의 `process.env.NODE_ENV` 미치환과 `.js`→`.mjs` 규칙, `transformIndexHtml`의 태그 반환 형태, `server.cors` 기본 정규식, `vite preview` CLI 옵션; Playwright `hasTouch`·`deviceScaleFactor`·`viewport`·`launchOptions`·`trace`·`channel`, JSON reporter `outputFile`, `install --dry-run/--only-shell/--with-deps`, `PLAYWRIGHT_BROWSERS_PATH`, `chromiumSandbox` 기본 false, browsers.json의 1194/141과 1243/153; CDP `dispatchTouchEvent`·`dispatchDragEvent`·`setInterceptDrags`·`dragIntercepted`의 pdl 정의; Playwright `crDragDrop.ts`/`crInput.ts`의 인터셉트·drop·dragCancel 코드; Chromium `input_handler.cc`의 drop 순서, `mouse_event_manager.cc`의 임계값 4(`>=`)와 `DragSourceEndedAt`; `ui_base_features.cc` 141 vs 153의 `kTouchDragAndDrop`; `gesture_manager.cc`의 `HandleGestureLongPress` → `HandleDragDropIfPossible`; HTML 명세의 350ms 문구; Pointer Events의 호환 마우스 이벤트 억제; npm alias 형식과 `npm ping`; Node `detached`/`shell`/`.cmd` 규칙과 `process.kill`; `taskkill /pid /t /f`; Chrome for Testing URL 형식과 141.0.7390.37 zip의 존재(HEAD 200).
+확인한 것(1차 자료를 열어 봄): 위 핀 표의 모든 버전과 호환 범위; `shareStrategy`가 `@module-federation/vite`의 최상위 옵션이고 기본값이 `'version-first'`라는 것(플러그인 소스)과 두 값의 뜻(module-federation.io 설정 페이지); 플러그인 기본값 `filename: 'remoteEntry-[hash]'`, `manifest` 없음; 상위 예제의 host remotes가 매니페스트 URL 문자열이고 React 네 키(`react`, `react/`(긴 형태), `react-dom`, `react-dom/`)를 `singleton: true, requiredVersion: '^19.2.4'`로 공유하며 `build.target: 'chrome89'`라는 것; MF 매니페스트 최상위 필드(`id, name, metaData, shared, remotes, exposes`); `errorLoadRemote` 훅의 인자(`id, error, from, lifecycle, origin`)와 lifecycle 네 값(`beforeRequest | afterResolve | onLoad | beforeLoadShare`), 모듈 팩토리 반환이 `onLoad`에서만 유효하다는 것(런타임 훅 문서와 블로그 예제); 런타임 플러그인 파일이 `export default` 팩토리라는 것; Node `process.kill` 문서에 음수 pid 변경 이력이 없고 Windows만 프로세스 그룹 미지원이라는 것; Vite `build.lib.fileName` 함수 형태, `publicDir`→`outDir` 복사(`copyPublicDir` 기본 true), lib 모드의 `process.env.NODE_ENV` 미치환과 `.js`→`.mjs` 규칙, `transformIndexHtml`의 태그 반환 형태, `server.cors` 기본 정규식, `vite preview` CLI 옵션; Playwright `hasTouch`·`deviceScaleFactor`·`viewport`·`launchOptions`·`trace`·`channel`, JSON reporter `outputFile`, `install --dry-run/--only-shell/--with-deps`, `PLAYWRIGHT_BROWSERS_PATH`, `chromiumSandbox` 기본 false, browsers.json의 1194/141과 1243/153; CDP `dispatchTouchEvent`·`dispatchDragEvent`·`setInterceptDrags`·`dragIntercepted`의 pdl 정의; Playwright `crDragDrop.ts`/`crInput.ts`의 인터셉트·drop·dragCancel 코드; Chromium `input_handler.cc`의 drop 순서, `mouse_event_manager.cc`의 임계값 4(`>=`)와 `DragSourceEndedAt`; `ui_base_features.cc` 141 vs 153의 `kTouchDragAndDrop`; `gesture_manager.cc`의 `HandleGestureLongPress` → `HandleDragDropIfPossible`; HTML 명세의 350ms 문구; Pointer Events의 호환 마우스 이벤트 억제; npm alias 형식과 `npm ping`; Node `detached`/`shell`/`.cmd` 규칙과 `process.kill`; `taskkill /pid /t /f`; Chrome for Testing URL 형식과 141.0.7390.37 zip의 존재(HEAD 200).
 
-확인하지 못한 것(레시피 옆에 표시했다): `shareStrategy: 'loaded-first'`가 실제로 막힌 remote에서 shell을 살리는지(게이트 (b)); `errorLoadRemote`의 전체 인자와 그 밖의 lifecycle 값; Playwright 수동 설치의 `INSTALLATION_COMPLETE` 표식; Node 22에서 `process.kill(-pid)`의 프로세스 그룹 동작; Chrome for Testing zip의 내부 디렉터리 이름과 클라우드 프록시 통과; cross-site iframe의 `sessionStorage`; `Input.dispatchTouchEvent`가 `hasTouch` 없이도 trusted인지; headless shell에서 터치 시작 네이티브 드래그가 실제로 시작되는지; 그리고 이 문서의 모든 코드가 그대로 빌드되는지.
+확인하지 못한 것(레시피 옆에 표시했다): `shareStrategy: 'loaded-first'`가 실제로 막힌 remote에서 shell을 살리는지(게이트 (b)); `errorLoadRemote`가 `afterResolve`에서 `undefined`를 돌려줄 때 shell 전체가 뜨고 `error-orders` 카드만 남는지(게이트 (b)-2); `@module-federation/runtime`의 실제 `.d.ts`가 위 최소 타입과 맞는지; Playwright 수동 설치의 `INSTALLATION_COMPLETE` 표식; Chrome for Testing zip의 내부 디렉터리 이름과 클라우드 프록시 통과; cross-site iframe의 `sessionStorage`; `Input.dispatchTouchEvent`가 `hasTouch` 없이도 trusted인지; headless shell에서 터치 시작 네이티브 드래그가 실제로 시작되는지; 그리고 이 문서의 모든 코드가 그대로 빌드되는지.

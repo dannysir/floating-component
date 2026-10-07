@@ -128,7 +128,7 @@
 | 핸들 없는 모드의 상호작용, 남아 있는 `draggable` | H-HANDLE-STALE | mouse | not-run | |
 | 드래그 가능한 패널 롱프레스 (레인 B에서만) | H-TOUCH-NATIVE-RACE | touch-cdp-longpress | not-run | |
 | 크기·넘침 조합 | H-SIZING | mouse | not-run | |
-| workbench에서 여러 지점을 지나는 드래그(glide) | | mouse | not-run | |
+| workbench에서 여러 지점을 지나는 드래그(glide) | H-REMOUNT | mouse | not-run | |
 | dev 모드 host 콘솔 확인 | | mouse | not-run | |
 | 패키징한 tarball로 확인 | | mouse | not-run | |
 
@@ -255,6 +255,8 @@
 | `mfe-audit` (React 18 mount remote) | | | | |
 | 공격적 전역 CSS 플래그 | | | | |
 | shadow root 안의 레이아웃 | | | | |
+| 늦은 store 등록 (레이아웃이 그려진 뒤 `register`) | | | | |
+| 느린 remote (지연 주입) | | | | |
 
 ---
 
