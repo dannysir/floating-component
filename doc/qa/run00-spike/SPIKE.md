@@ -47,8 +47,8 @@
 | S4 | 통과 | 1 | 97d303d | S3의 hover 뒤 nav 위 `settled` 릴리스: `drop` 없음, `dragend`는 분리된 원본에만(`isConnected: false`). 트리 불변, I1~I7 통과 |
 | S5 | 요구대로 실패 | 1 | 69e663b | `:4390` `lib.source = npm051`. `fc-051/dist/index.js`를 직접 열어 루트의 `onDragEnd: () => L()`가 있고 원본 노드 리스너가 없음을 확인. 전제: hover `H[nav,terminal,editor,output]`, 소스 `terminal` 리마운트, 드래그 중 I1·I2 선택자가 상태를 잡음. Esc 뒤 `dragend`는 분리된 원본에만(`isConnected: false`) → **I1 실패(`data-dragging-panel-id=terminal` 잔존), I2 실패(terminal shadow 잔존)**, I5도 실패. I3·I4·I6·I7 통과 |
 | S6 | 통과 | 1 | 3930df3 | `row3` p-a|p-b 경계 +150 px / 10 step: resizer에 `gotpointercapture`·`lostpointercapture`. p-a 413.3→561.4(+148.1), p-b 413.3→265.3(−148.1), 오차 1.9 px ≤ 3. 리사이즈 중 `body.style.userSelect = none`, 뒤에 로드 직후 값(`''`)으로 복원. `onResizeBorder` 10건. 리사이즈 시작 전 hover 이동의 mousemove 2건 외에 드래그 구간 mousemove 없음. I1~I7 통과 |
-| S7a | 미실행 | | | |
-| S7b | 미실행 | | | |
+| S7a | 통과 | 2 | (B1-03e 커밋) | touch 프로젝트. 1회차 실패: 핸들에서 12 px `touchMove` 한 번은 `pointermove`만 만들고 `touchmove`가 페이지에 오지 않아(Chromium의 touch slop 억제) ghost가 생기지 않았다. 수정(사다리 2): 첫 이동을 12 px → 24 px 두 번으로 나눔. 2회차 통과: (1) `pair` p-a → p-b 오른쪽 커밋, touch 이벤트 전부 trusted, 드래그 중 ghost 정확히 1개·끝난 뒤 0, `onMovePanel` 1건, 트리 `H[p-b,p-a]` (2) `locks` editor → terminal 위 → nav 위: ghost `opacity 0.4` + `rgba(232, 17, 35, 0.8) solid 2px`, 떼면 `onMovePanel` 0건·트리 불변, 이어서 두 번째 드래그(control-b)가 시작되고 취소됨. 모두 I1~I7 통과. 롱프레스 없이 시작함을 확인(오라클 = 코드) |
+| S7b | 기록 | 1 | (B1-03e 커밋) | 7절 참고. 레인 B(153) headless shell에서 네이티브 `dragstart`·`touchcancel` 없음, 롱프레스 드래그가 커밋됨 |
 | S8 | 미실행 | | | |
 | S9 | 미실행 | | | |
 | S10 | 미실행 | | | |
@@ -74,7 +74,11 @@
 
 ## 7. S7b 관찰
 
-(B1-03e에서 기록)
+- 레인 B, `HeadlessChrome/153.0.8010.12` (headless shell), touch 프로젝트(`hasTouch: true`), 새 컨텍스트. `?layout=pair&drag=panel`.
+- 절차: p-a 위 `touchStart` → 550 ms 유지 → p-b 오른쪽으로 `touchMove` 3회 → `touchEnd`.
+- 관찰(커밋 (B1-03e 커밋)): 유지 직후 ghost 1개(`opacity 0.7`) = 라이브러리의 450 ms 롱프레스 타이머로 드래그 시작. **네이티브 `dragstart` 없음, `touchcancel` 없음, `contextmenu`·`selectstart` 없음.** 루트 `data-dragging-panel-id` 없음. 떼면 `onMovePanel` 1건, 트리 `H[p-b,p-a]`, I1~I7 통과.
+- 프로브 발췌: `touchstart(p-a) → gotpointercapture → touchmove → lostpointercapture → touchmove → touchmove → touchend(capture/target(connected)/bubble)`.
+- 해석(추정): `kTouchDragAndDrop`이 153 Linux에서 기본 on이라도 headless shell + CDP 터치 에뮬레이션에서는 롱프레스 제스처가 네이티브 드래그를 시작하지 않았다. H-TOUCH-NATIVE-RACE는 이 환경에서 관찰되지 않았다(반증이 아니라 미관찰). `native_touch_drag` 라벨은 레인 규칙대로 `on`이지만 실제 동작은 위와 같다.
 
 ## 8. 라이브러리 버그 의심 메모
 
