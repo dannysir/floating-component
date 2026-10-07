@@ -104,12 +104,12 @@
 | R17 | workbench | 전·후 PNG 시각 점검 (잘림, 넘침·스크롤바, 리사이저, shadow, ghost, 에러 카드) | — | pass | as-predicted (점검표 이상 없음. 좁은 패널의 "잘린" 내용은 body 가로 스크롤(DOM 확인), 스크롤바는 `--hide-scrollbars`로 PNG 판정 불가. orders `minWidth 320`은 세로 split 안에서 무시 = 문서대로 → 6절) | obs/R17-visual-run1.json |
 | R18 | workbench | 탐색 동작 약 30회 | mouse | fail(FC-QA-009, FC-QA-001, FC-QA-005) | 22회. 불변식 실패 0(제스처 직후 기준). 이상 4건 → 재현 스펙: #13 → `r18-x01` 2회×2: nudge 뒤 놓으면 stale preview 시그니처 = **FC-QA-009**(새 발견), nudge 없으면 하네스 취소(#17). #6·#8 루트 띠가 iframe 본문(FC-QA-005), #7 루트 왼쪽 띠는 전부 잠긴 nav(설계), #17 800x600에서 폭 0 패널은 핸들을 누를 수 없음(`r18-x02` 축소 재현 not-reproduced, 설계상 결과 → 6절). Resizer·상단 바·여백 위 릴리스는 예측대로 취소. 매 커밋·hover의 리마운트는 FC-QA-001 | obs/R18-log.json (n 1~22) |
 | R18 | workbench | 탐색 동작 (터치) | touch-cdp-handle | fail(FC-QA-001, FC-QA-005) | 10회. 불변식 실패 0. touchCancel·5px 미만 이동·본문 끌기 모두 깨끗(ghost 없음/제거). iframe 본문 위 터치 드롭은 커밋(FC-QA-005의 터치 쪽). 터치 뒤 마우스 드래그 정상. Chromium CDP touch emulation, headless; not a real device | obs/R18-log.json (n 101~110) |
-| R19 | control 패널 (`persist=1`) | 저장 → 새로고침 → 복원 | mouse | not-run | | |
-| R19 | control 패널 (`persist=1`) | 미등록 키 → 빈 패널 | mouse | not-run | | |
-| R19 | control 패널 (`persist=1`) | 복원 후 드래그 앤 드롭 | mouse | not-run | | |
-| R19 | control 패널 / 폭 1280 | min/max px: 창 크기 변경, 경계선 드래그 | mouse | not-run | | |
-| R19 | control 패널 / 폭 800 | min/max px: 창 크기 변경, 경계선 드래그 | mouse | not-run | | |
-| R19 | control 패널 | 패널보다 큰 내용의 스크롤 | mouse | not-run | | |
+| R19 | control 패널 (`persist=1`) | 저장 → 새로고침 → 복원 | mouse | pass | as-ideal(= 예측: 저장 JSON = T1, reload 뒤 `getTree()` 깊은 비교 일치, `domTree` 일치, 전 슬롯 ready, 내용 상태는 초기화, 콘솔 에러 0) | obs/R19-persist-roundtrip-run{1,2}.json |
+| R19 | control 패널 (`persist=1`) | 미등록 키 → 빈 패널 | mouse | pass | as-ideal(= 예측: `p-b` 요소 존재·자식 0, `shell-error` 없음, 콘솔 에러 0(prod), 트리에 `nope-slot` 유지) | obs/R19-persist-unregistered-run{1,2}.json |
+| R19 | control 패널 (`persist=1`) | 복원 후 드래그 앤 드롭 | mouse | pass (FC-QA-001 증거 포함) | as-ideal(= 예측: 빈 패널을 앵커로 커밋 `H[p-b,p-a]`, 복원 뒤 페이지에서 `onMovePanel('p-b','p-c','bottom',0)` 커밋, 둘 다 localStorage가 커밋 트리로 갱신, I1~I7 통과) | obs/R19-persist-dnd-{empty,restored}-run{1,2}.json |
+| R19 | control 패널 / 폭 1280 | min/max px: 창 크기 변경, 경계선 드래그 | mouse | fail(FC-QA-010) | as-predicted — row3-size: 400px에서 `+400` 끌면 **263.3px로 줄어듦**(상한 약 2/3), 하한 뒤 `+50` 지연(0px 이동). pair-size 397.5(-2.5, as-ideal), census-vsize 296.7(-3.3) | obs/R19-size-1280-*-run{1,2}.json |
+| R19 | control 패널 / 폭 800 | min/max px: 창 크기 변경, 경계선 드래그 | mouse | fail(FC-QA-010) | as-predicted — 창 크기 변경은 하한 200/150/120 정확. 800에서 경계선 상한 row3 261.2(-138.8), pair 395.9(-4.1), census 295.5(-4.5) | obs/R19-size-800-*-run{1,2}.json |
+| R19 | control 패널 | 패널보다 큰 내용의 스크롤 | mouse | pass | as-ideal — p-a 200px에서 스크롤은 내용(`control-a-scroll`, sh 2000 > ch 647)에서만, 패널 wrapper·PanelFrame body는 넘치지 않음 → 이중 스크롤바 없음 | obs/R19-overflow-run{1,2}.json |
 
 ### 2-2. 둘째 묶음 (시간이 부족하면 **끝에서부터** `not-run` 가능. 이 묶음에서만 허용)
 
@@ -160,6 +160,7 @@
 | [FC-QA-007](../findings/FC-QA-007-handle-touch-starts-without-long-press.md) | 핸들 모드 터치 드래그가 문서와 달리 롱프레스 없이 8px 이동으로 시작 | sev-4 | spec-question | needs-user-confirmation | 2/2 | S7a·R12·R14 | docs-touch-handle-start |
 | [FC-QA-008](../findings/FC-QA-008-resize-capture-loss-leaks-user-select.md) | 경계선 리사이즈가 포인터 캡처를 잃으면 userSelect가 none으로 남고 그 Resizer를 다시 잡을 수 없다 | sev-1 | library-bug | open | 2/2 | R17 | resize-capture-cleanup |
 | [FC-QA-009](../findings/FC-QA-009-stale-preview-after-drop.md) | 드롭 직전 dragover의 rAF가 드래그 뒤 실행돼 소스 shadow가 남는다 (stale preview) | sev-3 | library-bug (`harness_amplified`) | open | 2/2 | R18 | raf-not-cancelled-on-drop |
+| [FC-QA-010](../findings/FC-QA-010-resize-limit-px-mismatch.md) | 경계선 드래그의 최소·최대 한계가 설정 px과 다르다(자식 3개 split 상한 약 2/3) | sev-3 | library-bug | open | 2/2 | R19 | resize-flex-conversion |
 | [FC-QA-006](../findings/FC-QA-006-oopif-release-no-dragend-harness.md) | (하네스) OOPIF 위 마우스 릴리스에서 dragend가 오지 않고 CDP 드래그 세션이 멈춘다 | sev-4 | harness-artifact | open | 2/2 | R12 | harness-cdp-drag-oopif |
 
 `predicted`였던 발견의 결과: FC-QA-001 — 관찰됨(R01에서 `open`으로 변경)
@@ -247,8 +248,8 @@
 | 실제 마우스로 `not-allowed` 커서 표시 확인 | "PanelNode lock options" → "남은 일" | S2, R07 (대용: `dragend`의 `dropEffect`가 `none`, `drop` 없음) | | 커서 글리프 자체 |
 | 실기기로 터치 경로 확인 | 같은 곳 | S7a, R13, R14 (CDP 터치 에뮬레이션) | R14: 잠긴 nav 위 차단 ghost·취소·두 번째 드래그 모두 문서대로(에뮬레이션). 단 핸들 모드 시작 조건이 문서(롱프레스)와 다름 → FC-QA-007 | 실기기 Android·iOS |
 | 소스 DOM 교체 시 종료 이벤트 유실 수정을 실제 입력으로 확인 | "해결: 드래그 중 소스 DOM 교체로 종료 이벤트 유실" → "확실성" | S3, S4, S5(0.5.1 양성 대조), R07, R14 | | |
-| 직렬화 (0.3.0) | "남은 검증" | R19 | | |
-| 패널 크기 제약 (0.4.0) | "남은 검증" | R19 | | |
+| 직렬화 (0.3.0) | "남은 검증" | R19 | 확인: 저장→새로고침→복원(레이아웃·컴포넌트), 미등록 키 → 빈 패널·prod 콘솔 조용, 복원 뒤·빈 패널 앵커 DnD 정상. 범위: `splitPanel`은 run 01 밖, `insertPanel`은 R17 Nav 토글(persist 없이)이 다룸, R19는 DnD만 | dev 모드 `devWarn` 문구(P1 dev 모드 항목) |
+| 패널 크기 제약 (0.4.0) | "남은 검증" | R19 | **성립하지 않음** — 창 크기 변경(CSS)은 정확하지만 경계선 드래그 한계가 다르다: 자식 3개 split에서 상한 약 2/3(바깥으로 끌면 줄어듦), 하한 뒤 지연, 자식 2개에서도 2.5~4.5px 부족 → FC-QA-010. 오버플로우는 내용 스크롤로 성립(이중 스크롤바 없음) | — |
 
 ---
 

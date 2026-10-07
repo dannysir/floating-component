@@ -1,0 +1,75 @@
+{
+  "run": "run01-tier1",
+  "runNo": 1,
+  "scenario": "R19",
+  "case": "R19-overflow",
+  "expected": "패널보다 큰 내용은 잘리지 않고 스크롤된다",
+  "predicted": "통과. 스크롤은 PanelFrame body(`overflow:auto`) 안에서. 패널 wrapper(`overflow:auto`)와 body가 둘 다 스크롤 컨테이너라 이중 스크롤바가 생길 수 있다(픽스처 CSS 문제면 `fixture-bug`)",
+  "observed": "p-a 하한 상태: panel {\"sw\":200,\"cw\":200,\"sh\":736,\"ch\":736,\"ox\":\"auto\",\"oy\":\"auto\"}, body {\"sw\":200,\"cw\":200,\"sh\":705,\"ch\":705,\"ox\":\"auto\",\"oy\":\"auto\"}, control-a-scroll {\"sw\":192,\"cw\":192,\"sh\":2000,\"ch\":647,\"ox\":\"auto\",\"oy\":\"auto\"}; 실제로 스크롤 가능한 요소 [scroll](이중 스크롤바 없음)",
+  "verdict": "as-ideal",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": true,
+      "detail": "no data-dragging-panel-id",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": true,
+      "detail": "userSelect restored",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[p-a,p-b,p-c]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (control-a,control-b,control-c)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r19-size/R19-overflow-run1"
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "run": "run01-tier1",
+  "runNo": 2,
+  "scenario": "R19",
+  "case": "R19-size-1280-row3-size",
+  "expected": "상한 400·하한 200(세로 300·120)이 창 크기 변경(CSS)과 경계선 드래그에서 **같은 px**로 지켜진다(오차 3px)",
+  "predicted": "**`row3-size`(자식 3개): 경계선 드래그의 상한이 설정 px보다 작은 곳에서 멈춘다.** px→flex 환산이 split 전체 px에 인접 두 자식의 flex 합을 곱하므로 비율이 `2/3`이 된다: 400 → 약 267px(루트 폭 1256 기준). 하한: 상태 `size`가 200px에 해당하는 값 아래로 내려가고 화면은 CSS `min-width`에 걸려 200에서 멈춘다. 되돌릴 때(`+50`) 상태가 200px 상당을 넘을 때까지 경계선이 따라오지 않는다(지연). **`pair-size`(자식 2개): 상한 약 397~398px**(Resizer 8px만큼 덜 움직임. 3px 안이 아닐 수 있다. 관찰로 적는다). **`census-vsize`**: `p-b`·`p-c`뿐인 세로 split이므로 pair와 같은 수 px 오차",
+  "observed": "row3-size: 시작 p-a 400px; +400 → p-a 263.3px flex {\"p-a\":0.637,\"p-b\":1.363,\"p-c\":1}; -600 → p-a 200px flex {\"p-a\":0.318,\"p-b\":1.682,\"p-c\":1}; +50 → p-a 200px flex {\"p-a\":0.438,\"p-b\":1.562,\"p-c\":1}. 상한 오차 -136.7px, 하한 오차 0.0px, +50 되돌림 0.0px 이동; I1~I7 통과",
+  "verdict": "as-predicted",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": true,
+      "detail": "no data-dragging-panel-id",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": true,
+      "detail": "userSelect restored",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[p-a,p-b,p-c]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (control-a,control-b,control-c)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r19-size/R19-size-1280-row3-size-run2"
+  ],
+  "extra": {
+    "px": [
+      263.3,
+      200,
+      200
+    ],
+    "rows": [
+      "+400 → p-a 263.3px flex {\"p-a\":0.637,\"p-b\":1.363,\"p-c\":1}",
+      "-600 → p-a 200px flex {\"p-a\":0.318,\"p-b\":1.682,\"p-c\":1}",
+      "+50 → p-a 200px flex {\"p-a\":0.438,\"p-b\":1.562,\"p-c\":1}"
+    ]
+  }
+}
