@@ -1,0 +1,327 @@
+{
+ "step": "02-mid",
+ "url": "http://127.0.0.1:4300/?layout=census",
+ "lib": {
+  "source": "src",
+  "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+  "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+ },
+ "settle": {
+  "stable": true,
+  "reads": 2,
+  "ms": 78
+ },
+ "tree": {
+  "type": "split",
+  "direction": "horizontal",
+  "size": 1,
+  "children": [
+   {
+    "type": "panel",
+    "id": "p-a",
+    "size": 1,
+    "componentKey": "control-a"
+   },
+   {
+    "type": "split",
+    "direction": "vertical",
+    "size": 1,
+    "children": [
+     {
+      "type": "panel",
+      "id": "p-b",
+      "size": 1,
+      "componentKey": "control-b"
+     },
+     {
+      "type": "panel",
+      "id": "p-c",
+      "size": 1,
+      "componentKey": "control-c"
+     }
+    ]
+   },
+   {
+    "type": "panel",
+    "id": "p-d",
+    "size": 1,
+    "componentKey": "control-d"
+   }
+  ]
+ },
+ "treeNotation": "H[p-a,V[p-b,p-c],p-d]",
+ "treeVersion": 0,
+ "calls": [],
+ "dom": {
+  "domTree": "H[p-d,p-a,V[p-b,p-c]]",
+  "draggingPanelId": "p-d",
+  "panels": {
+   "p-d": {
+    "slot": "control-d",
+    "rect": {
+     "x": 12,
+     "y": 52,
+     "width": 413.328125,
+     "height": 736
+    },
+    "draggable": true,
+    "droppable": true,
+    "shadow": true,
+    "elementSeq": 4
+   },
+   "p-a": {
+    "slot": "control-a",
+    "rect": {
+     "x": 433.328125,
+     "y": 52,
+     "width": 413.34375,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 1
+   },
+   "p-b": {
+    "slot": "control-b",
+    "rect": {
+     "x": 854.671875,
+     "y": 52,
+     "width": 413.328125,
+     "height": 364
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 5
+   },
+   "p-c": {
+    "slot": "control-c",
+    "rect": {
+     "x": 854.671875,
+     "y": 424,
+     "width": 413.328125,
+     "height": 364
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 6
+   }
+  },
+  "resizerCount": 3,
+  "resizers": [
+   {
+    "rect": {
+     "x": 425.328125,
+     "y": 52,
+     "width": 8,
+     "height": 736
+    },
+    "axis": "x"
+   },
+   {
+    "rect": {
+     "x": 846.671875,
+     "y": 52,
+     "width": 8,
+     "height": 736
+    },
+    "axis": "x"
+   },
+   {
+    "rect": {
+     "x": 854.671875,
+     "y": 416,
+     "width": 413.328125,
+     "height": 8
+    },
+    "axis": "y"
+   }
+  ],
+  "ghosts": [],
+  "bodyUserSelect": ""
+ },
+ "counters": {
+  "frames": {
+   "control-a": {
+    "kind": "local",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   },
+   "control-b": {
+    "kind": "local",
+    "frameMounts": 2,
+    "frameUnmounts": 1,
+    "state": "ready"
+   },
+   "control-c": {
+    "kind": "local",
+    "frameMounts": 2,
+    "frameUnmounts": 1,
+    "state": "ready"
+   },
+   "control-d": {
+    "kind": "local",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   }
+  },
+  "mfe": {
+   "control-a": {
+    "slot": "control-a",
+    "kind": "local",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "shell",
+    "build": "20261007T013117Z-427d"
+   },
+   "control-b": {
+    "slot": "control-b",
+    "kind": "local",
+    "mounts": 2,
+    "unmounts": 1,
+    "instanceSeq": 2,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "shell",
+    "build": "20261007T013117Z-427d"
+   },
+   "control-c": {
+    "slot": "control-c",
+    "kind": "local",
+    "mounts": 2,
+    "unmounts": 1,
+    "instanceSeq": 2,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "shell",
+    "build": "20261007T013117Z-427d"
+   },
+   "control-d": {
+    "slot": "control-d",
+    "kind": "local",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "shell",
+    "build": "20261007T013117Z-427d"
+   }
+  },
+  "iframes": {},
+  "domMoves": {
+   "p-a": 1
+  },
+  "domLog": [
+   {
+    "seq": 1,
+    "t": 118.89999999990687,
+    "panelId": "p-a",
+    "kind": "added",
+    "elementSeq": 1
+   },
+   {
+    "seq": 2,
+    "t": 118.89999999990687,
+    "panelId": "p-b",
+    "kind": "added",
+    "elementSeq": 2
+   },
+   {
+    "seq": 3,
+    "t": 118.89999999990687,
+    "panelId": "p-c",
+    "kind": "added",
+    "elementSeq": 3
+   },
+   {
+    "seq": 4,
+    "t": 118.89999999990687,
+    "panelId": "p-d",
+    "kind": "added",
+    "elementSeq": 4
+   },
+   {
+    "seq": 5,
+    "t": 2010.2999999999302,
+    "panelId": "p-b",
+    "kind": "removed",
+    "elementSeq": 2
+   },
+   {
+    "seq": 6,
+    "t": 2010.2999999999302,
+    "panelId": "p-c",
+    "kind": "removed",
+    "elementSeq": 3
+   },
+   {
+    "seq": 7,
+    "t": 2010.2999999999302,
+    "panelId": "p-a",
+    "kind": "removed",
+    "elementSeq": 1
+   },
+   {
+    "seq": 8,
+    "t": 2010.2999999999302,
+    "panelId": "p-a",
+    "kind": "reinserted",
+    "elementSeq": 1
+   },
+   {
+    "seq": 9,
+    "t": 2010.2999999999302,
+    "panelId": "p-b",
+    "kind": "remounted",
+    "elementSeq": 5
+   },
+   {
+    "seq": 10,
+    "t": 2010.2999999999302,
+    "panelId": "p-c",
+    "kind": "remounted",
+    "elementSeq": 6
+   }
+  ]
+ },
+ "content": {
+  "control-d": {
+   "input": "seed-control-d",
+   "counter": "count 3",
+   "scrollTop": 120,
+   "focused": false
+  },
+  "control-a": {
+   "input": "seed-control-a",
+   "counter": "count 3",
+   "scrollTop": 0,
+   "focused": false
+  },
+  "control-b": {
+   "input": "",
+   "counter": "count 0",
+   "scrollTop": 0,
+   "focused": false
+  },
+  "control-c": {
+   "input": "",
+   "counter": "count 0",
+   "scrollTop": 0,
+   "focused": false
+  }
+ },
+ "activeTestid": null,
+ "console": [],
+ "pageErrors": [],
+ "documentRequests": {
+  "http://127.0.0.1:4300": 1
+ }
+}

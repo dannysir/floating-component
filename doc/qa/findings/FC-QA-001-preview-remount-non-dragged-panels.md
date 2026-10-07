@@ -3,30 +3,30 @@ id: FC-QA-001
 title: 드래그 미리보기가 드래그하지 않은 패널을 리마운트한다
 severity: sev-2
 class: library-bug
-status: predicted
-confidence: code-reading
-repro_rate:            # run 01에서 채운다 (예: 2/2)
+status: open
+confidence: high
+repro_rate: 2/2
 found_in: pre-run
-variants: []           # run 01에서 재현된 슬롯 이름 목록을 채운다 (예: [control-b, control-c, orders, billing, telemetry])
-input:                 # run 01에서 채운다 (mouse | touch-cdp-handle)
-browser:               # run 01에서 채운다
-playwright:            # run 01에서 채운다
-native_touch_drag:
+variants: [control-b, control-c, bare-1, bare-2]
+input: mouse
+browser: chromium-153 headless-shell
+playwright: 1.63.0
+native_touch_drag: on
 library_tree: c1da6c9dc03a4811eea42c220be309e5e73b0a4a
 library_commit: ea25ff7
 hypothesis: H-REMOUNT
 harness_amplified: false
 decision_ref: D3
 root_cause_group: split-index-key
-blocked_by:
-dup_of:
-repro_spec:            # run 01에서 추가: mfa-lab/e2e/regression/fc-qa-001-preview-remount-non-dragged-panels.spec.ts
-fix_commit:
+blocked_by: none
+dup_of: none
+repro_spec: mfa-lab/e2e/regression/fc-qa-001-preview-remount-non-dragged-panels.spec.ts
+fix_commit: none
 ---
 
 # FC-QA-001 — 드래그 미리보기가 드래그하지 않은 패널을 리마운트한다
 
-> **이 문서는** 실행 전에 코드 리딩만으로 선등록한 발견이다. 상태는 `predicted`이고 **브라우저에서 관측한 것은 없다(미실행).**
+> **이 문서는** 실행 전에 코드 리딩만으로 선등록한 발견이다(`found_in: pre-run`). 2026-10-07 run 01(R01)에서 관측해 상태를 `open`으로 올렸다. 아래 「기대와 예측」 표는 선등록 문구 그대로이고, 관측은 「실제」 절에 있다.
 > 클라우드 세션 2(run 01)가 R01·R02·R03·R05를 실행한 뒤 이 파일에 증거를 붙이고 상태를 `open`으로 올린다. 수정 세션은 [../FIXING.md](../FIXING.md) 절차로 이 파일에서 시작한다.
 > 선등록한 이유: 사용자가 이 동작을 결함으로 기록하라고 결정했다(결정 D3, [../README.md](../README.md) 결정 로그). 검수 세션이 실행되지 못해도 결함 기록이 남아야 한다.
 > 의존 문서: 메커니즘 전체는 [../mfa/HYPOTHESES.md](../mfa/HYPOTHESES.md) "리마운트 · DOM 재삽입 · iframe 재로드"와 H-REMOUNT, 계측 이름은 [../mfa/ARCHITECTURE.md](../mfa/ARCHITECTURE.md) 「계측 계약」, 헬퍼는 [../mfa/HARNESS.md](../mfa/HARNESS.md) 「헬퍼」.
@@ -118,7 +118,24 @@ fix_commit:
 
 ## 실제
 
-**미관측.** 이 발견은 선등록 상태다. 아래는 run 01이 채운다.
+### run 01 관측 (2026-10-07)
+
+**R01** — `http://127.0.0.1:4300/?layout=census`(전부 control), 깨끗한 컨텍스트 2회(`R01-run1`, `R01-run2`), 두 번 모두 같은 값. 시작 트리 `H[p-a,V[p-b,p-c],p-d]`. `p-d`(control-d)를 핸들로 `(p-a, left, 1)`로 hover → Esc. 값은 `01-before` 대비 증가분. 관찰 기록 `doc/qa/run01-tier1/obs/R01-hover-run{1,2}.json`, `R01-esc-run{1,2}.json`.
+
+| 시점 | 패널 | 프레임 마운트 변화 (`frameMounts`/`frameUnmounts`) | 내용 마운트 변화 (`mounts`/`unmounts`) | DOM 이동 | 내용 상태 |
+|---|---|---|---|---|---|
+| hover (미리보기 `H[p-d,p-a,V[p-b,p-c]]`) | `p-b` (control-b) | +1 / +1 | +1 / +1 | +0 (새 요소: `domLog` remounted) | input·counter·scrollTop 초기화 (`""`, `count 0`, 0) |
+| hover | `p-c` (control-c) | +1 / +1 | +1 / +1 | +0 (remounted) | 초기화 |
+| hover | `p-a` (control-a) | +0 | +0 | +1 (reinserted) | input·counter 유지, scrollTop 120 → 0 (FC-QA-002) |
+| hover | `p-d` (소스) | +0 | +0 | +0 | 유지 |
+| Esc 뒤 누적 | `p-b`, `p-c` | +2 / +2 | +2 / +2 | +0 | 초기화 |
+| Esc 뒤 누적 | `p-a` | +0 | +0 | +1 | scrollTop 0 |
+| Esc 뒤 누적 | `p-d` (소스) | +0 | +0 | +1 (취소 때 재삽입. D3b 하위 관찰) | scrollTop 120 → 0 |
+
+- 예측과 같다(`as-predicted`, 2/2). 커밋 없음: `onMovePanel` 0건, 트리 불변.
+- 불변식 I1~I7: Esc 뒤 전부 통과. `dragend`는 연결된 원본 노드(capture/target/bubble 모두 `isConnected: true`).
+- 대조(bare, `R01-bare-run{1,2}`): `bare-1`·`bare-2` 내용 마운트 hover +1, Esc 뒤 +2. `bare-0` reinserted. 라이브러리만으로 재현된다.
+- 스크린샷 `02-mid.png`(직접 열어 확인): `control-d`가 점선·반투명(shadow)으로 맨 왼쪽, `control-b`·`control-c` 헤더 배지 `f2 c2`(로드 1 + 리마운트 1)와 빈 입력·`count 0`, `control-a`는 입력값 유지·목록이 맨 위(scrollTop 0).
 
 ### run 01에서 할 일
 
@@ -137,12 +154,16 @@ fix_commit:
 
 ## 증거
 
-없음(미실행). run 01이 `doc/qa/run01-tier1/evidence/FC-QA-001/`에 붙일 것(이름은 [../mfa/HARNESS.md](../mfa/HARNESS.md) 「증거와 라벨 → 발견 하나의 증거 묶음」 기준):
+경로 `doc/qa/run01-tier1/evidence/FC-QA-001/` (R01-run1에서 `promote`).
 
-- `01-before.png`, `02-mid.png`(미리보기 + 헤더의 `status-<slot>` 카운터가 보이게), `03-after.png`. 발견당 최대 6장, 1280x800, 배율 1.
-- `tree-before.json`, `tree-after.json`(카운터, `domTree`, 내용 상태 포함), `console.txt`.
-- `events.json`(제스처 구간만).
-- R03·R05의 컨테이너별 카운터 증가분 표(`diff` 결과).
+| 파일 | 무엇을 보여 주는가 |
+|---|---|
+| 01-before.png | 심은 상태(입력 `seed-<slot>`, `count 3`, 목록 스크롤 120). 배지 전부 `f1 c1` |
+| 02-mid.png | 미리보기 `H[p-d,p-a,V[p-b,p-c]]`. `control-b`·`control-c` 배지 `f2 c2`, 입력 비고 `count 0` (직접 열어 확인) |
+| 03-after.png | Esc 뒤 원래 배치. `control-b`·`control-c` 배지 `f3 c3`, 상태 초기화 그대로 |
+| tree-before.json / 02-mid.snapshot.json / tree-after.json | `counters.frames`·`counters.mfe`·`counters.domLog`·`content` |
+| events.json | 제스처 구간 프로브 로그. `dragend`는 연결된 소스(`p-d`) |
+| console.txt | 비어 있음 |
 
 ## 추정 원인
 
@@ -175,6 +196,20 @@ fix_commit:
 
 ## 대조 실험
 
+계획 표(선등록)는 아래 "계획"에 그대로 두고, 실행 결과를 위에 둔다.
+
+| 단계 | 한 것 | 결과 |
+|---|---|---|
+| 1 재현 | 깨끗한 컨텍스트 2회 (R01) | 2/2, 수치 동일 |
+| 2 대조 교체 | bare(`a..d=bare-0..3`) | 재현(`bare-1`·`bare-2` 내용 마운트 hover +1). 라이브러리 단계에서 처음 나타남 → `library-bug` |
+| 3 입력·릴리스 교체 | (R02 드롭, R14·R13 터치에서 덧붙인다) | — |
+| 4 하네스 점검 | 이벤트 순서를 S1 기준선과 비교 | 같은 순서(dragstart → dragenter → dragover(p-a) → Esc dragend). 알려진 부작용과 무관(카운터는 React 마운트) |
+| 5 픽스처 점검 | 해당 없음 | control·bare에서 재현되므로 remote 단독 페이지와 무관 |
+| 6 프로브 끄고 재실행 | 해당 없음 | 예측대로라 생략. `frameMounts`·`mounts`는 프로브가 아니라 픽스처 카운터다 |
+| 7 오라클 | D3 | 있음 |
+
+### 계획 (선등록)
+
 계획이다(미실행). 귀속 사다리는 [../README.md](../README.md)를 따른다.
 
 | 대조 | 방법 | 확인하려는 것 | 예측 |
@@ -195,3 +230,4 @@ fix_commit:
 - 기존 기록: [../../TODO.md](../../TODO.md) "해결: 드래그 중 소스 DOM 교체로 종료 이벤트 유실" — 소스 패널의 리마운트와 그로 인한 `dragend` 유실 수정(`ea25ff7`). 드래그하지 않은 패널의 리마운트는 거기에 적혀 있지 않다
 - 설계 원칙: `CLAUDE.md` "SplitNode에 ID 추가하지 않음 — path(number[])로 식별", [../../API.ko.md](../../API.ko.md) "설계 노트"
 - 수정 절차: [../FIXING.md](../FIXING.md)
+- 2026-10-07 run 01: R01에서 관측, `status: open`. 관찰 기록 `doc/qa/run01-tier1/obs/R01-*.json`, 회귀 스펙 `mfa-lab/e2e/regression/fc-qa-001-preview-remount-non-dragged-panels.spec.ts`(케이스 (a)·(b) 모두 "예상대로 실패": (a) `control-b frameMounts`, (b) `control-a frameMounts` 단언에서 실패)

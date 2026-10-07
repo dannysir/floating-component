@@ -1,0 +1,159 @@
+{
+  "run": "run01-tier1",
+  "runNo": 1,
+  "scenario": "R01",
+  "case": "R01-hover",
+  "expected": "드래그하지 않은 `p-a`·`p-b`·`p-c`의 내용은 unmount·재삽입·재로드되지 않는다. input·counter·scrollTop 유지",
+  "predicted": "미리보기 `H[p-d,p-a,V[p-b,p-c]]`. `p-b`·`p-c`: frame +1, content +1, input·counter·scrollTop 초기화(split 키 `split-1` → `split-2`). `p-a`: frame +0, content +0, moves +1, scrollTop 0으로 초기화. `p-d`(소스): 변화 없음, DOM도 안 움직임",
+  "observed": "미리보기 H[p-d,p-a,V[p-b,p-c]], p-d shadow=true. control-a(p-a): frame+0 content+0 moves+1 input=\"seed-control-a\" counter=\"count 3\" scrollTop=0 [reinserted]; control-b(p-b): frame+1 content+1 moves+0 input=\"\" counter=\"count 0\" scrollTop=0 [remounted]; control-c(p-c): frame+1 content+1 moves+0 input=\"\" counter=\"count 0\" scrollTop=0 [remounted]; control-d(p-d): frame+0 content+0 moves+0 input=\"seed-control-d\" counter=\"count 3\" scrollTop=120 [untouched]",
+  "verdict": "as-predicted",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": false,
+      "detail": "data-dragging-panel-id=p-d remains",
+      "violations": [
+        {
+          "key": "p-d",
+          "message": "data-dragging-panel-id=p-d remains"
+        }
+      ],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": false,
+      "detail": "shadow style remains on p-d",
+      "violations": [
+        {
+          "key": "p-d",
+          "message": "shadow style remains on p-d"
+        }
+      ],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": true,
+      "detail": "userSelect restored",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": false,
+      "detail": "domTree H[p-d,p-a,V[p-b,p-c]] != tree H[p-a,V[p-b,p-c],p-d]",
+      "violations": [
+        {
+          "key": "domTree",
+          "message": "domTree H[p-d,p-a,V[p-b,p-c]] != tree H[p-a,V[p-b,p-c],p-d]"
+        }
+      ],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (control-a,control-b,control-c,control-d)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r01-census-hover-esc/R01-run1"
+  ],
+  "extra": {
+    "deltas": {
+      "control-a": {
+        "slot": "control-a",
+        "panelId": "p-a",
+        "frame": 0,
+        "content": 0,
+        "moves": 1,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-a",
+        "counter": "count 3",
+        "scrollTop": 0,
+        "cls": "reinserted"
+      },
+      "control-b": {
+        "slot": "control-b",
+        "panelId": "p-b",
+        "frame": 1,
+        "content": 1,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "",
+        "counter": "count 0",
+        "scrollTop": 0,
+        "cls": "remounted"
+      },
+      "control-c": {
+        "slot": "control-c",
+        "panelId": "p-c",
+        "frame": 1,
+        "content": 1,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "",
+        "counter": "count 0",
+        "scrollTop": 0,
+        "cls": "remounted"
+      },
+      "control-d": {
+        "slot": "control-d",
+        "panelId": "p-d",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-d",
+        "counter": "count 3",
+        "scrollTop": 120,
+        "cls": "untouched"
+      }
+    },
+    "phase": "hover (불변식은 드래그 중이라 I1·I2 실패가 정상)"
+  }
+}

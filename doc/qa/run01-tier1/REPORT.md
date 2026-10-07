@@ -58,8 +58,9 @@
 
 | ID | 변형 (레이아웃 / 슬롯) | 케이스 | 입력 | 상태 | 기대 대비 | 관찰 기록 |
 |---|---|---|---|---|---|---|
-| R01 | census / 전부 control | hover | mouse | not-run | | |
-| R01 | census / 전부 control | Esc | mouse | not-run | | |
+| R01 | census / 전부 control | hover | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R01-hover-run1.json, obs/R01-hover-run2.json |
+| R01 | census / 전부 control | Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R01-esc-run1.json, obs/R01-esc-run2.json |
+| R01 (사다리) | census / bare-0..3 | hover + Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R01-bare-run1.json, obs/R01-bare-run2.json |
 | R02 | census / 전부 control | hover 후 drop (overShadow) | mouse | not-run | | |
 | R03 | census / b=orders | hover + Esc, hover + drop | mouse | not-run | | |
 | R03 | census / b=billing | hover + Esc, hover + drop | mouse | not-run | | |
@@ -139,9 +140,10 @@
 
 | ID | 제목 | 심각도 | class | status | 재현율 | 시나리오 | root_cause_group |
 |---|---|---|---|---|---|---|---|
-| <[FC-QA-NNN](../findings/FC-QA-NNN-slug.md)> | | | | | | | |
+| [FC-QA-001](../findings/FC-QA-001-preview-remount-non-dragged-panels.md) | 드래그 미리보기가 드래그하지 않은 패널을 리마운트한다 | sev-2 | library-bug | open | 2/2 | R01 | split-index-key |
+| [FC-QA-002](../findings/FC-QA-002-preview-reinserts-non-dragged-panels.md) | 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM 재삽입해 스크롤을 잃게 한다 | sev-3 | library-bug | open | 2/2 | R01 | keyed-reorder-reinsert |
 
-`predicted`였던 발견의 결과: <FC-QA-001 — 관찰됨(open으로 변경) \| 재현 안 됨(predicted 유지, 4절에 refuted) \| 실행 못 함>
+`predicted`였던 발견의 결과: FC-QA-001 — 관찰됨(R01에서 `open`으로 변경)
 
 ---
 

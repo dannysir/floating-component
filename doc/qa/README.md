@@ -242,8 +242,9 @@ AI가 보고한 발견을 믿을 수 있게 하는 규칙이다. 하나라도 �
 | ID | 발견 파일 | found_in | 한 줄 요약 |
 |---|---|---|---|
 | FC-QA-001 | [FC-QA-001-preview-remount-non-dragged-panels.md](./findings/FC-QA-001-preview-remount-non-dragged-panels.md) | `pre-run` (실행 전 선등록) | 미리보기 때문에 드래그하지 않은 패널이 리마운트됨 (D3) |
+| FC-QA-002 | [FC-QA-002-preview-reinserts-non-dragged-panels.md](./findings/FC-QA-002-preview-reinserts-non-dragged-panels.md) | `run01-tier1` | 미리보기 때문에 드래그하지 않은 패널이 리마운트 없이 DOM 재삽입되어 스크롤을 잃음 (D3a) |
 
-**다음 빈 ID: FC-QA-002**
+**다음 빈 ID: FC-QA-003**
 
 ---
 

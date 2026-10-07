@@ -1,0 +1,640 @@
+[
+ {
+  "seq": 145,
+  "eid": 73,
+  "t": 1614.2999999999302,
+  "wall": 1791338677326,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 146,
+  "eid": 73,
+  "t": 1614.3999999999069,
+  "wall": 1791338677326,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 147,
+  "eid": 74,
+  "t": 1614.3999999999069,
+  "wall": 1791338677326,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66
+ },
+ {
+  "seq": 148,
+  "eid": 74,
+  "t": 1614.5,
+  "wall": 1791338677326,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66
+ },
+ {
+  "seq": 149,
+  "eid": 75,
+  "t": 1624.5,
+  "wall": 1791338677336,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 150,
+  "eid": 75,
+  "t": 1624.6999999999534,
+  "wall": 1791338677336,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 151,
+  "eid": 76,
+  "t": 1624.6999999999534,
+  "wall": 1791338677336,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "mousedown",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66
+ },
+ {
+  "seq": 152,
+  "eid": 76,
+  "t": 1624.8999999999069,
+  "wall": 1791338677337,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "mousedown",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66
+ },
+ {
+  "seq": 153,
+  "eid": 77,
+  "t": 1646.1999999999534,
+  "wall": 1791338677358,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 154,
+  "eid": 77,
+  "t": 1646.3999999999069,
+  "wall": 1791338677358,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 155,
+  "eid": 78,
+  "t": 1646.3999999999069,
+  "wall": 1791338677358,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067,
+  "y": 66
+ },
+ {
+  "seq": 156,
+  "eid": 78,
+  "t": 1646.5999999999767,
+  "wall": 1791338677358,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067,
+  "y": 66
+ },
+ {
+  "seq": 157,
+  "eid": 79,
+  "t": 1646.7999999999302,
+  "wall": 1791338677359,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragstart",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66,
+  "dropEffect": "none",
+  "effectAllowed": "uninitialized",
+  "types": []
+ },
+ {
+  "seq": 158,
+  "eid": 79,
+  "t": 1647.3999999999069,
+  "wall": 1791338677359,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragstart",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 159,
+  "eid": 80,
+  "t": 1650.0999999999767,
+  "wall": 1791338677362,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 160,
+  "eid": 80,
+  "t": 1650.0999999999767,
+  "wall": 1791338677362,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 161,
+  "eid": 81,
+  "t": 1654.6999999999534,
+  "wall": 1791338677366,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067,
+  "y": 66,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 162,
+  "eid": 81,
+  "t": 1654.7999999999302,
+  "wall": 1791338677366,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067,
+  "y": 66,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 163,
+  "eid": 82,
+  "t": 1985.6999999999534,
+  "wall": 1791338677697,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "control-a-scroll",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 137,
+  "y": 419,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 164,
+  "eid": 82,
+  "t": 1985.6999999999534,
+  "wall": 1791338677697,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "control-a-scroll",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 137,
+  "y": 419,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 165,
+  "eid": 83,
+  "t": 1985.7999999999302,
+  "wall": 1791338677697,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragleave",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 137,
+  "y": 419,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 166,
+  "eid": 83,
+  "t": 1986,
+  "wall": 1791338677698,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragleave",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 137,
+  "y": 419,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 167,
+  "eid": 84,
+  "t": 2003.3999999999069,
+  "wall": 1791338677715,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "control-a-scroll",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 137,
+  "y": 419,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 168,
+  "eid": 84,
+  "t": 2003.6999999999534,
+  "wall": 1791338677715,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "control-a-scroll",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 137,
+  "y": 419,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 169,
+  "eid": 85,
+  "t": 2512.5,
+  "wall": 1791338678224,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragend",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 137,
+  "y": 419,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 170,
+  "eid": 85,
+  "t": 2512.899999999907,
+  "wall": 1791338678225,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragend",
+  "phase": "target",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 137,
+  "y": 419,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 171,
+  "eid": 85,
+  "t": 2518.0999999999767,
+  "wall": 1791338678230,
+  "frame": "http://127.0.0.1:4300/?layout=census",
+  "top": true,
+  "type": "dragend",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 137,
+  "y": 419,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ }
+]
