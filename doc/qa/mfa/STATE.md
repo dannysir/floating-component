@@ -61,7 +61,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R01 (필수 묶음) | 5d490ad | 2026-10-07T02:06Z | 2 | fail(FC-QA-001, FC-QA-002) — hover·Esc 모두 예측대로(2/2), 대조 bare도 재현 |
 | [x] | R02 (필수 묶음) | 4d13a3d | 2026-10-07T02:08Z | 2 | fail(FC-QA-001, FC-QA-002) — 커밋은 미리보기와 같고 추가 리마운트 없음, hover분 리마운트·재삽입 그대로 |
 | [x] | R03 (필수 묶음) | d839779 | 2026-10-07T02:09Z | 2 | fail(FC-QA-001, FC-QA-002) — orders·billing·telemetry·telemetry-x 모두 예측 횟수대로 리마운트/재로드, 사다리(twin·control-mount·control-iframe)도 같은 횟수 |
-| [x] | R05 (필수 묶음) | (R05 커밋) | 2026-10-07T02:11Z | 2 | fail(FC-QA-001) — 루트 감싸기로 세 remote 모두 hover +1·Esc +2, 사다리 control·bare 같은 횟수 |
+| [x] | R05 (필수 묶음) | 359b34c | 2026-10-07T02:11Z | 2 | fail(FC-QA-001) — 루트 감싸기로 세 remote 모두 hover +1·Esc +2, 사다리 control·bare 같은 횟수 |
 | [ ] | R07 (필수 묶음) | | | | |
 | [ ] | R09 (필수 묶음) | | | | |
 | [ ] | R10 (필수 묶음) | | | | |
