@@ -1,0 +1,49 @@
+{
+  "run": "run01-tier1",
+  "runNo": 1,
+  "scenario": "R09",
+  "case": "R09-standalone",
+  "expected": "깨끗함",
+  "predicted": "`data-dragging-panel-id` 없음, `types`는 카드 타입만, `lastDragend.dropEffect 'move'`",
+  "observed": "드래그 중 data-dragging-panel-id=[]; dragstart capture:[]/uninitialized bubble:[application/x-harbor-card]/move; 카드 [[\"c1\",\"c2\"],[\"c3\",\"c4\"],[\"c5\",\"c6\"]] → [[\"c2\"],[\"c3\",\"c4\",\"c1\"],[\"c5\",\"c6\"]], cardMoves +1, lastTypes [\"application/x-harbor-card\"], lastDragend {\"dropEffect\":\"move\",\"effectAllowed\":\"move\"}; drop 레코드 [capture, bubble]; dragend [target/board-card-c1/dropEffect=move/connected=false]; 드래그 뒤 data-dragging-panel-id=[]",
+  "verdict": "as-ideal",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on"
+  },
+  "lib": {
+    "source": "n/a",
+    "tree": "n/a",
+    "commit": "n/a"
+  },
+  "invariants": [],
+  "artifacts": [
+    "r09-board-native-drag/R09-standalone-run1"
+  ],
+  "extra": {
+    "events": "dragstart/capture/DIV[none] dragstart/bubble/DIV[none] dragenter/capture/DIV[move] dragenter/bubble/DIV[move] dragenter/capture/DIV[move] dragenter/bubble/DIV[move] dragleave/capture/DIV[none] dragleave/bubble/DIV[none] dragenter/capture/DIV[move] dragenter/bubble/DIV[move] dragleave/capture/DIV[none] dragleave/bubble/DIV[none] dragover/capture/DIV[move] dragover/bubble/DIV[move] dragover/capture/DIV[move] dragover/bubble/DIV[move] drop/capture/DIV[move] drop/bubble/DIV[move] dragend/target/DIV[move](connected=false)",
+    "dndBefore": {
+      "cardMoves": 0,
+      "zoneDrops": 0,
+      "copyDrops": 0,
+      "lastDragend": null,
+      "lastTypes": []
+    },
+    "dndAfter": {
+      "cardMoves": 1,
+      "zoneDrops": 1,
+      "copyDrops": 0,
+      "lastDragend": {
+        "dropEffect": "move",
+        "effectAllowed": "move"
+      },
+      "lastTypes": [
+        "application/x-harbor-card"
+      ]
+    },
+    "midDragging": null,
+    "deltas": null
+  }
+}

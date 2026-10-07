@@ -1,0 +1,149 @@
+{
+  "run": "run01-tier1",
+  "runNo": 2,
+  "scenario": "R09",
+  "case": "R09-board-local",
+  "expected": "같다",
+  "predicted": "같다(라이브러리 코어 동작)",
+  "observed": "드래그 중 data-dragging-panel-id=[p-a], domTree H[p-a,p-b,p-c]; dragstart capture:[]/uninitialized bubble:[application/x-harbor-card,text/panel-id]/move; 카드 [[\"c1\",\"c2\"],[\"c3\",\"c4\"],[\"c5\",\"c6\"]] → [[\"c2\"],[\"c3\",\"c4\",\"c1\"],[\"c5\",\"c6\"]], cardMoves +1, lastTypes [\"text/panel-id\",\"application/x-harbor-card\"], lastDragend {\"dropEffect\":\"move\",\"effectAllowed\":\"move\"}; drop 레코드 [capture(stopped)]; dragend [target/board-local-card-c1/dropEffect=move/connected=false]; 드래그 뒤 data-dragging-panel-id=[]; 트리 불변=true, onMovePanel 0건; I1~I7 통과. 누적: board-local(p-a): frame+0 content+0 moves+0 input=\"\" counter=\"count 0\" scrollTop=0 [untouched]; control-b(p-b): frame+0 content+0 moves+0 input=\"seed-control-b\" counter=\"count 3\" scrollTop=120 [untouched]; control-c(p-c): frame+0 content+0 moves+0 input=\"seed-control-c\" counter=\"count 3\" scrollTop=120 [untouched]",
+  "verdict": "as-predicted",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": true,
+      "detail": "no data-dragging-panel-id",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": true,
+      "detail": "userSelect restored",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[p-a,p-b,p-c]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (board-local,control-b,control-c)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r09-board-native-drag/R09-board-local-run2"
+  ],
+  "extra": {
+    "events": "dragstart/capture/p-a[none] dragstart/bubble/p-a[none] dragenter/capture/p-a[move] dragenter/bubble/p-a[move] dragenter/capture/p-a[move] dragenter/bubble/p-a[move] dragleave/capture/p-a[none] dragleave/bubble/p-a[none] dragenter/capture/p-a[move] dragenter/bubble/p-a[move] dragleave/capture/p-a[none] dragleave/bubble/p-a[none] dragover/capture/p-a[move] dragover/bubble/p-a[move] dragover/capture/p-a[move] dragover/bubble/p-a[move] drop/capture/p-a[move] dragend/target/DIV[move](connected=false)",
+    "dndBefore": {
+      "cardMoves": 0,
+      "zoneDrops": 0,
+      "copyDrops": 0,
+      "lastDragend": null,
+      "lastTypes": []
+    },
+    "dndAfter": {
+      "cardMoves": 1,
+      "zoneDrops": 1,
+      "copyDrops": 0,
+      "lastDragend": {
+        "dropEffect": "move",
+        "effectAllowed": "move"
+      },
+      "lastTypes": [
+        "text/panel-id",
+        "application/x-harbor-card"
+      ]
+    },
+    "midDragging": "p-a",
+    "deltas": {
+      "board-local": {
+        "slot": "board-local",
+        "panelId": "p-a",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "",
+        "counter": "count 0",
+        "scrollTop": 0,
+        "cls": "untouched"
+      },
+      "control-b": {
+        "slot": "control-b",
+        "panelId": "p-b",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-b",
+        "counter": "count 3",
+        "scrollTop": 120,
+        "cls": "untouched"
+      },
+      "control-c": {
+        "slot": "control-c",
+        "panelId": "p-c",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-c",
+        "counter": "count 3",
+        "scrollTop": 120,
+        "cls": "untouched"
+      }
+    }
+  }
+}

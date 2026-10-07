@@ -1,0 +1,61 @@
+{
+ "step": "03-after",
+ "url": "http://127.0.0.1:4302/",
+ "lib": null,
+ "settle": {
+  "stable": true,
+  "reads": 2,
+  "ms": 89
+ },
+ "tree": null,
+ "treeNotation": "",
+ "treeVersion": -1,
+ "calls": [],
+ "dom": {
+  "domTree": "",
+  "draggingPanelId": null,
+  "panels": {},
+  "resizerCount": 0,
+  "resizers": [],
+  "ghosts": [],
+  "bodyUserSelect": ""
+ },
+ "counters": {
+  "frames": {},
+  "mfe": {
+   "board": {
+    "slot": "board",
+    "kind": "same-tree",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": null,
+    "remote": "board",
+    "build": "20261007T021650Z-4e0b",
+    "dnd": {
+     "cardMoves": 1,
+     "zoneDrops": 1,
+     "copyDrops": 0,
+     "lastDragend": {
+      "dropEffect": "move",
+      "effectAllowed": "move"
+     },
+     "lastTypes": [
+      "application/x-harbor-card"
+     ]
+    }
+   }
+  },
+  "iframes": {},
+  "domMoves": {},
+  "domLog": []
+ },
+ "content": {},
+ "activeTestid": null,
+ "console": [],
+ "pageErrors": [],
+ "documentRequests": {
+  "http://127.0.0.1:4302": 1
+ }
+}

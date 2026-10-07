@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`R09`
+`R10`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -63,7 +63,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R03 (필수 묶음) | d839779 | 2026-10-07T02:09Z | 2 | fail(FC-QA-001, FC-QA-002) — orders·billing·telemetry·telemetry-x 모두 예측 횟수대로 리마운트/재로드, 사다리(twin·control-mount·control-iframe)도 같은 횟수 |
 | [x] | R05 (필수 묶음) | 359b34c | 2026-10-07T02:11Z | 2 | fail(FC-QA-001) — 루트 감싸기로 세 remote 모두 hover +1·Esc +2, 사다리 control·bare 같은 횟수 |
 | [x] | R07 (필수 묶음) | b9cd67c | 2026-10-07T02:14Z | 2 | fail(FC-QA-001, FC-QA-002) — 다섯 취소 경로 모두 깨끗(I1~I7, 트리 불변), output 리마운트·editor 재삽입 |
-| [ ] | R09 (필수 묶음) | | | | |
+| [x] | R09 (필수 묶음) | (R09 커밋) | 2026-10-07T02:20Z | 3 | fail(FC-QA-003, FC-QA-004) — 카드 드래그가 p-a 패널 드래그로 등록, drop 버블 차단. 단독 페이지 깨끗. 픽스처 수정 1건(board lastDragend) |
 | [ ] | R10 (필수 묶음) | | | | |
 | [ ] | R12 (필수 묶음) | | | | |
 | [ ] | R14 (필수 묶음) | | | | |
@@ -149,6 +149,6 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 
 ## 발견 ID
 
-- 다음 발견 ID: `FC-QA-003`
+- 다음 발견 ID: `FC-QA-005`
 
 `FC-QA-001`은 사전 등록돼 있다(`doc/qa/findings/`, 상태 `predicted`). ID는 전역이고 재사용하지 않는다. 세션 1은 ID를 발급하지 않는다. 세션 2가 발급할 때마다 이 줄과 [../README.md](../README.md)의 ID 대장을 함께 올린다. 둘이 다르면 README가 기준이다.

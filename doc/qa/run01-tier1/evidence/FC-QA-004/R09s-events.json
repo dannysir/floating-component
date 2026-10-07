@@ -1,0 +1,882 @@
+[
+ {
+  "seq": 1,
+  "eid": 1,
+  "t": 411,
+  "wall": 1791339530151,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 220,
+  "y": 79,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 2,
+  "eid": 1,
+  "t": 411.39999999990687,
+  "wall": 1791339530152,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 220,
+  "y": 79,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 3,
+  "eid": 2,
+  "t": 411.39999999990687,
+  "wall": 1791339530152,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 220,
+  "y": 79
+ },
+ {
+  "seq": 4,
+  "eid": 2,
+  "t": 411.69999999995343,
+  "wall": 1791339530152,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 220,
+  "y": 79
+ },
+ {
+  "seq": 5,
+  "eid": 3,
+  "t": 417,
+  "wall": 1791339530157,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 220,
+  "y": 79,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 6,
+  "eid": 3,
+  "t": 417.19999999995343,
+  "wall": 1791339530157,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 220,
+  "y": 79,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 7,
+  "eid": 4,
+  "t": 417.19999999995343,
+  "wall": 1791339530157,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "mousedown",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 220,
+  "y": 79
+ },
+ {
+  "seq": 8,
+  "eid": 4,
+  "t": 417.30000000004657,
+  "wall": 1791339530157,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "mousedown",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 220,
+  "y": 79
+ },
+ {
+  "seq": 9,
+  "eid": 5,
+  "t": 425,
+  "wall": 1791339530165,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 223,
+  "y": 79,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 10,
+  "eid": 5,
+  "t": 425.0999999998603,
+  "wall": 1791339530165,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 223,
+  "y": 79,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 11,
+  "eid": 6,
+  "t": 425.19999999995343,
+  "wall": 1791339530165,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 223,
+  "y": 79
+ },
+ {
+  "seq": 12,
+  "eid": 6,
+  "t": 425.39999999990687,
+  "wall": 1791339530166,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 223,
+  "y": 79
+ },
+ {
+  "seq": 13,
+  "eid": 7,
+  "t": 433.5999999998603,
+  "wall": 1791339530174,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 226,
+  "y": 79,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 14,
+  "eid": 7,
+  "t": 433.80000000004657,
+  "wall": 1791339530174,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 226,
+  "y": 79,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 15,
+  "eid": 8,
+  "t": 433.89999999990687,
+  "wall": 1791339530174,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 226,
+  "y": 79
+ },
+ {
+  "seq": 16,
+  "eid": 8,
+  "t": 434,
+  "wall": 1791339530174,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 226,
+  "y": 79
+ },
+ {
+  "seq": 17,
+  "eid": 9,
+  "t": 434.19999999995343,
+  "wall": 1791339530174,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragstart",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 220,
+  "y": 79,
+  "dropEffect": "none",
+  "effectAllowed": "uninitialized",
+  "types": []
+ },
+ {
+  "seq": 18,
+  "eid": 9,
+  "t": 434.5999999998603,
+  "wall": 1791339530175,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragstart",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 220,
+  "y": 79,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 19,
+  "eid": 10,
+  "t": 435.0999999998603,
+  "wall": 1791339530175,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 20,
+  "eid": 10,
+  "t": 435.19999999995343,
+  "wall": 1791339530175,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 21,
+  "eid": 11,
+  "t": 437.89999999990687,
+  "wall": 1791339530178,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 226,
+  "y": 79,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 22,
+  "eid": 11,
+  "t": 438,
+  "wall": 1791339530178,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 226,
+  "y": 79,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 23,
+  "eid": 12,
+  "t": 816,
+  "wall": 1791339530556,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-col-1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 433,
+  "y": 82,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 24,
+  "eid": 12,
+  "t": 816.0999999998603,
+  "wall": 1791339530556,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-col-1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 433,
+  "y": 82,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 25,
+  "eid": 13,
+  "t": 816.0999999998603,
+  "wall": 1791339530556,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragleave",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 433,
+  "y": 82,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 26,
+  "eid": 13,
+  "t": 816.0999999998603,
+  "wall": 1791339530556,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragleave",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 433,
+  "y": 82,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 27,
+  "eid": 14,
+  "t": 816.8999999999069,
+  "wall": 1791339530557,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c3",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 640,
+  "y": 85,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 28,
+  "eid": 14,
+  "t": 817,
+  "wall": 1791339530557,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c3",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 640,
+  "y": 85,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 29,
+  "eid": 15,
+  "t": 817,
+  "wall": 1791339530557,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragleave",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-col-1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 640,
+  "y": 85,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 30,
+  "eid": 15,
+  "t": 817,
+  "wall": 1791339530557,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragleave",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-col-1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 640,
+  "y": 85,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 31,
+  "eid": 16,
+  "t": 820.5999999998603,
+  "wall": 1791339530561,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c3",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 640,
+  "y": 85,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 32,
+  "eid": 16,
+  "t": 820.8999999999069,
+  "wall": 1791339530561,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c3",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 640,
+  "y": 85,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 33,
+  "eid": 17,
+  "t": 1031.6999999999534,
+  "wall": 1791339530772,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c3",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 640,
+  "y": 85,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 34,
+  "eid": 17,
+  "t": 1031.8999999999069,
+  "wall": 1791339530772,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c3",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 640,
+  "y": 85,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 35,
+  "eid": 18,
+  "t": 1032.3000000000466,
+  "wall": 1791339530773,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "drop",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c3",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 640,
+  "y": 85,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 36,
+  "eid": 18,
+  "t": 1036.0999999998603,
+  "wall": 1791339530776,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "drop",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c3",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 640,
+  "y": 85,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ },
+ {
+  "seq": 37,
+  "eid": 19,
+  "t": 1037.1999999999534,
+  "wall": 1791339530777,
+  "frame": "http://127.0.0.1:4302/",
+  "top": true,
+  "type": "dragend",
+  "phase": "target",
+  "target": {
+   "tag": "DIV",
+   "testid": "board-card-c1",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": false,
+  "defaultPrevented": false,
+  "x": 640,
+  "y": 85,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-card"
+  ]
+ }
+]

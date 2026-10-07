@@ -79,9 +79,9 @@
 | R07 (사다리) | locks / output=control-iframe | iframe 본문 위에서 놓기 | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (telemetry와 같음) | obs/R07-ladder-control-iframe-run{1,2}.json |
 | R07 | locks / terminal=control | workspace 여백에서 놓기 | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (루트 `dragleave`로 미리보기가 먼저 지워짐, drop 없음) | obs/R07-padding-run{1,2}.json |
 | R07 | locks / terminal=telemetry | 소스 리마운트 후 Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (소스 iframe `loads` +2는 D3b) | obs/R07-iframe-source-run{1,2}.json |
-| R09 | row3 / a=board | 카드를 board 안에서 열 이동 | mouse | not-run | | |
-| R09 | row3 / a=board-local | 같은 동작 | mouse | not-run | | |
-| R09 | board 단독 페이지 (`http://127.0.0.1:4302/`) | 같은 동작 | mouse | not-run | | |
+| R09 | row3 / a=board | 카드를 board 안에서 열 이동 | mouse | fail(FC-QA-003, FC-QA-004) | as-predicted (루트 `data-dragging-panel-id="p-a"`, `types`에 `text/panel-id`, `cardMoves` +1, drop bubble 없음, 트리 불변, I1~I7 통과) | obs/R09-board-run{1,2}.json |
+| R09 | row3 / a=board-local | 같은 동작 | mouse | fail(FC-QA-003, FC-QA-004) | as-predicted (board와 같음: 라이브러리 코어 동작) | obs/R09-board-local-run{1,2}.json |
+| R09 | board 단독 페이지 (`http://127.0.0.1:4302/`) | 같은 동작 | mouse | pass | as-ideal (= 예측: `data-dragging-panel-id` 없음, `lastTypes` 카드 타입만, `lastDragend.dropEffect 'move'`, drop capture+bubble) | obs/R09-standalone-run{1,2}.json |
 | R10 | row3 / a=board, b=control-b | 카드를 옆 패널로: hover, drop | mouse | not-run | | |
 | R10 | row3 / a=board, b=control-b | `<img>`를 옆 패널로: hover, drop | mouse | not-run | | |
 | R10 | row3 / a=board-local, b=control-b | 카드, `<img>` | mouse | not-run | | |
@@ -149,6 +149,8 @@
 |---|---|---|---|---|---|---|---|
 | [FC-QA-001](../findings/FC-QA-001-preview-remount-non-dragged-panels.md) | 드래그 미리보기가 드래그하지 않은 패널을 리마운트한다 | sev-2 | library-bug | open | 2/2 | R01 | split-index-key |
 | [FC-QA-002](../findings/FC-QA-002-preview-reinserts-non-dragged-panels.md) | 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM 재삽입해 스크롤을 잃게 한다 | sev-3 | library-bug | open | 2/2 | R01 | keyed-reorder-reinsert |
+| [FC-QA-003](../findings/FC-QA-003-content-native-drag-becomes-panel-drag.md) | 패널 내용(remote 칸반 카드)의 네이티브 드래그가 패널 드래그로 처리된다 | sev-2 | library-bug | open | 2/2 | R09 | foreign-dragstart-unguarded |
+| [FC-QA-004](../findings/FC-QA-004-layout-hijacks-non-panel-drag.md) | 패널이 패널 드래그가 아닌 드래그의 drop 전파를 막고 dropEffect를 덮어쓴다 | sev-2 | spec-question | needs-user-confirmation | 2/2 | R09 | foreign-drag-handlers-unguarded |
 
 `predicted`였던 발견의 결과: FC-QA-001 — 관찰됨(R01에서 `open`으로 변경)
 
@@ -200,7 +202,7 @@
 
 | ID | 물어볼 것 | 선택지 | 권고 |
 |---|---|---|---|
-| | | | |
+| FC-QA-004 | 레이아웃은 패널 드래그가 아닌 네이티브 드래그(remote 내부 DnD)에 투명해야 하는가? 지금은 패널이 그 drop의 전파를 막고(window 버블 리스너 미실행) `dropEffect`를 `move`로 덮어쓴다(R11에서 copy 드롭 영향 확인 예정) | (a) 투명해야 한다 → `library-bug`로 재분류, FC-QA-003과 함께 수정 (b) 현재 동작을 사양으로 두고 통합 가이드에 "remote는 window drop에 의존하지 말 것"을 적는다 | (a). 단독 페이지와 동작이 달라 remote 팀이 원인을 찾기 어렵다 |
 
 ### 라이브러리 수정 대상이 아닌 발견
 
@@ -279,6 +281,7 @@
 | `seedContent`가 없는 요소(bare의 counter·scroll)를 기다리다 시간 초과 → 있을 때만 조작 (R01 사다리) | R01 `test:` 커밋 | smoke 19 passed, S1·S3·S6 통과, S5 요구대로 실패. R01 재실행 결과 동일 |
 | `diff`가 `focused`를 내용 상태로 비교해 포커스만 잃은 소스를 `content-reset`으로 분류 → `focused` 제외(마우스 시나리오는 포커스를 판정하지 않는다) | R01 `test:` 커밋 | 같은 재실행. 영향받은 행은 분류 라벨뿐(카운터 무관) |
 | `promote`가 대상 디렉터리를 통째로 비워 여러 시나리오의 증거를 한 발견에 모을 수 없음 → 선택적 `prefix`(예: `R05-`)로 그 접두어 파일만 갱신 | R05 `test:` 커밋 | smoke 19 passed, S1·S3·S6 통과, S5 요구대로 실패 |
+| (픽스처) mfe-board: 드롭이 성공하면 카드가 다른 열로 옮겨져 원본 노드가 분리되고, 분리된 노드의 `dragend`가 React 루트에 오지 않아 `dnd.lastDragend`가 `null`로 남음(단독 페이지 포함 모든 R09 케이스, 첫 실행에서 standalone이 `deviates`) → `dragstart` 때 원본 카드 노드에 네이티브 `dragend` 리스너를 걸고 분리된 경우에만 기록. 라이브러리 동작은 우회하지 않는다 | R09 `test: [R09] fix` 커밋 | `build --only mfe-board,shell` 뒤 ctl smoke OK, smoke 19 passed, S1·S3·S6 통과, S5 요구대로 실패. board 슬롯을 쓰는 닫힌 행 없음. R09 재실행: `lastDragend {move, move}` 외 값 동일, 첫 실행 관찰 기록은 재측정으로 덮었다 |
 
 ### 브리프 변경
 
