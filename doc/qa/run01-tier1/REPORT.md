@@ -119,8 +119,8 @@
 | R04 | census / a=billing | hover + Esc | mouse | fail(FC-QA-002, FC-QA-001) | as-predicted (같다. `mountCalls`·`unmountCalls` +0, `rootsAlive` 1, scrollTop 초기화) | obs/R04-billing-run{1,2}.json |
 | R04 | census / a=telemetry | hover + Esc | mouse | fail(FC-QA-002, FC-QA-001) | as-predicted (`iframeShield=1`로 측정: 브리프 지점이 iframe 본문이라 shield 없이는 미리보기가 없다 = FC-QA-005. frame +0인데 `loads` +1·`docId` 변경·문서 요청 +1, 프레임 안 상태 소실, Esc 추가 없음) | obs/R04-telemetry-run{1,2}.json |
 | R04 (사다리) | census / a=control-iframe (`iframeShield=1`) | hover + Esc | mouse | fail(FC-QA-002) | as-predicted (telemetry와 같음 → 컨테이너 고유) | obs/R04-ladder-control-iframe-run{1,2}.json |
-| R06 | row3 / b=telemetry | (a) p-c → p-a 왼쪽: hover + Esc, hover + drop | mouse | not-run | | |
-| R06 | row3 / b=telemetry | (b) 새 페이지, p-a → p-c 오른쪽: hover + Esc, hover + drop | mouse | not-run | | |
+| R06 | row3 / b=telemetry | (a) p-c → p-a 왼쪽: hover + Esc, hover + drop | mouse | fail(FC-QA-002) | as-predicted (리마운트 0. hover에서 p-a·p-b moves +1, telemetry `loads` +1(hover 때 재로드), Esc는 소스만 moves +1, 드롭 추가 없음, 커밋 `H[p-c,p-a,p-b]`) | obs/R06-a-run{1,2}.json |
+| R06 | row3 / b=telemetry | (b) 새 페이지, p-a → p-c 오른쪽: hover + Esc, hover + drop | mouse | fail(FC-QA-002) | as-predicted (hover는 소스만 moves +1, Esc에서 p-b·p-c moves +1·telemetry `loads` +1(취소 때 재로드), 드롭 추가 없음, 커밋 `H[p-b,p-c,p-a]`) | obs/R06-b-run{1,2}.json |
 | R08 | census / bare | (a) stale preview 강제 (다른 패널 위에서 immediate 릴리스) | mouse | not-run | | |
 | R08 | census / bare | (b) stale 상태에서 ext-chip을 패널에 놓기 | mouse | not-run | | |
 | R08 | census / bare | (c) 새 페이지, stale 상태에서 경계선 리사이즈 | mouse | not-run | | |

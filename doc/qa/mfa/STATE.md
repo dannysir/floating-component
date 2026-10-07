@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`R06`
+`R08`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -72,7 +72,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R18 (필수 묶음) | a383303 | 2026-10-07T02:59Z | 4 | fail(FC-QA-009, FC-QA-001, FC-QA-005) — 마우스 22·터치 10회, 이상 4건 재현 스펙(x01 → stale preview FC-QA-009, x02 not-reproduced), 나머지는 설계·기존 발견 |
 | [x] | R19 (필수 묶음) | 1639e37 | 2026-10-07T03:04Z | 2 | fail(FC-QA-010) — 직렬화·미등록 키·복원 뒤 DnD·오버플로우 pass. 경계선 드래그 한계 px 불일치(row3 상한 약 2/3, 바깥으로 끌면 줄어듦) |
 | [x] | R04 (두 번째 묶음) | a9dc300 | 2026-10-07T03:08Z | 2 | fail(FC-QA-002, FC-QA-001) — remote(orders·billing) 재삽입 = 스크롤 초기화, iframe(telemetry·control-iframe) 재삽입 = 재로드(shield로 측정). FC-QA-002 sev-2로 |
-| [ ] | R06 (두 번째 묶음) | | | | |
+| [x] | R06 (두 번째 묶음) | (R06 커밋) | 2026-10-07T03:08Z | 1 | fail(FC-QA-002) — 리마운트 없이 재삽입만. iframe 재로드 시점이 이동 방향에 따라 hover(a) 또는 취소(b) |
 | [ ] | R08 (두 번째 묶음) | | | | |
 | [ ] | R11 (두 번째 묶음) | | | | |
 | [ ] | R13 (두 번째 묶음) | | | | |
