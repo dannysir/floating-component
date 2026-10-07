@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`B2-00 (사용자 GO 결정 대기)`
+`R01`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -57,7 +57,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | B1-06 `mfe-orders` (twin → federation) | 2235019 | 2026-10-07T01:28Z | 1 | 통과 (사다리 단: 기본 설정. (a) orders same-tree·reactSame true·mf on·manifest/remoteEntry 요청, (b) :4301 차단 시 census 정상·workbench는 error-orders만, (c) deploy-2 독립 배포·shell buildId 불변, (d) S1·S2·S3·S6 기준선 동일·S5 요구대로 실패) |
 | [x] | B1-07 `mfe-board` | 268e694 | 2026-10-07T01:30Z | 1 | 통과 (B1-06과 같은 기본 설정 단. board·orders reactSame true 동시, 단독 페이지, :4302/:4301 차단 시 해당 패널만 error, workbench 6슬롯 ready, Nav 토글 domTree 복원. size 차이는 SPIKE 8절) |
 | [x] | B1-08 인계 | 2504c5e | 2026-10-07T01:38Z | 2 | 통과 (깨끗한 상태 `ctl up` 39초, smoke 3회 연속 초록(1회차 시도는 B1-06 시점 단언 `skipped=['board']`가 낡아 실패 → 갱신), S1·S3·S6 통과·S5 요구대로 실패, 문서 갱신, diff 검사 빈 출력, 서버 종료. SPIKE 권고 GO, 막히는 run 01 행 없음) |
-| [ ] | B2-00 사전 점검 | | | | |
+| [x] | B2-00 사전 점검 | (B2-00 커밋) | 2026-10-07T01:58Z | 1 | pass (GO caveat 없음 → blocked 행 없음. smoke 19 passed·1 skipped, S1·S3·S6 통과, S5 요구대로 실패, S7a 통과, 트리 해시 일치) |
 | [ ] | R01 (필수 묶음) | | | | |
 | [ ] | R02 (필수 묶음) | | | | |
 | [ ] | R03 (필수 묶음) | | | | |
@@ -88,7 +88,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 
 | 항목 | 값 | 기록 단계 |
 |---|---|---|
-| 작업 브랜치 | `qa/mfa-lab` | B1-00 (세션이 바뀌면 덧붙인다) |
+| 작업 브랜치 | `qa/mfa-lab` (세션 1), `qa/mfa-lab` (세션 2, 같은 세션에서 이어감) | B1-00 (세션이 바뀌면 덧붙인다) |
 | Node 버전 | v22.22.0 (npm 10.9.4) | B1-00 |
 | shallow clone 여부 (yes/no) | yes | B1-00 |
 | 레인 (B/A/C) | B | B1-01 |
@@ -143,7 +143,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 
 ## 사용자 GO 결정
 
-- (없음)
+- SPIKE.md를 읽었고 GO(caveat: 없음. 참고: cross-origin iframe 위 CDP 마우스 드래그 이벤트 미전달, OOPIF는 --site-per-process 기준)로 결정했다.
 
 세션 1은 [../run00-spike/SPIKE.md](../run00-spike/SPIKE.md)에 권고만 쓴다. 결정은 사용자가 하고 세션 2 프롬프트에 `SPIKE.md를 읽었고 GO(caveat: ...)로 결정했다` 한 줄로 넣는다. 세션 2의 B2-00이 그 줄을 확인해 여기에 그대로 옮겨 적는다. 그 줄이 없으면 세션 2는 진행하지 않는다.
 
