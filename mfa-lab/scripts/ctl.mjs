@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // mfa-lab/scripts/ctl.mjs — 의존성 없는 랩 CLI. 명령 분기만 한다. 명세: doc/qa/mfa/ARCHITECTURE.md 「실행 모델」
 import { doctor } from './lib/doctor.mjs';
+import { serve, status, stop } from './lib/serve.mjs';
+import { install, build, smoke, up, test } from './lib/commands.mjs';
 
 // 값을 갖는 플래그만 여기 적는다. 나머지(--baseline, --foreground, --json, --fresh, --force)는 boolean이다.
 const VALUE_FLAGS = new Set(['only', 'lib', 'mf', 'stamp', 'project', 'write']);
@@ -14,7 +16,7 @@ const parseArgs = (argv) => argv.reduce((acc, arg) => {
 const [cmd, ...rest] = process.argv.slice(2);
 const { flags, positional } = parseArgs(rest);
 
-const commands = { doctor };
+const commands = { doctor, install, build, serve, status, stop, smoke, up, test };
 const run = commands[cmd];
 if (!run) {
   console.error(`usage: node mfa-lab/scripts/ctl.mjs <${Object.keys(commands).join('|')}> [...]`);

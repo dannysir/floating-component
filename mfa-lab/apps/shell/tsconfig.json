@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", "module": "ESNext", "moduleResolution": "Bundler",
+    "jsx": "react-jsx", "strict": true, "noEmit": true, "skipLibCheck": true,
+    "resolveJsonModule": true, "verbatimModuleSyntax": true,
+    "paths": {
+      "@dannysir/floating-components": ["../../../src/index.ts"],
+      "@harbor/contract": ["../../contract/src/index.ts"],
+      "@twin/orders": ["../mfe-orders/src/Panel.tsx"],
+      "@twin/board": ["../mfe-board/src/Panel.tsx"],
+      "@twin/billing": ["../mfe-billing/src/App.tsx"]
+    }
+  },
+  "include": ["src", "vite.config.ts"]
+}

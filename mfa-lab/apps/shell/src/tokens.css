@@ -1,0 +1,15 @@
+/* 기본 토큰은 :root, 테마 토큰(--hb-bg, --hb-fg, --hb-accent, --hb-border)은 워크스페이스 wrapper [data-theme]에 둔다.
+   의도적이다: 터치 ghost는 document.body에 붙어 테마 토큰을 잃는다(H-GHOST-CLONE). */
+:root {
+  --hb-font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --hb-topbar-bg: #f6f8fa;
+  --hb-border-base: #d0d7de;
+}
+html, body { margin: 0; height: 100%; font-family: var(--hb-font); }
+#root { height: 100%; }
+[data-theme='harbor'] {
+  --hb-bg: #ffffff;
+  --hb-fg: #1f2328;
+  --hb-accent: #0969da;
+  --hb-border: #d0d7de;
+}

@@ -1,0 +1,8 @@
+{
+  "name": "@harbor/contract",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Harbor Workbench integration contract v1 (types, probe, bus, style). No dependencies, no React.",
+  "exports": { ".": "./src/index.ts" }
+}
