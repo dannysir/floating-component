@@ -12,11 +12,11 @@ Tree-based resizable and reorderable panel layout for React. Split panels horizo
 
 ---
 
-## What's New (0.5.0)
+## What's New (0.6.0)
 
-- Border resize migrated to Pointer Events — a single path for mouse, touch, and pen
-- Touch panel drag — start from a handle or long-press (450ms), with a floating ghost tracking the finger
-- Resizers always shown on touch devices (`@media (hover: none)`)
+- Panel lock options `draggable`/`droppable`/`resizable` — block dragging, dropping, and border resizing per panel (e.g. a fixed sidebar). Over a non-droppable panel a "can't drop" indicator is shown and releasing cancels the move
+- `movePanel`/`resizeBorder` honor locks — violating calls are ignored with a dev-mode warning
+- Fixed: drag end events lost when the preview remounted the source panel, and a border resize that lost pointer capture leaving `user-select: none` behind
 
 See the full history in the [changelog](./CHANGELOG.md).
 

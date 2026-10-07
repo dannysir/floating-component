@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.6.0] - 2026-10-07
 
 ### Added
 
@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - `splitPanel` ignored `minWidth`/`minHeight`/`maxWidth`/`maxHeight` in its `newPanel` option — they are now applied to the new panel along with the lock options
 - When the drag preview moved the source panel into another split and remounted it, a touch drag froze and blocked later touch drags, and a mouse drag that ended without a drop (Esc, non-droppable target) left the preview behind — end-of-drag listeners are now attached directly to the node that started the drag
+- When a border resize ended without (or after losing) pointer capture — e.g. dragging toward a cross-origin iframe — `body` kept `user-select: none`, blocking text selection on the page, and that border could not be grabbed again — `user-select` is now changed only while pointer capture is active, and the resize session is cleaned up on capture loss, button release, window blur, unmount, or the next `pointerdown`
 
 ---
 

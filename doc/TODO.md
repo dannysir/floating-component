@@ -11,7 +11,7 @@
 
 ## 진행 중
 
-### PanelNode lock options (브랜치 `feat/panel-lock`)
+### PanelNode lock options (브랜치 `feat/panel-lock`, 릴리스 준비 `release/0.6.0`)
 
 > 구현 완료 `8872ff7`, 문서 반영 완료. 검증 중 발견한 [소스 DOM 교체 이벤트 유실 문제](#해결-드래그-중-소스-dom-교체로-종료-이벤트-유실)도 수정 완료.
 > 남은 것은 실제 입력(마우스 커서·실기기 터치) 확인과 릴리스.
@@ -43,7 +43,10 @@
 - [ ] 실제 마우스로 `not-allowed` 커서 표시 확인
   - 합성 `DataTransfer`는 `dropEffect` 쓰기가 무시돼 스크립트로는 검증 불가
 - [ ] 실기기(또는 DevTools 모바일 에뮬레이션 실입력)로 터치 경로 확인
-- [ ] PR → 머지 → 버전 bump(0.6.0) 시 CHANGELOG `[Unreleased]` 확정, README "최근 변경" 갱신
+  - 참고: `qa/mfa-lab`의 CDP 입력 스펙(마우스 S2·S4, 터치 S7a(2))에서 잠긴 패널 위 놓기 취소는 통과. 커서 표시와 실기기는 미확인
+- [x] 경계선 리사이즈가 포인터 캡처를 잃으면 `user-select: none`이 남고 Resizer가 다시 잡히지 않던 문제 수정 (QA 발견 FC-QA-008, `qa/mfa-lab` 브랜치에서 검수·수정 후 cherry-pick)
+- [x] CHANGELOG `[0.6.0]` 확정, README "최근 변경" 갱신 (`release/0.6.0`)
+- [ ] PR → main 머지 → `npm version` 0.6.0 → GitHub Release 발행(배포)
 
 #### 검증 기록 (2026-10-01, 임시 플레이그라운드 + 합성 이벤트)
 
