@@ -22,6 +22,7 @@
 | 네트워크 (curl http_code) | registry.npmjs.org 200, cdn.playwright.dev 400, playwright.download.prss.microsoft.com 404, storage.googleapis.com 400, `npm ping` ok |
 | `/opt/pw-browsers` | `chromium`, `chromium-1194`, `chromium_headless_shell-1194`, `ffmpeg-1011` (env `PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers`, `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`) |
 | 포트 4300~4304, 4390 | 모두 비어 있음 |
+| 터치 / telemetry-x / MF | ok / `localhost`, OOPIF yes(`--site-per-process`) / on (B1-03e, B1-05, B1-06) |
 
 ## 2. 레인
 
@@ -52,6 +53,8 @@
 | S8 | 기록 (게이트 충족) | 1 | 2b7fd5c | 5절 표. `overShadow` 0/10 |
 | S9 | 기록 | 2 | c6c78c7 | 6절 참고. 1회차: 렌더러 1개, iframe 타깃 없음(OOPIF no) → 사다리 telemetry-x 3: `--site-per-process` 추가 후 telemetry-x가 별도 CDP 타깃·렌더러(OOPIF yes) |
 | S10 | 통과 (선택) | 2 | 2b7fd5c | 프로젝트 `mouse-full`(`channel: 'chromium'`, 풀 바이너리 `chromium-1243`, 새 headless). 1회차: 풀 바이너리는 `/favicon.ico`를 요청해 404 콘솔 에러로 I6 실패(headless shell은 요청하지 않음) → shell `index.html`에 `<link rel="icon" href="data:,">` 추가(픽스처 수정). 2회차 S1·S2·S3 통과, 축소 이벤트 로그가 headless shell 기준선과 **완전히 같다**(파일 diff 없음) |
+
+B1-08 인계 재실행(깨끗한 상태에서 `ctl up` 복원 뒤, 커밋 `84adee8`): `ctl test smoke` 연속 3회 초록(19 passed, 1 skipped), S1·S3·S6 통과, S5 요구대로 실패(I1·I2), 기준선 파일 변화 없음.
 
 ## 4. 이벤트 로그 기준선
 
@@ -113,8 +116,49 @@
 
 ## 9. HANDOFF
 
-(B1-08에서 작성)
+| 항목 | 값 |
+|---|---|
+| 작업 브랜치 | `qa/mfa-lab` (시작 커밋 `e8e2d8f`, 세션 1 마지막 코드 커밋 `40ac74c`) |
+| 실행 모드 | prod만 (`vite build` + `vite preview`). dev-host·packed-tarball 패스는 하지 않았다 |
+| 버전 핀 | React·react-dom 19.2.4, Vite 7.3.6, `@vitejs/plugin-react` 5.1.2, `@module-federation/vite` 1.23.0, `@playwright/test` 1.63.0, `fc-051` = `npm:@dannysir/floating-components@0.5.1`. `^`·`~` 없음(`ctl smoke` 핀 검사 통과) |
+| 레인 | B: Playwright 1.63.0 + Chromium 153.0.8010.12 headless shell. 실행 인자 `--no-proxy-server --site-per-process`. `native_touch_drag` 라벨 `on`(버전 규칙), 실제 S7b에서는 네이티브 드래그 미관찰 |
+| MF | `on`, 통과한 사다리 단 = **기본 설정**(매니페스트 URL 문자열 remotes, 짧은 키 React 네 키 공유, `React.lazy` 동적 import). 런타임 플러그인·정적 import·객체 remote·`--mf off` 모두 쓰지 않음 |
+| `shareStrategy` | `'loaded-first'` (shell·orders·board). remote 하나를 막아도 shell이 뜨고 해당 패널에만 에러 카드 |
+| 라이브러리 소스 | `src` (`<repo>/src/index.ts` alias + `resolve.dedupe`). 루트 `npm ci` 안 함, dist 대체 안 씀. 트리 해시 `c1da6c9dc03a4811eea42c220be309e5e73b0a4a` |
+| detached 서버 생존 | yes (새 Bash 호출의 `ctl status`에서 alive·ready) |
+| blocked 변형 | 없음 |
+| 컨테이너 유형 | same-tree(orders, board), mount(billing), iframe(telemetry, telemetry-x) 모두 smoke 통과 |
+| 알려진 하네스 부작용 (세션 1에서 새로 확인) | (1) 대상 요소가 바뀌는 드래그 이동 한 번은 `dragover`를 만들지 않는다(Blink) → `teleport`가 같은 점으로 재이동. (2) 첫 터치 이동 12px은 touch slop으로 페이지에 안 온다 → `handleDrag` 12px+24px. (3) **cross-origin iframe(`telemetry`, `telemetry-x`) 위 CDP 마우스 드래그 이벤트는 어느 문서에도 오지 않는다** → 그 행에 충실도 단서. (4) headless shell은 사이트 격리가 꺼져 있다 → `--site-per-process`. (5) 풀 바이너리는 `/favicon.ico`를 요청한다 → 픽스처 HTML에 빈 favicon. (6) `immediate`·`settled` 릴리스에서 커서 아래가 소스가 아닌 패널이면 stale preview가 생긴다(S8). 커밋 측정은 `overShadow` |
+| 기본 릴리스의 경합 | `overShadow` 0/10 (S8) → 세션 2의 커밋 측정에 오염 표시 불필요 |
+| 복원 명령 | `node mfa-lab/scripts/ctl.mjs up` (600000) → `node mfa-lab/scripts/ctl.mjs test smoke` (600000) |
+| 소요 시간 (깨끗한 상태, B1-08) | `up` 전체 39초 = install 17.7초(레인 B 브라우저 다운로드 포함) + build 17.2초 + serve 2.7초 + `ctl smoke` 0.05초. `ctl test smoke` 15~17초 |
+| 세션 2 사전 점검 기대값 | S1·S3·S6 통과, S5 요구대로 실패(I1·I2), S7a 통과. 기준선 파일 `evidence/baseline/s0{1..6}.events.json`과 축소 로그가 같아야 한다 |
+| 문서 갱신 | ARCHITECTURE·HARNESS·RECIPES에 「B1-08 구축 결과」 절과 `실행 확인: 40ac74c`, BRIEF-2 「Amendments」 6행, `mfa-lab/README.md` |
 
 ## 10. GO / NO-GO 권고
 
-(B1-08에서 작성)
+필수 조건
+
+| 조건 | 충족 | 근거 |
+|---|---|---|
+| S0, S1, S2, S3, S4, S6 통과 | 예 | 3절 (S1 2회차, S2~S4·S6 1회차, S0 1회차) |
+| S5가 요구대로 실패 | 예 | npm 0.5.1에서 I1·I2 모두 실패. B1-06·B1-08 재실행에서도 같음 |
+| 최소 인계: shell + 하네스 스파이크 + 컨테이너 유형 2종 이상 | 예 (3종) | same-tree·mount·iframe 모두 smoke 통과 |
+| diff 검사가 비어 있음 | 예 | `git diff --stat e8e2d8f..HEAD -- src package.json package-lock.json tsconfig.json vite.config.ts`와 `git status --short -- …` 모두 출력 없음 |
+
+조건부 GO 항목: **없음**. `MF: degraded` 아님, 터치 `ok`, `telemetry-x` 로드됨(OOPIF yes, `--site-per-process` 기준), remote 막힘 없음 → `blocked`가 되는 run 01 행은 **없다**.
+
+권고: **GO.**
+
+권고와 함께 알려 두는 점(조건부 GO 항목은 아니지만 세션 2의 판정에 영향):
+
+- cross-origin iframe(`telemetry`, `telemetry-x`) 위의 CDP 마우스 드래그는 어느 문서에도 이벤트를 전달하지 않았다(S9). R07의 iframe 경우, R12, R15의 iframe 위 마우스 관찰은 하네스 충실도 단서를 붙이고 `control-iframe`·터치 대조와 함께 읽어야 한다.
+- OOPIF는 실행 인자 `--site-per-process`로 만든 것이다(headless shell 기본값은 격리 없음).
+- S7b에서 네이티브 터치 드래그가 나타나지 않았으므로 P1의 H-TOUCH-NATIVE-RACE는 이 환경에서 관찰되지 않을 수 있다.
+- 8절의 관찰(미리보기의 넓은 리마운트, stale preview, Nav 토글 size 변화)은 세션 2가 시나리오로 판정한다.
+
+세션 2 프롬프트에 붙일 문장 예시:
+
+`SPIKE.md를 읽었고 GO(caveat: 없음)로 결정했다`
+
+참고 사항까지 남기려면: `SPIKE.md를 읽었고 GO(caveat: 없음. 참고: cross-origin iframe 위 CDP 마우스 드래그 이벤트 미전달, OOPIF는 --site-per-process 기준)로 결정했다`
