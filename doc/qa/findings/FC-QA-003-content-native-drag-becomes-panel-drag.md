@@ -51,6 +51,15 @@ fix_commit: none
 | R09-board-local ×2 | `"p-a"` | 같다 | 같다 | 불변, 0건 |
 | R09-standalone ×2 (대조) | 없음 | `[application/x-harbor-card]` / `move` | 같다 | (레이아웃 없음) |
 
+**R10 (옆 패널로, `?layout=row3&a=board&b=control-b`)**: 카드·`<img>`를 `dropPoint(p-b, right, 0)`로 가져간 뒤 `board` 핸들 위(underCursor `p-a`)에서 놓음. 4개 케이스 × 2회 전부 같은 값:
+
+| 케이스 | hover `domTree` | `p-a` shadow | `onMovePanel` | 커밋된 트리 | `cardMoves` | `dragend` `dropEffect` |
+|---|---|---|---|---|---|---|
+| R10-card / R10-board-local-card | `H[p-b,p-a,p-c]` | true | 1건 `('p-a','p-b','right',0)` | `H[p-b,p-a,p-c]` | +0 | `move` |
+| R10-img / R10-board-local-img (`types`: `text/uri-list,text/html,text/panel-id,Files`) | 같다 | true | 같다 | 같다 | +0 | `move` |
+| R10 대조 `&lock=p-a:draggable` (카드) | `H[p-a,p-b,p-c]`(미리보기 없음) | false | 0건 | 불변 | +0 | `move`(FC-QA-004 참고) |
+
+- 카드나 이미지를 옆 패널 쪽으로 끌면 **board 패널 전체**가 미리보기로 움직이고, 놓으면 실제 레이아웃 이동이 커밋된다. 패널을 잠그면(`draggable` 잠금) 일어나지 않는다 → 74행 가드만 동작한다는 추정과 일치.
 - 카드 드래그가 시작되는 순간 라이브러리가 그것을 `p-a` 패널 드래그로 등록한다: 루트에 `data-dragging-panel-id="p-a"`가 붙고 데이터에 `text/panel-id`가 추가된다. 같은 패널 안에서 끝나면(R09) 소스 = 대상이라 미리보기·이동이 없어 겉으로는 드러나지 않는다. 옆 패널 위로 가면 미리보기와 패널 이동이 된다(R10에서 확인한다).
 - 드래그가 끝난 뒤 `data-dragging-panel-id`는 지워지고 I1~I7 통과(카드 노드에 건 `dragend` 리스너가 `finishDrag`, 카드가 다른 열로 옮겨져 분리된 노드에서도 동작).
 - MF on, remote(board)와 twin(board-local) 결과가 같다 → 라이브러리 코어 동작.
@@ -68,6 +77,9 @@ fix_commit: none
 | 03-after.png / tree-after.json | 카드 c1이 packing 열로 이동, 레이아웃 트리 불변 |
 | events.json | 카드 `dragstart`(버블 `types`에 `text/panel-id`), `drop`(capture만), 분리된 카드의 `dragend` |
 | console.txt | 비어 있음 |
+| R10-02-mid.png | R10-card hover: board 패널이 가운데로 옮겨진 미리보기(점선 shadow). control-b·control-c는 상태 유지 (직접 열어 확인) |
+| R10-03-after.png / R10-tree-after.json | 커밋 뒤 `H[p-b,p-a,p-c]`: 카드 드래그 한 번으로 레이아웃이 바뀌었다 |
+| R10-events.json | 카드 `dragstart`→ `p-b` 위 `dragover` → `p-a` `drop` → `dragend dropEffect move` |
 
 ## 추정 원인
 
@@ -82,7 +94,7 @@ fix_commit: none
 |---|---|---|
 | 1 재현 | 깨끗한 컨텍스트 2회 | 2/2 |
 | 2 대조 교체 | `a=board-local`(빌드 타임 twin) | 재현. remote 로딩 경로와 무관 |
-| 3 입력·릴리스 교체 | (R10에서 img·옆 패널 드롭을 덧붙인다) | — |
+| 3 입력·릴리스 교체 | R10: `<img>`(브라우저 기본 드래그), 옆 패널 hover 후 소스 핸들 위 릴리스, `lock=p-a:draggable` 대조 | 카드·img 모두 재현, 잠금 대조에서는 사라짐 |
 | 4 하네스 점검 | `page.mouse` 직접 사용(헬퍼 없음), 프로브는 수동 리스너 | 단독 페이지에서는 같은 입력으로 `text/panel-id`가 없다 |
 | 5 픽스처 점검 | 카드 핸들러는 `stopPropagation`을 부르지 않는다(흔한 구현) | 픽스처는 표준 HTML5 DnD만 쓴다 |
 | 6 프로브 끄고 재실행 | 해당 없음 | `data-dragging-panel-id`는 라이브러리가 쓰는 속성이다 |
@@ -90,5 +102,6 @@ fix_commit: none
 
 ## 관련
 
+- 시나리오: R10, 관찰 기록: doc/qa/run01-tier1/obs/R10-card-run1.json, R10-img-run1.json, R10-board-local-card-run1.json, R10-board-local-img-run1.json, R10-ladder-lock-card-run1.json (run2도 같다)
 - 시나리오: R09, 관찰 기록: doc/qa/run01-tier1/obs/R09-board-run1.json, R09-board-local-run1.json, R09-standalone-run1.json (run2도 같다)
 - 관련 발견: FC-QA-004(같은 드래그에서 drop 전파가 막힘, H-DROP-HIJACK), 가설: H-FOREIGN-DRAG

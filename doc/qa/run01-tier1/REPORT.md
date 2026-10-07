@@ -82,9 +82,10 @@
 | R09 | row3 / a=board | 카드를 board 안에서 열 이동 | mouse | fail(FC-QA-003, FC-QA-004) | as-predicted (루트 `data-dragging-panel-id="p-a"`, `types`에 `text/panel-id`, `cardMoves` +1, drop bubble 없음, 트리 불변, I1~I7 통과) | obs/R09-board-run{1,2}.json |
 | R09 | row3 / a=board-local | 같은 동작 | mouse | fail(FC-QA-003, FC-QA-004) | as-predicted (board와 같음: 라이브러리 코어 동작) | obs/R09-board-local-run{1,2}.json |
 | R09 | board 단독 페이지 (`http://127.0.0.1:4302/`) | 같은 동작 | mouse | pass | as-ideal (= 예측: `data-dragging-panel-id` 없음, `lastTypes` 카드 타입만, `lastDragend.dropEffect 'move'`, drop capture+bubble) | obs/R09-standalone-run{1,2}.json |
-| R10 | row3 / a=board, b=control-b | 카드를 옆 패널로: hover, drop | mouse | not-run | | |
-| R10 | row3 / a=board, b=control-b | `<img>`를 옆 패널로: hover, drop | mouse | not-run | | |
-| R10 | row3 / a=board-local, b=control-b | 카드, `<img>` | mouse | not-run | | |
+| R10 | row3 / a=board, b=control-b | 카드를 옆 패널로: hover, drop | mouse | fail(FC-QA-003) | as-predicted (hover `H[p-b,p-a,p-c]` + `p-a` shadow, `onMovePanel('p-a','p-b','right',0)` 1건, board 패널 전체 이동, `cardMoves` +0) | obs/R10-card-run{1,2}.json |
+| R10 | row3 / a=board, b=control-b | `<img>`를 옆 패널로: hover, drop | mouse | fail(FC-QA-003) | as-predicted (카드와 같음) | obs/R10-img-run{1,2}.json |
+| R10 | row3 / a=board-local, b=control-b | 카드, `<img>` | mouse | fail(FC-QA-003) | as-predicted (board와 같음) | obs/R10-board-local-{card,img}-run{1,2}.json |
+| R10 (사다리) | row3 / a=board, `lock=p-a:draggable` | 카드를 옆 패널로 | mouse | fail(FC-QA-004) | as-ideal(= 대조 예측: 미리보기·이동 없음). 단 헤더 위 릴리스가 `dropEffect 'move'`로 받아들여짐 → FC-QA-004 변형 | obs/R10-ladder-lock-card-run{1,2}.json |
 | R12 | row3 / control-a, telemetry, telemetry-x (`iframeShield=0`) | telemetry 위 hover, 놓기 | mouse | not-run | | |
 | R12 | row3 / 같은 배치 (`iframeShield=0`) | telemetry-x 위 hover, 놓기 | mouse | not-run | | |
 | R12 | row3 / 같은 배치 (`iframeShield=1`) | telemetry, telemetry-x 위 hover, 놓기 | mouse | not-run | | |

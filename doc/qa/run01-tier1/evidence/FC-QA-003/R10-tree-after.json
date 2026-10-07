@@ -1,0 +1,256 @@
+{
+ "step": "03-after",
+ "url": "http://127.0.0.1:4300/?layout=row3&a=board&b=control-b",
+ "lib": {
+  "source": "src",
+  "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+  "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+ },
+ "settle": {
+  "stable": true,
+  "reads": 2,
+  "ms": 79
+ },
+ "tree": {
+  "type": "split",
+  "direction": "horizontal",
+  "size": 1,
+  "children": [
+   {
+    "type": "panel",
+    "id": "p-b",
+    "size": 1,
+    "componentKey": "control-b"
+   },
+   {
+    "type": "panel",
+    "id": "p-a",
+    "size": 1,
+    "componentKey": "board"
+   },
+   {
+    "type": "panel",
+    "id": "p-c",
+    "size": 1,
+    "componentKey": "control-c"
+   }
+  ]
+ },
+ "treeNotation": "H[p-b,p-a,p-c]",
+ "treeVersion": 1,
+ "calls": [
+  {
+   "seq": 1,
+   "fn": "onMovePanel",
+   "args": [
+    "p-a",
+    "p-b",
+    "right",
+    0
+   ],
+   "treeVersionBefore": 0
+  }
+ ],
+ "dom": {
+  "domTree": "H[p-b,p-a,p-c]",
+  "draggingPanelId": null,
+  "panels": {
+   "p-b": {
+    "slot": "control-b",
+    "rect": {
+     "x": 12,
+     "y": 52,
+     "width": 413.328125,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 2
+   },
+   "p-a": {
+    "slot": "board",
+    "rect": {
+     "x": 433.328125,
+     "y": 52,
+     "width": 413.34375,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 1
+   },
+   "p-c": {
+    "slot": "control-c",
+    "rect": {
+     "x": 854.671875,
+     "y": 52,
+     "width": 413.328125,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 3
+   }
+  },
+  "resizerCount": 2,
+  "resizers": [
+   {
+    "rect": {
+     "x": 425.328125,
+     "y": 52,
+     "width": 8,
+     "height": 736
+    },
+    "axis": "x"
+   },
+   {
+    "rect": {
+     "x": 846.671875,
+     "y": 52,
+     "width": 8,
+     "height": 736
+    },
+    "axis": "x"
+   }
+  ],
+  "ghosts": [],
+  "bodyUserSelect": ""
+ },
+ "counters": {
+  "frames": {
+   "board": {
+    "kind": "same-tree",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   },
+   "control-b": {
+    "kind": "local",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   },
+   "control-c": {
+    "kind": "local",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   }
+  },
+  "mfe": {
+   "control-b": {
+    "slot": "control-b",
+    "kind": "local",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "shell",
+    "build": "20261007T021653Z-2754"
+   },
+   "control-c": {
+    "slot": "control-c",
+    "kind": "local",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "shell",
+    "build": "20261007T021653Z-2754"
+   },
+   "board": {
+    "slot": "board",
+    "kind": "same-tree",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "board",
+    "build": "20261007T021650Z-4e0b",
+    "dnd": {
+     "cardMoves": 0,
+     "zoneDrops": 0,
+     "copyDrops": 0,
+     "lastDragend": {
+      "dropEffect": "move",
+      "effectAllowed": "move"
+     },
+     "lastTypes": []
+    }
+   }
+  },
+  "iframes": {},
+  "domMoves": {
+   "p-a": 1
+  },
+  "domLog": [
+   {
+    "seq": 1,
+    "t": 132.4000000001397,
+    "panelId": "p-a",
+    "kind": "added",
+    "elementSeq": 1
+   },
+   {
+    "seq": 2,
+    "t": 132.5,
+    "panelId": "p-b",
+    "kind": "added",
+    "elementSeq": 2
+   },
+   {
+    "seq": 3,
+    "t": 132.5,
+    "panelId": "p-c",
+    "kind": "added",
+    "elementSeq": 3
+   },
+   {
+    "seq": 4,
+    "t": 1777.6000000000931,
+    "panelId": "p-a",
+    "kind": "removed",
+    "elementSeq": 1
+   },
+   {
+    "seq": 5,
+    "t": 1777.6000000000931,
+    "panelId": "p-a",
+    "kind": "reinserted",
+    "elementSeq": 1
+   }
+  ]
+ },
+ "content": {
+  "control-b": {
+   "input": "seed-control-b",
+   "counter": "count 3",
+   "scrollTop": 120,
+   "focused": false
+  },
+  "board": {
+   "input": "",
+   "counter": "count 0",
+   "scrollTop": 0,
+   "focused": false
+  },
+  "control-c": {
+   "input": "seed-control-c",
+   "counter": "count 3",
+   "scrollTop": 120,
+   "focused": false
+  }
+ },
+ "activeTestid": null,
+ "console": [],
+ "pageErrors": [],
+ "documentRequests": {
+  "http://127.0.0.1:4300": 1
+ }
+}

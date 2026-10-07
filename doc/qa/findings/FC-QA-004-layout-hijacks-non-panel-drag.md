@@ -53,6 +53,7 @@ fix_commit: none
 | R09-standalone ×2 (대조) | capture + bubble | 같다 | `lastDragend.dropEffect 'move'` |
 
 - 레이아웃 안에서는 remote의 드롭 핸들러는 실행되지만(카드 이동은 됨), 같은 drop이 document·window의 버블 리스너에 도달하지 않는다. 앱 셸이나 분석 코드가 window에서 drop을 듣는다면 레이아웃 안에서만 조용히 빠진다.
+- R10 대조(`?layout=row3&a=board&b=control-b&lock=p-a:draggable`, 카드를 `board` 핸들 위에서 놓음, 2/2): 카드를 받는 존이 없는 패널 헤더 위인데 `dragend dropEffect 'move'`. 패널 `handleDragOver`가 모든 dragover를 `preventDefault` + `dropEffect = 'move'`로 받아들여 drop이 "성공"으로 끝난다. 단독 페이지라면 열 밖에서 놓은 카드는 `dropEffect 'none'`이다(열 밖에는 dragover 취소가 없다). 소스가 `dropEffect`로 이동 성공을 판단하는 remote(예: 원본 삭제)는 레이아웃 안에서 오동작할 수 있다. 관찰 기록 `obs/R10-ladder-lock-card-run{1,2}.json`.
 - R11(copy 드롭)에서 `dropEffect` 덮어쓰기·copy 드롭 거부를 이 발견의 변형으로 덧붙인다.
 - 실행별 결과: 1회차·2회차 같은 값.
 
