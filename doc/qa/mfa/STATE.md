@@ -68,7 +68,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R12 (필수 묶음) | 4faf0a4 | 2026-10-07T02:31Z | 2 | fail(FC-QA-005) — 마우스는 iframe 패널(control-iframe 포함) 위 미리보기·커밋 없음, 터치는 커밋(경로 불일치). shield=1 pass. telemetry-x 릴리스는 harness-artifact(FC-QA-006). S7a 재실행 pass |
 | [x] | R14 (필수 묶음) | f4ff5e1 | 2026-10-07T02:33Z | 2 | fail(FC-QA-001, FC-QA-002, FC-QA-007) — 터치 취소·두 번째 드래그 깨끗(I1~I7), 리마운트·재삽입은 마우스와 같음, 롱프레스 없이 시작(docs). S7a 재실행 pass |
 | [x] | R16 (필수 묶음) | cf0b610 | 2026-10-07T02:36Z | 2 | pass — 죽은 remote는 그 패널만 에러 카드, 다른 패널·죽은 패널 모두 조작 가능. FC-QA-001·002 증거 추가. dead-drag 좌표 대체(right,0→3) |
-| [x] | R17 (필수 묶음) | (R17 커밋) | 2026-10-07T02:48Z | 5 | fail(FC-QA-001, FC-QA-005, FC-QA-008) — OOPIF 쪽 리사이즈에서 캡처 유실·userSelect 누수·Resizer 재사용 불가(sev-1). 이동·토글 리마운트, M2 iframe 앵커 불가. 시각 점검 이상 없음. M1 좌표 대체 |
+| [x] | R17 (필수 묶음) | 2c27182 | 2026-10-07T02:48Z | 5 | fail(FC-QA-001, FC-QA-005, FC-QA-008) — OOPIF 쪽 리사이즈에서 캡처 유실·userSelect 누수·Resizer 재사용 불가(sev-1). 이동·토글 리마운트, M2 iframe 앵커 불가. 시각 점검 이상 없음. M1 좌표 대체 |
 | [ ] | R18 (필수 묶음) | | | | |
 | [ ] | R19 (필수 묶음) | | | | |
 | [ ] | R04 (두 번째 묶음) | | | | |
