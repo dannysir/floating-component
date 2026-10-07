@@ -7,7 +7,7 @@ status: needs-user-confirmation
 confidence: high
 repro_rate: 2/2
 found_in: run01-tier1
-variants: [board, board-local, ext-chip]
+variants: [board, board-local, ext-chip, board-copy, board-copy-locked]
 input: mouse
 browser: chromium-153 headless-shell
 playwright: 1.63.0
@@ -93,3 +93,8 @@ fix_commit: none
 - 시나리오: R09, 관찰 기록: doc/qa/run01-tier1/obs/R09-board-run1.json, R09-standalone-run1.json (run2도 같다)
 - 관련 발견: FC-QA-003(같은 드래그가 패널 드래그로 등록됨), 가설: H-DROP-HIJACK
 - 2026-10-07 R08 대조(`?layout=census` bare, stale 없음, `obs/R08-chip-control-run{1,2}.json`): 셸의 ext-chip(패널 밖에서 시작한 네이티브 드래그)을 `p-c` 위에 놓으면 `drop`이 capture만 찍히고 `stopped`(패널 `handleDrop`의 `stopPropagation`), `dragend dropEffect 'move'`. 패널 내용뿐 아니라 레이아웃 밖에서 들어온 드래그에도 같다.
+- 2026-10-07 R11(`?layout=row3&a=board`, board의 copy 전용 쌍, 2/2씩, 전부 예측대로):
+  - R11-board: `dragstart` bubble `effectAllowed 'move'`(소스가 준 `copy`를 패널 `handleDragStart`가 덮음), `types`에 `text/panel-id` 추가, `data-dragging-panel-id="p-a"`, 존 위 dragover bubble `dropEffect 'move'`(존의 `copy`를 패널 `handleDragOver`가 덮음), drop `stopped`, `copyDrops` +1이지만 `lastDragend.dropEffect 'move'`.
+  - **R11-locked**(`lock=p-a:draggable`): `effectAllowed 'copy'`는 남는데 패널이 `dropEffect`를 `move`로 강제해 **드롭 거부** — `copyDrops` +0, `dragend dropEffect 'none'`. 잠금을 건 패널 안에서 remote의 copy DnD가 동작하지 않는다(가장 큰 사용자 영향).
+  - R11-standalone(대조): `effectAllowed 'copy'`, 존 `dropEffect 'copy'`, drop capture+bubble, `copyDrops` +1, `dragend 'copy'`.
+  - 회귀 스펙에 R11-board(`dragend copy`)·R11-locked(`copyDrops` 1) 케이스 추가, 둘 다 "예상대로 실패". 관찰 기록 `obs/R11-*-run{1,2}.json`, 증거 `R11-03-after.png`, `R11L-events.json`.

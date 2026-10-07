@@ -1,0 +1,78 @@
+{
+  "run": "run01-tier1",
+  "runNo": 2,
+  "scenario": "R11",
+  "case": "R11-board",
+  "expected": "copy 드롭이 성공하고 `dragend`의 `dropEffect`는 `'copy'`(단독 페이지와 같다)",
+  "predicted": "드롭은 성공(`copyDrops` +1)하지만 `lastDragend.dropEffect 'move'`. 소스 `effectAllowed`가 패널 `handleDragStart`에서 `'move'`로 덮이고, 존이 준 `dropEffect 'copy'`가 패널 `handleDragOver`에서 `'move'`로 덮인다",
+  "observed": "dragstart bubble effectAllowed=move types [application/x-harbor-copy,text/panel-id]; 드래그 중 data-dragging-panel-id=p-a; 존 위 dragover(bubble) dropEffect=move; drop [capture(stopped)]; copyDrops +1, lastDragend {\"dropEffect\":\"move\",\"effectAllowed\":\"move\"}, lastTypes [\"text/panel-id\",\"application/x-harbor-copy\"], 프로브 dragend dropEffect=move; hover domTree H[p-a,p-b,p-c]; onMovePanel 0건, 트리 불변=true; I1~I7 통과",
+  "verdict": "as-predicted",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": true,
+      "detail": "no data-dragging-panel-id",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": true,
+      "detail": "userSelect restored",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[p-a,p-b,p-c]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (board,control-b,control-c)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r11-board-copy-drag/R11-board-run2"
+  ],
+  "extra": {
+    "events": "dragstart/capture/p-a[none] dragstart/bubble/p-a[none] dragenter/capture/p-a[move] dragenter/bubble/p-a[move] dragenter/capture/p-a[move] dragenter/bubble/p-a[move] dragleave/capture/p-a[none] dragleave/bubble/p-a[none] dragover/capture/p-a[move] dragover/bubble/p-a[move] dragover/capture/p-a[move] dragover/bubble/p-a[move] drop/capture/p-a[move] dragend/capture/p-a[move] dragend/target/p-a[move](connected=true) dragend/bubble/p-a[move]"
+  }
+}

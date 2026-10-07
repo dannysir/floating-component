@@ -1,0 +1,820 @@
+[
+ {
+  "seq": 1,
+  "eid": 1,
+  "t": 749.5,
+  "wall": 1791342765663,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 354.4375,
+  "y": 108,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 2,
+  "eid": 1,
+  "t": 749.7999999998137,
+  "wall": 1791342765664,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 354.4375,
+  "y": 108,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 3,
+  "eid": 2,
+  "t": 749.7999999998137,
+  "wall": 1791342765664,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 354,
+  "y": 108
+ },
+ {
+  "seq": 4,
+  "eid": 2,
+  "t": 750,
+  "wall": 1791342765664,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 354,
+  "y": 108
+ },
+ {
+  "seq": 5,
+  "eid": 3,
+  "t": 757.4000000003725,
+  "wall": 1791342765671,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 354.4375,
+  "y": 108,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 6,
+  "eid": 3,
+  "t": 757.7999999998137,
+  "wall": 1791342765672,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 354.4375,
+  "y": 108,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 7,
+  "eid": 4,
+  "t": 757.9000000003725,
+  "wall": 1791342765672,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "mousedown",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 354,
+  "y": 108
+ },
+ {
+  "seq": 8,
+  "eid": 4,
+  "t": 758.2000000001863,
+  "wall": 1791342765672,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "mousedown",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 354,
+  "y": 108
+ },
+ {
+  "seq": 9,
+  "eid": 5,
+  "t": 781.2999999998137,
+  "wall": 1791342765695,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 357.4375,
+  "y": 108,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 10,
+  "eid": 5,
+  "t": 781.5,
+  "wall": 1791342765695,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 357.4375,
+  "y": 108,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 11,
+  "eid": 6,
+  "t": 781.5,
+  "wall": 1791342765695,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 357,
+  "y": 108
+ },
+ {
+  "seq": 12,
+  "eid": 6,
+  "t": 781.7999999998137,
+  "wall": 1791342765696,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 357,
+  "y": 108
+ },
+ {
+  "seq": 13,
+  "eid": 7,
+  "t": 797.4000000003725,
+  "wall": 1791342765711,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 360.4375,
+  "y": 108,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 14,
+  "eid": 7,
+  "t": 797.5999999996275,
+  "wall": 1791342765711,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 360.4375,
+  "y": 108,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 15,
+  "eid": 8,
+  "t": 797.5999999996275,
+  "wall": 1791342765711,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 360,
+  "y": 108
+ },
+ {
+  "seq": 16,
+  "eid": 8,
+  "t": 797.7000000001863,
+  "wall": 1791342765712,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 360,
+  "y": 108
+ },
+ {
+  "seq": 17,
+  "eid": 9,
+  "t": 797.7999999998137,
+  "wall": 1791342765712,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragstart",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 354,
+  "y": 108,
+  "dropEffect": "none",
+  "effectAllowed": "uninitialized",
+  "types": []
+ },
+ {
+  "seq": 18,
+  "eid": 9,
+  "t": 798.5,
+  "wall": 1791342765712,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragstart",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 354,
+  "y": 108,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-copy",
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 19,
+  "eid": 10,
+  "t": 798.7999999998137,
+  "wall": 1791342765713,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 20,
+  "eid": 10,
+  "t": 798.9000000003725,
+  "wall": 1791342765713,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 21,
+  "eid": 11,
+  "t": 801.9000000003725,
+  "wall": 1791342765716,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 360,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id",
+   "application/x-harbor-copy"
+  ]
+ },
+ {
+  "seq": 22,
+  "eid": 11,
+  "t": 802,
+  "wall": 1791342765716,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 360,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id",
+   "application/x-harbor-copy"
+  ]
+ },
+ {
+  "seq": 23,
+  "eid": 12,
+  "t": 1195.5999999996275,
+  "wall": 1791342766109,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-zone",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id",
+   "application/x-harbor-copy"
+  ]
+ },
+ {
+  "seq": 24,
+  "eid": 12,
+  "t": 1195.7000000001863,
+  "wall": 1791342766110,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-zone",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id",
+   "application/x-harbor-copy"
+  ]
+ },
+ {
+  "seq": 25,
+  "eid": 13,
+  "t": 1195.7000000001863,
+  "wall": 1791342766110,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragleave",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id",
+   "application/x-harbor-copy"
+  ]
+ },
+ {
+  "seq": 26,
+  "eid": 13,
+  "t": 1195.9000000003725,
+  "wall": 1791342766110,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragleave",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id",
+   "application/x-harbor-copy"
+  ]
+ },
+ {
+  "seq": 27,
+  "eid": 14,
+  "t": 1203.2999999998137,
+  "wall": 1791342766117,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-zone",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id",
+   "application/x-harbor-copy"
+  ]
+ },
+ {
+  "seq": 28,
+  "eid": 14,
+  "t": 1203.7999999998137,
+  "wall": 1791342766118,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-zone",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id",
+   "application/x-harbor-copy"
+  ]
+ },
+ {
+  "seq": 29,
+  "eid": 15,
+  "t": 1316.2999999998137,
+  "wall": 1791342766230,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-zone",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id",
+   "application/x-harbor-copy"
+  ]
+ },
+ {
+  "seq": 30,
+  "eid": 15,
+  "t": 1316.7000000001863,
+  "wall": 1791342766231,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-zone",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id",
+   "application/x-harbor-copy"
+  ]
+ },
+ {
+  "seq": 31,
+  "eid": 16,
+  "t": 1317.5999999996275,
+  "wall": 1791342766232,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "drop",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-zone",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id",
+   "application/x-harbor-copy"
+  ],
+  "stopped": true
+ },
+ {
+  "seq": 32,
+  "eid": 17,
+  "t": 1318.5999999996275,
+  "wall": 1791342766233,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragend",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-copy",
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 33,
+  "eid": 17,
+  "t": 1318.7999999998137,
+  "wall": 1791342766233,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragend",
+  "phase": "target",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-copy",
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 34,
+  "eid": 17,
+  "t": 1319.7000000001863,
+  "wall": 1791342766234,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=board",
+  "top": true,
+  "type": "dragend",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "board-copy-src",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 409,
+  "y": 108,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "application/x-harbor-copy",
+   "text/panel-id"
+  ]
+ }
+]

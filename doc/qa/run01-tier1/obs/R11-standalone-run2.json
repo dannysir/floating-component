@@ -1,0 +1,28 @@
+{
+  "run": "run01-tier1",
+  "runNo": 2,
+  "scenario": "R11",
+  "case": "R11-standalone",
+  "expected": "—",
+  "predicted": "`copyDrops` +1, `dropEffect 'copy'`",
+  "observed": "dragstart bubble effectAllowed=copy types [application/x-harbor-copy]; 드래그 중 data-dragging-panel-id=null; 존 위 dragover(bubble) dropEffect=copy; drop [capture, bubble]; copyDrops +1, lastDragend {\"dropEffect\":\"copy\",\"effectAllowed\":\"copy\"}, lastTypes [\"application/x-harbor-copy\"], 프로브 dragend dropEffect=copy",
+  "verdict": "as-ideal",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on"
+  },
+  "lib": {
+    "source": "n/a",
+    "tree": "n/a",
+    "commit": "n/a"
+  },
+  "invariants": [],
+  "artifacts": [
+    "r11-board-copy-drag/R11-standalone-run2"
+  ],
+  "extra": {
+    "events": "dragstart/capture/SPAN[none] dragstart/bubble/SPAN[none] dragenter/capture/SPAN[copy] dragenter/bubble/SPAN[copy] dragenter/capture/SPAN[copy] dragenter/bubble/SPAN[copy] dragleave/capture/SPAN[none] dragleave/bubble/SPAN[none] dragover/capture/SPAN[copy] dragover/bubble/SPAN[copy] dragover/capture/SPAN[copy] dragover/bubble/SPAN[copy] drop/capture/SPAN[copy] drop/bubble/SPAN[copy] dragend/capture/SPAN[copy] dragend/target/SPAN[copy](connected=true) dragend/bubble/SPAN[copy]"
+  }
+}

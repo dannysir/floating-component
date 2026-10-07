@@ -126,9 +126,9 @@
 | R08 (대조) | census / bare, stale 없음 | ext-chip을 p-c에 놓기 | mouse | fail(FC-QA-004) | as-predicted (`onMovePanel` 0건, drop capture만 `stopped`, `dragend move`) | obs/R08-chip-control-run{1,2}.json |
 | R08 (대체 유도) | workbench, R18-x01 경로로 stale | ext-chip을 orders에 놓기 | mouse | fail(FC-QA-009) | as-predicted (**패널 드래그 없이 `onMovePanel('board','telemetry','top',1)` 1건, `treeVersion` +1**, 이후 I1~I7 통과) → FC-QA-009 sev-2 | obs/R08-chip-alt-run{1,2}.json |
 | R08 | census / bare | (c) 새 페이지, stale 상태에서 경계선 리사이즈 | mouse | not-run(R08-stale 미재현) | 대체 유도 경로의 stale 미리보기는 커밋 트리와 같은 모양이라 경로 불일치를 볼 수 없어 대체 실행하지 않음 | obs/R08-resize-run{1,2}.json |
-| R11 | row3 / a=board | copy 소스 → copy 영역, `dragend`의 `dropEffect` | mouse | not-run | | |
-| R11 | row3 / a=board (`lock=p-a:draggable`) | 같은 동작 | mouse | not-run | | |
-| R11 | board 단독 페이지 | 같은 동작 | mouse | not-run | | |
+| R11 | row3 / a=board | copy 소스 → copy 영역, `dragend`의 `dropEffect` | mouse | fail(FC-QA-004, FC-QA-003) | as-predicted (`effectAllowed`·존 `dropEffect`가 패널 핸들러에서 `move`로 덮임, `copyDrops` +1, `lastDragend.dropEffect 'move'`, drop `stopped`, `data-dragging-panel-id=p-a`, 트리 불변, I1~I7 통과) | obs/R11-board-run{1,2}.json |
+| R11 | row3 / a=board (`lock=p-a:draggable`) | 같은 동작 | mouse | fail(FC-QA-004) | as-predicted (**copy 드롭 거부**: `effectAllowed 'copy'` 유지, 패널이 `dropEffect 'move'` 강제, drop 없음, `copyDrops` +0, `dragend 'none'`) | obs/R11-locked-run{1,2}.json |
+| R11 | board 단독 페이지 | 같은 동작 | mouse | pass | as-ideal(= 예측: `dropEffect 'copy'`, `copyDrops` +1, drop capture+bubble) | obs/R11-standalone-run{1,2}.json |
 | R13 | pair / 소스=control | 핸들 터치 드래그, ghost 생성 시점 스냅샷, 커밋 | touch-cdp-handle | not-run | | |
 | R13 | pair / 소스=orders | 같은 동작 | touch-cdp-handle | not-run | | |
 | R13 | pair / 소스=billing | 같은 동작 | touch-cdp-handle | not-run | | |
@@ -217,7 +217,7 @@
 | ID | 물어볼 것 | 선택지 | 권고 |
 |---|---|---|---|
 | FC-QA-007 | 핸들 모드 터치는 롱프레스 없이 8px 이동으로 시작한다(`useTouchDrag.ts:145-149`). `doc/API.ko.md:33`은 "핸들을 롱프레스(450ms)"라 하고 309행은 "핸들을 누르거나"라 한다. 어느 쪽이 의도인가? | (a) 코드가 맞다 → `doc/API.ko.md`·`doc/API.md` 33행을 "핸들은 8px 넘게 움직이면 바로 시작, 핸들이 없으면 롱프레스 450ms"로 고친다 (b) 문서가 맞다 → 핸들 모드에도 롱프레스를 적용(스크롤과의 충돌이 줄지만 핸들 드래그가 느려진다) | (a). 핸들은 명시적 손잡이라 즉시 시작이 자연스럽고 구현·주석·TODO 테스트가 모두 그 전제다 |
-| FC-QA-004 | 레이아웃은 패널 드래그가 아닌 네이티브 드래그(remote 내부 DnD)에 투명해야 하는가? 지금은 패널이 그 drop의 전파를 막고(window 버블 리스너 미실행) `dropEffect`를 `move`로 덮어쓴다(R11에서 copy 드롭 영향 확인 예정) | (a) 투명해야 한다 → `library-bug`로 재분류, FC-QA-003과 함께 수정 (b) 현재 동작을 사양으로 두고 통합 가이드에 "remote는 window drop에 의존하지 말 것"을 적는다 | (a). 단독 페이지와 동작이 달라 remote 팀이 원인을 찾기 어렵다 |
+| FC-QA-004 | 레이아웃은 패널 드래그가 아닌 네이티브 드래그(remote 내부 DnD)에 투명해야 하는가? 지금은 패널이 그 drop의 전파를 막고(window 버블 리스너 미실행) `dropEffect`를 `move`로 덮어쓴다(R11: copy 드롭의 `dragend`가 `move`로 보고되고, 잠긴 패널에서는 copy 드롭이 거부된다) | (a) 투명해야 한다 → `library-bug`로 재분류, FC-QA-003과 함께 수정 (b) 현재 동작을 사양으로 두고 통합 가이드에 "remote는 window drop에 의존하지 말 것"을 적는다 | (a). 단독 페이지와 동작이 달라 remote 팀이 원인을 찾기 어렵다 |
 
 ### 라이브러리 수정 대상이 아닌 발견
 
