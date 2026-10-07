@@ -1,0 +1,226 @@
+[
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousemove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousemove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointerdown",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointerdown",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "gotpointercapture",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "gotpointercapture",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointerup",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointerup",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "lostpointercapture",
+  "phase": "capture",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "lostpointercapture",
+  "phase": "bubble",
+  "panelId": null,
+  "isTrusted": true,
+  "top": true
+ }
+]
