@@ -149,8 +149,17 @@ export const snapshot = async (page: Page, step: string): Promise<Snapshot> => {
 };
 
 // 제스처 전에 내용 상태를 기본값이 아닌 값으로 만든다: 입력 seed-<slot>, 카운터 3회, scrollTop 120.
+// iframe 슬롯은 프레임 문서 안의 tele-input·tele-scroll에 같은 값을 넣는다.
 export const seedContent = async (page: Page, slot: string): Promise<void> => {
   const root = page.locator('[data-tree-root]');
+  const iframe = root.locator(`iframe[data-testid="iframe-${slot}"]`);
+  if (await iframe.count()) {
+    const frame = await (await iframe.elementHandle())?.contentFrame();
+    if (!frame) return;
+    await frame.locator('[data-testid="tele-input"]').fill(`seed-${slot}`);
+    await frame.locator('[data-testid="tele-scroll"]').evaluate((el) => { (el as HTMLElement).scrollTop = 120; });
+    return;
+  }
   await root.locator(`[data-testid="${slot}-input"]`).fill(`seed-${slot}`);
   const counter = root.locator(`[data-testid="${slot}-counter"]`);
   if (await counter.count()) {
@@ -159,4 +168,50 @@ export const seedContent = async (page: Page, slot: string): Promise<void> => {
     await counter.click();
   }
   await root.locator(`[data-testid="${slot}-scroll"]`).evaluate((el) => { (el as HTMLElement).scrollTop = 120; }).catch(() => undefined);
+};
+
+// diff(before, after): 슬롯마다 한 가지 분류. 위에서부터 처음 맞는 것 (doc/qa/mfa/HARNESS.md 「diff(before, after) 분류」)
+export type DiffClass = 'remounted' | 'reloaded' | 'reinserted' | 'content-reset' | 'untouched';
+export interface SlotDiff {
+  slot: string; panelId: string | null; class: DiffClass;
+  frameMounts: number; contentMounts: number; domRemounted: boolean; domMoves: number;
+  loads: number | null; docIdChanged: boolean; lostContent: string[]; mismatch: boolean;
+}
+export interface SnapshotDiff { unsettled: boolean; slots: Record<string, SlotDiff> }
+
+const num = (v: unknown) => Number(v ?? 0);
+const DEFAULTS: Record<keyof ContentSnap, unknown> = { input: '', counter: 'count 0', scrollTop: 0, focused: false };
+
+export const diff = (before: Snapshot, after: Snapshot): SnapshotDiff => {
+  const panelOfSlot = Object.fromEntries(Object.entries({ ...before.dom.panels, ...after.dom.panels }).map(([id, p]) => [p.slot ?? id, id]));
+  const slots = [...new Set([...Object.keys(before.content), ...Object.keys(after.content), ...Object.keys(after.counters.frames), ...Object.keys(after.counters.iframes)])];
+  const newLog = (after.counters.domLog as Array<{ panelId: string; kind: string }>).slice((before.counters.domLog as unknown[]).length);
+  const entries = slots.map((slot): [string, SlotDiff] => {
+    const panelId = panelOfSlot[slot] ?? null;
+    const fb = before.counters.frames[slot] as { frameMounts?: number } | undefined;
+    const fa = after.counters.frames[slot] as { frameMounts?: number } | undefined;
+    const mb = before.counters.mfe[slot] as { mounts?: number } | undefined;
+    const ma = after.counters.mfe[slot] as { mounts?: number } | undefined;
+    const ib = before.counters.iframes[slot];
+    const ia = after.counters.iframes[slot];
+    const frameMounts = num(fa?.frameMounts) - num(fb?.frameMounts);
+    const contentMounts = num(ma?.mounts) - num(mb?.mounts);
+    const domRemounted = panelId !== null && newLog.some((l) => l.panelId === panelId && l.kind === 'remounted');
+    const domMoves = panelId ? num(after.counters.domMoves[panelId]) - num(before.counters.domMoves[panelId]) : 0;
+    const loads = ia && ib && ia.loads !== null && ib.loads !== null ? ia.loads - ib.loads : null;
+    const docIdChanged = Boolean(ia && ib && ia.docId !== ib.docId);
+    const cb = before.content[slot];
+    const ca = after.content[slot];
+    const lostContent = cb && ca ? (Object.keys(DEFAULTS) as Array<keyof ContentSnap>).filter((k) => cb[k] !== ca[k] && ca[k] === DEFAULTS[k] && cb[k] !== DEFAULTS[k]) : [];
+    const remounted = domRemounted || frameMounts > 0 || contentMounts > 0;
+    const levels = [domRemounted, frameMounts > 0, contentMounts > 0].filter((x, i) => (i === 1 ? fa !== undefined : i === 2 ? ma !== undefined : panelId !== null));
+    const mismatch = remounted && levels.some((x) => !x);
+    const cls: DiffClass = remounted ? 'remounted'
+      : (loads !== null && loads > 0) || docIdChanged ? 'reloaded'
+      : domMoves > 0 ? 'reinserted'
+      : lostContent.length > 0 ? 'content-reset'
+      : 'untouched';
+    return [slot, { slot, panelId, class: cls, frameMounts, contentMounts, domRemounted, domMoves, loads, docIdChanged, lostContent, mismatch }];
+  });
+  return { unsettled: before.settle?.stable === false || after.settle?.stable === false, slots: Object.fromEntries(entries) };
 };

@@ -109,6 +109,7 @@
 - **S8 stale preview (H-RAF-STALE)** (B1-03f, 관찰): 마지막 dragover가 소스가 아닌 droppable 패널(p-a)에 떨어지는 릴리스에서 릴리스 뒤 미리보기 shadow가 남는다(`settled` 6/10, `immediate` 8/10, I1은 통과). 하네스가 빈도를 키운 경합(`harness_amplified`). 재현: `node mfa-lab/scripts/ctl.mjs test spike/s08`. 관련 스펙 `mfa-lab/e2e/spike/s08-raf-stale-ratio.spec.ts`.
 
 - **S1 미리보기 중 드래그하지 않은 패널의 리마운트·재삽입** (B1-03a, 관찰): `census` bare에서 p-d를 (p-a, left, 1)로 hover하는 미리보기 한 번에 프로브 `domLog`가 `p-b`·`p-c` = `remounted`(새 요소), `p-a` = `reinserted`(같은 요소의 제거 후 삽입)를 기록했다. 사전 등록된 FC-QA-001(`predicted`, D3)·D3a의 예측과 같은 모양이다. 재현: `node mfa-lab/scripts/ctl.mjs test spike/s01` 출력의 `[S1] domLog` 줄. 관련 스펙 `mfa-lab/e2e/spike/s01-mouse-drag-commit.spec.ts`.
+  - 같은 hover를 `?layout=census&b=telemetry`(control + iframe)에서 `diff(before, mid)`로 본 확인용 1회(B1-08, 헬퍼 점검 목적, 증거로 쓰지 않음): `control-a` = reinserted(scrollTop 유실), `control-c` = remounted(input·counter·scrollTop 유실), `telemetry` = remounted + iframe 문서 재로드(`loads` +1). FC-QA-001·D3a 예측과 같은 방향이다.
 
 ## 9. HANDOFF
 
