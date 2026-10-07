@@ -50,7 +50,7 @@
 | S7a | 통과 | 2 | 831126e | touch 프로젝트. 1회차 실패: 핸들에서 12 px `touchMove` 한 번은 `pointermove`만 만들고 `touchmove`가 페이지에 오지 않아(Chromium의 touch slop 억제) ghost가 생기지 않았다. 수정(사다리 2): 첫 이동을 12 px → 24 px 두 번으로 나눔. 2회차 통과: (1) `pair` p-a → p-b 오른쪽 커밋, touch 이벤트 전부 trusted, 드래그 중 ghost 정확히 1개·끝난 뒤 0, `onMovePanel` 1건, 트리 `H[p-b,p-a]` (2) `locks` editor → terminal 위 → nav 위: ghost `opacity 0.4` + `rgba(232, 17, 35, 0.8) solid 2px`, 떼면 `onMovePanel` 0건·트리 불변, 이어서 두 번째 드래그(control-b)가 시작되고 취소됨. 모두 I1~I7 통과. 롱프레스 없이 시작함을 확인(오라클 = 코드) |
 | S7b | 기록 | 1 | 831126e | 7절 참고. 레인 B(153) headless shell에서 네이티브 `dragstart`·`touchcancel` 없음, 롱프레스 드래그가 커밋됨 |
 | S8 | 기록 (게이트 충족) | 1 | 2b7fd5c | 5절 표. `overShadow` 0/10 |
-| S9 | 미실행 | | | |
+| S9 | 기록 | 2 | (B1-05 커밋) | 6절 참고. 1회차: 렌더러 1개, iframe 타깃 없음(OOPIF no) → 사다리 telemetry-x 3: `--site-per-process` 추가 후 telemetry-x가 별도 CDP 타깃·렌더러(OOPIF yes) |
 | S10 | 통과 (선택) | 2 | 2b7fd5c | 프로젝트 `mouse-full`(`channel: 'chromium'`, 풀 바이너리 `chromium-1243`, 새 headless). 1회차: 풀 바이너리는 `/favicon.ico`를 요청해 404 콘솔 에러로 I6 실패(headless shell은 요청하지 않음) → shell `index.html`에 `<link rel="icon" href="data:,">` 추가(픽스처 수정). 2회차 S1·S2·S3 통과, 축소 이벤트 로그가 headless shell 기준선과 **완전히 같다**(파일 diff 없음) |
 
 ## 4. 이벤트 로그 기준선
@@ -82,7 +82,16 @@
 
 ## 6. S9 iframe 사실
 
-(B1-05에서 기록)
+레이아웃 `?layout=census&a=telemetry&b=telemetry-x&c=control-iframe&d=bare-3`, 레인 B 153 headless shell, 커밋 (B1-05 커밋).
+
+| 항목 | 결과 |
+|---|---|
+| 사용한 호스트 이름 | `localhost` (`http://localhost:4304`가 브라우저 안에서 열림. `crosssite.test` 대안 불필요) |
+| OOPIF | **기본 실행 인자에서는 no**: 렌더러 프로세스 1개, `Target.getTargets`에 iframe 타깃 없음(headless shell은 기본으로 사이트 격리를 하지 않는다). **`--site-per-process`를 켠 뒤 yes**: `telemetry-x`가 type `iframe` 타깃이고 렌더러가 3개. `telemetry`(127.0.0.1:4304, same-site)는 별도 타깃이 아니다. 이 인자를 `playwright.config.ts`의 기본 `launchOptions.args`에 넣었다(아래 결정) |
+| cross-site iframe의 `sessionStorage` | 가능 (`telemetry-x` 안에서 set/get 성공). same-site `telemetry`도 가능 |
+| 드래그 중 iframe 위 dragover | 마우스 패널 드래그(bare-3)의 커서를 `telemetry`·`telemetry-x` iframe 본문 위로 teleport + nudge 했을 때 **어느 프레임의 프로브에도 드래그 이벤트가 찍히지 않았다**(host 패널도, iframe 문서도, telemetry 자신의 `seen` 카운터도 0). `--site-per-process` 유무와 무관. 반면 `control-iframe`(srcdoc, same-origin) 위에서는 dragenter/dragover가 **iframe 문서의 프로브**(`about:srcdoc`)에 찍히고 host 패널에는 찍히지 않았다 |
+| 해석 | cross-origin iframe 위의 CDP 드래그(`Input.dispatchDragEvent`)는 이 환경에서 어느 문서에도 전달되지 않는다(관찰). 실제 브라우저는 iframe 문서로 dragover를 보낼 것으로 추정한다. 따라서 `telemetry`·`telemetry-x` 위의 마우스 드래그 관찰은 하네스 충실도 단서(HARNESS 부작용 #7)를 붙여야 하고, same-origin `control-iframe`과 결과가 다를 수 있다 |
+| 릴리스 | 이후 소스 shadow 헤더 위 `overShadow` 릴리스: drop + dragend(`move`), 미리보기가 없었으므로 트리 불변. I1~I7 통과 |
 
 ## 7. S7b 관찰
 

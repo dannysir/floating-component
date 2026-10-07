@@ -25,7 +25,10 @@ export default defineConfig({
     deviceScaleFactor: 1,
     headless: true,
     launchOptions: {
-      args: ['--no-proxy-server'],                                   // 클라우드 프록시 변수가 127.0.0.1 요청에 끼지 않게
+      // --no-proxy-server: 클라우드 프록시 변수가 127.0.0.1 요청에 끼지 않게.
+      // --site-per-process: headless shell은 기본으로 사이트 격리를 하지 않아 telemetry-x(localhost)가 같은 렌더러에 들어간다.
+      // 데스크톱 Chrome처럼 cross-site iframe을 별도 프로세스(OOPIF)로 만들기 위해 켠다 (B1-05 사다리 telemetry-x 3).
+      args: ['--no-proxy-server', '--site-per-process'],
       ...(local.executablePath ? { executablePath: local.executablePath } : {}),   // 레인 C만
     },
     trace: 'retain-on-failure',

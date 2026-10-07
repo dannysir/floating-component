@@ -5,7 +5,7 @@ import { ControlPanel } from '../local/ControlPanel';
 import { NavPanel } from '../local/NavPanel';
 import { RemoteMount } from '../adapters/RemoteMount';
 import { BillingTwin } from '../local/twins';
-// B1-05 부터: import { IframeRemote } from '../adapters/IframeRemote';
+import { IframeRemote } from '../adapters/IframeRemote';
 // B1-06 부터: import { SameTreeRemote } from '../adapters/SameTreeRemote'; import { OrdersTwin } from '../local/twins';
 // B1-07 부터: import { BoardTwin } from '../local/twins';
 import { bus } from '../bus';
@@ -23,9 +23,9 @@ export const components = createComponentStore({
   billing: <PanelFrame slot="billing" kind="mount" title="Billing" team="billing"><RemoteMount slot="billing" /></PanelFrame>,
   'billing-local': <PanelFrame slot="billing-local" kind="local" title="billing-local" team="billing"><BillingTwin slot="billing-local" bus={bus} /></PanelFrame>,
   // B1-05
-  // 'control-iframe': <PanelFrame slot="control-iframe" kind="iframe" title="control-iframe" team="workspace-platform"><IframeRemote slot="control-iframe" /></PanelFrame>,
-  // telemetry: <PanelFrame slot="telemetry" kind="iframe" title="Telemetry" team="telemetry"><IframeRemote slot="telemetry" /></PanelFrame>,
-  // 'telemetry-x': <PanelFrame slot="telemetry-x" kind="iframe" title="Telemetry (cross-site)" team="telemetry"><IframeRemote slot="telemetry-x" /></PanelFrame>,
+  'control-iframe': <PanelFrame slot="control-iframe" kind="iframe" title="control-iframe" team="workspace-platform"><IframeRemote slot="control-iframe" /></PanelFrame>,
+  telemetry: <PanelFrame slot="telemetry" kind="iframe" title="Telemetry" team="telemetry"><IframeRemote slot="telemetry" /></PanelFrame>,
+  'telemetry-x': <PanelFrame slot="telemetry-x" kind="iframe" title="Telemetry (cross-site)" team="telemetry"><IframeRemote slot="telemetry-x" /></PanelFrame>,
   // B1-06
   // orders: <PanelFrame slot="orders" kind="same-tree" title="Orders" team="order-desk"><SameTreeRemote slot="orders" /></PanelFrame>,
   // 'orders-local': <PanelFrame slot="orders-local" kind="local" title="orders-local" team="order-desk"><OrdersTwin slot="orders-local" bus={bus} /></PanelFrame>,

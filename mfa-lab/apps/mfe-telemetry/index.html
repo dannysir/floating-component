@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="ko">
+  <head><meta charset="utf-8" /><link rel="icon" href="data:," /><title>mfe-telemetry</title>
+    <style>body{margin:0;font:12px sans-serif;display:flex;flex-direction:column;height:100vh}#scroll{flex:1;min-height:0;overflow:auto}</style>
+  </head>
+  <body>
+    <div id="head">telemetry · loads <output data-testid="tele-loads">?</output> · doc <output id="doc"></output> · <output id="seen"></output></div>
+    <input data-testid="tele-input" />
+    <canvas data-testid="tele-canvas" width="160" height="40"></canvas>
+    <div id="scroll" data-testid="tele-scroll"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
