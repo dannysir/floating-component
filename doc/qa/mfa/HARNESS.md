@@ -4,7 +4,7 @@
 > - 무엇: `mfa-lab/e2e/` Playwright 하네스의 계약이다. 브라우저 확보 순서(레인), 설정, 헬퍼 API, 프로브·스냅샷 스키마, 불변식 I1~I7, stale preview 판정 규칙, 하네스 부작용 목록, 스펙 구성, 증거 규칙을 정한다.
 > - 누가·언제: 클라우드 세션 1이 B1-01~B1-03에서 하네스를 만들 때, 세션 2가 시나리오 스펙을 쓰고 결과를 판정할 때, 수정 세션이 회귀 스펙을 돌릴 때 읽는다.
 > - 의존: 슬롯·testid·`window.__fc`·`window.__mfe`·URL 플래그·`ctl.mjs` 명령은 [ARCHITECTURE.md](./ARCHITECTURE.md), 헬퍼·설정 코드 본문은 [RECIPES.md](./RECIPES.md), 단계·스파이크 표는 [BRIEF-1-build.md](./BRIEF-1-build.md), 시나리오·예측은 [BRIEF-2-inspect.md](./BRIEF-2-inspect.md), 가설은 [HYPOTHESES.md](./HYPOTHESES.md), 분류·심각도·귀속 사다리는 [../README.md](../README.md)가 정한다.
-> - 상태: 이 문서의 절차·설정·예측은 전부 **미실행**이다. 브라우저에서 실행해 확인한 것은 없다. 세션 1이 B1-08에서 실제 구현에 맞게 고치고 항목 옆에 `실행 확인: <commit>`을 적는다. 그 표시가 없는 내용은 설계다.
+> - 상태: 2026-10-07 세션 1이 레인 B(Playwright 1.63.0, Chromium 153 headless shell)에서 이 하네스를 구현하고 스파이크 S0~S10을 실행했다. 실행으로 확인한 내용은 「B1-08 구축 결과」와 각 절의 `실행 확인: 40ac74c` 표시가 기준이다. 표시가 없는 예측(레인 A·C, 세션 2 시나리오)은 설계다.
 
 **용어**
 
@@ -22,6 +22,24 @@
 **이름 혼동 주의**: 스파이크 ID는 `S0`~`S10`, 심각도는 `sev-1`~`sev-4`다. 둘은 관계없다.
 
 ---
+
+## B1-08 구축 결과 (2026-10-07, 세션 1)
+
+실행 확인: 40ac74c. 스파이크 결과·기준선은 [../run00-spike/SPIKE.md](../run00-spike/SPIKE.md).
+
+| 항목 | 실제 |
+|---|---|
+| 레인 | B. `@playwright/test@1.63.0`, Chromium 153.0.8010.12 headless shell(`chromium_headless_shell-1243`), 풀 바이너리 `chromium-1243`도 설치됨. `lane.json` = `{ "lane": "B", "playwright": "1.63.0", "chromium": "153.0.8010.12" }`, `.run/lane.local.json`의 `browsersPath` = `<repo>/mfa-lab/.run/pw-browsers` |
+| 실행 인자 | `--no-proxy-server`, **`--site-per-process`**. headless shell은 기본으로 사이트 격리를 하지 않아 렌더러가 1개였고 `telemetry-x`가 OOPIF가 아니었다. 켠 뒤 `telemetry-x`는 별도 CDP 타깃이다(S9) |
+| 프로젝트 | `mouse`, `touch`(`hasTouch: true`), `mouse-full`(`channel: 'chromium'`, S10 전용) |
+| `teleport` | 이동 1회 뒤 프로브에 dragover가 없으면 같은 점으로 1회 더 이동한다. **Blink는 드래그 대상 요소가 바뀌는 갱신에서 `dragenter`(새 대상)·`dragleave`(옛 대상)만 보내고 `dragover`는 다음 갱신으로 미룬다.** 그래도 teleport당 dragover는 1회다. `MouseDrag.teleportMoves`가 1 또는 2 |
+| 터치 시작 | `handleDrag`는 핸들에서 12px, 이어서 24px로 두 번 움직인다. **Chromium은 touch slop 안의 첫 `touchmove`(12px)를 페이지에 보내지 않는다**(`pointermove`만 나온다). 롱프레스(`longPressDrag`)는 550ms 뒤 첫 이동이 slop 밖이면 그대로 전달된다 |
+| CDP 터치와 `hasTouch` | `hasTouch` 없는 `mouse` 프로젝트에서도 CDP `touchStart`가 trusted touchstart를 만든다(S0) |
+| 헬퍼 시그니처 차이 | `snapshot(page, step)`, `checkInvariants(page, opts?)`, `expectInvariants(page, opts?)`(lab이 아니라 page. 페이지별 로그는 `labstate.ts`로 찾는다), `capture(page, testInfo, label, opts?)`, `finishCase(page, testInfo, since?)`(케이스 끝 `events.json`·`console.txt`), `readBaseline(name)`·`compareBaseline(a, b)`(`evidence.ts`), `writeBaseline(name, events)`(`baseline.ts`). `lab`은 `open`, `openStandalone`, `console`, `pageErrors`, `requests`, `failedRequests`, `consoleErrors()`, `bodyUserSelect()`, `lastOpen()`을 가진다. 테스트 끝 불변식은 `invariants.json` 첨부로 남는다 |
+| 기준선 | S1~S6의 축소 이벤트 로그는 B1-06 federation 추가 뒤, `--site-per-process` 추가 뒤, B1-08 깨끗한 복원 뒤에도 바이트 단위로 같았다 |
+| 양성 대조 | S5: npm 0.5.1(:4390)에서 Esc 뒤 I1·I2 모두 실패(요구대로) |
+| stale preview | S8: `overShadow` 0/10, `settled`×`other-droppable` 6/10, `immediate`×`other-droppable` 8/10, 소스 위 릴리스는 모두 0/10 |
+| S7b | 레인 B headless shell에서 550ms 롱프레스는 네이티브 `dragstart`·`touchcancel`을 내지 않았고 라이브러리 롱프레스 드래그가 커밋됐다 |
 
 ## 브라우저 레인
 
@@ -105,12 +123,12 @@
 | `use.baseURL` | `http://127.0.0.1:4300` | shell. 0.5.1 기준 빌드는 `http://127.0.0.1:4390` |
 | `use.viewport` | `{ width: 1280, height: 800 }` | 증거 크기 고정 |
 | `use.deviceScaleFactor` | `1` | 위와 같음 |
-| `use.launchOptions.args` | `['--no-proxy-server']` | 클라우드의 프록시 환경 변수가 로컬 origin 요청에 끼어들지 않게 한다 |
+| `use.launchOptions.args` | `['--no-proxy-server', '--site-per-process']` (실행 확인: 40ac74c) | 프록시 환경 변수가 로컬 origin 요청에 끼어들지 않게 하고, cross-site iframe을 데스크톱 Chrome처럼 별도 프로세스(OOPIF)로 만든다(B1-05) |
 | `use.launchOptions.executablePath` | `.run/lane.local.json`의 `executablePath` (레인 C와 레인 B 수동 다운로드만. 그 밖에는 `null`이라 지정하지 않는다) | |
 | `use.trace` | `'retain-on-failure'` | 결과는 무시 경로 `test-results/`에 남는다. 커밋하지 않는다 |
 | `use.video`, `use.screenshot` | 끔 | 스크린샷은 `capture`로 명시적으로만 찍는다 |
 | `reporter` | `line` + `json` (`.artifacts/results.json`) | |
-| `projects` | `mouse` (기본), `touch` (`use.hasTouch: true`) | 터치 헬퍼는 `touch` 프로젝트에서만 쓴다 |
+| `projects` | `mouse` (기본), `touch` (`use.hasTouch: true`), `mouse-full` (`channel: 'chromium'`, S10) (실행 확인: 40ac74c) | 터치 헬퍼는 `touch` 프로젝트에서만 쓴다 |
 
 - **테스트마다 새 브라우저 컨텍스트**를 쓴다. Playwright Test의 기본 동작(`{ page }` 픽스처)을 그대로 쓰고, `beforeAll`에서 만든 page 공유, `storageState` 재사용, `test.describe.serial`로 상태를 이어 가는 구성은 금지한다. 직전 제스처의 잔여 상태(stale preview, 모듈 전역 터치 세션 `useTouchDrag.ts:45`)가 다음 테스트로 새지 않게 하기 위해서다.
 - S10(선택)을 실행할 때만 `channel: 'chromium'`(풀 바이너리) 프로젝트 `mouse-full`을 추가한다. 풀 바이너리가 없으면 추가하지 않고 S10을 `not-run`으로 기록한다.
@@ -243,7 +261,7 @@ interface ReleaseResult {
 | 헬퍼 | 동작 | 규칙 |
 |---|---|---|
 | `begin` | `handlePoint(slot)`으로 이동 → `mouse.down` → 6px 이동 1회 → `settle`. 핸들 위의 실제 mousedown이 패널의 `draggable`을 켠다 (`PanelNodeRenderer.tsx:59-69`) | 첫 이동은 4px 이상이어야 드래그가 시작된다 (Blink 임계값). 첫 이동은 `dragstart` + `dragenter`만 만들고 `dragover`는 만들지 않는다. 시작 확인: 프로브에 소스 패널을 대상으로 한 신뢰된 `dragstart`가 있고 `[data-tree-root]`에 `data-dragging-panel-id="<id>"`가 붙어야 한다. 없으면 `HarnessError`. 잠긴 패널은 `expectStart: false`로 "시작되지 않음"을 확인한다 |
-| `teleport` | `mouse.move(x, y)` 정확히 1회 → `settle` → 스냅샷 | **이동 1회 = dragover 1회 = 미리보기 변화 최대 1회.** 카운터 변화를 미리보기 변화 한 번에 귀속시키기 위한 규칙이다. 측정·취소·커밋 시나리오의 기본 이동 방식이다 |
+| `teleport` | `mouse.move(x, y)` 1회 → 그 이동으로 dragover가 없었으면(대상 요소가 바뀐 경우, Blink가 dragover를 미룸) 같은 점으로 1회 더 → `settle` → 스냅샷 (실행 확인: B1-03a) | **이동 1회 = dragover 1회 = 미리보기 변화 최대 1회.** 카운터 변화를 미리보기 변화 한 번에 귀속시키기 위한 규칙이다. 측정·취소·커밋 시나리오의 기본 이동 방식이다 |
 | `glide` | `mouse.move(x, y, { steps })` → `settle` → 스냅샷. dragover가 여러 번 발생한다 | P1의 churn 시나리오에서만 명시적으로 쓴다 |
 | `nudge` | 같은 좌표로 `mouse.move`를 다시 보낸다 → `settle` → 스냅샷 | 멈춘 커서에서는 dragover가 오지 않으므로(「알려진 하네스 부작용」) 이것으로 흉내 낸다. 결과에 `emulated: 'stationary-dragover'` 라벨을 붙인다 |
 | `release` | 아래 표 | 릴리스마다 `underCursorAtDrop`을 기록한다 |
@@ -307,7 +325,7 @@ longPressDrag(page, panelId: string, waypoints: Point[], end: 'end' | 'cancel'):
 
 | 복합 헬퍼 | 절차 | 오라클과 용도 |
 |---|---|---|
-| `handleDrag` (`input: touch-cdp-handle`) | 핸들에서 `touchStart` → 12px `touchMove` 1회 → waypoint마다 `touchMove` → `touchEnd` 또는 `touchCancel` | 핸들 모드는 **롱프레스 없이 8px를 넘는 이동**에서 드래그가 시작된다 (`useTouchDrag.ts:9, 145-149, 234`). 핸들 모드의 패널은 `draggable=false`라서(`PanelNodeRenderer.tsx:143`) 네이티브 드래그 경합이 없다. S7a(터치의 유일한 게이트)와 R13·R14가 쓴다 |
+| `handleDrag` (`input: touch-cdp-handle`) | 핸들에서 `touchStart` → 12px `touchMove` → (ghost가 없으면) 24px `touchMove`(Chromium touch slop, 실행 확인: B1-03e) → waypoint마다 `touchMove` → `touchEnd` 또는 `touchCancel` | 핸들 모드는 **롱프레스 없이 8px를 넘는 이동**에서 드래그가 시작된다 (`useTouchDrag.ts:9, 145-149, 234`). 핸들 모드의 패널은 `draggable=false`라서(`PanelNodeRenderer.tsx:143`) 네이티브 드래그 경합이 없다. S7a(터치의 유일한 게이트)와 R13·R14가 쓴다 |
 | `longPressDrag` (`input: touch-cdp-longpress`) | `?drag=panel`에서 패널 위 `touchStart` → `hold(550)` → waypoint마다 `touchMove` → 종료 | 라이브러리 타이머는 450ms다 (`useTouchDrag.ts:8, 246-250`). 타이머 전에 8px를 넘게 움직이면 세션이 끝난다 (`:142`). **기록 전용**이다 (S7b와 P1). 레인 B에서는 네이티브 `dragstart`나 `touchcancel`이 나타날 수 있고, 그것은 H-TOUCH-NATIVE-RACE의 관찰이다. 환경 한계나 하네스 실패로 처리하지 않는다 |
 
 - `TouchResult`에는 ghost 관찰(개수, rect, `opacity`, `outline`), 종료 시 손가락 아래 분류(`underCursorAtDrop`과 같은 값), `onMovePanel` 호출 여부, 프로브의 `dragstart`·`contextmenu`·`selectstart` 유무를 담는다.
@@ -583,7 +601,7 @@ type AllowList = { [id in 'I1' | 'I2' | 'I3' | 'I4' | 'I5' | 'I6' | 'I7']?: Arra
 | 4 | OS 커서 모양(`not-allowed`)을 볼 수 없다 | headless에는 커서가 없고, 드래그 인터셉트 아래에서는 OS 드래그가 시작되지 않는다 | 대체 지표: `dragend`의 `dataTransfer.dropEffect`와 `drop`의 부재. 커서 모양은 수동 확인 항목 |
 | 5 | 리사이즈 중 `mousedown`·`mousemove`·`mouseup`이 없다 | Resizer가 `pointerdown`을 취소한다 (`useDragResize.ts:20`). 브라우저는 그 뒤 릴리스까지 호환 마우스 이벤트를 내지 않는다. 표준 동작이다 | 포인터 이벤트와 `gotpointercapture`로 판정한다 |
 | 6 | 드래그 중 `mousemove`·`mouseup`·`pointerup`이 없다 | 드래그가 인터셉트되면 Playwright는 이동마다 `dragOver`만, `mouse.up`에는 `drop`만 보낸다 (crDragDrop.ts, crInput.ts) | 드래그 구간의 마우스 이벤트 부재를 결함으로 보지 않는다 |
-| 7 | cross-site iframe 위에서 드래그 이벤트가 어느 프레임에 찍히는지 알 수 없다 | 인터셉트된 드래그 이벤트가 별도 프로세스 프레임에 어떻게 전달되는지 근거가 없다 | S9에서 기록한다. 충실하다고 확인되기 전까지 `telemetry-x` 행에는 하네스 충실도 단서를 붙인다 |
+| 7 | cross-origin iframe 위에서는 CDP 드래그 이벤트가 **어느 문서에도 오지 않는다**(S9 관찰: `telemetry`(same-site)·`telemetry-x`(cross-site) 모두. host 패널도, iframe 문서의 프로브·`seen`도 0). same-origin `control-iframe`(srcdoc) 위에서는 iframe 문서에 dragenter/dragover가 온다 | 인터셉트된 드래그(`Input.dispatchDragEvent`)의 프레임 전달 방식 때문으로 추정한다. 실제 브라우저는 iframe 문서로 dragover를 보낼 것이다 | `telemetry`·`telemetry-x` 위 마우스 드래그 관찰에는 하네스 충실도 단서를 붙인다. `control-iframe`과 결과가 다르면 이 부작용부터 의심한다 |
 | 8 | 터치 드래그 중 같은 `data-testid`가 두 개 있다 | ghost가 패널을 통째로 복제한다 (`useTouchDrag.ts:60-61`). 중복 자체는 하네스의 질의 문제다 | 질의를 `[data-tree-root]` 아래로 한정한다. 복제의 부작용(iframe 문서 추가 로드 등)은 H-GHOST-CLONE으로 따로 관찰한다 |
 | 9 | 스크린샷에 resizer가 보이지 않는다 | 기본값이 hover 때만 보이는 설정이다 (`resizerConstants.ts:5`, `resizerStyles.ts:19-20`) | 존재 여부는 `.ftl-resizer` 개수와 rect로 확인한다 |
 | 10 | 첫 이동이 4px 미만이면 드래그가 시작되지 않는다. 이동 한 번으로는 `dragover`가 없다 | Blink의 드래그 임계값과 Playwright의 동작이다 (https://playwright.dev/docs/input) | `begin`의 6px 이동과 이후 `teleport`를 쓴다. 직접 `mouse.move`를 조합하지 않는다 |
@@ -592,7 +610,9 @@ type AllowList = { [id in 'I1' | 'I2' | 'I3' | 'I4' | 'I5' | 'I6' | 'I7']?: Arra
 | 13 | 터치 결과가 실기기와 다를 수 있다 | CDP 터치 에뮬레이션, headless다. 실기기가 아니다 | 「증거와 라벨」의 필수 문장을 붙인다. 실기기 확인은 수동 항목 |
 | 14 | 터치 결과가 Chromium 메이저에 따라 다르다 | 터치 시작 네이티브 드래그가 153에서 on, 141에서 off다 | `native_touch_drag` 라벨을 남긴다. 레인 B의 롱프레스 중 네이티브 `dragstart`는 부작용이 **아니라** H-TOUCH-NATIVE-RACE의 관찰이다 |
 | 15 | 프로브가 리스너와 `MutationObserver`를 추가한다 | 수동적이지만 타이밍에 영향을 줄 수 있다 | 놀라운 결과는 `test.use({ probe: false })`로 다시 실행한다 |
-| 16 | headless shell과 풀 Chromium의 동작이 같다는 보장이 없다 | 같다는 것은 추론이다 | S10(선택)으로 비교한다. 못 하면 `not-run` |
+| 16 | headless shell과 풀 Chromium의 동작이 같다는 보장이 없다 | 같다는 것은 추론이다 | S10으로 비교했다(B1-03f): S1~S3의 축소 이벤트 로그가 같았다. 풀 바이너리는 `/favicon.ico`를 요청하므로 픽스처 HTML에 빈 favicon을 둔다 |
+| 17 | 드래그 중 대상 요소가 바뀌는 이동 한 번은 `dragover`를 만들지 않는다 | Blink가 대상 변경 갱신에서 dragover를 다음 갱신으로 미룬다(실제 브라우저도 같다. 사람은 계속 움직이므로 드러나지 않는다) | `teleport`가 같은 점으로 한 번 더 이동한다. 직접 `mouse.move`를 조합할 때 주의 |
+| 18 | 첫 터치 이동이 작으면(12px) `touchmove`가 페이지에 오지 않는다 | Chromium의 touch slop 억제 | `handleDrag`가 24px로 한 번 더 움직인다. 8px 문턱(`useTouchDrag.ts:9`) 바로 위의 동작은 이 하네스로 볼 수 없다 |
 
 환경 한계(`env-limit`)로 REPORT.md에 적는 것: OS 커서 모양, 실제 Android·iOS 터치, Firefox·WebKit, 쓰지 않은 Chromium 메이저의 터치 결과, 창 밖에서의 릴리스.
 

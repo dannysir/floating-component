@@ -4,7 +4,7 @@
 > - 무엇: `mfa-lab/` 아래에 만들 설정 파일과 코드 골격의 **전문**이다. 클라우드 세션 1이 각 단계에서 복사해 시작점으로 쓴다. 파일마다 목적, 처음 쓰는 단계(B1-xx), 알려진 함정, 1차 자료 URL을 붙였다.
 > - 누가·언제: 세션 1이 [BRIEF-1-build.md](./BRIEF-1-build.md) 「단계」의 각 단계 직전에 그 단계가 가리키는 레시피만 읽는다. 세션 2는 하네스 헬퍼를 고칠 때만 연다.
 > - 의존: 이름·슬롯·포트·계측 필드·`ctl.mjs` 명령의 **정의**는 [ARCHITECTURE.md](./ARCHITECTURE.md), 헬퍼의 **동작 규칙**은 [HARNESS.md](./HARNESS.md)가 정한다. 이 문서의 골격과 그 두 문서가 다르면 그 두 문서가 우선이고, 세션 1이 B1-08에서 이 문서를 실제 구현에 맞게 고친다.
-> - 상태: 여기 있는 모든 파일과 코드는 **미실행**이다. 2026-10-02에 문서·소스 리딩으로 썼고 빌드하거나 브라우저에서 실행한 것은 없다. 실행해 본 뒤에는 레시피 제목 아래에 `실행 확인: <commit>`을 적는다. 그 표시가 없으면 설계다.
+> - 상태: 2026-10-02에 문서·소스 리딩으로 썼고, 2026-10-07 세션 1이 실제로 빌드·실행했다. 실행한 레시피는 머리 표의 상태가 `실행 확인: 40ac74c`이고, 실제 파일과의 차이는 「B1-08 구축 결과」에 있다. 그 표시가 없는 것(`fallbackPlugin.ts`, 레인 A·C 명령)은 여전히 설계다.
 
 ## 읽는 법
 
@@ -13,6 +13,32 @@
 - 코딩 규칙은 저장소 규칙([CLAUDE.md](../../../CLAUDE.md))을 따른다: arrow function만, named export만, 타입은 `import type`, 불변 업데이트. 허용된 예외는 `vite.config.ts`·`playwright.config.ts`·MF 런타임 플러그인 파일의 `export default`, `React.lazy`용 `{ default: m.Panel }` 어댑터, `RemoteErrorBoundary` class뿐이다([ARCHITECTURE.md](./ARCHITECTURE.md) 「코딩 규칙 예외」). JSON 파일과 `@vitejs/plugin-react`처럼 **남의** default export를 import하는 것은 예외가 아니라 그냥 import다.
 - 주석의 `src/...:NN`은 이 저장소 `src/`의 파일과 줄이다. 라이브러리 동작에 기대는 부분마다 적었다.
 - 파일 경로는 전부 저장소 루트 기준이다.
+
+## B1-08 구축 결과 (2026-10-07, 세션 1)
+
+이 문서의 레시피는 세션 1이 실제로 빌드·실행했다. 머리 표의 상태가 `실행 확인: 40ac74c`인 레시피는 그 커밋의 파일이 기준이고, 아래 차이가 있다. `src/mf/fallbackPlugin.ts`(사다리 (b)-2)와 레인 A·C 명령은 쓰지 않았으므로 `미실행`이다.
+
+| 레시피 | 실제 구현과의 차이 |
+|---|---|
+| 3.1 shell `package.json` | 최종 devDependencies: `vite`, `@vitejs/plugin-react`, `fc-051`(B1-03c), `@module-federation/vite`(B1-06) |
+| 3.2/3.5 shell `vite.config.ts` | 2단계 설정이 최종이다. `LAB_MF` 기본값은 `ctl build`가 정한다(아래 8절 차이) |
+| 3.3 `index.html` | `<link rel="icon" href="data:," />` 추가(풀 바이너리 `channel: 'chromium'`이 `/favicon.ico`를 요청해 404 콘솔 에러 → I6 실패). `mfe-billing/public/index.html`, `mfe-orders`·`mfe-board`·`mfe-telemetry`의 `index.html`도 같다 |
+| 3.4 `main.tsx` | URL 플래그 오류면 `ShellError`(`shell-error`)를 그리고 `markError`. `strict=1`이면 `StrictMode` |
+| 3.8 `store.tsx` | 19개 키 전부 등록. `bus` import는 B1-04부터 |
+| 3.10 `PanelFrame.tsx` | 구독 직후 `rerender()` 한 번(첫 마운트 갱신이 구독 전에 지나가 배지가 `f0 c0`으로 남던 문제) |
+| 3.11 `Bare.tsx`·`ControlPanel.tsx` | `Bare`도 `harbor:probe`를 구독해 배지를 갱신한다. `ControlPanel`의 `reactSame`은 하드코딩 대신 `window.__fc.reactRef.createElement === React.createElement`로 계산한다 |
+| 4.1 mfe-orders `package.json` | B1-06 순서 1부터 `@module-federation/vite`를 **포함**했다(BRIEF-1 B1-06 「만들 것」 1의 지시를 따름. 이 절의 "빼고 쓴다" 문장과 다르다). `--mf off` 빌드에서는 `federation()`이 호출되지 않을 뿐 import는 풀린다 |
+| 4 mfe-board | 레시피 없이 작성: `src/Panel.tsx`의 칸반(`application/x-harbor-card`), `<img>`(SVG data URI), `<a href>`, copy 쌍(`application/x-harbor-copy`). `dnd` 필드: `cardMoves`(카드 이동 성공), `zoneDrops`(열이 받은 drop 수, 타입 무관), `copyDrops`, `lastDragend`(board 안에서 시작한 드래그의 dragend `dropEffect`·`effectAllowed`), `lastTypes`(마지막 dragover/drop의 types) |
+| 7.2 `playwright.config.ts` | `launchOptions.args = ['--no-proxy-server', '--site-per-process']`(B1-05 사다리 telemetry-x 3. headless shell은 기본으로 사이트 격리를 하지 않는다). 프로젝트 `mouse-full`(`channel: 'chromium'`, S10)을 상시 둔다 |
+| 7.4 `settle.ts` | 마지막 결과를 페이지별로 기억한다(`lastSettleOf`). 스냅샷의 `settle` 필드가 쓴다 |
+| 7.5 `geometry.ts` | `harnessError`는 `helpers/errors.ts`에서 가져온다. `treeNotation`, `resizerBetween` 추가 |
+| 7.6 `mouseDrag.ts` | **`teleport`: 이동 직후 프로브에 dragover가 없으면 같은 점으로 한 번 더 이동한다.** Blink는 드래그 대상 요소가 바뀌는 갱신에서 `dragenter`/`dragleave`만 보내고 `dragover`는 다음 갱신으로 미룬다(S1 1회차 실패의 원인). teleport당 dragover 1회 규칙은 유지된다. `teleportMoves`(1 또는 2) 필드가 있다 |
+| 7.7 `touch.ts` | **`handleDrag`: 시작 이동을 12px 한 번 → 12px, 24px 두 번으로 나눈다.** Chromium은 touch slop 영역 안의 첫 `touchmove`를 페이지에 보내지 않는다(12px에서 `pointermove`만 나옴, S7a 1회차 실패의 원인). `TouchResult`는 HARNESS 표의 필드 + `ghostsDuring`, `touchTrusted`, `events` |
+| 7.8 `probe.init.ts` | 최초 렌더(트리 루트째 `#root`에 붙음)의 패널도 `added`로 기록하도록 MutationObserver 조건을 고쳤다(전에는 remount가 `added`로 보였다). `__probe.seqOf(el)` 추가(스냅샷의 `elementSeq`). 합치기는 직전 레코드와만 비교하므로 capture/bubble이 번갈아 오는 실제 로그에서는 거의 합쳐지지 않는다(teleport의 dragover는 capture 1 + bubble 1) |
+| 7.x 추가 헬퍼 | `errors.ts`(`harnessError`, class 대신 name을 붙인 Error), `presets.ts`(프리셋 기대 JSON), `labstate.ts`(페이지별 로그), `events.ts`, `frames.ts`(`frameOfSlot`, `readFrameMfe`), `baseline.ts`(`reduceEvents`, `writeBaseline`), `invariants.ts`, `evidence.ts`(`compareBaseline`, `readBaseline`, `capture`, `finishCase`, `writeObservation`, `promote`), `resize.ts`(`resizeBorder`, `touchResize`), `snapshot.ts`(`snapshot`, `diff`, `seedContent`) |
+| 8 `ctl.mjs` | `lib/buildinfo.mjs` 추가(`.run/build.json`, 준비 판정 대상). `build`의 `--mf` 기본값: `mfa-lab/mf-mode.json`이 있으면 그 값(MF degraded 기록용, 현재 없음), 없으면 그 앱 `package.json`에 `@module-federation/vite`가 있으면 `on`, 아니면 `off`. `--lib npm051`은 `shell-051`만 빌드한다. 스탬프는 `--stamp` 또는 환경 변수 `LAB_BUILD_STAMP`(지정하면 항상 빌드). `up`은 `.run/durations.json`을 쓴다. `install`은 레인 브라우저를 못 찾으면 3, `up`은 BLOCKED-LANE이면 3으로 끝난다. `doctor` 출력에 `node_ok`, `lab_pw_browsers`, `lane_resolution`, `lane_local`이 더 있다 |
+| 9 레인 B | 1차 시도(`install chromium`)가 성공했다. 다운로드 URL `https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-headless-shell-linux64.zip`. 풀 바이너리 `chromium-1243`도 함께 받아진다. 수동 다운로드 단은 쓰지 않았다 |
+| 10 #1, #8 | #1의 "이후 `mouse.move`마다 `dragOver`" 자체는 맞지만, 페이지가 받는 것은 대상 변경 시 `dragenter`/`dragleave`뿐이고 dragover는 다음 이동에서 온다(7.6 차이). #8의 `hasTouch` 질문: CDP `touchStart`는 `hasTouch` 없이도 trusted touchstart를 만든다(S0) |
 
 ## 레시피가 어긋날 때 (1차 자료 읽기)
 
@@ -83,7 +109,7 @@
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| 이름·팀·유형·origin·진입점·디렉터리·핀의 단일 기준. shell `vite.config.ts`, shell 런타임, `ctl.mjs`, telemetry, 하네스가 읽는다 | B1-00 | 미실행 | [ARCHITECTURE.md](./ARCHITECTURE.md) 「레지스트리」 |
+| 이름·팀·유형·origin·진입점·디렉터리·핀의 단일 기준. shell `vite.config.ts`, shell 런타임, `ctl.mjs`, telemetry, 하네스가 읽는다 | B1-00 | 실행 확인: 40ac74c | [ARCHITECTURE.md](./ARCHITECTURE.md) 「레지스트리」 |
 
 [ARCHITECTURE.md](./ARCHITECTURE.md) 「레지스트리」의 JSON을 **그대로** 쓴다(아래는 복사본이다. 둘이 다르면 ARCHITECTURE가 맞다).
 
@@ -132,7 +158,7 @@
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| React를 모르는 통합 계약. 타입 + `createProbe`/`createBus`/`ensureStyle`. 모든 프로젝트가 alias `@harbor/contract`로 소스를 직접 번들한다 | B1-02 | 미실행 | [ARCHITECTURE.md](./ARCHITECTURE.md) 「통합 계약」 |
+| React를 모르는 통합 계약. 타입 + `createProbe`/`createBus`/`ensureStyle`. 모든 프로젝트가 alias `@harbor/contract`로 소스를 직접 번들한다 | B1-02 | 실행 확인: 40ac74c | [ARCHITECTURE.md](./ARCHITECTURE.md) 「통합 계약」 |
 
 ### 2.1 `mfa-lab/contract/package.json`
 
@@ -304,7 +330,7 @@ shell은 라이브러리의 유일한 소비자다. B1-02에서는 federation �
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| shell 의존성. 1단계(B1-02) → `fc-051` 추가(B1-03c) → MF 플러그인 추가(B1-06) | B1-02 | 미실행 | 핀 표(위), https://docs.npmjs.com/cli/v11/commands/npm-install (alias `npm:` 형식) |
+| shell 의존성. 1단계(B1-02) → `fc-051` 추가(B1-03c) → MF 플러그인 추가(B1-06) | B1-02 | 실행 확인: 40ac74c | 핀 표(위), https://docs.npmjs.com/cli/v11/commands/npm-install (alias `npm:` 형식) |
 
 ```json
 {
@@ -340,7 +366,7 @@ shell은 라이브러리의 유일한 소비자다. B1-02에서는 federation �
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| 라이브러리 alias(`LAB_LIB`), React dedupe, 저장소 밖 소스 허용, `harbor-app` 표식, 빌드 상수 | B1-02 | 미실행 | https://vite.dev/config/shared-options (`resolve.alias`, `resolve.dedupe`, `define`), https://vite.dev/config/server-options (`server.fs.allow`, `strictPort`), https://vite.dev/config/build-options (`build.target`, `outDir`), https://vite.dev/guide/api-plugin (`transformIndexHtml`) |
+| 라이브러리 alias(`LAB_LIB`), React dedupe, 저장소 밖 소스 허용, `harbor-app` 표식, 빌드 상수 | B1-02 | 실행 확인: 40ac74c | https://vite.dev/config/shared-options (`resolve.alias`, `resolve.dedupe`, `define`), https://vite.dev/config/server-options (`server.fs.allow`, `strictPort`), https://vite.dev/config/build-options (`build.target`, `outDir`), https://vite.dev/guide/api-plugin (`transformIndexHtml`) |
 
 ```ts
 // mfa-lab/apps/shell/vite.config.ts (1단계)
@@ -492,7 +518,7 @@ createRoot(document.getElementById('root')!).render(<Workspace />);   // StrictM
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| `@module-federation/vite` host 역할. `registry.json`에서 remote를 생성, React 네 키 싱글턴 공유, `shareStrategy: 'loaded-first'`, `LAB_MF=off` alias 대체 | B1-06 | 미실행 | https://raw.githubusercontent.com/module-federation/vite/main/src/utils/normalizeModuleFederationOptions.ts , https://module-federation.io/configure/shareStrategy.html , https://module-federation.io/integrations/build-tool/vite , 상위 host 예제(위 URL) |
+| `@module-federation/vite` host 역할. `registry.json`에서 remote를 생성, React 네 키 싱글턴 공유, `shareStrategy: 'loaded-first'`, `LAB_MF=off` alias 대체 | B1-06 | 실행 확인: 40ac74c | https://raw.githubusercontent.com/module-federation/vite/main/src/utils/normalizeModuleFederationOptions.ts , https://module-federation.io/configure/shareStrategy.html , https://module-federation.io/integrations/build-tool/vite , 상위 host 예제(위 URL) |
 
 1단계 파일에서 바뀌는 부분만 적는다.
 
@@ -595,7 +621,7 @@ export default fallbackPlugin;
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| `window.__fc` 구현. 프레임 카운터, 호출 로그, 트리 접근, mirror | B1-02 | 미실행 | [ARCHITECTURE.md](./ARCHITECTURE.md) 「계측 계약」 `window.__fc` |
+| `window.__fc` 구현. 프레임 카운터, 호출 로그, 트리 접근, mirror | B1-02 | 실행 확인: 40ac74c | [ARCHITECTURE.md](./ARCHITECTURE.md) 「계측 계약」 `window.__fc` |
 
 ```ts
 import * as React from 'react';
@@ -714,7 +740,7 @@ export const registry = raw as Registry;
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| `createComponentStore`를 모듈 스코프에서 한 번 만들고 모든 키를 고정 엘리먼트로 등록한다. 늦은 등록은 없다(`register`는 리렌더를 일으키지 않는다: `src/tree/componentStore.ts:13-15`) | B1-02 (키는 단계마다 추가) | 미실행 | [ARCHITECTURE.md](./ARCHITECTURE.md) 「store 등록」 |
+| `createComponentStore`를 모듈 스코프에서 한 번 만들고 모든 키를 고정 엘리먼트로 등록한다. 늦은 등록은 없다(`register`는 리렌더를 일으키지 않는다: `src/tree/componentStore.ts:13-15`) | B1-02 (키는 단계마다 추가) | 실행 확인: 40ac74c | [ARCHITECTURE.md](./ARCHITECTURE.md) 「store 등록」 |
 
 ```tsx
 import { createComponentStore } from '@dannysir/floating-components';
@@ -760,7 +786,7 @@ export const components = createComponentStore({
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| remote 소스를 `@twin/*` alias로 host 트리 안에서 그리는 얇은 래퍼. 래퍼의 `createProbe`가 자식보다 **먼저** 실행돼 `kind: 'local'`을 쓰고, `billing-local`은 `reactSame: true`·`reactVersion`도 여기서 적는다(`App`은 계산하지 않는다 — 5.4절) | B1-04 | 미실행 | [ARCHITECTURE.md](./ARCHITECTURE.md) 「앱 목록」 mfe-billing 「소스 구조」, 「계측 계약」 기대값(twin은 `kind: 'local'`, `reactSame: true`); 2.3절 `createProbe`의 "뒤에 온 meta는 정의된 필드만 덮어쓴다" |
+| remote 소스를 `@twin/*` alias로 host 트리 안에서 그리는 얇은 래퍼. 래퍼의 `createProbe`가 자식보다 **먼저** 실행돼 `kind: 'local'`을 쓰고, `billing-local`은 `reactSame: true`·`reactVersion`도 여기서 적는다(`App`은 계산하지 않는다 — 5.4절) | B1-04 | 실행 확인: 40ac74c | [ARCHITECTURE.md](./ARCHITECTURE.md) 「앱 목록」 mfe-billing 「소스 구조」, 「계측 계약」 기대값(twin은 `kind: 'local'`, `reactSame: true`); 2.3절 `createProbe`의 "뒤에 온 meta는 정의된 필드만 덮어쓴다" |
 
 ```tsx
 // src/local/twins.tsx — import 줄은 그 remote가 생기는 단계에서 푼다 (store.tsx와 같은 규칙. 미리 풀면 alias 대상 파일이 없어 빌드가 실패한다).
@@ -847,7 +873,7 @@ export const useLoggedLayoutTree = (layoutId: string, initialTree: LayoutNode) =
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| 모든 슬롯(`bare-*` 제외)의 프레임. 헤더 = 드래그 핸들(경계 밖), body 안에 에러 경계 + Suspense. 상태 배지 | B1-02 | 미실행 | [ARCHITECTURE.md](./ARCHITECTURE.md) 「패널 프레임과 경계」 |
+| 모든 슬롯(`bare-*` 제외)의 프레임. 헤더 = 드래그 핸들(경계 밖), body 안에 에러 경계 + Suspense. 상태 배지 | B1-02 | 실행 확인: 40ac74c | [ARCHITECTURE.md](./ARCHITECTURE.md) 「패널 프레임과 경계」 |
 
 ```tsx
 // src/workspace/PanelFrame.tsx
@@ -1015,7 +1041,7 @@ export const ExtChip = () => (
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| mount 계약 어댑터. div를 소유하고 `import(url)`로 받은 모듈의 `mount(el, ctx)`/`unmount(el)`를 부른다. 모듈 promise는 모듈 스코프 캐시, cleanup이 먼저면 `lateResolves`, unmount는 **동기** | B1-04 | 미실행 | [ARCHITECTURE.md](./ARCHITECTURE.md) 「host 어댑터」 `RemoteMount` 표, CORS 근거 https://vite.dev/config/preview-options (`preview.cors` 기본값 = `server.cors`), https://vite.dev/config/server-options (`server.cors` 기본 정규식이 `localhost`·`127.0.0.1`·`[::1]`의 모든 포트를 허용) |
+| mount 계약 어댑터. div를 소유하고 `import(url)`로 받은 모듈의 `mount(el, ctx)`/`unmount(el)`를 부른다. 모듈 promise는 모듈 스코프 캐시, cleanup이 먼저면 `lateResolves`, unmount는 **동기** | B1-04 | 실행 확인: 40ac74c | [ARCHITECTURE.md](./ARCHITECTURE.md) 「host 어댑터」 `RemoteMount` 표, CORS 근거 https://vite.dev/config/preview-options (`preview.cors` 기본값 = `server.cors`), https://vite.dev/config/server-options (`server.cors` 기본 정규식이 `localhost`·`127.0.0.1`·`[::1]`의 모든 포트를 허용) |
 
 ```tsx
 // src/adapters/RemoteMount.tsx
@@ -1146,7 +1172,7 @@ export const unmount = (el: HTMLElement) => {
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| iframe 어댑터. `message` 리스너는 **모듈 스코프**에 한 번, `event.origin`을 레지스트리로 검증. `control-iframe`은 `srcdoc`(서버 불필요) | B1-05 | 미실행 | [ARCHITECTURE.md](./ARCHITECTURE.md) 「IframeRemote와 mirror」 |
+| iframe 어댑터. `message` 리스너는 **모듈 스코프**에 한 번, `event.origin`을 레지스트리로 검증. `control-iframe`은 `srcdoc`(서버 불필요) | B1-05 | 실행 확인: 40ac74c | [ARCHITECTURE.md](./ARCHITECTURE.md) 「IframeRemote와 mirror」 |
 
 ```tsx
 // src/adapters/IframeRemote.tsx
@@ -1219,7 +1245,7 @@ export const CONTROL_IFRAME_SRCDOC = `<!doctype html>
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| same-tree 어댑터. 정적 로더 맵에서 슬롯당 한 번 `React.lazy`를 만들고(모듈 스코프 캐시) host 트리 안에 렌더한다 | B1-06 (`board`: B1-07) | 미실행 | https://react.dev/reference/react/lazy , [ARCHITECTURE.md](./ARCHITECTURE.md) 「host 어댑터」 |
+| same-tree 어댑터. 정적 로더 맵에서 슬롯당 한 번 `React.lazy`를 만들고(모듈 스코프 캐시) host 트리 안에 렌더한다 | B1-06 (`board`: B1-07) | 실행 확인: 40ac74c | https://react.dev/reference/react/lazy , [ARCHITECTURE.md](./ARCHITECTURE.md) 「host 어댑터」 |
 
 ```ts
 // src/registry/loaders.ts — 항목은 remote가 생기는 단계에서 추가한다. remotes(vite.config.ts 2단계)와 같은 단계에 함께 늘린다.
@@ -1298,7 +1324,7 @@ export const SameTreeRemote = ({ slot }: { slot: string }) => {
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| Module Federation remote. `./Panel`을 노출하고 `/mf-manifest.json`·`/remoteEntry.js`를 서빙한다. 단독 페이지(`/`)는 같은 Panel을 레이아웃 없이 그린다 | B1-06 | 미실행 | https://module-federation.io/integrations/build-tool/vite , 상위 remote 예제 https://raw.githubusercontent.com/module-federation/vite/main/examples/vite-vite/vite-remote/vite.config.js , 기본값 https://raw.githubusercontent.com/module-federation/vite/main/src/utils/normalizeModuleFederationOptions.ts |
+| Module Federation remote. `./Panel`을 노출하고 `/mf-manifest.json`·`/remoteEntry.js`를 서빙한다. 단독 페이지(`/`)는 같은 Panel을 레이아웃 없이 그린다 | B1-06 | 실행 확인: 40ac74c | https://module-federation.io/integrations/build-tool/vite , 상위 remote 예제 https://raw.githubusercontent.com/module-federation/vite/main/examples/vite-vite/vite-remote/vite.config.js , 기본값 https://raw.githubusercontent.com/module-federation/vite/main/src/utils/normalizeModuleFederationOptions.ts |
 
 `mfe-board`는 `NAME`을 `'board'`로 바꾼 같은 모양이다(내용은 칸반·`<img>`·`<a>`·copy 쌍, [ARCHITECTURE.md](./ARCHITECTURE.md) 「앱 목록」 mfe-board).
 
@@ -1470,7 +1496,7 @@ createRoot(document.getElementById('root')!).render(<Panel slot="orders" bus={cr
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| 플러그인 없는 ES 모듈 remote. Vite lib 모드로 `remote-entry.js` 하나를 내고, `mount(el, ctx)`/`unmount(el)`를 named export한다. 자기 React 19.2.4를 번들한다 | B1-04 | 미실행 | https://vite.dev/guide/build (Library Mode: `process.env.NODE_ENV` 미치환, `.js`/`.mjs` 규칙), https://vite.dev/config/build-options (`build.lib.fileName` 함수 형태, `build.copyPublicDir` 기본 `true`), https://vite.dev/config/shared-options (`publicDir`) |
+| 플러그인 없는 ES 모듈 remote. Vite lib 모드로 `remote-entry.js` 하나를 내고, `mount(el, ctx)`/`unmount(el)`를 named export한다. 자기 React 19.2.4를 번들한다 | B1-04 | 실행 확인: 40ac74c | https://vite.dev/guide/build (Library Mode: `process.env.NODE_ENV` 미치환, `.js`/`.mjs` 규칙), https://vite.dev/config/build-options (`build.lib.fileName` 함수 형태, `build.copyPublicDir` 기본 `true`), https://vite.dev/config/shared-options (`publicDir`) |
 
 ### 5.1 `mfa-lab/apps/mfe-billing/package.json`
 
@@ -1650,7 +1676,7 @@ export const App = ({ slot, bus, kind }: { slot: string; bus: HarborBus; kind?: 
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| 바닐라 TypeScript 앱. 문서 로드 수를 `sessionStorage`에 세고, 프레임 안에서 본 drag·pointer·touch 이벤트를 **수동적으로** 센다. 부모에게 `mfe:loaded` 한 번 | B1-05 | 미실행 | [ARCHITECTURE.md](./ARCHITECTURE.md) 「앱 목록」 mfe-telemetry, 「유형별 계약」 |
+| 바닐라 TypeScript 앱. 문서 로드 수를 `sessionStorage`에 세고, 프레임 안에서 본 drag·pointer·touch 이벤트를 **수동적으로** 센다. 부모에게 `mfe:loaded` 한 번 | B1-05 | 실행 확인: 40ac74c | [ARCHITECTURE.md](./ARCHITECTURE.md) 「앱 목록」 mfe-telemetry, 「유형별 계약」 |
 
 ### 6.1 `package.json`, `vite.config.ts`
 
@@ -1779,7 +1805,7 @@ if (window.parent !== window && allowedParents.has(parent)) {
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| Playwright 하나만 의존하는 하네스 프로젝트. 레인 핀 | B1-01 | 미실행 | [HARNESS.md](./HARNESS.md) 「브라우저 레인」, 「Playwright 설정」 |
+| Playwright 하나만 의존하는 하네스 프로젝트. 레인 핀 | B1-01 | 실행 확인: 40ac74c | [HARNESS.md](./HARNESS.md) 「브라우저 레인」, 「Playwright 설정」 |
 
 ```json
 {
@@ -1803,7 +1829,7 @@ if (window.parent !== window && allowedParents.has(parent)) {
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| 단일 worker, 재시도 없음, 1280x800 / dsf 1, `--no-proxy-server`, 프로젝트 `mouse`·`touch`, **globalSetup·webServer 없음** | B1-01 | 미실행 | https://playwright.dev/docs/api/class-testoptions (`hasTouch`, `deviceScaleFactor`, `viewport`, `launchOptions`, `trace`, `channel`), https://playwright.dev/docs/test-reporters (json `outputFile`), https://playwright.dev/docs/api/class-browsertype (`args`, `executablePath`, `chromiumSandbox` 기본 false) |
+| 단일 worker, 재시도 없음, 1280x800 / dsf 1, `--no-proxy-server`, 프로젝트 `mouse`·`touch`, **globalSetup·webServer 없음** | B1-01 | 실행 확인: 40ac74c | https://playwright.dev/docs/api/class-testoptions (`hasTouch`, `deviceScaleFactor`, `viewport`, `launchOptions`, `trace`, `channel`), https://playwright.dev/docs/test-reporters (json `outputFile`), https://playwright.dev/docs/api/class-browsertype (`args`, `executablePath`, `chromiumSandbox` 기본 false) |
 
 ```ts
 import { defineConfig } from '@playwright/test';
@@ -1906,7 +1932,7 @@ test('S0 browser gate', async ({ page, browser, browserName }, testInfo) => {
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| 입력 뒤 화면과 카운터가 멈출 때까지 기다린다: rAF 2회 + 매크로태스크 1회, 그다음 `domTree`·카운터가 두 번 연속 같을 때까지 25ms 간격 폴링(최대 500ms) | B1-03a | 미실행 | [HARNESS.md](./HARNESS.md) 「헬퍼」 `settle.ts`; 라이브러리가 미리보기를 rAF 콜백에서 설정: `src/components/PanelNodeRenderer.tsx:103-106` |
+| 입력 뒤 화면과 카운터가 멈출 때까지 기다린다: rAF 2회 + 매크로태스크 1회, 그다음 `domTree`·카운터가 두 번 연속 같을 때까지 25ms 간격 폴링(최대 500ms) | B1-03a | 실행 확인: 40ac74c | [HARNESS.md](./HARNESS.md) 「헬퍼」 `settle.ts`; 라이브러리가 미리보기를 rAF 콜백에서 설정: `src/components/PanelNodeRenderer.tsx:103-106` |
 
 ```ts
 import type { Page } from '@playwright/test';
@@ -1952,7 +1978,7 @@ export const settle = async (page: Page): Promise<SettleResult> => {
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| 라이브러리의 드롭 판정을 그대로 다시 계산해, 앵커 패널 위에서 정확히 `(position, depth)`로 해석되는 점을 고른다. 렌더 구조를 중첩 표기로 읽는다 | B1-03a | 미실행 | `src/dnd/dropTarget.ts:4-5, 11-15, 17-34, 36-73`; `src/components/LayoutNodeRenderer.tsx:126-129`; `src/components/PanelNodeRenderer.tsx:141-142`; `src/components/TreeLayout.tsx:124` |
+| 라이브러리의 드롭 판정을 그대로 다시 계산해, 앵커 패널 위에서 정확히 `(position, depth)`로 해석되는 점을 고른다. 렌더 구조를 중첩 표기로 읽는다 | B1-03a | 실행 확인: 40ac74c | `src/dnd/dropTarget.ts:4-5, 11-15, 17-34, 36-73`; `src/components/LayoutNodeRenderer.tsx:126-129`; `src/components/PanelNodeRenderer.tsx:141-142`; `src/components/TreeLayout.tsx:124` |
 
 라이브러리의 판정(`getDropTarget`, `src/dnd/dropTarget.ts:36-73`)을 옮기면:
 
@@ -2080,7 +2106,7 @@ export const panelRect = async (page: Page, panelId: string) => {
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| `page.mouse`로 실제(trusted) HTML5 드래그를 시작·이동·릴리스·취소한다. 첫 이동 6px(임계값 4px 이상), teleport = 이동 1회 = dragover 1회, 기본 릴리스 `overShadow` | B1-03a | 미실행 | https://raw.githubusercontent.com/microsoft/playwright/main/packages/playwright-core/src/server/chromium/crDragDrop.ts , https://raw.githubusercontent.com/microsoft/playwright/main/packages/playwright-core/src/server/chromium/crInput.ts , Blink 임계값 https://raw.githubusercontent.com/chromium/chromium/main/third_party/blink/renderer/core/input/mouse_event_manager.cc , 핸들 모드 mousedown `src/components/PanelNodeRenderer.tsx:59-69` |
+| `page.mouse`로 실제(trusted) HTML5 드래그를 시작·이동·릴리스·취소한다. 첫 이동 6px(임계값 4px 이상), teleport = 이동 1회 = dragover 1회, 기본 릴리스 `overShadow` | B1-03a | 실행 확인: 40ac74c | https://raw.githubusercontent.com/microsoft/playwright/main/packages/playwright-core/src/server/chromium/crDragDrop.ts , https://raw.githubusercontent.com/microsoft/playwright/main/packages/playwright-core/src/server/chromium/crInput.ts , Blink 임계값 https://raw.githubusercontent.com/chromium/chromium/main/third_party/blink/renderer/core/input/mouse_event_manager.cc , 핸들 모드 mousedown `src/components/PanelNodeRenderer.tsx:59-69` |
 
 ```ts
 import type { Page } from '@playwright/test';
@@ -2179,7 +2205,7 @@ export const begin = async (page: Page, slot: string, opts: { expectStart?: bool
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| CDP `Input.dispatchTouchEvent`로 누르기·이동·떼기를 보낸다. `touchEnd`·`touchCancel`은 `touchPoints: []`. 핸들 모드는 8px 초과 이동으로 시작(롱프레스 없음), `?drag=panel`은 550ms 유지 | B1-03e | 미실행 | https://raw.githubusercontent.com/ChromeDevTools/devtools-protocol/master/pdl/domains/Input.pdl ("TouchEnd and TouchCancel must not contain any touch points, while TouchStart and TouchMove must contains at least one"), https://playwright.dev/docs/api/class-browsercontext (`newCDPSession`은 Chromium 전용), `src/hooks/useTouchDrag.ts:8-9, 142, 145-149, 234, 246-250` |
+| CDP `Input.dispatchTouchEvent`로 누르기·이동·떼기를 보낸다. `touchEnd`·`touchCancel`은 `touchPoints: []`. 핸들 모드는 8px 초과 이동으로 시작(롱프레스 없음), `?drag=panel`은 550ms 유지 | B1-03e | 실행 확인: 40ac74c | https://raw.githubusercontent.com/ChromeDevTools/devtools-protocol/master/pdl/domains/Input.pdl ("TouchEnd and TouchCancel must not contain any touch points, while TouchStart and TouchMove must contains at least one"), https://playwright.dev/docs/api/class-browsercontext (`newCDPSession`은 Chromium 전용), `src/hooks/useTouchDrag.ts:8-9, 142, 145-149, 234, 246-250` |
 
 ```ts
 import type { CDPSession, Page } from '@playwright/test';
@@ -2245,7 +2271,7 @@ export const longPressDrag = async (page: Page, panelId: string, waypoints: Poin
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| 모든 프레임에 `window.__probe`를 넣는다: window capture+bubble 리스너, dragstart/touchstart 때 **대상 노드 자체**에 종료 리스너, 요소 동일성(WeakMap) 기준 DOM 이동 로그. 수동적이다(`preventDefault`·`stopPropagation` 없음) | B1-03a | 미실행 | https://playwright.dev/docs/api/class-browsercontext (`addInitScript`: 페이지 생성·내비게이션·자식 프레임 attach마다 실행), [HARNESS.md](./HARNESS.md) 「프로브」; 분리된 노드로 가는 dragend: `src/components/TreeLayout.tsx:144-150`, `doc/TODO.md` "해결: 드래그 중 소스 DOM 교체로 종료 이벤트 유실" |
+| 모든 프레임에 `window.__probe`를 넣는다: window capture+bubble 리스너, dragstart/touchstart 때 **대상 노드 자체**에 종료 리스너, 요소 동일성(WeakMap) 기준 DOM 이동 로그. 수동적이다(`preventDefault`·`stopPropagation` 없음) | B1-03a | 실행 확인: 40ac74c | https://playwright.dev/docs/api/class-browsercontext (`addInitScript`: 페이지 생성·내비게이션·자식 프레임 attach마다 실행), [HARNESS.md](./HARNESS.md) 「프로브」; 분리된 노드로 가는 dragend: `src/components/TreeLayout.tsx:144-150`, `doc/TODO.md` "해결: 드래그 중 소스 DOM 교체로 종료 이벤트 유실" |
 
 ```ts
 import type { BrowserContext, Page } from '@playwright/test';
@@ -2391,7 +2417,7 @@ export const blockRemote = async (page: Page, origin: string): Promise<() => Pro
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| 의존성 없는 Node CLI: `doctor install build serve status stop smoke up test`. 명령 명세는 [ARCHITECTURE.md](./ARCHITECTURE.md) 「실행 모델」. 여기에는 **틀리기 쉬운 부분**(spawn, 준비 판정, pid, 종료, 탐침, 테스트 래퍼)만 적는다 | B1-00 (`doctor`만), B1-02 (전체) | 미실행 | https://nodejs.org/api/child_process.html (`detached`, `shell`, `.cmd` 실행), https://nodejs.org/api/process.html (`process.kill`), https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/taskkill (`/pid /t /f`), https://vite.dev/guide/cli (`vite preview --host --port --strictPort --outDir`), https://docs.npmjs.com/cli/v11/commands/npm-ping |
+| 의존성 없는 Node CLI: `doctor install build serve status stop smoke up test`. 명령 명세는 [ARCHITECTURE.md](./ARCHITECTURE.md) 「실행 모델」. 여기에는 **틀리기 쉬운 부분**(spawn, 준비 판정, pid, 종료, 탐침, 테스트 래퍼)만 적는다 | B1-00 (`doctor`만), B1-02 (전체) | 실행 확인: 40ac74c | https://nodejs.org/api/child_process.html (`detached`, `shell`, `.cmd` 실행), https://nodejs.org/api/process.html (`process.kill`), https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/taskkill (`/pid /t /f`), https://vite.dev/guide/cli (`vite preview --host --port --strictPort --outDir`), https://docs.npmjs.com/cli/v11/commands/npm-ping |
 
 파일 분할([ARCHITECTURE.md](./ARCHITECTURE.md) 「저장소 구조」와 같다): `ctl.mjs`(명령 분기만) + `lib/{apps,spawn,ready,pins,browser,doctor,serve,commands}.mjs`.
 
@@ -2668,7 +2694,7 @@ export const test = async ({ flags, positional }) => {
 
 | 목적 | 처음 쓰는 단계 | 상태 | 출처 |
 |---|---|---|---|
-| 레인 B → A → C 순서로 Chromium을 확보한다. 버전은 섞지 않는다 | B1-01 | 미실행 | https://playwright.dev/docs/browsers (`PLAYWRIGHT_BROWSERS_PATH`, `install chromium`, `install-deps`, `--only-shell`), https://playwright.dev/docs/test-cli (`install --dry-run`), 버전 대응 https://raw.githubusercontent.com/microsoft/playwright/v1.63.0/packages/playwright-core/browsers.json , https://raw.githubusercontent.com/microsoft/playwright/v1.56.0/packages/playwright-core/browsers.json |
+| 레인 B → A → C 순서로 Chromium을 확보한다. 버전은 섞지 않는다 | B1-01 | 실행 확인(레인 B만): 40ac74c | https://playwright.dev/docs/browsers (`PLAYWRIGHT_BROWSERS_PATH`, `install chromium`, `install-deps`, `--only-shell`), https://playwright.dev/docs/test-cli (`install --dry-run`), 버전 대응 https://raw.githubusercontent.com/microsoft/playwright/v1.63.0/packages/playwright-core/browsers.json , https://raw.githubusercontent.com/microsoft/playwright/v1.56.0/packages/playwright-core/browsers.json |
 
 버전 대응(확인 2026-10-06): v1.63.0 → `chromium`·`chromium-headless-shell` 리비전 **1243**, `153.0.8010.12`. v1.56.0 → 리비전 **1194**, `141.0.7390.37`.
 

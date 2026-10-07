@@ -3,9 +3,28 @@
 > **이 문서는** `@dannysir/floating-components`를 마이크로 프론트엔드(MFA) 환경에서 검수하기 위한 랩 `mfa-lab/`의 설계 기준이다.
 > 클라우드 세션 1(구축)이 이 문서대로 만들고, 클라우드 세션 2(검수)와 이후 수정 세션이 이름·포트·계측 필드를 여기서 찾는다.
 > 설정 파일 전문은 [RECIPES.md](./RECIPES.md), 가설은 [HYPOTHESES.md](./HYPOTHESES.md), 하네스는 [HARNESS.md](./HARNESS.md), 작업 순서는 [BRIEF-1-build.md](./BRIEF-1-build.md)·[BRIEF-2-inspect.md](./BRIEF-2-inspect.md), 판정 규칙은 [../README.md](../README.md)가 맡는다.
-> **이 문서의 내용은 전부 미실행이다.** 코드 리딩과 공개 문서에 근거한 설계이며 브라우저에서 돌려 본 것은 없다. 세션 1의 마지막 단계(B1-08)에서 실제 구축 내용으로 갱신하고, 확인한 항목 옆에 `실행 확인: <commit>`을 적는다.
+> **상태 (2026-10-07)**: 세션 1이 이 설계대로 `mfa-lab/`을 구축하고 실행했다(실행 확인: 40ac74c). 실제와 다른 점과 확인한 사실은 아래 「B1-08 구축 결과」에 모았다. 그 절과 본문이 다르면 그 절이 실제다. 2차 백로그는 여전히 설계다.
 
 ---
+
+## B1-08 구축 결과 (2026-10-07, 세션 1)
+
+실행 확인: 40ac74c. 깨끗한 상태(`mfa-lab/` 아래 `node_modules`·`dist*`·`.run/` 삭제)에서 `node mfa-lab/scripts/ctl.mjs up` 한 번(39초: install 17.7초, build 17.2초)으로 6개 서버(4300, 4390, 4301~4304)가 뜨고 `ctl smoke`가 통과했다. `ctl test smoke` 연속 3회 초록(19 passed, 1 skipped = `EXPECT_ORDERS_STAMP`가 있어야 도는 (c) 케이스).
+
+| 항목 | 실제 |
+|---|---|
+| 앱 | shell, mfe-orders, mfe-board, mfe-billing, mfe-telemetry 전부 구축. blocked 변형 없음 |
+| Module Federation | `MF: on`, 기본 설정 단(매니페스트 URL 문자열 remotes, 짧은 키 React 네 키 싱글턴 공유, `React.lazy` 동적 import). `shareStrategy: 'loaded-first'` — `:4301`을 막아도 `census`는 remote 요청 없이 뜨고 `workbench`는 `error-orders`만 그린다(B1-06 (b)). `:4302` 차단도 같다(B1-07) |
+| MF 매니페스트 | 최상위 `id, name, metaData, shared, remotes, exposes`. `exposes[0] = { id: 'orders:Panel', name: 'Panel', assets }`, `metaData.remoteEntry = { name: 'remoteEntry.js', path: '', type: 'module' }`, `shared`에 react·react-dom 19.2.4 singleton. `ctl smoke`는 `name`과 `exposes`에 `Panel`이 있는지 본다 |
+| 독립 배포 | `LAB_BUILD_STAMP=deploy-2 ctl build --only mfe-orders` → `ctl stop --only mfe-orders` → `ctl serve` 뒤 shell 재빌드 없이 `__mfe.orders.build === 'deploy-2'`, shell `harbor-app` buildId 불변 |
+| React 정체성 | `reactSame`: orders·board·twin·control·control-mount `true`, billing `false`, 단독 페이지 `null` |
+| iframe | `localhost:4304`가 브라우저 안에서 열린다(`crosssite.test` 대안 불필요). cross-site iframe의 `sessionStorage` 사용 가능. OOPIF는 Chromium 인자 `--site-per-process`가 있어야 생긴다(하네스 설정에 넣음). cross-origin iframe 위의 CDP 마우스 드래그 이벤트는 어느 문서에도 오지 않는다(HARNESS 부작용 #7) |
+| `ctl.mjs` | `lib/buildinfo.mjs`(`.run/build.json`·준비 판정 대상)가 더 있다. `build`의 `--mf` 기본값 = `mfa-lab/mf-mode.json`의 `mf`(있을 때. MF degraded 기록용, 지금은 없음) → 없으면 그 앱 `package.json`에 `@module-federation/vite`가 있으면 `on`. `--lib npm051`은 `shell-051`만 빌드. `LAB_BUILD_STAMP` 환경 변수나 `--stamp`·`--only`가 있으면 항상 빌드. `up`은 `.run/durations.json`을 쓴다. 종료 코드: BLOCKED-LANE 3 |
+| detached 서버 | 새 Bash 호출에서도 살아 있다(`ctl status` alive·ready). `serve --foreground`는 쓰지 않았다 |
+| `vite preview`와 재빌드 | 같은 outDir을 다시 빌드하면 떠 있는 preview가 새 파일을 그대로 서빙했다(`harbor-app` buildId가 새 값으로 바뀜). `serve`는 buildId가 다르면 프로세스를 다시 띄운다 |
+| 픽스처 수정 | 모든 HTML에 빈 favicon(`<link rel="icon" href="data:,">`). `PanelFrame`·`Bare` 배지가 첫 마운트를 반영하도록 구독 뒤 한 번 다시 그린다 |
+| mfe-board `dnd` 필드 | `cardMoves`(카드 이동 성공), `zoneDrops`(열이 받은 drop, 타입 무관), `copyDrops`(copy 존이 받은 copy 드롭), `lastDragend`(board 안에서 시작한 드래그의 dragend `dropEffect`·`effectAllowed`), `lastTypes`(board 존의 마지막 dragover/drop types) |
+| 타입 검사 | 하지 않았다(게이트 아님) |
 
 ## 제품 개요
 
@@ -745,7 +764,7 @@ mfa-lab/
     src/{index.ts,probe.ts,bus.ts,style.ts}
   scripts/
     ctl.mjs                      의존성 없는 CLI (「실행 모델」). 명령 분기만
-    lib/{apps,spawn,ready,pins,browser,doctor,serve,commands}.mjs
+    lib/{apps,spawn,ready,pins,browser,doctor,serve,commands,buildinfo}.mjs
                                  apps=레지스트리·활성 집합, spawn=프로세스, ready=준비 판정, pins=핀 검사,
                                  browser=레인 해석, doctor=탐침, serve=serve·status·stop·pid 파일, commands=나머지 명령
   apps/
@@ -872,7 +891,7 @@ mfa-lab/
 | 핀 | 활성 프로젝트의 `package.json`에서 `registry.json` `pins`에 있는 의존성이 핀과 정확히 같다. `^`·`~` 없음 |
 | 보호 경로 | `git status --porcelain -- package.json package-lock.json tsconfig.json vite.config.ts`(루트 파일)가 비어 있다. `src`에 변경이 있으면 경고만 낸다(수정 세션에서는 `src/`를 고치는 것이 정상이다) |
 | 준비 확인 | 활성 앱 전부가 「포트와 origin」의 상태 200 + 본문 검사를 통과 |
-| MF 매니페스트 | (`build.json`의 shell `mf`가 `on`일 때만) `/mf-manifest.json`의 `name`이 맞고 `Panel` 노출이 들어 있다. 매니페스트의 정확한 필드 모양은 B1-06에서 실제 파일을 보고 확정한다 |
+| MF 매니페스트 | (`build.json`의 shell `mf`가 `on`일 때만) `/mf-manifest.json`의 `name`이 맞고 `exposes`에 `Panel`이 있다(실행 확인: 40ac74c. 모양은 「B1-08 구축 결과」) |
 | billing 단독 페이지 | :4303의 `/`가 `remote-entry.js`를 참조하는 HTML |
 | lockfile (경고만) | 각 lockfile에 `@rollup/rollup-win32-x64-msvc`와 `@esbuild/win32-x64`가 있다. 없으면 경고를 낸다(게이트 아님) |
 

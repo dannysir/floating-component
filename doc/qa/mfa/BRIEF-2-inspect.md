@@ -741,4 +741,9 @@ STATE.md 행 `B2-END`. 전부 참이어야 닫는다.
 
 | 날짜 | 세션 | 내용 |
 |---|---|---|
-| | | |
+| 2026-10-07 | 세션 1 (B1-08) | 헬퍼 시그니처: `snapshot(page, step)`, `checkInvariants(page, opts?)`, `expectInvariants(page, opts?)`, `capture(page, testInfo, label, opts?)`, `finishCase(page, testInfo, since?)`(케이스 끝 `events.json`·`console.txt`). 이 문서의 `snapshot`·`checkInvariants`·`capture` 호출은 `lab` 대신 `page`(와 `test.info()`)를 넘긴다. `diff(before, after)`, `seedContent(page, slot)`(iframe 슬롯은 프레임 안 `tele-input`·`tele-scroll`), `writeObservation`, `promote`는 이름 그대로다. 위치: `mfa-lab/e2e/helpers/{snapshot,invariants,evidence}.ts` |
+| 2026-10-07 | 세션 1 (B1-08) | `teleport`: 대상 요소가 바뀌는 이동이면 같은 점으로 한 번 더 움직인다(Blink가 그 갱신의 dragover를 미룸). teleport당 dragover 1회는 그대로다. 터치 `handleDrag`: 시작 이동이 12px → 24px 두 번이다(Chromium touch slop). 8px 문턱 바로 위의 터치 시작은 이 하네스로 볼 수 없다 |
+| 2026-10-07 | 세션 1 (B1-08) | Playwright 실행 인자에 `--site-per-process`가 있다. 이 인자 없이는 `telemetry-x`가 OOPIF가 아니었다. `telemetry-x OOPIF: yes`(인자 기준) |
+| 2026-10-07 | 세션 1 (B1-08) | S9 관찰: cross-origin iframe(`telemetry`, `telemetry-x`) 위의 CDP 마우스 드래그 이벤트는 host에도 iframe 문서에도 오지 않는다(HARNESS 부작용 #7). R07의 iframe 경우·R12·R15의 iframe 위 마우스 관찰에는 하네스 충실도 단서를 붙이고, 사다리 3단계(터치)와 `control-iframe` 대조를 함께 적는다 |
+| 2026-10-07 | 세션 1 (B1-08) | blocked 행 없음: MF on(기본 설정 단), 터치 ok, `telemetry-x` 로드됨, remote 막힘 없음. S7b: 레인 B headless shell에서 네이티브 `dragstart`·`touchcancel` 미관찰 |
+| 2026-10-07 | 세션 1 (B1-08) | 스모크 스펙 `smoke/orders`의 (c) 케이스는 `EXPECT_ORDERS_STAMP`가 있을 때만 돈다(없으면 skipped 1). S8 스펙은 환경 변수 `S08_RUN_ID`로 실행을 구분한다 |
