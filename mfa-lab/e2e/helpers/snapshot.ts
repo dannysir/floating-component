@@ -160,14 +160,16 @@ export const seedContent = async (page: Page, slot: string): Promise<void> => {
     await frame.locator('[data-testid="tele-scroll"]').evaluate((el) => { (el as HTMLElement).scrollTop = 120; });
     return;
   }
-  await root.locator(`[data-testid="${slot}-input"]`).fill(`seed-${slot}`);
+  const input = root.locator(`[data-testid="${slot}-input"]`);
+  if (await input.count()) await input.fill(`seed-${slot}`);
   const counter = root.locator(`[data-testid="${slot}-counter"]`);
   if (await counter.count()) {
     await counter.click();
     await counter.click();
     await counter.click();
   }
-  await root.locator(`[data-testid="${slot}-scroll"]`).evaluate((el) => { (el as HTMLElement).scrollTop = 120; }).catch(() => undefined);
+  const scroll = root.locator(`[data-testid="${slot}-scroll"]`);
+  if (await scroll.count()) await scroll.evaluate((el) => { (el as HTMLElement).scrollTop = 120; });   // bare-*에는 스크롤이 없다
 };
 
 // diff(before, after): 슬롯마다 한 가지 분류. 위에서부터 처음 맞는 것 (doc/qa/mfa/HARNESS.md 「diff(before, after) 분류」)
@@ -180,7 +182,8 @@ export interface SlotDiff {
 export interface SnapshotDiff { unsettled: boolean; slots: Record<string, SlotDiff> }
 
 const num = (v: unknown) => Number(v ?? 0);
-const DEFAULTS: Record<keyof ContentSnap, unknown> = { input: '', counter: 'count 0', scrollTop: 0, focused: false };
+// focused는 비교하지 않는다: 마우스 시나리오에서는 begin의 핸들 mousedown이 먼저 포커스를 빼앗는다(BRIEF-2 공통 규칙).
+const DEFAULTS: Partial<Record<keyof ContentSnap, unknown>> = { input: '', counter: 'count 0', scrollTop: 0 };
 
 export const diff = (before: Snapshot, after: Snapshot): SnapshotDiff => {
   const panelOfSlot = Object.fromEntries(Object.entries({ ...before.dom.panels, ...after.dom.panels }).map(([id, p]) => [p.slot ?? id, id]));
