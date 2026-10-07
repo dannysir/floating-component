@@ -11,15 +11,7 @@
 
 ## 진행 중
 
-### 1.0.0 릴리스 (브랜치 `release/1.0.0`)
-
-> 첫 안정 버전. 패널 잠금(`feat/panel-lock`)과 QA 발견 FC-QA-008 수정(`qa/mfa-lab`에서 검수·수정 후 cherry-pick)을 묶었다. CHANGELOG `[1.0.0]`·README "최근 변경" 확정 완료.
-
-- [ ] PR `release/1.0.0` → main 머지 (머지 커밋)
-- [ ] main에서 `npm version major` → `git push origin main --follow-tags` (태그 `v1.0.0`)
-- [ ] GitHub Release `v1.0.0` 발행 → Actions "Publish to npm" 성공, npm에서 1.0.0 확인
-- [ ] main을 `qa/mfa-lab`에 머지 (테스트 브랜치의 `src/`를 배포본과 맞춤)
-- [ ] 배포 후 이 절을 지우고 CHANGELOG 날짜가 실제 배포일과 같은지 확인
+- 없음. QA 검수 발견의 수정 목록은 `qa/mfa-lab` 브랜치의 `doc/TODO.md` "QA 발견 수정 (run 01)" 참고
 
 ---
 
