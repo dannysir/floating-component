@@ -61,11 +61,12 @@ test('smoke orders (b2): orders origin blocked, workbench renders with the error
   await blockRemote(page, ORDERS);
   const opened = await lab.open({ layout: 'workbench', expectState: { orders: 'error' } });
   await settle(page);
-  expect(opened.skipped).toEqual(['board']);                            // board는 B1-07 전이라 미등록
+  // B1-06 시점에는 board가 미등록이라 skipped = ['board']였다. B1-07에서 board를 등록한 뒤에는 [] 이고 board도 ready다.
+  expect(opened.skipped).toEqual([]);
   await expect(page.locator('[data-tree-root] [data-testid="error-orders"]')).toBeVisible();
   await expect(page.locator('[data-tree-root] [data-testid^="error-"]')).toHaveCount(1);
   const states = await page.evaluate(() => Object.fromEntries(Object.entries((window as unknown as { __fc: { frames: Record<string, { state: string }> } }).__fc.frames).map(([k, v]) => [k, v.state])));
-  expect(states).toMatchObject({ nav: 'ready', orders: 'error', billing: 'ready', telemetry: 'ready', 'telemetry-x': 'ready' });
+  expect(states).toMatchObject({ nav: 'ready', orders: 'error', board: 'ready', billing: 'ready', telemetry: 'ready', 'telemetry-x': 'ready' });
   // 허용되는 콘솔 에러는 끊은 요청에 대한 것뿐이다
   const unexpected = lab.consoleErrors().filter((c) => !c.text.includes('4301') && !/Failed to load resource|ERR_FAILED|Failed to fetch|mf-manifest|RUNTIME-/.test(c.text));
   console.log(`[B1-06 b2] console errors: ${JSON.stringify(lab.consoleErrors().map((c) => c.text.slice(0, 160)))}`);
