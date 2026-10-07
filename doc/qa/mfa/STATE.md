@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`B1-03e`
+`B1-03f`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -50,7 +50,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | B1-03b 불변식·취소 경로 (S2~S4) | 97d303d | 2026-10-07T01:12Z | 1 | 통과 (S1~S4 + I1~I7, S3·S4의 dragend는 분리된 원본에만 기록) |
 | [x] | B1-03c npm 0.5.1 양성 대조 (S5) | 69e663b | 2026-10-07T01:13Z | 1 | 통과 (S5 요구대로 실패: I1·I2 둘 다 실패) |
 | [x] | B1-03d 리사이즈 (S6) | 3930df3 | 2026-10-07T01:14Z | 1 | 통과 (+148.1 px, 오차 1.9 px, gotpointercapture, userSelect 복원) |
-| [ ] | B1-03e 터치 (S7a, S7b) | | | | |
+| [x] | B1-03e 터치 (S7a, S7b) | 831126e | 2026-10-07T01:16Z | 2 | 통과 (S7a: 1회차 touch slop으로 첫 12px touchmove 억제 → 12+24px로 분할. S7b 기록: 네이티브 dragstart·touchcancel 없음) |
 | [ ] | B1-03f rAF 경합 비율 표 (S8) | | | | |
 | [ ] | B1-04 `mfe-billing` + mount 어댑터 | | | | |
 | [ ] | B1-05 `mfe-telemetry` + iframe 어댑터 (S9) | | | | |
@@ -96,7 +96,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | Chromium 빌드 | 153.0.8010.12 (리비전 1243, headless shell) | B1-01 |
 | detached 서버 생존 (yes/no) | yes (새 Bash 호출의 `ctl status` = alive·ready) | B1-02 |
 | 라이브러리 소스 (src/dist) | src | B1-02 |
-| 터치 (ok/env-limit) | | B1-03e |
+| 터치 (ok/env-limit) | ok | B1-03e |
 | telemetry-x OOPIF (yes/no/env-limit) | | B1-05 |
 | MF (on/degraded) | | B1-06 |
 | blocked 변형 | | B1-04~B1-07 |
