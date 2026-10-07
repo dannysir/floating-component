@@ -1,0 +1,223 @@
+{
+ "step": "01-before",
+ "url": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+ "lib": {
+  "source": "src",
+  "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+  "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+ },
+ "settle": {
+  "stable": true,
+  "reads": 2,
+  "ms": 146
+ },
+ "tree": {
+  "type": "split",
+  "direction": "horizontal",
+  "size": 1,
+  "children": [
+   {
+    "type": "panel",
+    "id": "p-a",
+    "size": 1,
+    "componentKey": "control-a"
+   },
+   {
+    "type": "panel",
+    "id": "p-b",
+    "size": 1,
+    "componentKey": "telemetry"
+   },
+   {
+    "type": "panel",
+    "id": "p-c",
+    "size": 1,
+    "componentKey": "telemetry-x"
+   }
+  ]
+ },
+ "treeNotation": "H[p-a,p-b,p-c]",
+ "treeVersion": 0,
+ "calls": [],
+ "dom": {
+  "domTree": "H[p-a,p-b,p-c]",
+  "draggingPanelId": null,
+  "panels": {
+   "p-a": {
+    "slot": "control-a",
+    "rect": {
+     "x": 12,
+     "y": 52,
+     "width": 413.328125,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 1
+   },
+   "p-b": {
+    "slot": "telemetry",
+    "rect": {
+     "x": 433.328125,
+     "y": 52,
+     "width": 413.34375,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 2
+   },
+   "p-c": {
+    "slot": "telemetry-x",
+    "rect": {
+     "x": 854.671875,
+     "y": 52,
+     "width": 413.328125,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 3
+   }
+  },
+  "resizerCount": 2,
+  "resizers": [
+   {
+    "rect": {
+     "x": 425.328125,
+     "y": 52,
+     "width": 8,
+     "height": 736
+    },
+    "axis": "x"
+   },
+   {
+    "rect": {
+     "x": 846.671875,
+     "y": 52,
+     "width": 8,
+     "height": 736
+    },
+    "axis": "x"
+   }
+  ],
+  "ghosts": [],
+  "bodyUserSelect": ""
+ },
+ "counters": {
+  "frames": {
+   "control-a": {
+    "kind": "local",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   },
+   "telemetry": {
+    "kind": "iframe",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready",
+    "mirror": {
+     "loads": 1,
+     "docIds": [
+      "2765a16a-aa01-4a2a-8964-cd4dd7d81743"
+     ],
+     "lastLoadedAt": 1791339822088
+    }
+   },
+   "telemetry-x": {
+    "kind": "iframe",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready",
+    "mirror": {
+     "loads": 1,
+     "docIds": [
+      "41869429-d39a-48b3-98e5-e37143a66399"
+     ],
+     "lastLoadedAt": 1791339822062
+    }
+   }
+  },
+  "mfe": {
+   "control-a": {
+    "slot": "control-a",
+    "kind": "local",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "shell",
+    "build": "20261007T021653Z-2754"
+   }
+  },
+  "iframes": {
+   "telemetry": {
+    "loads": 1,
+    "docId": "2765a16a-aa01-4a2a-8964-cd4dd7d81743",
+    "frameUrl": "http://127.0.0.1:4304/?slot=telemetry&parent=http%3A%2F%2F127.0.0.1%3A4300"
+   },
+   "telemetry-x": {
+    "loads": 1,
+    "docId": "41869429-d39a-48b3-98e5-e37143a66399",
+    "frameUrl": "http://localhost:4304/?slot=telemetry-x&parent=http%3A%2F%2F127.0.0.1%3A4300"
+   }
+  },
+  "domMoves": {},
+  "domLog": [
+   {
+    "seq": 1,
+    "t": 113.29999999981374,
+    "panelId": "p-a",
+    "kind": "added",
+    "elementSeq": 1
+   },
+   {
+    "seq": 2,
+    "t": 113.39999999990687,
+    "panelId": "p-b",
+    "kind": "added",
+    "elementSeq": 2
+   },
+   {
+    "seq": 3,
+    "t": 113.39999999990687,
+    "panelId": "p-c",
+    "kind": "added",
+    "elementSeq": 3
+   }
+  ]
+ },
+ "content": {
+  "control-a": {
+   "input": "seed-control-a",
+   "counter": "count 3",
+   "scrollTop": 120,
+   "focused": false
+  },
+  "telemetry": {
+   "input": "seed-telemetry",
+   "counter": null,
+   "scrollTop": 120,
+   "focused": false
+  },
+  "telemetry-x": {
+   "input": "seed-telemetry-x",
+   "counter": null,
+   "scrollTop": 120,
+   "focused": true
+  }
+ },
+ "activeTestid": "iframe-telemetry-x",
+ "console": [],
+ "pageErrors": [],
+ "documentRequests": {
+  "http://127.0.0.1:4300": 1,
+  "http://127.0.0.1:4304": 1,
+  "http://localhost:4304": 1
+ }
+}

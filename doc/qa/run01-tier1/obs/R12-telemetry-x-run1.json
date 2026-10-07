@@ -1,0 +1,180 @@
+{
+  "run": "run01-tier1",
+  "runNo": 1,
+  "scenario": "R12",
+  "case": "R12-telemetry-x",
+  "expected": "같다",
+  "predicted": "같다. 이벤트가 어느 프레임 프로브에 찍히는지는 S9 결과에 따름(하네스 충실도 단서)",
+  "observed": "hover domTree H[p-a,p-b,p-c]; dragenter/dragover 프레임 [top], top 프레임 p-c 대상 dragover 0건; telemetry-x seen {\"dragenter\":0,\"dragover\":0,\"drop\":0,\"pointermove\":0,\"touchstart\":0} → hover {\"dragenter\":0,\"dragover\":0,\"drop\":0,\"pointermove\":0,\"touchstart\":0} → 후 {\"dragenter\":0,\"dragover\":0,\"drop\":0,\"pointermove\":0,\"touchstart\":0}, loads 1→1; under=outside, sawDrop=false, dragendDropEffect=null; onMovePanel 0건 ; 커밋된 트리 H[p-a,p-b,p-c]; 불변식 실패: I1(data-dragging-panel-id=p-a remains). 누적: control-a(p-a): frame+0 content+0 moves+0 input=\"seed-control-a\" counter=\"count 3\" scrollTop=120 [untouched]; telemetry(p-b): frame+0 content+0 moves+0 loads+0 input=\"seed-telemetry\" counter=null scrollTop=120 [untouched]; telemetry-x(p-c): frame+0 content+0 moves+0 loads+0 input=\"seed-telemetry-x\" counter=null scrollTop=120 [untouched]",
+  "verdict": "deviates",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on",
+    "harness_fidelity": "cross-origin iframe 위 CDP 마우스 드래그 이벤트 미전달(S9, HARNESS 부작용 #7)",
+    "harness_artifact": "FC-QA-006: OOPIF 위 mouse.up에서 dragend 미전달, 드래그 세션 정지(I1 실패는 이것 때문). 사이트 격리 없이 같은 절차는 dragend(none)로 끝남(r12c-oopif-release-nospp)"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": false,
+      "detail": "data-dragging-panel-id=p-a remains",
+      "violations": [
+        {
+          "key": "p-a",
+          "message": "data-dragging-panel-id=p-a remains"
+        }
+      ],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": true,
+      "detail": "userSelect restored",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[p-a,p-b,p-c]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (control-a,telemetry,telemetry-x)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r12-iframe-drop-target/R12-telemetry-x-run1"
+  ],
+  "extra": {
+    "events": "dragstart/capture/p-a[none] dragstart/bubble/p-a[none] dragenter/capture/p-a[move] dragenter/bubble/p-a[move]",
+    "deltas": {
+      "control-a": {
+        "slot": "control-a",
+        "panelId": "p-a",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-a",
+        "counter": "count 3",
+        "scrollTop": 120,
+        "cls": "untouched"
+      },
+      "telemetry": {
+        "slot": "telemetry",
+        "panelId": "p-b",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": 0,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-telemetry",
+        "counter": null,
+        "scrollTop": 120,
+        "cls": "untouched"
+      },
+      "telemetry-x": {
+        "slot": "telemetry-x",
+        "panelId": "p-c",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": 0,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-telemetry-x",
+        "counter": null,
+        "scrollTop": 120,
+        "cls": "untouched"
+      }
+    },
+    "innerBefore": {
+      "slot": "telemetry-x",
+      "kind": "iframe",
+      "build": "20261007T013117Z-8cd7",
+      "loads": 1,
+      "docId": "3106910f-0edd-4c0b-9899-c4c29b7e6c6b",
+      "loadedAt": 1791339832258,
+      "seen": {
+        "dragenter": 0,
+        "dragover": 0,
+        "drop": 0,
+        "pointermove": 0,
+        "touchstart": 0
+      }
+    },
+    "innerMid": {
+      "slot": "telemetry-x",
+      "kind": "iframe",
+      "build": "20261007T013117Z-8cd7",
+      "loads": 1,
+      "docId": "3106910f-0edd-4c0b-9899-c4c29b7e6c6b",
+      "loadedAt": 1791339832258,
+      "seen": {
+        "dragenter": 0,
+        "dragover": 0,
+        "drop": 0,
+        "pointermove": 0,
+        "touchstart": 0
+      }
+    },
+    "innerAfter": {
+      "slot": "telemetry-x",
+      "kind": "iframe",
+      "build": "20261007T013117Z-8cd7",
+      "loads": 1,
+      "docId": "3106910f-0edd-4c0b-9899-c4c29b7e6c6b",
+      "loadedAt": 1791339832258,
+      "seen": {
+        "dragenter": 0,
+        "dragover": 0,
+        "drop": 0,
+        "pointermove": 0,
+        "touchstart": 0
+      }
+    }
+  }
+}

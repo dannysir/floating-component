@@ -75,7 +75,7 @@
 | R05 (사다리) | census / bare | 같은 제스처 | mouse | fail(FC-QA-001) | as-predicted | obs/R05-ladder-bare-run{1,2}.json |
 | R07 | locks / terminal=control | 소스 리마운트 후 Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (취소 자체는 깨끗: I1~I7 통과, `dragend`는 분리된 원본에 `isConnected:false`) | obs/R07-esc-run{1,2}.json |
 | R07 | locks / terminal=control | 잠긴 nav 위에서 놓기 | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (`locked`, drop 없음, `dropEffect none`, 트리 불변) | obs/R07-nav-run{1,2}.json |
-| R07 | locks / output=telemetry | iframe 본문 위에서 놓기 | mouse | fail(FC-QA-001, FC-QA-002; iframe 드롭은 R12 발견 참고) | as-predicted (취소·미리보기 유지·트리 불변. "마지막 dragover가 :4304 프레임"은 관찰 불가: HARNESS 부작용 #7) | obs/R07-iframe-run{1,2}.json |
+| R07 | locks / output=telemetry | iframe 본문 위에서 놓기 | mouse | fail(FC-QA-001, FC-QA-002, FC-QA-005) | as-predicted (취소·미리보기 유지·트리 불변. "마지막 dragover가 :4304 프레임"은 관찰 불가: HARNESS 부작용 #7) | obs/R07-iframe-run{1,2}.json |
 | R07 (사다리) | locks / output=control-iframe | iframe 본문 위에서 놓기 | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (telemetry와 같음) | obs/R07-ladder-control-iframe-run{1,2}.json |
 | R07 | locks / terminal=control | workspace 여백에서 놓기 | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (루트 `dragleave`로 미리보기가 먼저 지워짐, drop 없음) | obs/R07-padding-run{1,2}.json |
 | R07 | locks / terminal=telemetry | 소스 리마운트 후 Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (소스 iframe `loads` +2는 D3b) | obs/R07-iframe-source-run{1,2}.json |
@@ -86,9 +86,12 @@
 | R10 | row3 / a=board, b=control-b | `<img>`를 옆 패널로: hover, drop | mouse | fail(FC-QA-003) | as-predicted (카드와 같음) | obs/R10-img-run{1,2}.json |
 | R10 | row3 / a=board-local, b=control-b | 카드, `<img>` | mouse | fail(FC-QA-003) | as-predicted (board와 같음) | obs/R10-board-local-{card,img}-run{1,2}.json |
 | R10 (사다리) | row3 / a=board, `lock=p-a:draggable` | 카드를 옆 패널로 | mouse | fail(FC-QA-004) | as-ideal(= 대조 예측: 미리보기·이동 없음). 단 헤더 위 릴리스가 `dropEffect 'move'`로 받아들여짐 → FC-QA-004 변형 | obs/R10-ladder-lock-card-run{1,2}.json |
-| R12 | row3 / control-a, telemetry, telemetry-x (`iframeShield=0`) | telemetry 위 hover, 놓기 | mouse | not-run | | |
-| R12 | row3 / 같은 배치 (`iframeShield=0`) | telemetry-x 위 hover, 놓기 | mouse | not-run | | |
-| R12 | row3 / 같은 배치 (`iframeShield=1`) | telemetry, telemetry-x 위 hover, 놓기 | mouse | not-run | | |
+| R12 | row3 / control-a, telemetry, telemetry-x (`iframeShield=0`) | telemetry 위 hover, 놓기 | mouse | fail(FC-QA-005) | as-predicted 핵심(미리보기 없음, 취소, 트리 불변, I1~I7 통과). ":4304 프레임에 dragover, `seen` 증가"는 관찰 불가(부작용 #7: 이벤트 0), 그래서 하네스의 `underCursorAtDrop`이 `outside`(기하로는 iframe) | obs/R12-telemetry-run{1,2}.json |
+| R12 | row3 / 같은 배치 (`iframeShield=0`) | telemetry-x 위 hover, 놓기 | mouse | fail(FC-QA-005) | deviates — 미리보기 없음은 같지만 릴리스 뒤 `dragend` 없음 → I1 실패. 귀속: harness-artifact(FC-QA-006, 사이트 격리 없이 같은 절차는 정상 종료) | obs/R12-telemetry-x-run{1,2}.json (`harness_artifact` 라벨) |
+| R12 (사다리 4) | row3 / 같은 배치, `--site-per-process` 유무 | OOPIF 위 릴리스 진단 | mouse | harness-artifact(FC-QA-006) | OOPIF일 때만 `dragend` 미전달·세션 정지 | explore/r12c-oopif-release-{spp,nospp}.spec.ts 로그 |
+| R12 (사다리) | row3 / b=control-iframe (`iframeShield=0`) | iframe 위 hover, 놓기 | mouse | fail(FC-QA-005) | as-predicted (same-origin에서도 미리보기 없음, `under 'iframe'`, drop 없음, I1~I7 통과) | obs/R12-ladder-control-iframe-run{1,2}.json |
+| R12 (사다리 3) | row3 / telemetry, telemetry-x, control-iframe | 핸들 터치 드래그로 같은 지점에 놓기 | touch-cdp-handle | fail(FC-QA-005) | as-predicted (세 대상 모두 **커밋** `H[p-b,p-a,p-c]` → 마우스와 경로 불일치. Chromium CDP touch emulation, headless; not a real device) | obs/R12-touch-{telemetry,telemetry-x,control-iframe}-run{1,2}.json |
+| R12 | row3 / 같은 배치 (`iframeShield=1`) | telemetry, telemetry-x 위 hover, 놓기 | mouse | pass | as-ideal(= 예측: 미리보기 `H[p-b,p-a,p-c]`, `overShadow` 커밋, `calls` 1건, I1~I7 통과) | obs/R12-shield-p-{b,c}-run{1,2}.json |
 | R14 | locks | terminal 터치 드래그 → editor 왼쪽 → nav 위(차단 ghost) → 놓기 | touch-cdp-handle | not-run | | |
 | R14 | locks | 이어서 두 번째 드래그 | touch-cdp-handle | not-run | | |
 | R16 | workbench / orders origin 차단 | 로드 | mouse | not-run | | |
@@ -152,6 +155,8 @@
 | [FC-QA-002](../findings/FC-QA-002-preview-reinserts-non-dragged-panels.md) | 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM 재삽입해 스크롤을 잃게 한다 | sev-3 | library-bug | open | 2/2 | R01 | keyed-reorder-reinsert |
 | [FC-QA-003](../findings/FC-QA-003-content-native-drag-becomes-panel-drag.md) | 패널 내용(remote 칸반 카드)의 네이티브 드래그가 패널 드래그로 처리된다 | sev-2 | library-bug | open | 2/2 | R09 | foreign-dragstart-unguarded |
 | [FC-QA-004](../findings/FC-QA-004-layout-hijacks-non-panel-drag.md) | 패널이 패널 드래그가 아닌 드래그의 drop 전파를 막고 dropEffect를 덮어쓴다 | sev-2 | spec-question | needs-user-confirmation | 2/2 | R09 | foreign-drag-handlers-unguarded |
+| [FC-QA-005](../findings/FC-QA-005-iframe-panel-not-mouse-drop-target.md) | iframe 패널은 마우스 드롭 대상이 되지 않는데 터치에서는 된다 (경로 불일치) | sev-3 | library-bug | open | 2/2 | R12 | iframe-drop-target-mouse |
+| [FC-QA-006](../findings/FC-QA-006-oopif-release-no-dragend-harness.md) | (하네스) OOPIF 위 마우스 릴리스에서 dragend가 오지 않고 CDP 드래그 세션이 멈춘다 | sev-4 | harness-artifact | open | 2/2 | R12 | harness-cdp-drag-oopif |
 
 `predicted`였던 발견의 결과: FC-QA-001 — 관찰됨(R01에서 `open`으로 변경)
 
@@ -220,7 +225,7 @@
 | 후보 | 근거 (시나리오, 관찰 기록) | 권장 패턴 | 확인 여부 |
 |---|---|---|---|
 | iframe 내용 안에서는 패널 드래그를 시작할 수 없다 (결정 D4) | <R12, R13> | 핸들을 host가 그리고 `dragHandleSelector="[data-drag-handle]"`를 쓴다 | <확인 \| 미확인> |
-| iframe 패널 위에서는 마우스 드롭 대상 판정이 되지 않는다 | <R12> | 드래그 중 `[data-dragging-panel-id] iframe { pointer-events: none }` | <확인 \| 미확인> |
+| iframe 패널 위에서는 마우스 드롭 대상 판정이 되지 않는다 (FC-QA-005가 고쳐질 때까지) | R12: shield 없이 마우스 미리보기 없음(`obs/R12-ladder-control-iframe-run1.json`), `iframeShield=1`이면 커밋(`obs/R12-shield-p-b-run1.json`, `R12-shield-p-c-run1.json`) | 드래그 중 `[data-dragging-panel-id] iframe { pointer-events: none }` | 확인 |
 | remote가 죽어도 레이아웃이 유지되려면 경계가 패널 안에 있어야 한다 | <R16> | 패널 내용마다 에러 경계·Suspense를 두고, `TreeLayout` 바깥에는 두지 않는다. 핸들은 경계 밖에 둔다 | <확인 \| 미확인> |
 
 ---
@@ -251,6 +256,7 @@
 | Firefox / WebKit 마우스 | 이번 run은 Chromium만 실행했다. Firefox에는 소스 노드가 옮겨지면 `dragend`가 오지 않는 버그 보고가 있다 ([Bugzilla 460801](https://bugzilla.mozilla.org/show_bug.cgi?id=460801)) | 사용자 PC의 Firefox에서 R07의 취소 경로 | <미확인> |
 | 터치: 다른 Chromium major | 레인 하나만 실행했다. Chromium 141은 터치 롱프레스 네이티브 드래그가 꺼져 있고 153은 켜져 있다 | 다른 레인으로 S7b·R13·R14 재실행 | <미확인> |
 | 브라우저 창 밖에서 놓기 | 가로챈 드래그로는 창 밖 릴리스를 만들 수 없다 | 사용자 PC에서 패널을 창 밖으로 끌고 나가 놓기 | <미확인> |
+| cross-origin iframe 위 마우스 드래그 (GO 참고 사항) | CDP 드래그 이벤트가 cross-origin iframe 위에서 어느 문서에도 오지 않는다(부작용 #7). OOPIF 위 릴리스는 `dragend`도 오지 않는다(FC-QA-006) | 사용자 PC Chrome에서 `?layout=row3&b=telemetry&c=telemetry-x&iframeShield=0`: 패널을 telemetry-x 본문 위로 끌어 놓았을 때 (1) 미리보기가 생기는지(FC-QA-005 예측: 아니오) (2) 놓은 뒤 패널이 정상으로 돌아오는지(FC-QA-006 예측: 예) | <미확인> |
 | <GO caveat 등 이번 run에서 추가된 한계> | | | |
 
 ---
@@ -283,6 +289,15 @@
 | `diff`가 `focused`를 내용 상태로 비교해 포커스만 잃은 소스를 `content-reset`으로 분류 → `focused` 제외(마우스 시나리오는 포커스를 판정하지 않는다) | R01 `test:` 커밋 | 같은 재실행. 영향받은 행은 분류 라벨뿐(카운터 무관) |
 | `promote`가 대상 디렉터리를 통째로 비워 여러 시나리오의 증거를 한 발견에 모을 수 없음 → 선택적 `prefix`(예: `R05-`)로 그 접두어 파일만 갱신 | R05 `test:` 커밋 | smoke 19 passed, S1·S3·S6 통과, S5 요구대로 실패 |
 | (픽스처) mfe-board: 드롭이 성공하면 카드가 다른 열로 옮겨져 원본 노드가 분리되고, 분리된 노드의 `dragend`가 React 루트에 오지 않아 `dnd.lastDragend`가 `null`로 남음(단독 페이지 포함 모든 R09 케이스, 첫 실행에서 standalone이 `deviates`) → `dragstart` 때 원본 카드 노드에 네이티브 `dragend` 리스너를 걸고 분리된 경우에만 기록. 라이브러리 동작은 우회하지 않는다 | R09 `test: [R09] fix` 커밋 | `build --only mfe-board,shell` 뒤 ctl smoke OK, smoke 19 passed, S1·S3·S6 통과, S5 요구대로 실패. board 슬롯을 쓰는 닫힌 행 없음. R09 재실행: `lastDragend {move, move}` 외 값 동일, 첫 실행 관찰 기록은 재측정으로 덮었다 |
+
+### HARNESS.md 「알려진 하네스 부작용」 추가 제안
+
+세션은 HARNESS.md를 직접 고치지 않고 여기 제안한다(BRIEF-2 분류 기본값표).
+
+| # | 현상 | 원인 | 대처 | 근거 |
+|---|---|---|---|---|
+| 19 | OOPIF(`--site-per-process`의 `telemetry-x`) 위에서 `mouse.up` 하면 `dragleave`·`dragend`가 오지 않고, 이후 이동·up·Esc에도 이벤트가 없다(드래그 세션 정지). 라이브러리 `data-dragging-panel-id`가 남아 I1 실패 | 가로챈 드래그(`Input.dispatchDragEvent`)를 OOPIF 위에서 끝낼 때의 전달 방식(추정). 사이트 격리를 끄면 사라진다 | OOPIF 위 마우스 릴리스 결과는 판정에 쓰지 않는다. 그 페이지는 재사용하지 않는다. 릴리스 판정은 `control-iframe`·same-site `telemetry`·터치로 | FC-QA-006, `explore/r12c-oopif-release-{spp,nospp}.spec.ts` |
+| 7 보강 | 부작용 #7 때문에 `release()`의 `underCursorAtDrop`(마지막 `dragover` 기준)이 cross-origin iframe 위에서 `outside`가 된다(기하로는 iframe) | `mouseDrag.ts` `finish`가 이벤트로 분류 | iframe 위 릴리스는 `underCursor()`(기하)도 함께 기록한다 | R07-iframe, R12-telemetry |
 
 ### 브리프 변경
 
