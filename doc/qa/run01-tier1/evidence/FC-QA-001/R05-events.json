@@ -1,0 +1,634 @@
+[
+ {
+  "seq": 113,
+  "eid": 57,
+  "t": 2518.5,
+  "wall": 1791339039544,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 114,
+  "eid": 57,
+  "t": 2518.5999999999767,
+  "wall": 1791339039544,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 115,
+  "eid": 58,
+  "t": 2518.5999999999767,
+  "wall": 1791339039544,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66
+ },
+ {
+  "seq": 116,
+  "eid": 58,
+  "t": 2518.6999999999534,
+  "wall": 1791339039544,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66
+ },
+ {
+  "seq": 117,
+  "eid": 59,
+  "t": 2533.79999999993,
+  "wall": 1791339039559,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 118,
+  "eid": 59,
+  "t": 2534.0999999999767,
+  "wall": 1791339039559,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 119,
+  "eid": 60,
+  "t": 2534.0999999999767,
+  "wall": 1791339039559,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "mousedown",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66
+ },
+ {
+  "seq": 120,
+  "eid": 60,
+  "t": 2534.4000000000233,
+  "wall": 1791339039560,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "mousedown",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66
+ },
+ {
+  "seq": 121,
+  "eid": 61,
+  "t": 2568.1999999999534,
+  "wall": 1791339039593,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 122,
+  "eid": 61,
+  "t": 2568.29999999993,
+  "wall": 1791339039594,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067.3359375,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 123,
+  "eid": 62,
+  "t": 2568.29999999993,
+  "wall": 1791339039594,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067,
+  "y": 66
+ },
+ {
+  "seq": 124,
+  "eid": 62,
+  "t": 2568.5,
+  "wall": 1791339039594,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067,
+  "y": 66
+ },
+ {
+  "seq": 125,
+  "eid": 63,
+  "t": 2568.6999999999534,
+  "wall": 1791339039594,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragstart",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66,
+  "dropEffect": "none",
+  "effectAllowed": "uninitialized",
+  "types": []
+ },
+ {
+  "seq": 126,
+  "eid": 63,
+  "t": 2569.29999999993,
+  "wall": 1791339039595,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragstart",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1061,
+  "y": 66,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 127,
+  "eid": 64,
+  "t": 2572.79999999993,
+  "wall": 1791339039598,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 128,
+  "eid": 64,
+  "t": 2572.9000000000233,
+  "wall": 1791339039598,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 129,
+  "eid": 65,
+  "t": 2577.6999999999534,
+  "wall": 1791339039603,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067,
+  "y": 66,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 130,
+  "eid": 65,
+  "t": 2577.6999999999534,
+  "wall": 1791339039603,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 1067,
+  "y": 66,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 131,
+  "eid": 66,
+  "t": 3034,
+  "wall": 1791339040059,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-orders",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 219,
+  "y": 69,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 132,
+  "eid": 66,
+  "t": 3034.1999999999534,
+  "wall": 1791339040059,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-orders",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 219,
+  "y": 69,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 133,
+  "eid": 67,
+  "t": 3034.1999999999534,
+  "wall": 1791339040059,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragleave",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 219,
+  "y": 69,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 134,
+  "eid": 67,
+  "t": 3034.5,
+  "wall": 1791339040060,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragleave",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-d",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 219,
+  "y": 69,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 135,
+  "eid": 68,
+  "t": 3074.29999999993,
+  "wall": 1791339040100,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-orders",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 219,
+  "y": 69,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 136,
+  "eid": 68,
+  "t": 3074.79999999993,
+  "wall": 1791339040100,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-orders",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 219,
+  "y": 69,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 137,
+  "eid": 69,
+  "t": 4102.900000000023,
+  "wall": 1791339041128,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragend",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 219,
+  "y": 69,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": []
+ },
+ {
+  "seq": 138,
+  "eid": 69,
+  "t": 4103.199999999953,
+  "wall": 1791339041128,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragend",
+  "phase": "target",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 219,
+  "y": 69,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": []
+ },
+ {
+  "seq": 139,
+  "eid": 69,
+  "t": 4115.099999999977,
+  "wall": 1791339041140,
+  "frame": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+  "top": true,
+  "type": "dragend",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-d",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 219,
+  "y": 69,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": []
+ }
+]

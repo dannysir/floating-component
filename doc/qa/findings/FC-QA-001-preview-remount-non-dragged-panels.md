@@ -7,7 +7,7 @@ status: open
 confidence: high
 repro_rate: 2/2
 found_in: pre-run
-variants: [control-b, control-c, bare-1, bare-2, orders, billing, telemetry, telemetry-x, orders-local, billing-local, control-mount, control-iframe]
+variants: [control-a, bare-0, control-b, control-c, bare-1, bare-2, orders, billing, telemetry, telemetry-x, orders-local, billing-local, control-mount, control-iframe]
 input: mouse
 browser: chromium-153 headless-shell
 playwright: 1.63.0
@@ -149,6 +149,7 @@ fix_commit: none
 | 사다리 `control-iframe` (srcdoc) | frame +2, `loads` +2 (telemetry와 같은 횟수) | — |
 
   - 컨테이너와 Module Federation은 횟수를 바꾸지 않는다(twin = remote, 컨테이너 대조군 = remote). 결과만 다르다(별도 루트 재생성, iframe 문서 재로드).
+- **R05** (`?layout=census&a=orders&b=billing&c=telemetry&d=control-d`, `p-d` → `(p-a, top, 2)`, 미리보기 `V[p-d,H[p-a,V[p-b,p-c]]]`, hover + Esc, 2/2 예측대로): hover에서 `orders` frame +1·content +1, `billing` frame +1·`mountCalls`·`unmountCalls` +1(`rootsAlive` 1), `telemetry` frame +1·`loads` +1. Esc 뒤 셋 다 누적 +2. 소스 `p-d` frame +0, Esc에서 moves +1(D3b). 셋 다 입력·카운터·스크롤 초기화. 대조: 전부 control(`R05-ladder-control`)과 bare(`R05-ladder-bare`)에서 `p-a`·`p-b`·`p-c` 모두 같은 횟수로 리마운트 — 부모 변경(루트 감싸기, 추정 원인 3·4)도 라이브러리 단계에서 재현. 증거 `R05-02-mid.png`, `R05-03-after.png`(직접 열어 확인: 세 remote 배지 `f2`, telemetry `loads 2`). 리마운트된 패널의 `domMoves` +1은 같은 커밋 안에서 새 요소가 자리를 옮긴 기록이다(리마운트에 포함).
 - 대조(bare, `R01-bare-run{1,2}`): `bare-1`·`bare-2` 내용 마운트 hover +1, Esc 뒤 +2. `bare-0` reinserted. 라이브러리만으로 재현된다.
 - 스크린샷 `02-mid.png`(직접 열어 확인): `control-d`가 점선·반투명(shadow)으로 맨 왼쪽, `control-b`·`control-c` 헤더 배지 `f2 c2`(로드 1 + 리마운트 1)와 빈 입력·`count 0`, `control-a`는 입력값 유지·목록이 맨 위(scrollTop 0).
 

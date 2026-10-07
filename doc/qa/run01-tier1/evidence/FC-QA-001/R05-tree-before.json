@@ -1,0 +1,288 @@
+{
+ "step": "01-before",
+ "url": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+ "lib": {
+  "source": "src",
+  "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+  "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+ },
+ "settle": {
+  "stable": true,
+  "reads": 2,
+  "ms": 147
+ },
+ "tree": {
+  "type": "split",
+  "direction": "horizontal",
+  "size": 1,
+  "children": [
+   {
+    "type": "panel",
+    "id": "p-a",
+    "size": 1,
+    "componentKey": "orders"
+   },
+   {
+    "type": "split",
+    "direction": "vertical",
+    "size": 1,
+    "children": [
+     {
+      "type": "panel",
+      "id": "p-b",
+      "size": 1,
+      "componentKey": "billing"
+     },
+     {
+      "type": "panel",
+      "id": "p-c",
+      "size": 1,
+      "componentKey": "telemetry"
+     }
+    ]
+   },
+   {
+    "type": "panel",
+    "id": "p-d",
+    "size": 1,
+    "componentKey": "control-d"
+   }
+  ]
+ },
+ "treeNotation": "H[p-a,V[p-b,p-c],p-d]",
+ "treeVersion": 0,
+ "calls": [],
+ "dom": {
+  "domTree": "H[p-a,V[p-b,p-c],p-d]",
+  "draggingPanelId": null,
+  "panels": {
+   "p-a": {
+    "slot": "orders",
+    "rect": {
+     "x": 12,
+     "y": 52,
+     "width": 413.328125,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 1
+   },
+   "p-b": {
+    "slot": "billing",
+    "rect": {
+     "x": 433.328125,
+     "y": 52,
+     "width": 413.34375,
+     "height": 364
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 2
+   },
+   "p-c": {
+    "slot": "telemetry",
+    "rect": {
+     "x": 433.328125,
+     "y": 424,
+     "width": 413.34375,
+     "height": 364
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 3
+   },
+   "p-d": {
+    "slot": "control-d",
+    "rect": {
+     "x": 854.671875,
+     "y": 52,
+     "width": 413.328125,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 4
+   }
+  },
+  "resizerCount": 3,
+  "resizers": [
+   {
+    "rect": {
+     "x": 425.328125,
+     "y": 52,
+     "width": 8,
+     "height": 736
+    },
+    "axis": "x"
+   },
+   {
+    "rect": {
+     "x": 433.328125,
+     "y": 416,
+     "width": 413.34375,
+     "height": 8
+    },
+    "axis": "y"
+   },
+   {
+    "rect": {
+     "x": 846.671875,
+     "y": 52,
+     "width": 8,
+     "height": 736
+    },
+    "axis": "x"
+   }
+  ],
+  "ghosts": [],
+  "bodyUserSelect": ""
+ },
+ "counters": {
+  "frames": {
+   "orders": {
+    "kind": "same-tree",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   },
+   "billing": {
+    "kind": "mount",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   },
+   "telemetry": {
+    "kind": "iframe",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready",
+    "mirror": {
+     "loads": 1,
+     "docIds": [
+      "2a0e55f2-0841-49a1-b387-71cedaa3f63f"
+     ],
+     "lastLoadedAt": 1791339037267
+    }
+   },
+   "control-d": {
+    "kind": "local",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   }
+  },
+  "mfe": {
+   "control-d": {
+    "slot": "control-d",
+    "kind": "local",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "shell",
+    "build": "20261007T013117Z-427d"
+   },
+   "billing": {
+    "slot": "billing",
+    "kind": "mount",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": false,
+    "remote": "billing",
+    "build": "20261007T013114Z-f6e7",
+    "mountCalls": 1,
+    "rootsAlive": 1
+   },
+   "orders": {
+    "slot": "orders",
+    "kind": "same-tree",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "orders",
+    "build": "20261007T013107Z-6373"
+   }
+  },
+  "iframes": {
+   "telemetry": {
+    "loads": 1,
+    "docId": "2a0e55f2-0841-49a1-b387-71cedaa3f63f",
+    "frameUrl": "http://127.0.0.1:4304/?slot=telemetry&parent=http%3A%2F%2F127.0.0.1%3A4300"
+   }
+  },
+  "domMoves": {},
+  "domLog": [
+   {
+    "seq": 1,
+    "t": 141.19999999995343,
+    "panelId": "p-a",
+    "kind": "added",
+    "elementSeq": 1
+   },
+   {
+    "seq": 2,
+    "t": 141.19999999995343,
+    "panelId": "p-b",
+    "kind": "added",
+    "elementSeq": 2
+   },
+   {
+    "seq": 3,
+    "t": 141.29999999993015,
+    "panelId": "p-c",
+    "kind": "added",
+    "elementSeq": 3
+   },
+   {
+    "seq": 4,
+    "t": 141.29999999993015,
+    "panelId": "p-d",
+    "kind": "added",
+    "elementSeq": 4
+   }
+  ]
+ },
+ "content": {
+  "orders": {
+   "input": "seed-orders",
+   "counter": "count 3",
+   "scrollTop": 120,
+   "focused": false
+  },
+  "billing": {
+   "input": "seed-billing",
+   "counter": "count 3",
+   "scrollTop": 120,
+   "focused": false
+  },
+  "control-d": {
+   "input": "seed-control-d",
+   "counter": "count 3",
+   "scrollTop": 120,
+   "focused": false
+  },
+  "telemetry": {
+   "input": "seed-telemetry",
+   "counter": null,
+   "scrollTop": 120,
+   "focused": false
+  }
+ },
+ "activeTestid": "control-d-counter",
+ "console": [],
+ "pageErrors": [],
+ "documentRequests": {
+  "http://127.0.0.1:4300": 1,
+  "http://127.0.0.1:4304": 1
+ }
+}

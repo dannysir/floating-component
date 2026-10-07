@@ -70,7 +70,9 @@
 | R03 (사다리) | census / b=billing-local | hover + Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R03-ladder-billing-local-esc-run{1,2}.json |
 | R03 (사다리) | census / b=control-mount | hover + Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R03-ladder-control-mount-esc-run{1,2}.json |
 | R03 (사다리) | census / b=control-iframe | hover + Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R03-ladder-control-iframe-esc-run{1,2}.json |
-| R05 | census / a=orders, b=billing, c=telemetry, d=control | 루트 가장자리(top) hover, Esc | mouse | not-run | | |
+| R05 | census / a=orders, b=billing, c=telemetry, d=control | 루트 가장자리(top) hover, Esc | mouse | fail(FC-QA-001) | as-predicted | obs/R05-hover-esc-run{1,2}.json |
+| R05 (사다리) | census / 전부 control | 같은 제스처 | mouse | fail(FC-QA-001) | as-predicted | obs/R05-ladder-control-run{1,2}.json |
+| R05 (사다리) | census / bare | 같은 제스처 | mouse | fail(FC-QA-001) | as-predicted | obs/R05-ladder-bare-run{1,2}.json |
 | R07 | locks / terminal=control | 소스 리마운트 후 Esc | mouse | not-run | | |
 | R07 | locks / terminal=control | 잠긴 nav 위에서 놓기 | mouse | not-run | | |
 | R07 | locks / output=telemetry | iframe 본문 위에서 놓기 | mouse | not-run | | |
@@ -273,7 +275,9 @@
 
 | 무엇 | 커밋 | 재실행 결과 |
 |---|---|---|
-| | | |
+| `seedContent`가 없는 요소(bare의 counter·scroll)를 기다리다 시간 초과 → 있을 때만 조작 (R01 사다리) | R01 `test:` 커밋 | smoke 19 passed, S1·S3·S6 통과, S5 요구대로 실패. R01 재실행 결과 동일 |
+| `diff`가 `focused`를 내용 상태로 비교해 포커스만 잃은 소스를 `content-reset`으로 분류 → `focused` 제외(마우스 시나리오는 포커스를 판정하지 않는다) | R01 `test:` 커밋 | 같은 재실행. 영향받은 행은 분류 라벨뿐(카운터 무관) |
+| `promote`가 대상 디렉터리를 통째로 비워 여러 시나리오의 증거를 한 발견에 모을 수 없음 → 선택적 `prefix`(예: `R05-`)로 그 접두어 파일만 갱신 | R05 `test:` 커밋 | smoke 19 passed, S1·S3·S6 통과, S5 요구대로 실패 |
 
 ### 브리프 변경
 

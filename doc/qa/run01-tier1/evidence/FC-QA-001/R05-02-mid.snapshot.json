@@ -1,0 +1,378 @@
+{
+ "step": "02-mid",
+ "url": "http://127.0.0.1:4300/?layout=census&a=orders&b=billing&c=telemetry&d=control-d",
+ "lib": {
+  "source": "src",
+  "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+  "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+ },
+ "settle": {
+  "stable": true,
+  "reads": 2,
+  "ms": 172
+ },
+ "tree": {
+  "type": "split",
+  "direction": "horizontal",
+  "size": 1,
+  "children": [
+   {
+    "type": "panel",
+    "id": "p-a",
+    "size": 1,
+    "componentKey": "orders"
+   },
+   {
+    "type": "split",
+    "direction": "vertical",
+    "size": 1,
+    "children": [
+     {
+      "type": "panel",
+      "id": "p-b",
+      "size": 1,
+      "componentKey": "billing"
+     },
+     {
+      "type": "panel",
+      "id": "p-c",
+      "size": 1,
+      "componentKey": "telemetry"
+     }
+    ]
+   },
+   {
+    "type": "panel",
+    "id": "p-d",
+    "size": 1,
+    "componentKey": "control-d"
+   }
+  ]
+ },
+ "treeNotation": "H[p-a,V[p-b,p-c],p-d]",
+ "treeVersion": 0,
+ "calls": [],
+ "dom": {
+  "domTree": "V[p-d,H[p-a,V[p-b,p-c]]]",
+  "draggingPanelId": "p-d",
+  "panels": {
+   "p-d": {
+    "slot": "control-d",
+    "rect": {
+     "x": 12,
+     "y": 52,
+     "width": 1256,
+     "height": 364
+    },
+    "draggable": true,
+    "droppable": true,
+    "shadow": true,
+    "elementSeq": 4
+   },
+   "p-a": {
+    "slot": "orders",
+    "rect": {
+     "x": 12,
+     "y": 424,
+     "width": 624,
+     "height": 364
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 5
+   },
+   "p-b": {
+    "slot": "billing",
+    "rect": {
+     "x": 644,
+     "y": 424,
+     "width": 624,
+     "height": 178
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 6
+   },
+   "p-c": {
+    "slot": "telemetry",
+    "rect": {
+     "x": 644,
+     "y": 610,
+     "width": 624,
+     "height": 178
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 7
+   }
+  },
+  "resizerCount": 3,
+  "resizers": [
+   {
+    "rect": {
+     "x": 12,
+     "y": 416,
+     "width": 1256,
+     "height": 8
+    },
+    "axis": "y"
+   },
+   {
+    "rect": {
+     "x": 636,
+     "y": 424,
+     "width": 8,
+     "height": 364
+    },
+    "axis": "x"
+   },
+   {
+    "rect": {
+     "x": 644,
+     "y": 602,
+     "width": 624,
+     "height": 8
+    },
+    "axis": "y"
+   }
+  ],
+  "ghosts": [],
+  "bodyUserSelect": ""
+ },
+ "counters": {
+  "frames": {
+   "orders": {
+    "kind": "same-tree",
+    "frameMounts": 2,
+    "frameUnmounts": 1,
+    "state": "ready"
+   },
+   "billing": {
+    "kind": "mount",
+    "frameMounts": 2,
+    "frameUnmounts": 1,
+    "state": "ready"
+   },
+   "telemetry": {
+    "kind": "iframe",
+    "frameMounts": 2,
+    "frameUnmounts": 1,
+    "state": "ready",
+    "mirror": {
+     "loads": 2,
+     "docIds": [
+      "2a0e55f2-0841-49a1-b387-71cedaa3f63f",
+      "b9fbaf5b-a5c1-489b-9311-7559a30e1b26"
+     ],
+     "lastLoadedAt": 1791339040202
+    }
+   },
+   "control-d": {
+    "kind": "local",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   }
+  },
+  "mfe": {
+   "control-d": {
+    "slot": "control-d",
+    "kind": "local",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "shell",
+    "build": "20261007T013117Z-427d"
+   },
+   "billing": {
+    "slot": "billing",
+    "kind": "mount",
+    "mounts": 2,
+    "unmounts": 1,
+    "instanceSeq": 2,
+    "reactVersion": "19.2.4",
+    "reactSame": false,
+    "remote": "billing",
+    "build": "20261007T013114Z-f6e7",
+    "mountCalls": 2,
+    "rootsAlive": 1,
+    "unmountCalls": 1
+   },
+   "orders": {
+    "slot": "orders",
+    "kind": "same-tree",
+    "mounts": 2,
+    "unmounts": 1,
+    "instanceSeq": 2,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "orders",
+    "build": "20261007T013107Z-6373"
+   }
+  },
+  "iframes": {
+   "telemetry": {
+    "loads": 2,
+    "docId": "b9fbaf5b-a5c1-489b-9311-7559a30e1b26",
+    "frameUrl": "http://127.0.0.1:4304/?slot=telemetry&parent=http%3A%2F%2F127.0.0.1%3A4300"
+   }
+  },
+  "domMoves": {
+   "p-a": 1,
+   "p-b": 1,
+   "p-c": 1
+  },
+  "domLog": [
+   {
+    "seq": 1,
+    "t": 141.19999999995343,
+    "panelId": "p-a",
+    "kind": "added",
+    "elementSeq": 1
+   },
+   {
+    "seq": 2,
+    "t": 141.19999999995343,
+    "panelId": "p-b",
+    "kind": "added",
+    "elementSeq": 2
+   },
+   {
+    "seq": 3,
+    "t": 141.29999999993015,
+    "panelId": "p-c",
+    "kind": "added",
+    "elementSeq": 3
+   },
+   {
+    "seq": 4,
+    "t": 141.29999999993015,
+    "panelId": "p-d",
+    "kind": "added",
+    "elementSeq": 4
+   },
+   {
+    "seq": 5,
+    "t": 3107.4000000000233,
+    "panelId": "p-a",
+    "kind": "removed",
+    "elementSeq": 1
+   },
+   {
+    "seq": 6,
+    "t": 3107.5,
+    "panelId": "p-b",
+    "kind": "removed",
+    "elementSeq": 2
+   },
+   {
+    "seq": 7,
+    "t": 3107.5,
+    "panelId": "p-c",
+    "kind": "removed",
+    "elementSeq": 3
+   },
+   {
+    "seq": 8,
+    "t": 3107.5,
+    "panelId": "p-a",
+    "kind": "remounted",
+    "elementSeq": 5
+   },
+   {
+    "seq": 9,
+    "t": 3107.5,
+    "panelId": "p-b",
+    "kind": "remounted",
+    "elementSeq": 6
+   },
+   {
+    "seq": 10,
+    "t": 3107.5999999999767,
+    "panelId": "p-c",
+    "kind": "remounted",
+    "elementSeq": 7
+   },
+   {
+    "seq": 11,
+    "t": 3107.5999999999767,
+    "panelId": "p-a",
+    "kind": "removed",
+    "elementSeq": 5
+   },
+   {
+    "seq": 12,
+    "t": 3107.5999999999767,
+    "panelId": "p-b",
+    "kind": "removed",
+    "elementSeq": 6
+   },
+   {
+    "seq": 13,
+    "t": 3107.5999999999767,
+    "panelId": "p-c",
+    "kind": "removed",
+    "elementSeq": 7
+   },
+   {
+    "seq": 14,
+    "t": 3107.5999999999767,
+    "panelId": "p-a",
+    "kind": "reinserted",
+    "elementSeq": 5
+   },
+   {
+    "seq": 15,
+    "t": 3107.5999999999767,
+    "panelId": "p-b",
+    "kind": "reinserted",
+    "elementSeq": 6
+   },
+   {
+    "seq": 16,
+    "t": 3107.5999999999767,
+    "panelId": "p-c",
+    "kind": "reinserted",
+    "elementSeq": 7
+   }
+  ]
+ },
+ "content": {
+  "control-d": {
+   "input": "seed-control-d",
+   "counter": "count 3",
+   "scrollTop": 120,
+   "focused": false
+  },
+  "orders": {
+   "input": "",
+   "counter": "count 0",
+   "scrollTop": 0,
+   "focused": false
+  },
+  "billing": {
+   "input": "",
+   "counter": "count 0",
+   "scrollTop": 0,
+   "focused": false
+  },
+  "telemetry": {
+   "input": "",
+   "counter": null,
+   "scrollTop": 0,
+   "focused": false
+  }
+ },
+ "activeTestid": null,
+ "console": [],
+ "pageErrors": [],
+ "documentRequests": {
+  "http://127.0.0.1:4300": 1,
+  "http://127.0.0.1:4304": 3
+ }
+}
