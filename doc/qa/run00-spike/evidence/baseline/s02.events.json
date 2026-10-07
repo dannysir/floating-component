@@ -1,0 +1,247 @@
+[
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousemove",
+  "phase": "capture",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousemove",
+  "phase": "bubble",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointerdown",
+  "phase": "capture",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointerdown",
+  "phase": "bubble",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousedown",
+  "phase": "capture",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousedown",
+  "phase": "bubble",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousemove",
+  "phase": "capture",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousemove",
+  "phase": "bubble",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragstart",
+  "phase": "capture",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragstart",
+  "phase": "bubble",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointercancel",
+  "phase": "capture",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointercancel",
+  "phase": "bubble",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "capture",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "bubble",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "capture",
+  "panelId": "output",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "bubble",
+  "panelId": "output",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragleave",
+  "phase": "capture",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragleave",
+  "phase": "bubble",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragover",
+  "phase": "capture",
+  "panelId": "output",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragover",
+  "phase": "bubble",
+  "panelId": "output",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "capture",
+  "panelId": "nav",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "bubble",
+  "panelId": "nav",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragover",
+  "phase": "capture",
+  "panelId": "nav",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragover",
+  "phase": "bubble",
+  "panelId": "nav",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragover",
+  "phase": "capture",
+  "panelId": "nav",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragover",
+  "phase": "bubble",
+  "panelId": "nav",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragleave",
+  "phase": "capture",
+  "panelId": "nav",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragleave",
+  "phase": "bubble",
+  "panelId": "nav",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragend",
+  "phase": "capture",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragend",
+  "phase": "target",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragend",
+  "phase": "bubble",
+  "panelId": "editor",
+  "isTrusted": true,
+  "top": true
+ }
+]

@@ -6,6 +6,7 @@ import { dropPoint, domTree, treeNotation } from '../helpers/geometry';
 import { readProbe } from '../helpers/probe.init';
 import { settle } from '../helpers/settle';
 import { writeBaseline } from '../helpers/baseline';
+import { expectInvariants } from '../helpers/invariants';
 
 const DRAG_TYPES = new Set(['dragstart', 'dragenter', 'dragover', 'dragleave', 'drop', 'dragend']);
 
@@ -45,6 +46,8 @@ test('S1 mouse drag commits p-d to (p-a, left, 1)', async ({ lab, page }) => {
   expect([...order].sort((a, b) => a - b)).toEqual(order);
   const dragend = drags.filter((e) => e.type === 'dragend');
   expect(dragend.some((e) => e.dropEffect === 'move')).toBe(true);
+
+  await expectInvariants(page);   // B1-03b부터 I1~I7
 
   const file = writeBaseline('s01', events);
   test.info().annotations.push({ type: 'baseline', description: file });

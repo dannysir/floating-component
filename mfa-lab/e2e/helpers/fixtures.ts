@@ -8,6 +8,7 @@ import { harnessError } from './errors';
 import { SLOT_PARAMS } from './presets';
 import { installProbe } from './probe.init';
 import { registerLabState } from './labstate';
+import { checkInvariants } from './invariants';
 import type { ConsoleEntry, RequestEntry } from './labstate';
 import type { PresetName } from './presets';
 
@@ -108,7 +109,7 @@ const waitFor = async (fn: () => Promise<boolean>, timeoutMs: number, what: stri
 
 export const test = base.extend<{ lab: Lab; probe: boolean }>({
   probe: [true, { option: true }],
-  lab: async ({ page, probe }, use) => {
+  lab: async ({ page, probe }, use, testInfo) => {
     if (probe) await installProbe(page.context());   // 모든 프레임에 window.__probe (test.use({ probe: false })로 끈다)
     const consoleLog: ConsoleEntry[] = [];
     const pageErrors: string[] = [];
@@ -178,6 +179,11 @@ export const test = base.extend<{ lab: Lab; probe: boolean }>({
       bodyUserSelect: () => bodyUserSelect,
       lastOpen: () => last,
     });
+    // 테스트 종료 시 불변식 검사를 한 번 실행해 첨부만 한다(테스트를 실패시키지 않는다).
+    if (last && !page.isClosed()) {
+      const res = await checkInvariants(page).catch((e) => [{ error: String(e) }]);
+      await testInfo.attach('invariants.json', { body: JSON.stringify(res, null, 2), contentType: 'application/json' });
+    }
   },
 });
 

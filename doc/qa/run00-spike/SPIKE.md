@@ -41,10 +41,10 @@
 | ID | 결과 | 시도 | 커밋 | 메모 |
 |---|---|---|---|---|
 | S0 | 통과 | 1 | 78f858f | `HeadlessChrome/153.0.8010.12`. rAF 실측 mouse 62/s, touch 61/s. CDP `Browser.getVersion` 성공. CDP `touchStart` → `isTrusted === true` touchstart: touch 프로젝트 `[true]`, mouse 프로젝트(`hasTouch` 없음)도 `[true]`, 오류 없음 → `hasTouch`가 trusted 여부에 필요하지 않다. 스크린샷 [evidence/s00-page.png](./evidence/s00-page.png)를 Read로 열어 "Harbor S0" 글자와 파란 상자를 확인 |
-| S1 | 통과 | 2 | e032a1c | 1회차 실패: hover 중 `domTree`가 `H[p-a,V[p-b,p-c],p-d]`(미리보기 없음). 프로브 로그상 teleport 한 번이 `dragenter(p-a)`·`dragleave(p-d)`만 만들고 `dragover`가 없었다 — Blink는 대상 요소가 바뀌는 갱신에서 dragover를 다음 갱신으로 미룬다. 수정: `teleport`가 이동 직후 프로브에 dragover가 없으면 같은 점으로 한 번 더 이동(그래도 teleport당 dragover 1회). 2회차 통과: trusted `dragstart→dragenter→dragover→drop→dragend`, hover `H[p-d,p-a,V[p-b,p-c]]` + p-d shadow, `onMovePanel(p-d,p-a,left,1)` 1건, 커밋 트리 = 미리보기, `dragend.dropEffect = move` |
-| S2 | 미실행 | | | |
-| S3 | 미실행 | | | |
-| S4 | 미실행 | | | |
+| S1 | 통과 | 2 (+B1-03b I1~I7 재실행 통과) | e032a1c | 1회차 실패: hover 중 `domTree`가 `H[p-a,V[p-b,p-c],p-d]`(미리보기 없음). 프로브 로그상 teleport 한 번이 `dragenter(p-a)`·`dragleave(p-d)`만 만들고 `dragover`가 없었다 — Blink는 대상 요소가 바뀌는 갱신에서 dragover를 다음 갱신으로 미룬다. 수정: `teleport`가 이동 직후 프로브에 dragover가 없으면 같은 점으로 한 번 더 이동(그래도 teleport당 dragover 1회). 2회차 통과: trusted `dragstart→dragenter→dragover→drop→dragend`, hover `H[p-d,p-a,V[p-b,p-c]]` + p-d shadow, `onMovePanel(p-d,p-a,left,1)` 1건, 커밋 트리 = 미리보기, `dragend.dropEffect = move` |
+| S2 | 통과 | 1 | (B1-03b 커밋) | hover `H[nav,V[terminal,output],editor]` + editor shadow. nav 위로 teleport 뒤 `settled` 릴리스: nav의 bubble dragover `dropEffect: none`, `drop` 없음, `dragleave(nav)` + `dragend(editor, dropEffect none)`. `onMovePanel` 0건, 트리·`treeVersion` 불변, I1~I7 통과 |
+| S3 | 통과 | 1 | (B1-03b 커밋) | hover `H[nav,terminal,editor,output]`, 미리보기가 소스 `terminal`을 리마운트(`domLog` remounted). Esc 뒤 `dragend`는 window에 없고 원본 노드에 건 리스너에만 `phase: target, isConnected: false, isTrusted: true`로 찍혔다. `onMovePanel` 0건, 트리 불변, I1~I7 통과 |
+| S4 | 통과 | 1 | (B1-03b 커밋) | S3의 hover 뒤 nav 위 `settled` 릴리스: `drop` 없음, `dragend`는 분리된 원본에만(`isConnected: false`). 트리 불변, I1~I7 통과 |
 | S5 | 미실행 | | | |
 | S6 | 미실행 | | | |
 | S7a | 미실행 | | | |
@@ -60,6 +60,9 @@
 | 스파이크 | 파일 | 드래그 이벤트 순서 (`type/phase/panelId`, pointer·mouse 생략) |
 |---|---|---|
 | S1 | [s01.events.json](./evidence/baseline/s01.events.json) | dragstart(p-d) → pointercancel(p-d) → dragenter(p-d) → [teleport] dragenter(p-a), dragleave(p-d), dragover(p-a) → [overShadow 이동] dragenter(p-d), dragleave(p-a) → [mouse.up] dragover(p-d) → drop(p-d) → dragend capture(p-d) / target(p-d, connected) / bubble(p-d). 모두 `isTrusted: true`, 메인 프레임 |
+| S2 | [s02.events.json](./evidence/baseline/s02.events.json) | dragstart(editor) → dragenter(editor) → [teleport] dragenter(output), dragleave(editor), dragover(output) → [nav로 teleport] dragenter(nav), dragover(nav; bubble `none`) → [mouse.up] dragover(nav; bubble `none`) → dragleave(nav) → dragend capture/target/bubble(editor, `none`, connected). `drop` 없음 |
+| S3 | [s03.events.json](./evidence/baseline/s03.events.json) | dragstart(terminal) → dragenter(terminal) → [teleport] dragenter(editor), dragleave(terminal), dragover(editor) → [Esc] dragend **target만**(terminal, `none`, `isConnected: false`). `dragleave` 없음(하네스 부작용 #1) |
+| S4 | [s04.events.json](./evidence/baseline/s04.events.json) | S3의 hover → [nav로 teleport] dragenter(nav), dragleave(editor), dragover(nav; `none`) → [mouse.up] dragover(nav; `none`) → dragleave(nav) → dragend **target만**(terminal, `none`, `isConnected: false`). `drop` 없음 |
 
 ## 5. S8 비율 표
 
