@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import type { Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+import { federation } from '@module-federation/vite';
 import { readFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -14,7 +15,7 @@ const registry = JSON.parse(readFileSync(here('../../registry.json'), 'utf8'));
 
 // ctl build가 넘기는 환경 변수 (ARCHITECTURE.md 「빌드 입력」)
 const lib = process.env.LAB_LIB ?? 'src';          // 'src' | 'npm051' | 'dist'
-const mf = process.env.LAB_MF ?? 'on';             // 'on' | 'off'  (1단계에서는 읽기만 한다)
+const mf = process.env.LAB_MF ?? 'on';             // 'on' | 'off'
 const stamp = process.env.LAB_BUILD_STAMP ?? 'dev';
 const git = (cmd: string) => {
   try { return execSync(cmd, { cwd: repoRoot, encoding: 'utf8' }).trim(); } catch { return ''; }
@@ -37,6 +38,22 @@ const twinAliases = Object.fromEntries(
   Object.entries(twinDirs).filter(([, rel]) => existsSync(here(rel))).map(([name, rel]) => [`@twin/${name}`, here(rel)]),
 );
 
+// same-tree remote 중 디렉터리가 실제로 있는 것만 host remotes로 만든다 (활성 집합과 같은 규칙).
+// 형식은 매니페스트 URL 문자열: { orders: 'http://127.0.0.1:4301/mf-manifest.json' }. 상위 host 예제와 같은 형태다.
+type RemoteEntry = { kind: string; dir?: string; origin: string; entry: string };
+const sameTree = Object.entries(registry.remotes as Record<string, RemoteEntry>)
+  .filter(([, r]) => r.kind === 'same-tree' && r.dir && existsSync(`${labRoot}${r.dir}/package.json`));
+const remotes = Object.fromEntries(sameTree.map(([name, r]) => [name, `${r.origin}${r.entry}`]));
+
+// LAB_MF=off: remote 지정자를 remote 소스로 alias (빌드 타임 통합, MF: degraded)
+const mfOffAliases = mf === 'off'
+  ? Object.fromEntries(sameTree.map(([name, r]) => [`${name}/Panel`, `${labRoot}${r.dir}/src/Panel.tsx`]))
+  : {};
+
+// 공유 블록. React 네 키 싱글턴 (mfe-orders·mfe-board와 같게)
+const reactShared = { singleton: true, requiredVersion: `^${registry.pins.react}` };
+const shared = { react: reactShared, 'react/': reactShared, 'react-dom': reactShared, 'react-dom/': reactShared };
+
 // <meta name="harbor-app" content="<app>@<buildId>"> — ctl.mjs 준비 판정의 본문 검사 (ARCHITECTURE.md 「포트와 origin」)
 export const harborMeta = (app: string, buildId: string): Plugin => ({
   name: 'harbor-meta',
@@ -46,12 +63,26 @@ export const harborMeta = (app: string, buildId: string): Plugin => ({
 });
 
 export default defineConfig(({ command }) => ({
-  plugins: [react(), harborMeta(appName, stamp)],
+  plugins: [
+    react(),
+    harborMeta(appName, stamp),
+    ...(mf === 'on'
+      ? [federation({
+          name: 'shell',
+          dts: false,
+          remotes,
+          shared,
+          shareStrategy: registry.federation.shareStrategy,   // 'loaded-first'
+          // runtimePlugins: ['./src/mf/fallbackPlugin.ts'],   // B1-06 사다리 (b)-2에서만 켠다
+        })]
+      : []),
+  ],
   resolve: {
     alias: {
       '@dannysir/floating-components': libAlias,
       '@harbor/contract': here('../../contract/src/index.ts'),
       ...twinAliases,
+      ...mfOffAliases,
     },
     // alias된 저장소 src/와 twin 소스의 `react` import를 shell의 사본으로 묶는다.
     dedupe: ['react', 'react-dom'],
