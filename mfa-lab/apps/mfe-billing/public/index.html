@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="harbor-app" content="mfe-billing@static" />
+    <link rel="icon" href="data:," />
+    <title>mfe-billing standalone</title>
+  </head>
+  <body>
+    <div id="root" style="height:100vh"></div>
+    <script type="module">
+      import { mount } from './remote-entry.js';
+      const stub = { publish: () => {}, subscribe: () => () => {} };
+      mount(document.getElementById('root'), { slot: 'billing', bus: stub, contract: 1 });
+    </script>
+  </body>
+</html>
