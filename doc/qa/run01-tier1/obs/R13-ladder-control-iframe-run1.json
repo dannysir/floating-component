@@ -1,0 +1,180 @@
+{
+  "run": "run01-tier1",
+  "runNo": 1,
+  "scenario": "R13",
+  "case": "R13-ladder-control-iframe",
+  "expected": "(대조 사다리) 드래그 시작은 내용에 부작용이 없다. ghost 1개, 끝나면 없음. 커밋 `H[p-b,p-a]`",
+  "predicted": "(대조 사다리 control-iframe) ghost의 iframe이 문서를 한 번 더 로드: mirror `loads` +1, 새 `docId`, `:4304` 문서 요청 +1, `dom.ghosts[0].iframeCount === 1`. 프레임 안 sessionStorage `harbor.loads.telemetry`도 +1 돼 다음 재로드 때 숫자가 2 뛴다(카운터 오염. 관찰 기록에 적는다). 커밋에서 소스 재삽입으로 실제 iframe도 재로드(`loads` +1 더. D3b)",
+  "observed": "ghost {\"rect\":{\"x\":12,\"y\":52,\"width\":624,\"height\":736},\"opacity\":\"0.7\",\"outline\":\"\",\"iframeCount\":1}; 토큰 ghost {\"fg\":\"\",\"bg\":\"\"} vs 원본 {\"fg\":\"#1f2328\",\"bg\":\"#ffffff\"}; mirror loads 1→ghost직후 2→500ms 2→미리보기 3→커밋 3, 문서 요청 0→0→0→0→0, docIds [\"d1a9ebec-0b3f-4d01-a312-1c6c8ff02e9c\",\"dd79ef8b-df65-47c6-89fc-266345a78483\",\"97b6ad51-4994-42eb-8e4e-be622c562226\"]; ghost 0→500ms 구간: control-b(p-b): frame+0 content+0 moves+0 input=\"seed-control-b\" counter=\"count 3\" scrollTop=120 [untouched] | control-iframe(p-a): frame+0 content+0 moves+0 loads+0 input=\"seed-control-iframe\" counter=null scrollTop=120 [untouched]; 미리보기 구간: control-b(p-b): frame+0 content+0 moves+0 input=\"seed-control-b\" counter=\"count 3\" scrollTop=120 [untouched]; control-iframe(p-a): frame+0 content+0 moves+1 loads+2 docId-changed input=\"\" counter=null scrollTop=0 [reloaded]; 커밋 H[p-b,p-a], onMovePanel 1건 [\"p-a\",\"p-b\",\"right\",0], ghost 잔존 0, 신뢰된 dragstart false; touchend [capture/p-a/connected=true, target/p-a/connected=true, bubble/p-a/connected=true]; I1~I7 통과. 누적 control-iframe: frame+0 content+0 moves+1 loads+2",
+  "verdict": "as-predicted",
+  "labels": {
+    "input": "touch-cdp-handle",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on",
+    "touch": "Chromium CDP touch emulation, headless; not a real device"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": true,
+      "detail": "no data-dragging-panel-id",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": true,
+      "detail": "userSelect restored",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[p-b,p-a]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (control-b,control-iframe)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r13-pair-touch-ghost/R13-ladder-control-iframe-run1"
+  ],
+  "extra": {
+    "ghostToContentDeltas": {
+      "control-b": {
+        "slot": "control-b",
+        "panelId": "p-b",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-b",
+        "counter": "count 3",
+        "scrollTop": 120,
+        "cls": "untouched"
+      },
+      "control-iframe": {
+        "slot": "control-iframe",
+        "panelId": "p-a",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": 0,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-iframe",
+        "counter": null,
+        "scrollTop": 120,
+        "cls": "untouched"
+      }
+    },
+    "previewDeltas": {
+      "control-b": {
+        "slot": "control-b",
+        "panelId": "p-b",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-b",
+        "counter": "count 3",
+        "scrollTop": 120,
+        "cls": "untouched"
+      },
+      "control-iframe": {
+        "slot": "control-iframe",
+        "panelId": "p-a",
+        "frame": 0,
+        "content": 0,
+        "moves": 1,
+        "loads": 2,
+        "docIdChanged": true,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "",
+        "counter": null,
+        "scrollTop": 0,
+        "cls": "reloaded"
+      }
+    },
+    "all": {
+      "control-b": {
+        "slot": "control-b",
+        "panelId": "p-b",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-b",
+        "counter": "count 3",
+        "scrollTop": 120,
+        "cls": "untouched"
+      },
+      "control-iframe": {
+        "slot": "control-iframe",
+        "panelId": "p-a",
+        "frame": 0,
+        "content": 0,
+        "moves": 1,
+        "loads": 2,
+        "docIdChanged": true,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "",
+        "counter": null,
+        "scrollTop": 0,
+        "cls": "reloaded"
+      }
+    }
+  }
+}

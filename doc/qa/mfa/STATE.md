@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`R13`
+`R15`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -75,7 +75,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R06 (두 번째 묶음) | 1412937 | 2026-10-07T03:08Z | 1 | fail(FC-QA-002) — 리마운트 없이 재삽입만. iframe 재로드 시점이 이동 방향에 따라 hover(a) 또는 취소(b) |
 | [x] | R08 (두 번째 묶음) | 544cb56 | 2026-10-07T03:11Z | 2 | fail(FC-QA-009, FC-QA-004) — 브리프 유도 0/5×2(부작용 #17). 대체 유도로 stale 상태 ext-chip 드롭이 onMovePanel 커밋 → FC-QA-009 sev-2. 대조 chip drop stopped |
 | [x] | R11 (두 번째 묶음) | df260e0 | 2026-10-07T03:13Z | 1 | fail(FC-QA-004, FC-QA-003) — copy 드롭 dropEffect가 move로 덮임, 잠긴 패널에서는 copy 드롭 거부, 단독 페이지 깨끗 |
-| [ ] | R13 (두 번째 묶음) | | | | |
+| [x] | R13 (두 번째 묶음) | (R13 커밋) | 2026-10-07T03:16Z | 1 | fail(FC-QA-011) — ghost 토큰 유실, billing canvas 빈 캔버스, iframe ghost가 문서 재로드(mirror +1·요청 +1). spec-question |
 | [ ] | R15 (두 번째 묶음) | | | | |
 | [ ] | B2-P1 | | | | |
 | [ ] | B2-END | | | | |
@@ -149,6 +149,6 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 
 ## 발견 ID
 
-- 다음 발견 ID: `FC-QA-011`
+- 다음 발견 ID: `FC-QA-012`
 
 `FC-QA-001`은 사전 등록돼 있다(`doc/qa/findings/`, 상태 `predicted`). ID는 전역이고 재사용하지 않는다. 세션 1은 ID를 발급하지 않는다. 세션 2가 발급할 때마다 이 줄과 [../README.md](../README.md)의 ID 대장을 함께 올린다. 둘이 다르면 README가 기준이다.

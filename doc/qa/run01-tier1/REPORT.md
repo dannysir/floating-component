@@ -129,10 +129,11 @@
 | R11 | row3 / a=board | copy 소스 → copy 영역, `dragend`의 `dropEffect` | mouse | fail(FC-QA-004, FC-QA-003) | as-predicted (`effectAllowed`·존 `dropEffect`가 패널 핸들러에서 `move`로 덮임, `copyDrops` +1, `lastDragend.dropEffect 'move'`, drop `stopped`, `data-dragging-panel-id=p-a`, 트리 불변, I1~I7 통과) | obs/R11-board-run{1,2}.json |
 | R11 | row3 / a=board (`lock=p-a:draggable`) | 같은 동작 | mouse | fail(FC-QA-004) | as-predicted (**copy 드롭 거부**: `effectAllowed 'copy'` 유지, 패널이 `dropEffect 'move'` 강제, drop 없음, `copyDrops` +0, `dragend 'none'`) | obs/R11-locked-run{1,2}.json |
 | R11 | board 단독 페이지 | 같은 동작 | mouse | pass | as-ideal(= 예측: `dropEffect 'copy'`, `copyDrops` +1, drop capture+bubble) | obs/R11-standalone-run{1,2}.json |
-| R13 | pair / 소스=control | 핸들 터치 드래그, ghost 생성 시점 스냅샷, 커밋 | touch-cdp-handle | not-run | | |
-| R13 | pair / 소스=orders | 같은 동작 | touch-cdp-handle | not-run | | |
-| R13 | pair / 소스=billing | 같은 동작 | touch-cdp-handle | not-run | | |
-| R13 | pair / 소스=telemetry | 같은 동작 | touch-cdp-handle | not-run | | |
+| R13 | pair / 소스=control | 핸들 터치 드래그, ghost 생성 시점 스냅샷, 커밋 | touch-cdp-handle | fail(FC-QA-011) | as-predicted (ghost 1개 opacity 0.7, 토큰 `--hb-fg`·`--hb-bg` 유실, 커밋 `H[p-b,p-a]`·`onMovePanel` 1건, 소스 moves +1(D3b), dragstart 없음, ghost 제거. Chromium CDP touch emulation, headless; not a real device) | obs/R13-control-run{1,2}.json |
+| R13 | pair / 소스=orders | 같은 동작 | touch-cdp-handle | fail(FC-QA-011) | as-predicted (토큰 유실, content +0) | obs/R13-orders-run{1,2}.json |
+| R13 | pair / 소스=billing | 같은 동작 | touch-cdp-handle | fail(FC-QA-011) | as-predicted (ghost canvas 빈 캔버스·원본은 그림, 토큰 유실, 스크롤 위치 유실) | obs/R13-billing-run{1,2}.json |
+| R13 | pair / 소스=telemetry | 같은 동작 | touch-cdp-handle | fail(FC-QA-011, FC-QA-002) | as-predicted (ghost `iframeCount 1`, ghost 생성 직후 mirror `loads` +1·새 `docId`·`:4304` 문서 요청 +1, 미리보기 재삽입으로 실제 iframe도 +1(D3b), frame +0) | obs/R13-telemetry-run{1,2}.json |
+| R13 (사다리) | pair / 소스=control-iframe | 같은 동작 | touch-cdp-handle | fail(FC-QA-011) | as-predicted (telemetry와 같음, 네트워크 요청만 없음) | obs/R13-ladder-control-iframe-run{1,2}.json |
 | R15 | row3 / control-a, telemetry, telemetry-x | telemetry 옆 경계선: 150px 쓸기, iframe 위에서 놓기 | mouse | not-run | | |
 | R15 | row3 / 같은 배치 | telemetry-x 옆 경계선: 같은 동작 | mouse | not-run | | |
 
@@ -164,6 +165,7 @@
 | [FC-QA-008](../findings/FC-QA-008-resize-capture-loss-leaks-user-select.md) | 경계선 리사이즈가 포인터 캡처를 잃으면 userSelect가 none으로 남고 그 Resizer를 다시 잡을 수 없다 | sev-1 | library-bug | open | 2/2 | R17 | resize-capture-cleanup |
 | [FC-QA-009](../findings/FC-QA-009-stale-preview-after-drop.md) | 드롭 직전 dragover의 rAF가 드래그 뒤 실행돼 소스 shadow가 남고, 다음 비패널 드롭이 그 미리보기를 커밋한다 (stale preview) | sev-2 | library-bug (`harness_amplified`) | open | 4/4 | R18, R08 | raf-not-cancelled-on-drop |
 | [FC-QA-010](../findings/FC-QA-010-resize-limit-px-mismatch.md) | 경계선 드래그의 최소·최대 한계가 설정 px과 다르다(자식 3개 split 상한 약 2/3) | sev-3 | library-bug | open | 2/2 | R19 | resize-flex-conversion |
+| [FC-QA-011](../findings/FC-QA-011-touch-ghost-clone-side-effects.md) | 터치 ghost 복제가 iframe 문서를 다시 로드하고 토큰·canvas·스크롤을 잃은 사본을 보여 준다 | sev-3 | spec-question | needs-user-confirmation | 2/2 | R13 | touch-ghost-clone |
 | [FC-QA-006](../findings/FC-QA-006-oopif-release-no-dragend-harness.md) | (하네스) OOPIF 위 마우스 릴리스에서 dragend가 오지 않고 CDP 드래그 세션이 멈춘다 | sev-4 | harness-artifact | open | 2/2 | R12 | harness-cdp-drag-oopif |
 
 `predicted`였던 발견의 결과: FC-QA-001 — 관찰됨(R01에서 `open`으로 변경)
@@ -217,6 +219,7 @@
 | ID | 물어볼 것 | 선택지 | 권고 |
 |---|---|---|---|
 | FC-QA-007 | 핸들 모드 터치는 롱프레스 없이 8px 이동으로 시작한다(`useTouchDrag.ts:145-149`). `doc/API.ko.md:33`은 "핸들을 롱프레스(450ms)"라 하고 309행은 "핸들을 누르거나"라 한다. 어느 쪽이 의도인가? | (a) 코드가 맞다 → `doc/API.ko.md`·`doc/API.md` 33행을 "핸들은 8px 넘게 움직이면 바로 시작, 핸들이 없으면 롱프레스 450ms"로 고친다 (b) 문서가 맞다 → 핸들 모드에도 롱프레스를 적용(스크롤과의 충돌이 줄지만 핸들 드래그가 느려진다) | (a). 핸들은 명시적 손잡이라 즉시 시작이 자연스럽고 구현·주석·TODO 테스트가 모두 그 전제다 |
+| FC-QA-011 | 터치 ghost는 소스 패널의 "살아 있는" 모습(테마, canvas, 스크롤, iframe 내용)을 그대로 보여야 하는가, 아니면 단순화된 표현(헤더만, 스냅샷 이미지)이어도 되는가? 지금은 `cloneNode`라 iframe이 다시 로드되고 토큰·canvas·스크롤이 빠진다 | (a) 부작용 없어야 한다 → `library-bug`로 재분류: ghost를 헤더/외곽선만의 가벼운 요소로 바꾸거나 iframe·canvas를 플레이스홀더로 대체하고 `[data-theme]`를 복사 (b) 현재 동작 유지, 통합 가이드에 "iframe remote는 터치 드래그 시작 때 한 번 더 로드된다"를 적는다 | (a). iframe remote에 추가 요청·초기화 스크립트가 실행되는 것은 사용자 기대 밖이다 |
 | FC-QA-004 | 레이아웃은 패널 드래그가 아닌 네이티브 드래그(remote 내부 DnD)에 투명해야 하는가? 지금은 패널이 그 drop의 전파를 막고(window 버블 리스너 미실행) `dropEffect`를 `move`로 덮어쓴다(R11: copy 드롭의 `dragend`가 `move`로 보고되고, 잠긴 패널에서는 copy 드롭이 거부된다) | (a) 투명해야 한다 → `library-bug`로 재분류, FC-QA-003과 함께 수정 (b) 현재 동작을 사양으로 두고 통합 가이드에 "remote는 window drop에 의존하지 말 것"을 적는다 | (a). 단독 페이지와 동작이 달라 remote 팀이 원인을 찾기 어렵다 |
 
 ### 라이브러리 수정 대상이 아닌 발견
