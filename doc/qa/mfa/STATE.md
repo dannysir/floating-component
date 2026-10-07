@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`B1-03f`
+`B1-04`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -51,7 +51,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | B1-03c npm 0.5.1 양성 대조 (S5) | 69e663b | 2026-10-07T01:13Z | 1 | 통과 (S5 요구대로 실패: I1·I2 둘 다 실패) |
 | [x] | B1-03d 리사이즈 (S6) | 3930df3 | 2026-10-07T01:14Z | 1 | 통과 (+148.1 px, 오차 1.9 px, gotpointercapture, userSelect 복원) |
 | [x] | B1-03e 터치 (S7a, S7b) | 831126e | 2026-10-07T01:16Z | 2 | 통과 (S7a: 1회차 touch slop으로 첫 12px touchmove 억제 → 12+24px로 분할. S7b 기록: 네이티브 dragstart·touchcancel 없음) |
-| [ ] | B1-03f rAF 경합 비율 표 (S8) | | | | |
+| [x] | B1-03f rAF 경합 비율 표 (S8) | 2b7fd5c | 2026-10-07T01:19Z | 1 | 통과 (overShadow 0/10; settled×other 6/10, immediate×other 8/10. S10 선택: 풀 바이너리 S1~S3 통과, 기준선 동일) |
 | [ ] | B1-04 `mfe-billing` + mount 어댑터 | | | | |
 | [ ] | B1-05 `mfe-telemetry` + iframe 어댑터 (S9) | | | | |
 | [ ] | B1-06 `mfe-orders` (twin → federation) | | | | |
@@ -130,7 +130,9 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 
 세션 중 결정 (생기면 날짜·단계와 함께 한 줄씩 추가. 예: dist 대체 사용, `--mf off` 사용, 통과한 federation 사다리 단)
 
-- (없음)
+- 2026-10-07 B1-03a: `teleport`는 이동 직후 dragover가 없으면 같은 점으로 한 번 더 이동한다(Blink가 대상 변경 시 dragover를 미룸). teleport당 dragover 1회 규칙은 유지된다.
+- 2026-10-07 B1-03e: 터치 `handleDrag`의 시작 이동을 12px → 24px 두 번으로 나눈다(Chromium touch slop이 첫 12px touchmove를 억제).
+- 2026-10-07 B1-03f: S10용 Playwright 프로젝트 `mouse-full`(`channel: 'chromium'`)을 설정에 둔다. shell `index.html`에 빈 favicon(풀 바이너리의 /favicon.ico 404 방지).
 
 ## 차단 사항
 
