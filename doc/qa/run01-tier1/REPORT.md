@@ -97,10 +97,11 @@
 | R16 | workbench / orders origin 차단 | 로드 | mouse | pass | as-ideal(= 예측: orders만 `error`·에러 카드·retry, 나머지 5슬롯 ready, `shell-error` 없음, 콘솔 에러는 :4301 manifest 실패 2건뿐(허용 목록), I1~I7 통과) | obs/R16-load-run{1,2}.json |
 | R16 | workbench / orders origin 차단 | 다른 패널 드래그·리사이즈 | mouse | pass (FC-QA-002 증거 포함) | as-ideal(= 예측: billing → board 왼쪽 커밋, orders\|V 경계선 120px → orders +116.8px, 캡처 획득·해제, `userSelect` 복원, 에러 카드는 orders에만). 드래그하지 않은 `board` moves +1(재삽입) | obs/R16-others-run{1,2}.json |
 | R16 | workbench / orders origin 차단 | 죽은 패널을 핸들로 드래그 | mouse | pass (FC-QA-001 증거 포함) | as-ideal(= 예측: 핸들 드래그 시작, 에러 카드가 함께 이동, 새 콘솔 에러 없음, I1~I7 통과). 좌표 대체: 브리프의 `(billing, right, 0)`은 도달 불가 → `(billing, right, 3)`, 커밋 `H[nav,V[...],orders]`(10절). 드래그하지 않은 board·billing·telemetry·telemetry-x 모두 frame +1(iframe 둘은 `loads` +1) | obs/R16-dead-drag-run{1,2}.json |
-| R17 | workbench | 드래그 가능한 패널을 하나씩 핸들로 이동 | mouse | not-run | | |
-| R17 | workbench | 모든 경계선 리사이즈 | mouse | not-run | | |
-| R17 | workbench | Nav에서 board 닫기·다시 열기 (`removePanel`/`insertPanel`) | mouse | not-run | | |
-| R17 | workbench | 전·후 PNG 시각 점검 (잘림, 넘침·스크롤바, 리사이저, shadow, ghost, 에러 카드) | — | not-run | | |
+| R17 | workbench | 드래그 가능한 패널을 하나씩 핸들로 이동 | mouse | fail(FC-QA-001, FC-QA-005) | as-predicted (매 커밋 = 미리보기, I1~I7 통과. M1 좌표 대체 `(billing,right,0)→(billing,right,3)`로 표 트리 무효. 드래그하지 않은 패널 리마운트: M1 board·billing·telemetry·telemetry-x, M3 board·orders, M4 telemetry-x(iframe `loads` +1). M2(`board → telemetry 왼쪽`)는 놓는 점이 telemetry iframe 본문이라 미리보기·이동 없음 = FC-QA-005. M5는 이미 그 위치) | obs/R17-moves-run{1,2}.json |
+| R17 | workbench | 모든 경계선 리사이즈 | mouse | fail(FC-QA-008) | deviates — `telemetry\|telemetry-x` +120(OOPIF 쪽): 캡처 없음, 크기 0, `userSelect` `none` 잔존(I4 실패), 같은 Resizer 재시도 실패. 이후 다른 경계선도 끝난 뒤 `none`(이전 값으로 누수 복원). 나머지: orders\|board +116.8/120, board\|billing 118.2, board\|telemetry +82.7(하단 min 160에서 멈춤)/-117.0, nav 200 유지, resizer 4, nav 드래그 시작 안 함, 넘침 없음 | obs/R17-resize-run{1,2}.json |
+| R17 (사다리) | workbench | `telemetry\|telemetry-x` ±120, `--site-per-process` 유무 | mouse | fail(FC-QA-008) | OOPIF 쪽(+120)만 캡처 유실, same-site 쪽(-120)·사이트 격리 없음은 정상 | explore/r17b-oopif-resize-{spp,nospp}.spec.ts 로그 |
+| R17 | workbench | Nav에서 board 닫기·다시 열기 (`removePanel`/`insertPanel`) | mouse | fail(FC-QA-001) | as-predicted(메커니즘) — `removePanel`·`insertPanel` 각 1건, 닫기 `H[nav,telemetry-x,V[orders,billing],telemetry]`(V[board,telemetry-x] 풀림 → telemetry-x frame +1·`loads` +1), 열기 `H[nav,telemetry-x,V[orders,H[board,billing]],telemetry]`(billing이 새 split에 감싸여 frame +1·`mountCalls`·`unmountCalls` +1, board mounts +1). 표의 트리·슬롯 예측은 M1 대체로 무효. 콘솔 에러 0, I1~I7 통과 | obs/R17-nav-toggle-run{1,2}.json |
+| R17 | workbench | 전·후 PNG 시각 점검 (잘림, 넘침·스크롤바, 리사이저, shadow, ghost, 에러 카드) | — | pass | as-predicted (점검표 이상 없음. 좁은 패널의 "잘린" 내용은 body 가로 스크롤(DOM 확인), 스크롤바는 `--hide-scrollbars`로 PNG 판정 불가. orders `minWidth 320`은 세로 split 안에서 무시 = 문서대로 → 6절) | obs/R17-visual-run1.json |
 | R18 | workbench | 탐색 동작 약 30회 | mouse | not-run | | |
 | R18 | workbench | 탐색 동작 (터치) | touch-cdp-handle | not-run | | |
 | R19 | control 패널 (`persist=1`) | 저장 → 새로고침 → 복원 | mouse | not-run | | |
@@ -157,6 +158,7 @@
 | [FC-QA-004](../findings/FC-QA-004-layout-hijacks-non-panel-drag.md) | 패널이 패널 드래그가 아닌 드래그의 drop 전파를 막고 dropEffect를 덮어쓴다 | sev-2 | spec-question | needs-user-confirmation | 2/2 | R09 | foreign-drag-handlers-unguarded |
 | [FC-QA-005](../findings/FC-QA-005-iframe-panel-not-mouse-drop-target.md) | iframe 패널은 마우스 드롭 대상이 되지 않는데 터치에서는 된다 (경로 불일치) | sev-3 | library-bug | open | 2/2 | R12 | iframe-drop-target-mouse |
 | [FC-QA-007](../findings/FC-QA-007-handle-touch-starts-without-long-press.md) | 핸들 모드 터치 드래그가 문서와 달리 롱프레스 없이 8px 이동으로 시작 | sev-4 | spec-question | needs-user-confirmation | 2/2 | S7a·R12·R14 | docs-touch-handle-start |
+| [FC-QA-008](../findings/FC-QA-008-resize-capture-loss-leaks-user-select.md) | 경계선 리사이즈가 포인터 캡처를 잃으면 userSelect가 none으로 남고 그 Resizer를 다시 잡을 수 없다 | sev-1 | library-bug | open | 2/2 | R17 | resize-capture-cleanup |
 | [FC-QA-006](../findings/FC-QA-006-oopif-release-no-dragend-harness.md) | (하네스) OOPIF 위 마우스 릴리스에서 dragend가 오지 않고 CDP 드래그 세션이 멈춘다 | sev-4 | harness-artifact | open | 2/2 | R12 | harness-cdp-drag-oopif |
 
 `predicted`였던 발견의 결과: FC-QA-001 — 관찰됨(R01에서 `open`으로 변경)
@@ -228,6 +230,7 @@
 |---|---|---|---|
 | iframe 내용 안에서는 패널 드래그를 시작할 수 없다 (결정 D4) | <R12, R13> | 핸들을 host가 그리고 `dragHandleSelector="[data-drag-handle]"`를 쓴다 | <확인 \| 미확인> |
 | iframe 패널 위에서는 마우스 드롭 대상 판정이 되지 않는다 (FC-QA-005가 고쳐질 때까지) | R12: shield 없이 마우스 미리보기 없음(`obs/R12-ladder-control-iframe-run1.json`), `iframeShield=1`이면 커밋(`obs/R12-shield-p-b-run1.json`, `R12-shield-p-c-run1.json`) | 드래그 중 `[data-dragging-panel-id] iframe { pointer-events: none }` | 확인 |
+| 패널을 다른 방향의 split으로 옮기면 그 패널의 `minWidth`(또는 `minHeight`)가 꺼진다 | R17: orders `minWidth 320`이 `V[orders,billing]` 안에서 262→208px(`obs/R17-visual-run1.json`). `doc/API.ko.md` "패널 크기 제약"의 반대 축 무시 규정대로 | 최소 크기가 중요한 패널은 `droppable`/`draggable` 잠금이나 split 수준 제약으로 배치를 고정하거나, 이동 뒤 제약을 다시 지정한다 | 확인 |
 | remote가 죽어도 레이아웃이 유지되려면 경계가 패널 안에 있어야 한다 | R16: 픽스처의 패널별 `RemoteErrorBoundary`로 orders만 에러 카드, 나머지 조작 가능, 죽은 패널도 host 핸들로 이동(`obs/R16-*.json`). 라이브러리에는 경계가 없다(`PanelNodeRenderer.tsx:155`) | 패널 내용마다 에러 경계·Suspense를 두고, `TreeLayout` 바깥에는 두지 않는다. 핸들은 경계 밖에 둔다 | 확인 |
 
 ---
@@ -258,6 +261,8 @@
 | Firefox / WebKit 마우스 | 이번 run은 Chromium만 실행했다. Firefox에는 소스 노드가 옮겨지면 `dragend`가 오지 않는 버그 보고가 있다 ([Bugzilla 460801](https://bugzilla.mozilla.org/show_bug.cgi?id=460801)) | 사용자 PC의 Firefox에서 R07의 취소 경로 | <미확인> |
 | 터치: 다른 Chromium major | 레인 하나만 실행했다. Chromium 141은 터치 롱프레스 네이티브 드래그가 꺼져 있고 153은 켜져 있다 | 다른 레인으로 S7b·R13·R14 재실행 | <미확인> |
 | 브라우저 창 밖에서 놓기 | 가로챈 드래그로는 창 밖 릴리스를 만들 수 없다 | 사용자 PC에서 패널을 창 밖으로 끌고 나가 놓기 | <미확인> |
+| 스크롤바 시각 확인 | Playwright headless 실행은 `--hide-scrollbars`로 스크롤바를 그리지 않아 PNG로 "잘림 대 스크롤"을 판정할 수 없다(R17에서 DOM `scrollWidth/clientWidth`로 대체) | 사용자 PC에서 `?layout=workbench`의 좁은 board 패널을 가로 스크롤해 본다 | <미확인> |
+| OOPIF 쪽으로 경계선 리사이즈 (FC-QA-008 트리거) | CDP 마우스 입력이 OOPIF 위에서 host의 포인터 캡처를 따르지 않았다. 실제 Chrome의 입력 라우팅도 같은지는 이 환경으로 확인 불가 | 사용자 PC Chrome에서 `?layout=workbench`: telemetry\|telemetry-x 경계선을 오른쪽(telemetry-x 위)으로 끌고 놓은 뒤 (1) 경계선이 따라왔는지 (2) 페이지 텍스트 선택이 되는지 (3) 같은 경계선을 다시 잡을 수 있는지 | <미확인> |
 | cross-origin iframe 위 마우스 드래그 (GO 참고 사항) | CDP 드래그 이벤트가 cross-origin iframe 위에서 어느 문서에도 오지 않는다(부작용 #7). OOPIF 위 릴리스는 `dragend`도 오지 않는다(FC-QA-006) | 사용자 PC Chrome에서 `?layout=row3&b=telemetry&c=telemetry-x&iframeShield=0`: 패널을 telemetry-x 본문 위로 끌어 놓았을 때 (1) 미리보기가 생기는지(FC-QA-005 예측: 아니오) (2) 놓은 뒤 패널이 정상으로 돌아오는지(FC-QA-006 예측: 예) | <미확인> |
 | <GO caveat 등 이번 run에서 추가된 한계> | | | |
 
@@ -296,6 +301,7 @@
 
 | 시나리오 | 브리프 | 대체 | 이유 |
 |---|---|---|---|
+| R17-moves M1 | `orders → ('billing','right',0)` | `('billing','right',3)` | R16과 같은 이유. 이후 M2~M5와 토글의 표 트리·슬롯 예측은 시작 상태가 달라 무효 → 커밋 = 미리보기·메커니즘으로 판정. M4는 `(orders,right,0)` 도달 불가로 `(orders,right,2)`, M5는 `(board,bottom,4)` 도달 불가로 `(board,bottom,0)`(그 시점 트리에서 같은 동작이 이미 성립) |
 | R16-dead-drag | `dropPoint('billing','right',0)` | `dropPoint('billing','right',3)` | `billing`의 오른쪽 가장자리가 바깥 split들과 겹쳐 드롭 판정이 바깥 split(15% 띠)을 먼저 잡는다. `billing`의 `right`는 깊이 3·4만 도달 가능(`helpers/geometry.ts` 판정 재현으로 열거). 사례의 목적(죽은 패널을 핸들로 이동)은 그대로 |
 
 ### HARNESS.md 「알려진 하네스 부작용」 추가 제안

@@ -1,0 +1,1169 @@
+{
+ "step": "03-after",
+ "url": "http://127.0.0.1:4300/?layout=workbench",
+ "lib": {
+  "source": "src",
+  "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+  "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+ },
+ "settle": {
+  "stable": true,
+  "reads": 2,
+  "ms": 162
+ },
+ "tree": {
+  "type": "split",
+  "direction": "horizontal",
+  "size": 1,
+  "children": [
+   {
+    "type": "panel",
+    "id": "nav",
+    "size": 1,
+    "componentKey": "nav",
+    "minWidth": 200,
+    "maxWidth": 200,
+    "draggable": false,
+    "droppable": false,
+    "resizable": false
+   },
+   {
+    "type": "panel",
+    "id": "orders",
+    "size": 3,
+    "componentKey": "orders",
+    "minWidth": 320
+   },
+   {
+    "type": "split",
+    "direction": "vertical",
+    "size": 3,
+    "children": [
+     {
+      "type": "split",
+      "direction": "horizontal",
+      "size": 1.858695652173914,
+      "children": [
+       {
+        "type": "panel",
+        "id": "board",
+        "size": 1,
+        "componentKey": "board"
+       },
+       {
+        "type": "panel",
+        "id": "billing",
+        "size": 1,
+        "componentKey": "billing"
+       }
+      ]
+     },
+     {
+      "type": "split",
+      "direction": "horizontal",
+      "size": 1.141304347826086,
+      "children": [
+       {
+        "type": "panel",
+        "id": "telemetry",
+        "size": 1,
+        "componentKey": "telemetry"
+       },
+       {
+        "type": "panel",
+        "id": "telemetry-x",
+        "size": 1,
+        "componentKey": "telemetry-x"
+       }
+      ],
+      "minHeight": 160
+     }
+    ]
+   }
+  ]
+ },
+ "treeNotation": "H[nav,orders,V[H[board,billing],H[telemetry,telemetry-x]]]",
+ "treeVersion": 60,
+ "calls": [
+  {
+   "seq": 1,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 0
+  },
+  {
+   "seq": 2,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 1
+  },
+  {
+   "seq": 3,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 2
+  },
+  {
+   "seq": 4,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 3
+  },
+  {
+   "seq": 5,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 4
+  },
+  {
+   "seq": 6,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 5
+  },
+  {
+   "seq": 7,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 6
+  },
+  {
+   "seq": 8,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 7
+  },
+  {
+   "seq": 9,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 8
+  },
+  {
+   "seq": 10,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 9
+  },
+  {
+   "seq": 11,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    -0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 10
+  },
+  {
+   "seq": 12,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    -0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 11
+  },
+  {
+   "seq": 13,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    -0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 12
+  },
+  {
+   "seq": 14,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    -0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 13
+  },
+  {
+   "seq": 15,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    -0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 14
+  },
+  {
+   "seq": 16,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    -0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 15
+  },
+  {
+   "seq": 17,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    -0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 16
+  },
+  {
+   "seq": 18,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    -0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 17
+  },
+  {
+   "seq": 19,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    -0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 18
+  },
+  {
+   "seq": 20,
+   "fn": "onResizeBorder",
+   "args": [
+    [],
+    1,
+    -0.06687898089171974,
+    1256
+   ],
+   "treeVersionBefore": 19
+  },
+  {
+   "seq": 21,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 20
+  },
+  {
+   "seq": 22,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 21
+  },
+  {
+   "seq": 23,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 22
+  },
+  {
+   "seq": 24,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 23
+  },
+  {
+   "seq": 25,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 24
+  },
+  {
+   "seq": 26,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 25
+  },
+  {
+   "seq": 27,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 26
+  },
+  {
+   "seq": 28,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 27
+  },
+  {
+   "seq": 29,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 28
+  },
+  {
+   "seq": 30,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 29
+  },
+  {
+   "seq": 31,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    -0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 30
+  },
+  {
+   "seq": 32,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    -0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 31
+  },
+  {
+   "seq": 33,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    -0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 32
+  },
+  {
+   "seq": 34,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    -0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 33
+  },
+  {
+   "seq": 35,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    -0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 34
+  },
+  {
+   "seq": 36,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    -0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 35
+  },
+  {
+   "seq": 37,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    -0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 36
+  },
+  {
+   "seq": 38,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    -0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 37
+  },
+  {
+   "seq": 39,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    -0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 38
+  },
+  {
+   "seq": 40,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2,
+     0
+    ],
+    0,
+    -0.04580152671755725,
+    524
+   ],
+   "treeVersionBefore": 39
+  },
+  {
+   "seq": 41,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 40
+  },
+  {
+   "seq": 42,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 41
+  },
+  {
+   "seq": 43,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 42
+  },
+  {
+   "seq": 44,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 43
+  },
+  {
+   "seq": 45,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 44
+  },
+  {
+   "seq": 46,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 45
+  },
+  {
+   "seq": 47,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 46
+  },
+  {
+   "seq": 48,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 47
+  },
+  {
+   "seq": 49,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 48
+  },
+  {
+   "seq": 50,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 49
+  },
+  {
+   "seq": 51,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    -0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 50
+  },
+  {
+   "seq": 52,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    -0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 51
+  },
+  {
+   "seq": 53,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    -0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 52
+  },
+  {
+   "seq": 54,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    -0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 53
+  },
+  {
+   "seq": 55,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    -0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 54
+  },
+  {
+   "seq": 56,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    -0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 55
+  },
+  {
+   "seq": 57,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    -0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 56
+  },
+  {
+   "seq": 58,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    -0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 57
+  },
+  {
+   "seq": 59,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    -0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 58
+  },
+  {
+   "seq": 60,
+   "fn": "onResizeBorder",
+   "args": [
+    [
+     2
+    ],
+    0,
+    -0.048913043478260865,
+    736
+   ],
+   "treeVersionBefore": 59
+  }
+ ],
+ "dom": {
+  "domTree": "H[nav,orders,V[H[board,billing],H[telemetry,telemetry-x]]]",
+  "draggingPanelId": null,
+  "panels": {
+   "nav": {
+    "slot": "nav",
+    "rect": {
+     "x": 12,
+     "y": 52,
+     "width": 200,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": false,
+    "shadow": false,
+    "elementSeq": 1
+   },
+   "orders": {
+    "slot": "orders",
+    "rect": {
+     "x": 212,
+     "y": 52,
+     "width": 524,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 2
+   },
+   "board": {
+    "slot": "board",
+    "rect": {
+     "x": 744,
+     "y": 52,
+     "width": 258,
+     "height": 451.046875
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 3
+   },
+   "billing": {
+    "slot": "billing",
+    "rect": {
+     "x": 1010,
+     "y": 52,
+     "width": 258,
+     "height": 451.046875
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 4
+   },
+   "telemetry": {
+    "slot": "telemetry",
+    "rect": {
+     "x": 744,
+     "y": 511.046875,
+     "width": 258,
+     "height": 276.953125
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 5
+   },
+   "telemetry-x": {
+    "slot": "telemetry-x",
+    "rect": {
+     "x": 1010,
+     "y": 511.046875,
+     "width": 258,
+     "height": 276.953125
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 6
+   }
+  },
+  "resizerCount": 4,
+  "resizers": [
+   {
+    "rect": {
+     "x": 736,
+     "y": 52,
+     "width": 8,
+     "height": 736
+    },
+    "axis": "x"
+   },
+   {
+    "rect": {
+     "x": 1002,
+     "y": 52,
+     "width": 8,
+     "height": 451.046875
+    },
+    "axis": "x"
+   },
+   {
+    "rect": {
+     "x": 744,
+     "y": 503.046875,
+     "width": 524,
+     "height": 8
+    },
+    "axis": "y"
+   },
+   {
+    "rect": {
+     "x": 1002,
+     "y": 511.046875,
+     "width": 8,
+     "height": 276.953125
+    },
+    "axis": "x"
+   }
+  ],
+  "ghosts": [],
+  "bodyUserSelect": "none"
+ },
+ "counters": {
+  "frames": {
+   "nav": {
+    "kind": "local",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   },
+   "orders": {
+    "kind": "same-tree",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   },
+   "board": {
+    "kind": "same-tree",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   },
+   "billing": {
+    "kind": "mount",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   },
+   "telemetry": {
+    "kind": "iframe",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready",
+    "mirror": {
+     "loads": 1,
+     "docIds": [
+      "f998ae19-1882-4d62-8a4a-94618fb38388"
+     ],
+     "lastLoadedAt": 1791341159059
+    }
+   },
+   "telemetry-x": {
+    "kind": "iframe",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready",
+    "mirror": {
+     "loads": 1,
+     "docIds": [
+      "f7514ee8-5050-496f-87f6-a611610c7304"
+     ],
+     "lastLoadedAt": 1791341159034
+    }
+   }
+  },
+  "mfe": {
+   "billing": {
+    "slot": "billing",
+    "kind": "mount",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": false,
+    "remote": "billing",
+    "build": "20261007T013114Z-f6e7",
+    "mountCalls": 1,
+    "rootsAlive": 1
+   },
+   "board": {
+    "slot": "board",
+    "kind": "same-tree",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "board",
+    "build": "20261007T021650Z-4e0b",
+    "dnd": {
+     "cardMoves": 0,
+     "zoneDrops": 0,
+     "copyDrops": 0,
+     "lastDragend": null,
+     "lastTypes": []
+    }
+   },
+   "orders": {
+    "slot": "orders",
+    "kind": "same-tree",
+    "mounts": 1,
+    "unmounts": 0,
+    "instanceSeq": 1,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "orders",
+    "build": "20261007T013107Z-6373"
+   }
+  },
+  "iframes": {
+   "telemetry": {
+    "loads": 1,
+    "docId": "f998ae19-1882-4d62-8a4a-94618fb38388",
+    "frameUrl": "http://127.0.0.1:4304/?slot=telemetry&parent=http%3A%2F%2F127.0.0.1%3A4300"
+   },
+   "telemetry-x": {
+    "loads": 1,
+    "docId": "f7514ee8-5050-496f-87f6-a611610c7304",
+    "frameUrl": "http://localhost:4304/?slot=telemetry-x&parent=http%3A%2F%2F127.0.0.1%3A4300"
+   }
+  },
+  "domMoves": {},
+  "domLog": [
+   {
+    "seq": 1,
+    "t": 154.89999999990687,
+    "panelId": "nav",
+    "kind": "added",
+    "elementSeq": 1
+   },
+   {
+    "seq": 2,
+    "t": 155,
+    "panelId": "orders",
+    "kind": "added",
+    "elementSeq": 2
+   },
+   {
+    "seq": 3,
+    "t": 155,
+    "panelId": "board",
+    "kind": "added",
+    "elementSeq": 3
+   },
+   {
+    "seq": 4,
+    "t": 155,
+    "panelId": "billing",
+    "kind": "added",
+    "elementSeq": 4
+   },
+   {
+    "seq": 5,
+    "t": 155,
+    "panelId": "telemetry",
+    "kind": "added",
+    "elementSeq": 5
+   },
+   {
+    "seq": 6,
+    "t": 155,
+    "panelId": "telemetry-x",
+    "kind": "added",
+    "elementSeq": 6
+   }
+  ]
+ },
+ "content": {
+  "orders": {
+   "input": "seed-orders",
+   "counter": "count 3",
+   "scrollTop": 120,
+   "focused": false
+  },
+  "board": {
+   "input": "seed-board",
+   "counter": "count 3",
+   "scrollTop": 120,
+   "focused": false
+  },
+  "billing": {
+   "input": "seed-billing",
+   "counter": "count 3",
+   "scrollTop": 120,
+   "focused": false
+  },
+  "telemetry": {
+   "input": "seed-telemetry",
+   "counter": null,
+   "scrollTop": 120,
+   "focused": false
+  },
+  "telemetry-x": {
+   "input": "seed-telemetry-x",
+   "counter": null,
+   "scrollTop": 120,
+   "focused": false
+  }
+ },
+ "activeTestid": null,
+ "console": [],
+ "pageErrors": [],
+ "documentRequests": {
+  "http://127.0.0.1:4300": 1,
+  "http://127.0.0.1:4304": 1,
+  "http://localhost:4304": 1
+ }
+}

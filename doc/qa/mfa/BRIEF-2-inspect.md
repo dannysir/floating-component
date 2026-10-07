@@ -747,3 +747,4 @@ STATE.md 행 `B2-END`. 전부 참이어야 닫는다.
 | 2026-10-07 | 세션 1 (B1-08) | S9 관찰: cross-origin iframe(`telemetry`, `telemetry-x`) 위의 CDP 마우스 드래그 이벤트는 host에도 iframe 문서에도 오지 않는다(HARNESS 부작용 #7). R07의 iframe 경우·R12·R15의 iframe 위 마우스 관찰에는 하네스 충실도 단서를 붙이고, 사다리 3단계(터치)와 `control-iframe` 대조를 함께 적는다 |
 | 2026-10-07 | 세션 1 (B1-08) | blocked 행 없음: MF on(기본 설정 단), 터치 ok, `telemetry-x` 로드됨, remote 막힘 없음. S7b: 레인 B headless shell에서 네이티브 `dragstart`·`touchcancel` 미관찰 |
 | 2026-10-07 | 세션 1 (B1-08) | 스모크 스펙 `smoke/orders`의 (c) 케이스는 `EXPECT_ORDERS_STAMP`가 있을 때만 돈다(없으면 skipped 1). S8 스펙은 환경 변수 `S08_RUN_ID`로 실행을 구분한다 |
+| 2026-10-07 | 세션 2 | 앵커 대체(운영상, 예측 문구는 그대로): R16-dead-drag `('billing','right',0)` → `('billing','right',3)`; R17 M1 같은 대체, 그 결과 M2~M5·토글의 표 트리 무효(커밋 = 미리보기로 판정), M4 `(orders,right,0)`→`(orders,right,2)`, M5 `(board,bottom,4)`→`(board,bottom,0)`. 이유: `billing` 오른쪽 가장자리가 루트 split 가장자리와 겹쳐 바깥 split 띠가 먼저 잡힌다(깊이 0 도달 불가). REPORT.md 10절 「브리프 좌표 대체」 |

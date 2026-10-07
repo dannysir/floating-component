@@ -95,5 +95,6 @@ fix_commit: none
 ## 관련
 
 - 시나리오: R12, 관찰 기록: doc/qa/run01-tier1/obs/R12-telemetry-run1.json, R12-telemetry-x-run1.json, R12-ladder-control-iframe-run1.json, R12-shield-p-b-run1.json, R12-shield-p-c-run1.json, R12-touch-telemetry-run1.json, R12-touch-telemetry-x-run1.json, R12-touch-control-iframe-run1.json (run2도 같다). R07-iframe(`obs/R07-iframe-run{1,2}.json`)도 같은 현상(iframe 위 릴리스가 취소).
+- 2026-10-07 R17 M2(`?layout=workbench`, `board → (telemetry, left, 0)`): 놓는 점이 telemetry iframe 본문이라 미리보기·이동 없음(2/2). 제품 기본 화면에서도 iframe 패널을 마우스로 앵커 삼을 수 없다. `obs/R17-moves-run{1,2}.json`.
 - 통합 가이드 후보(REPORT 6절): 드래그 중 `[data-dragging-panel-id] iframe { pointer-events: none }`, 핸들은 host가 그린다.
 - 관련 발견: FC-QA-006(OOPIF 위 릴리스의 하네스 부작용), 가설: H-IFRAME-DEAD

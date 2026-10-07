@@ -1,0 +1,27 @@
+{
+  "run": "run01-tier1",
+  "runNo": 1,
+  "scenario": "R17",
+  "case": "R17-visual",
+  "expected": "점검표 전 항목 이상 없음",
+  "predicted": "이상 없음(remote는 계약대로 `width/height 100%`). 상태 배지의 숫자가 리마운트 수만큼 올라 있는 것은 FC-QA-001의 가시화이지 시각 결함이 아니다",
+  "observed": "Read 도구로 연 PNG: R17-moves-toggle-run1의 01-before, 02-mid-M1, 03-after-M1, 02-mid-M3, 03-after-M4, 03-after-close, 03-after-open, R17-resize-run1 01-before·03-after(나머지는 스냅샷 rect로 대조). 잘림: 이상 없음 — 좁은 패널(board 258px, orders 208~262px)에서 내용이 오른쪽에서 끊겨 보이지만 DOM 확인 결과 PanelFrame body(`body-<slot>`, overflow:auto)가 가로 스크롤 컨테이너(board sw 423 > cw 258)이고 패널 wrapper는 sw==cw. 헤더 글자는 좁은 폭에서 두 줄로 줄바꿈될 뿐 잘리지 않음. 넘침·스크롤바: PNG로 판정 불가 — Playwright headless의 `--hide-scrollbars`로 스크롤바가 그려지지 않는다(환경 한계, REPORT 8절). wrapper·workspace의 바깥 넘침은 없음(R17-resize `넘침 패널 []`). 리사이저: PNG에 없음(부작용 9), `resizerCount` 4. shadow: 02-mid-M1(orders)·02-mid-M3(billing)에만 반투명+점선, 03-after-*에는 없음. ghost: 없음. 에러 카드·스켈레톤: 없음. 상태 배지: 헤더 `f.. c..`/`f.. l..`가 스냅샷 counters와 같음(예: 02-mid-M1 board f2 c2, 03-after-close telemetry-x f4 l4). 고정 크기: nav 200 유지. orders ≥ 320은 orders가 가로 split의 자식일 때만 성립(T0 524, M1 뒤 320) — M3 뒤 세로 split `V[orders,billing]` 안에서 262px, M4 뒤 208px. `doc/API.ko.md` \"패널 크기 제약\"(반대 축 값은 무시)대로라 결함 아님 → 6절 가이드 후보. 하단 ≥ 160: `minHeight 160`을 가진 split이 M2~M3 이동으로 사라진 뒤에는 적용 대상 없음",
+  "verdict": "as-predicted",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on",
+    "visual": "PNG 직접 확인 + DOM 확인"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [],
+  "artifacts": [
+    "r17-workbench-tour/R17-moves-toggle-run1",
+    "r17-workbench-tour/R17-resize-run1"
+  ]
+}

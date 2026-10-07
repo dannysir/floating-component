@@ -1,0 +1,144 @@
+{
+  "run": "run01-tier1",
+  "runNo": 2,
+  "scenario": "R17",
+  "case": "R17-resize",
+  "expected": "8번 모두 방향대로 3px 안에서 변한다. `userSelect` 복원. `nav` 200 유지, `orders` ≥ 320, 하단 ≥ 160. `nav`는 드래그가 시작되지 않는다",
+  "predicted": "통과. 패널은 포인터보다 조금 덜 움직인다(Resizer 8px 포함 환산)",
+  "observed": "orders|board x +120: a 524.0→640.8(116.8) b 258.0→199.6(-58.4) cap true/true us \"none\"→\"\" nav 200.0 orders 640.8 bottom 242.7 inv ok ; orders|board x -120: a 640.8→524.0(-116.8) b 199.6→258.0(58.4) cap true/true us \"none\"→\"\" nav 200.0 orders 524.0 bottom 242.7 inv ok ; board|billing x +120: a 258.0→376.2(118.2) b 258.0→139.8(-118.2) cap true/true us \"none\"→\"\" nav 200.0 orders 524.0 bottom 242.7 inv ok ; board|billing x -120: a 376.2→258.0(-118.2) b 139.8→258.0(118.2) cap true/true us \"none\"→\"\" nav 200.0 orders 524.0 bottom 242.7 inv ok ; telemetry|telemetry-x x +120: a 258.0→258.0(0.0) b 258.0→258.0(0.0) cap false/false us \"none\"→\"none\" nav 200.0 orders 524.0 bottom 242.7 불변식 실패: I4(body.style.userSelect=\"none\" != \"\") ; telemetry|telemetry-x x -120: a 258.0→258.0(0.0) b 258.0→258.0(0.0) cap false/false us \"none\"→\"none\" nav 200.0 orders 524.0 bottom 242.7 불변식 실패: I4(body.style.userSelect=\"none\" != \"\") ; board|telemetry y +120: a 485.3→568.0(82.7) b 242.7→160.0(-82.7) cap true/true us \"none\"→\"none\" nav 200.0 orders 524.0 bottom 160.0 불변식 실패: I4(body.style.userSelect=\"none\" != \"\") ; board|telemetry y -120: a 568.0→451.0(-117.0) b 160.0→277.0(117.0) cap true/true us \"none\"→\"none\" nav 200.0 orders 524.0 bottom 277.0 불변식 실패: I4(body.style.userSelect=\"none\" != \"\"). 포인터 대비 최대 오차 120.0px; onResizeBorder 호출 60건(포인터 이동마다); resizer 4개; nav 드래그 시작 안 함(expectStart false 통과); 넘침 패널 []. 누적: orders(orders): frame+0 content+0 moves+0 input=\"seed-orders\" counter=\"count 3\" scrollTop=120 [untouched]; board(board): frame+0 content+0 moves+0 input=\"seed-board\" counter=\"count 3\" scrollTop=120 [untouched]; billing(billing): frame+0 content+0 moves+0 rootsAlive=1 input=\"seed-billing\" counter=\"count 3\" scrollTop=120 [untouched]; telemetry(telemetry): frame+0 content+0 moves+0 loads+0 input=\"seed-telemetry\" counter=null scrollTop=120 [untouched]; telemetry-x(telemetry-x): frame+0 content+0 moves+0 loads+0 input=\"seed-telemetry-x\" counter=null scrollTop=120 [untouched]; nav(nav): frame+0 content+0 moves+0 input=null counter=null scrollTop=null [untouched]",
+  "verdict": "deviates",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": true,
+      "detail": "no data-dragging-panel-id",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": false,
+      "detail": "body.style.userSelect=\"none\" != \"\"",
+      "violations": [
+        {
+          "key": "userSelect",
+          "message": "body.style.userSelect=\"none\" != \"\""
+        }
+      ],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[nav,orders,V[H[board,billing],H[telemetry,telemetry-x]]]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (nav,orders,board,billing,telemetry,telemetry-x)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r17-workbench-tour/R17-resize-run2"
+  ],
+  "extra": {
+    "rows": [
+      "orders|board x +120: a 524.0→640.8(116.8) b 258.0→199.6(-58.4) cap true/true us \"none\"→\"\" nav 200.0 orders 640.8 bottom 242.7 inv ok",
+      "orders|board x -120: a 640.8→524.0(-116.8) b 199.6→258.0(58.4) cap true/true us \"none\"→\"\" nav 200.0 orders 524.0 bottom 242.7 inv ok",
+      "board|billing x +120: a 258.0→376.2(118.2) b 258.0→139.8(-118.2) cap true/true us \"none\"→\"\" nav 200.0 orders 524.0 bottom 242.7 inv ok",
+      "board|billing x -120: a 376.2→258.0(-118.2) b 139.8→258.0(118.2) cap true/true us \"none\"→\"\" nav 200.0 orders 524.0 bottom 242.7 inv ok",
+      "telemetry|telemetry-x x +120: a 258.0→258.0(0.0) b 258.0→258.0(0.0) cap false/false us \"none\"→\"none\" nav 200.0 orders 524.0 bottom 242.7 불변식 실패: I4(body.style.userSelect=\"none\" != \"\")",
+      "telemetry|telemetry-x x -120: a 258.0→258.0(0.0) b 258.0→258.0(0.0) cap false/false us \"none\"→\"none\" nav 200.0 orders 524.0 bottom 242.7 불변식 실패: I4(body.style.userSelect=\"none\" != \"\")",
+      "board|telemetry y +120: a 485.3→568.0(82.7) b 242.7→160.0(-82.7) cap true/true us \"none\"→\"none\" nav 200.0 orders 524.0 bottom 160.0 불변식 실패: I4(body.style.userSelect=\"none\" != \"\")",
+      "board|telemetry y -120: a 568.0→451.0(-117.0) b 160.0→277.0(117.0) cap true/true us \"none\"→\"none\" nav 200.0 orders 524.0 bottom 277.0 불변식 실패: I4(body.style.userSelect=\"none\" != \"\")"
+    ],
+    "sizes": [
+      {
+        "nav": 200,
+        "orders": 640.8125,
+        "bottom": 242.671875
+      },
+      {
+        "nav": 200,
+        "orders": 524,
+        "bottom": 242.671875
+      },
+      {
+        "nav": 200,
+        "orders": 524,
+        "bottom": 242.671875
+      },
+      {
+        "nav": 200,
+        "orders": 524,
+        "bottom": 242.671875
+      },
+      {
+        "nav": 200,
+        "orders": 524,
+        "bottom": 242.671875
+      },
+      {
+        "nav": 200,
+        "orders": 524,
+        "bottom": 242.671875
+      },
+      {
+        "nav": 200,
+        "orders": 524,
+        "bottom": 160
+      },
+      {
+        "nav": 200,
+        "orders": 524,
+        "bottom": 276.953125
+      }
+    ],
+    "errs": [
+      3.1875,
+      3.1875,
+      1.828125,
+      1.828125,
+      120,
+      120,
+      37.328125,
+      3.046875
+    ]
+  }
+}

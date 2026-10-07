@@ -248,8 +248,9 @@ AI가 보고한 발견을 믿을 수 있게 하는 규칙이다. 하나라도 �
 | FC-QA-005 | [FC-QA-005-iframe-panel-not-mouse-drop-target.md](./findings/FC-QA-005-iframe-panel-not-mouse-drop-target.md) | `run01-tier1` | iframe 패널이 마우스 드롭 대상이 안 되는데 터치는 됨 (H-IFRAME-DEAD, 경로 불일치) |
 | FC-QA-006 | [FC-QA-006-oopif-release-no-dragend-harness.md](./findings/FC-QA-006-oopif-release-no-dragend-harness.md) | `run01-tier1` | (harness-artifact) OOPIF 위 마우스 릴리스에서 dragend 미전달 |
 | FC-QA-007 | [FC-QA-007-handle-touch-starts-without-long-press.md](./findings/FC-QA-007-handle-touch-starts-without-long-press.md) | `run01-tier1` | 핸들 모드 터치가 문서와 달리 롱프레스 없이 시작 (docs, 사용자 확인 대기) |
+| FC-QA-008 | [FC-QA-008-resize-capture-loss-leaks-user-select.md](./findings/FC-QA-008-resize-capture-loss-leaks-user-select.md) | `run01-tier1` | 리사이즈 캡처 유실 시 userSelect 누수·Resizer 재사용 불가 (H-RESIZE) |
 
-**다음 빈 ID: FC-QA-008**
+**다음 빈 ID: FC-QA-009**
 
 ---
 

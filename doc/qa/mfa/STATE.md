@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`R17`
+`R18`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -68,7 +68,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R12 (필수 묶음) | 4faf0a4 | 2026-10-07T02:31Z | 2 | fail(FC-QA-005) — 마우스는 iframe 패널(control-iframe 포함) 위 미리보기·커밋 없음, 터치는 커밋(경로 불일치). shield=1 pass. telemetry-x 릴리스는 harness-artifact(FC-QA-006). S7a 재실행 pass |
 | [x] | R14 (필수 묶음) | f4ff5e1 | 2026-10-07T02:33Z | 2 | fail(FC-QA-001, FC-QA-002, FC-QA-007) — 터치 취소·두 번째 드래그 깨끗(I1~I7), 리마운트·재삽입은 마우스와 같음, 롱프레스 없이 시작(docs). S7a 재실행 pass |
 | [x] | R16 (필수 묶음) | cf0b610 | 2026-10-07T02:36Z | 2 | pass — 죽은 remote는 그 패널만 에러 카드, 다른 패널·죽은 패널 모두 조작 가능. FC-QA-001·002 증거 추가. dead-drag 좌표 대체(right,0→3) |
-| [ ] | R17 (필수 묶음) | | | | |
+| [x] | R17 (필수 묶음) | (R17 커밋) | 2026-10-07T02:48Z | 5 | fail(FC-QA-001, FC-QA-005, FC-QA-008) — OOPIF 쪽 리사이즈에서 캡처 유실·userSelect 누수·Resizer 재사용 불가(sev-1). 이동·토글 리마운트, M2 iframe 앵커 불가. 시각 점검 이상 없음. M1 좌표 대체 |
 | [ ] | R18 (필수 묶음) | | | | |
 | [ ] | R19 (필수 묶음) | | | | |
 | [ ] | R04 (두 번째 묶음) | | | | |
@@ -149,6 +149,6 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 
 ## 발견 ID
 
-- 다음 발견 ID: `FC-QA-008`
+- 다음 발견 ID: `FC-QA-009`
 
 `FC-QA-001`은 사전 등록돼 있다(`doc/qa/findings/`, 상태 `predicted`). ID는 전역이고 재사용하지 않는다. 세션 1은 ID를 발급하지 않는다. 세션 2가 발급할 때마다 이 줄과 [../README.md](../README.md)의 ID 대장을 함께 올린다. 둘이 다르면 README가 기준이다.
