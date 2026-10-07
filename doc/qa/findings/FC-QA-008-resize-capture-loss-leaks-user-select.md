@@ -5,9 +5,9 @@ severity: sev-1
 class: library-bug
 status: open
 confidence: high
-repro_rate: 2/2
+repro_rate: 4/4
 found_in: run01-tier1
-variants: [telemetry-x]
+variants: [telemetry-x (workbench), telemetry-x (row3)]
 input: mouse
 browser: chromium-153 headless-shell
 playwright: 1.63.0
@@ -92,3 +92,4 @@ fix_commit: none
 
 - 시나리오: R17, 관찰 기록: doc/qa/run01-tier1/obs/R17-resize-run{1,2}.json. R15에서 iframe 옆 리사이즈로 증거를 덧붙인다.
 - 관련 발견: FC-QA-006(같은 OOPIF 입력 라우팅이 드래그 종료를 잃는 하네스 현상), 가설: H-RESIZE
+- 2026-10-07 R15(`?layout=row3&a=control-a&b=telemetry&c=telemetry-x`, 브리프 절차: iframe 쪽으로 150px + iframe 중앙에서 놓기 → 반대로 -150, 2/2씩): same-site `telemetry` 쪽은 캡처 획득, `pointerup` top, 포인터 이동 210.7px에 p-a +208.0, `userSelect` 복원, 반대 -148.1 — 깨끗(as-ideal). OOPIF `telemetry-x` 쪽은 캡처 없음, `pointermove` 16회·`pointerup`이 iframe 문서로(`seen.pointermove` 0→16), 크기 0, `userSelect` `none` 잔존(I4 실패), 반대 -150도 0(Resizer 다시 잡히지 않음), `onResizeBorder` 0건. R15의 "열린 질문"에 대한 이 환경의 답. 관찰 기록 `obs/R15-*-run{1,2}.json`.

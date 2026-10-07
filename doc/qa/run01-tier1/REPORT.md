@@ -134,8 +134,8 @@
 | R13 | pair / 소스=billing | 같은 동작 | touch-cdp-handle | fail(FC-QA-011) | as-predicted (ghost canvas 빈 캔버스·원본은 그림, 토큰 유실, 스크롤 위치 유실) | obs/R13-billing-run{1,2}.json |
 | R13 | pair / 소스=telemetry | 같은 동작 | touch-cdp-handle | fail(FC-QA-011, FC-QA-002) | as-predicted (ghost `iframeCount 1`, ghost 생성 직후 mirror `loads` +1·새 `docId`·`:4304` 문서 요청 +1, 미리보기 재삽입으로 실제 iframe도 +1(D3b), frame +0) | obs/R13-telemetry-run{1,2}.json |
 | R13 (사다리) | pair / 소스=control-iframe | 같은 동작 | touch-cdp-handle | fail(FC-QA-011) | as-predicted (telemetry와 같음, 네트워크 요청만 없음) | obs/R13-ladder-control-iframe-run{1,2}.json |
-| R15 | row3 / control-a, telemetry, telemetry-x | telemetry 옆 경계선: 150px 쓸기, iframe 위에서 놓기 | mouse | not-run | | |
-| R15 | row3 / 같은 배치 | telemetry-x 옆 경계선: 같은 동작 | mouse | not-run | | |
+| R15 | row3 / control-a, telemetry, telemetry-x | telemetry 옆 경계선: 150px 쓸기, iframe 위에서 놓기 | mouse | pass | as-ideal(= 예측: 캡처 획득, 프레임 안 `seen.pointermove` +0, `pointerup` top, 포인터 이동 210.7에 +208.0, `userSelect` 복원, 반대 -148.1, `loads` 변화 없음) | obs/R15-telemetry-run{1,2}.json |
+| R15 | row3 / 같은 배치 | telemetry-x 옆 경계선: 같은 동작 | mouse | fail(FC-QA-008) | as-predicted(열린 질문의 답: 캡처 유실) — 캡처 없음, `pointermove`·`pointerup`이 OOPIF 문서로, 크기 0, `userSelect none` 잔존(I4), 반대로도 0(재사용 불가), `onResizeBorder` 0건. OOPIF yes(`--site-per-process`) | obs/R15-telemetry-x-run{1,2}.json |
 
 ### 2-3. P1 (위 두 묶음의 발견을 모두 쓴 뒤에만. `not-run` 허용)
 
@@ -162,7 +162,7 @@
 | [FC-QA-004](../findings/FC-QA-004-layout-hijacks-non-panel-drag.md) | 패널이 패널 드래그가 아닌 드래그의 drop 전파를 막고 dropEffect를 덮어쓴다 | sev-2 | spec-question | needs-user-confirmation | 2/2 | R09 | foreign-drag-handlers-unguarded |
 | [FC-QA-005](../findings/FC-QA-005-iframe-panel-not-mouse-drop-target.md) | iframe 패널은 마우스 드롭 대상이 되지 않는데 터치에서는 된다 (경로 불일치) | sev-3 | library-bug | open | 2/2 | R12 | iframe-drop-target-mouse |
 | [FC-QA-007](../findings/FC-QA-007-handle-touch-starts-without-long-press.md) | 핸들 모드 터치 드래그가 문서와 달리 롱프레스 없이 8px 이동으로 시작 | sev-4 | spec-question | needs-user-confirmation | 2/2 | S7a·R12·R14 | docs-touch-handle-start |
-| [FC-QA-008](../findings/FC-QA-008-resize-capture-loss-leaks-user-select.md) | 경계선 리사이즈가 포인터 캡처를 잃으면 userSelect가 none으로 남고 그 Resizer를 다시 잡을 수 없다 | sev-1 | library-bug | open | 2/2 | R17 | resize-capture-cleanup |
+| [FC-QA-008](../findings/FC-QA-008-resize-capture-loss-leaks-user-select.md) | 경계선 리사이즈가 포인터 캡처를 잃으면 userSelect가 none으로 남고 그 Resizer를 다시 잡을 수 없다 | sev-1 | library-bug | open | 4/4 | R17, R15 | resize-capture-cleanup |
 | [FC-QA-009](../findings/FC-QA-009-stale-preview-after-drop.md) | 드롭 직전 dragover의 rAF가 드래그 뒤 실행돼 소스 shadow가 남고, 다음 비패널 드롭이 그 미리보기를 커밋한다 (stale preview) | sev-2 | library-bug (`harness_amplified`) | open | 4/4 | R18, R08 | raf-not-cancelled-on-drop |
 | [FC-QA-010](../findings/FC-QA-010-resize-limit-px-mismatch.md) | 경계선 드래그의 최소·최대 한계가 설정 px과 다르다(자식 3개 split 상한 약 2/3) | sev-3 | library-bug | open | 2/2 | R19 | resize-flex-conversion |
 | [FC-QA-011](../findings/FC-QA-011-touch-ghost-clone-side-effects.md) | 터치 ghost 복제가 iframe 문서를 다시 로드하고 토큰·canvas·스크롤을 잃은 사본을 보여 준다 | sev-3 | spec-question | needs-user-confirmation | 2/2 | R13 | touch-ghost-clone |

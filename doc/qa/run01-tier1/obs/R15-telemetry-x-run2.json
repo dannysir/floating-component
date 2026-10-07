@@ -1,0 +1,81 @@
+{
+  "run": "run01-tier1",
+  "runNo": 2,
+  "scenario": "R15",
+  "case": "R15-telemetry-x",
+  "expected": "같다",
+  "predicted": "**열린 질문.** 프로세스 밖 iframe 위의 포인터 캡처는 근거가 없다. 가정하지 말고 기록한다. 캡처가 끊기면 `userSelect`가 `none`으로 남고 그 Resizer는 다시 잡히지 않는다(`activePointerId` 잔존)",
+  "observed": "r1(+150, p-c 본문 위에서 놓기): p-b 413.3→413.3(0.0, 포인터 이동 210.7), capture false/false, pointerup [frame,frame], userSelect \"none\"→\"none\", 불변식 불변식 실패: I4(body.style.userSelect=\"none\" != \"\"); telemetry-x seen.pointermove 0→16, loads 1→1; r2(-150): 413.3→413.3(0.0), capture false, userSelect→\"none\"; onResizeBorder 0건(첫 path undefined); 끝 불변식 실패: I4(body.style.userSelect=\"none\" != \"\"); bodyUserSelect \"none\"",
+  "verdict": "as-predicted",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on",
+    "oopif": "yes (--site-per-process, S9)"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": true,
+      "detail": "no data-dragging-panel-id",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": false,
+      "detail": "body.style.userSelect=\"none\" != \"\"",
+      "violations": [
+        {
+          "key": "userSelect",
+          "message": "body.style.userSelect=\"none\" != \"\""
+        }
+      ],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[p-a,p-b,p-c]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (control-a,telemetry,telemetry-x)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r15-iframe-border-resize/R15-telemetry-x-run2"
+  ]
+}
