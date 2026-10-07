@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`B1-05`
+`B1-06`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -53,7 +53,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | B1-03e 터치 (S7a, S7b) | 831126e | 2026-10-07T01:16Z | 2 | 통과 (S7a: 1회차 touch slop으로 첫 12px touchmove 억제 → 12+24px로 분할. S7b 기록: 네이티브 dragstart·touchcancel 없음) |
 | [x] | B1-03f rAF 경합 비율 표 (S8) | 2b7fd5c | 2026-10-07T01:19Z | 1 | 통과 (overShadow 0/10; settled×other 6/10, immediate×other 8/10. S10 선택: 풀 바이너리 S1~S3 통과, 기준선 동일) |
 | [x] | B1-04 `mfe-billing` + mount 어댑터 | 9120d55 | 2026-10-07T01:21Z | 1 | 통과 (`ctl smoke` remote-entry.js 본문·단독 페이지, `smoke/billing` 3/3: billing reactSame false·rootsAlive 1·lateResolves 0, control-mount·billing-local reactSame true) |
-| [ ] | B1-05 `mfe-telemetry` + iframe 어댑터 (S9) | | | | |
+| [x] | B1-05 `mfe-telemetry` + iframe 어댑터 (S9) | c6c78c7 | 2026-10-07T01:24Z | 1 | 통과 (`smoke/telemetry`: telemetry·telemetry-x·control-iframe 모두 loads 1, mirror 1, 문서 요청 1. S9 기록: OOPIF는 `--site-per-process`로 yes, cross-origin iframe 위 CDP 드래그 이벤트는 어느 프레임에도 안 찍힘) |
 | [ ] | B1-06 `mfe-orders` (twin → federation) | | | | |
 | [ ] | B1-07 `mfe-board` | | | | |
 | [ ] | B1-08 인계 | | | | |
@@ -97,7 +97,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | detached 서버 생존 (yes/no) | yes (새 Bash 호출의 `ctl status` = alive·ready) | B1-02 |
 | 라이브러리 소스 (src/dist) | src | B1-02 |
 | 터치 (ok/env-limit) | ok | B1-03e |
-| telemetry-x OOPIF (yes/no/env-limit) | | B1-05 |
+| telemetry-x OOPIF (yes/no/env-limit) | yes (`--site-per-process` 인자로. 인자 없이는 no). 호스트 `localhost` | B1-05 |
 | MF (on/degraded) | | B1-06 |
 | blocked 변형 | | B1-04~B1-07 |
 
@@ -133,6 +133,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 - 2026-10-07 B1-03a: `teleport`는 이동 직후 dragover가 없으면 같은 점으로 한 번 더 이동한다(Blink가 대상 변경 시 dragover를 미룸). teleport당 dragover 1회 규칙은 유지된다.
 - 2026-10-07 B1-03e: 터치 `handleDrag`의 시작 이동을 12px → 24px 두 번으로 나눈다(Chromium touch slop이 첫 12px touchmove를 억제).
 - 2026-10-07 B1-03f: S10용 Playwright 프로젝트 `mouse-full`(`channel: 'chromium'`)을 설정에 둔다. shell `index.html`에 빈 favicon(풀 바이너리의 /favicon.ico 404 방지).
+- 2026-10-07 B1-05: `playwright.config.ts`의 `launchOptions.args`에 `--site-per-process`를 추가한다(B1-05 사다리 telemetry-x 3). headless shell 기본값에서는 telemetry-x가 OOPIF가 아니었다. 추가 뒤 S1~S6·S7a 재실행 통과, 기준선 동일.
 
 ## 차단 사항
 

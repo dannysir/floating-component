@@ -50,7 +50,7 @@
 | S7a | 통과 | 2 | 831126e | touch 프로젝트. 1회차 실패: 핸들에서 12 px `touchMove` 한 번은 `pointermove`만 만들고 `touchmove`가 페이지에 오지 않아(Chromium의 touch slop 억제) ghost가 생기지 않았다. 수정(사다리 2): 첫 이동을 12 px → 24 px 두 번으로 나눔. 2회차 통과: (1) `pair` p-a → p-b 오른쪽 커밋, touch 이벤트 전부 trusted, 드래그 중 ghost 정확히 1개·끝난 뒤 0, `onMovePanel` 1건, 트리 `H[p-b,p-a]` (2) `locks` editor → terminal 위 → nav 위: ghost `opacity 0.4` + `rgba(232, 17, 35, 0.8) solid 2px`, 떼면 `onMovePanel` 0건·트리 불변, 이어서 두 번째 드래그(control-b)가 시작되고 취소됨. 모두 I1~I7 통과. 롱프레스 없이 시작함을 확인(오라클 = 코드) |
 | S7b | 기록 | 1 | 831126e | 7절 참고. 레인 B(153) headless shell에서 네이티브 `dragstart`·`touchcancel` 없음, 롱프레스 드래그가 커밋됨 |
 | S8 | 기록 (게이트 충족) | 1 | 2b7fd5c | 5절 표. `overShadow` 0/10 |
-| S9 | 기록 | 2 | (B1-05 커밋) | 6절 참고. 1회차: 렌더러 1개, iframe 타깃 없음(OOPIF no) → 사다리 telemetry-x 3: `--site-per-process` 추가 후 telemetry-x가 별도 CDP 타깃·렌더러(OOPIF yes) |
+| S9 | 기록 | 2 | c6c78c7 | 6절 참고. 1회차: 렌더러 1개, iframe 타깃 없음(OOPIF no) → 사다리 telemetry-x 3: `--site-per-process` 추가 후 telemetry-x가 별도 CDP 타깃·렌더러(OOPIF yes) |
 | S10 | 통과 (선택) | 2 | 2b7fd5c | 프로젝트 `mouse-full`(`channel: 'chromium'`, 풀 바이너리 `chromium-1243`, 새 headless). 1회차: 풀 바이너리는 `/favicon.ico`를 요청해 404 콘솔 에러로 I6 실패(headless shell은 요청하지 않음) → shell `index.html`에 `<link rel="icon" href="data:,">` 추가(픽스처 수정). 2회차 S1·S2·S3 통과, 축소 이벤트 로그가 headless shell 기준선과 **완전히 같다**(파일 diff 없음) |
 
 ## 4. 이벤트 로그 기준선
@@ -82,7 +82,7 @@
 
 ## 6. S9 iframe 사실
 
-레이아웃 `?layout=census&a=telemetry&b=telemetry-x&c=control-iframe&d=bare-3`, 레인 B 153 headless shell, 커밋 (B1-05 커밋).
+레이아웃 `?layout=census&a=telemetry&b=telemetry-x&c=control-iframe&d=bare-3`, 레인 B 153 headless shell, 커밋 c6c78c7.
 
 | 항목 | 결과 |
 |---|---|
