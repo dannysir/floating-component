@@ -65,7 +65,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R07 (필수 묶음) | b9cd67c | 2026-10-07T02:14Z | 2 | fail(FC-QA-001, FC-QA-002) — 다섯 취소 경로 모두 깨끗(I1~I7, 트리 불변), output 리마운트·editor 재삽입 |
 | [x] | R09 (필수 묶음) | bbe9096 | 2026-10-07T02:20Z | 3 | fail(FC-QA-003, FC-QA-004) — 카드 드래그가 p-a 패널 드래그로 등록, drop 버블 차단. 단독 페이지 깨끗. 픽스처 수정 1건(board lastDragend) |
 | [x] | R10 (필수 묶음) | f7e7c40 | 2026-10-07T02:22Z | 1 | fail(FC-QA-003, FC-QA-004) — 카드·img 드래그로 board 패널 전체 이동 커밋, lock 대조 깨끗(헤더 위 drop 수락은 FC-QA-004) |
-| [x] | R12 (필수 묶음) | (R12 커밋) | 2026-10-07T02:31Z | 2 | fail(FC-QA-005) — 마우스는 iframe 패널(control-iframe 포함) 위 미리보기·커밋 없음, 터치는 커밋(경로 불일치). shield=1 pass. telemetry-x 릴리스는 harness-artifact(FC-QA-006). S7a 재실행 pass |
+| [x] | R12 (필수 묶음) | 4faf0a4 | 2026-10-07T02:31Z | 2 | fail(FC-QA-005) — 마우스는 iframe 패널(control-iframe 포함) 위 미리보기·커밋 없음, 터치는 커밋(경로 불일치). shield=1 pass. telemetry-x 릴리스는 harness-artifact(FC-QA-006). S7a 재실행 pass |
 | [ ] | R14 (필수 묶음) | | | | |
 | [ ] | R16 (필수 묶음) | | | | |
 | [ ] | R17 (필수 묶음) | | | | |
