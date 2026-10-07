@@ -8,6 +8,7 @@ import { devWarn } from "../utils/devWarn";
 import type { DropPreview } from "./LayoutNodeRenderer";
 import { panelSizeStyle } from "./panelSizeStyle";
 import { useTouchDrag } from "../hooks/useTouchDrag";
+import { isPanelDraggable, isPanelDroppable } from "../tree/lock";
 
 const SHADOW_STYLE: CSSProperties = {
   opacity: 0.5,
@@ -42,11 +43,15 @@ export const PanelNodeRenderer = ({
   const schedulerRef = useRef<ReturnType<typeof createRafScheduler> | null>(null);
   if (schedulerRef.current === null) schedulerRef.current = createRafScheduler();
 
+  const canDrag = isPanelDraggable(node);
+  const canDrop = isPanelDroppable(node);
+
   useTouchDrag({
     panelRef,
     nodeId: node.id,
     direction,
     dragHandleSelector,
+    draggable: canDrag,
     onDropPreviewChange,
     onMovePanel,
   });
@@ -57,20 +62,22 @@ export const PanelNodeRenderer = ({
       const target = e.target as HTMLElement;
       const isHandle = !!target.closest(dragHandleSelector);
       if (panelRef.current) {
-        panelRef.current.draggable = isHandle;
+        panelRef.current.draggable = canDrag && isHandle;
       }
     },
-    [dragHandleSelector]
+    [dragHandleSelector, canDrag]
   );
 
   const handleDragStart = useCallback(
     (e: React.DragEvent) => {
+      // 내부 img/link 등의 네이티브 드래그가 버블링돼 패널 드래그로 오인되지 않게 한다.
+      if (!canDrag) return;
       e.dataTransfer.setData("text/panel-id", node.id);
       e.dataTransfer.effectAllowed = "move";
       const root = e.currentTarget.closest("[data-tree-root]") as HTMLElement | null;
       if (root) root.dataset.draggingPanelId = node.id;
     },
-    [node.id]
+    [node.id, canDrag]
   );
 
   const handleDragOver = useCallback(
@@ -86,17 +93,29 @@ export const PanelNodeRenderer = ({
       const sourcePanelId = root?.dataset.draggingPanelId;
       if (!sourcePanelId || sourcePanelId === node.id) return;
 
+      // 드롭 불가 패널: 직전 미리보기는 유지하고 not-allowed 커서만 표시.
+      // 여기서 놓으면 drop 없이 dragend로 끝나 이동이 취소된다.
+      if (!canDrop) {
+        e.dataTransfer.dropEffect = "none";
+        return;
+      }
+
       schedulerRef.current!.schedule(() => {
         const { position, depth } = getDropTarget(clientX, clientY, panelEl, direction);
         onDropPreviewChange?.({ sourcePanelId, anchorPanelId: node.id, position, depth });
       });
     },
-    [node.id, onDropPreviewChange, direction]
+    [node.id, canDrop, onDropPreviewChange, direction]
   );
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
+      // dropEffect "none"이라 보통 발생하지 않지만, 발생해도 루트의 미리보기 커밋으로 번지지 않게 막는다.
+      if (!canDrop) {
+        e.stopPropagation();
+        return;
+      }
       if (isPreviewActive) return;
       e.stopPropagation();
       onDropPreviewChange?.(null);
@@ -105,7 +124,7 @@ export const PanelNodeRenderer = ({
       const { position, depth } = getDropTarget(e.clientX, e.clientY, e.currentTarget as HTMLElement, direction);
       onMovePanel(sourcePanelId, node.id, position, depth);
     },
-    [node.id, isPreviewActive, onDropPreviewChange, onMovePanel, direction]
+    [node.id, canDrop, isPreviewActive, onDropPreviewChange, onMovePanel, direction]
   );
 
   const isShadow = node.id === shadowPanelId;
@@ -120,7 +139,8 @@ export const PanelNodeRenderer = ({
     <div
       ref={panelRef}
       data-panel-id={node.id}
-      draggable={!dragHandleSelector}
+      data-panel-droppable={canDrop ? undefined : "false"}
+      draggable={canDrag && !dragHandleSelector}
       onMouseDown={handleMouseDown}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}

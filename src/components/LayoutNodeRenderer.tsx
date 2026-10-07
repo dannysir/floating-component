@@ -5,6 +5,7 @@ import { Resizer } from "./Resizer";
 import { PanelNodeRenderer } from "./PanelNodeRenderer";
 import { HORIZONTAL } from "../tree/constants";
 import { panelSizeStyle } from "./panelSizeStyle";
+import { canResizeBetween } from "../tree/lock";
 
 export interface DropPreview {
   sourcePanelId: string;
@@ -103,7 +104,7 @@ export const LayoutNodeRenderer = ({
         parentDirection={node.direction}
       />
     );
-    if (i < node.children.length - 1) {
+    if (i < node.children.length - 1 && canResizeBetween(child, node.children[i + 1])) {
       elements.push(
         <Resizer
           key={`resizer-${i}`}

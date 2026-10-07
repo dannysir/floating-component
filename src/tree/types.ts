@@ -13,6 +13,9 @@ export interface PanelNode {
   minHeight?: number;
   maxWidth?: number;
   maxHeight?: number;
+  draggable?: boolean;
+  droppable?: boolean;
+  resizable?: boolean;
 }
 
 export interface SplitNode {
@@ -38,6 +41,9 @@ export interface InsertPanelInit {
   minHeight?: number;
   maxWidth?: number;
   maxHeight?: number;
+  draggable?: boolean;
+  droppable?: boolean;
+  resizable?: boolean;
 }
 
 export interface InsertAt {

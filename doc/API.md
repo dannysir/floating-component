@@ -132,6 +132,42 @@ The panel wrapper uses `overflow: auto`. When your component is larger than the 
 
 ---
 
+## Panel locking
+
+Use `draggable`/`droppable`/`resizable` on a `PanelNode` to pin a panel in place, like a sidebar. The three options are independent and all default to `true`.
+
+| Option | When `false` |
+|---|---|
+| `draggable` | The panel cannot be picked up by dragging (mouse, drag handle, and touch long-press alike) |
+| `droppable` | Other panels cannot be dropped onto this panel |
+| `resizable` | The border (Resizer) between this panel and its adjacent siblings is not rendered |
+
+```ts
+{ type: "panel", id: "sidebar", size: 1, componentKey: "sidebar",
+  draggable: false, droppable: false, resizable: false }
+```
+
+### Behavior while dragging
+
+Dragging over a non-droppable panel **keeps the previous preview** and shows a "can't drop here" indicator. Releasing there **cancels** the move and restores the original layout.
+
+- Mouse: `not-allowed` cursor
+- Touch: the ghost dims and gets a red outline
+
+### Scope
+
+- `movePanel` — ignores the call and logs a dev-mode warning when the source is `draggable: false` or the anchor is `droppable: false`.
+- `resizeBorder` — ignores the call and logs a dev-mode warning when either child adjacent to the border is a `resizable: false` panel.
+- `insertPanel`·`splitPanel`·`removePanel` and direct `setTree` updates are not restricted. Locks only target user drag, drop, and resize.
+- Locks exist only on `PanelNode`. `resizable` only looks at the **direct children** on either side of a border, so if a locked panel sits inside a nested split, that split's outer border still resizes.
+- Locks prevent "picking up this panel" and "dropping onto this panel". If another panel is dropped on, e.g., the root edge and the tree is restructured, the locked panel's relative position can still change.
+
+### Fixed size
+
+`resizable: false` only blocks border dragging. The panel is still laid out by its flex ratio, so it grows and shrinks with the window. For a fixed px size, set `minWidth` and `maxWidth` (or `minHeight` and `maxHeight` in a vertical split) to the same value.
+
+---
+
 ## `useLayoutTree(initialTree)`
 
 Hook for managing layout tree state. Returns the current tree plus selectors and mutating helpers.
@@ -180,6 +216,7 @@ splitPanel("editor", "horizontal", {
 - `newPanel.id` — auto-generated via `crypto.randomUUID()` when omitted
 - `newPanel.size` — defaults to `0.5`
 - `newPanel.componentKey` — defaults to `""` (renders empty until a key is set)
+- Size constraints (`minWidth`, …) and lock options (`draggable`, …) on `newPanel` are applied to the new panel as well
 
 #### `removePanel(panelId)`
 
@@ -191,6 +228,7 @@ Moves an existing panel next to `anchorId`. Usually wired to `<TreeLayout onMove
 
 - `position`: `"top" | "bottom" | "left" | "right"` — drop side relative to the anchor panel
 - `depth`: `0` = panel level (sibling), `1` = parent split level, higher = ancestor split level
+- Ignored when the source is `draggable: false` or the anchor is `droppable: false` ([Panel locking](#panel-locking))
 
 #### `insertPanel({ panel, at? })`
 
@@ -214,7 +252,7 @@ insertPanel({
 
 #### `resizeBorder(path, borderIndex, delta, totalPixels?)`
 
-Resizes the border between two adjacent children of a split at `path`. Honors the adjacent children's split-axis min/max (`minWidth`/`maxWidth` in a horizontal split, `minHeight`/`maxHeight` in a vertical split). Usually wired to `<TreeLayout onResizeBorder={resizeBorder} />`. The internal resize handle runs on Pointer Events (`setPointerCapture`), so it works with mouse, touch, and pen alike.
+Resizes the border between two adjacent children of a split at `path`. Honors the adjacent children's split-axis min/max (`minWidth`/`maxWidth` in a horizontal split, `minHeight`/`maxHeight` in a vertical split). Usually wired to `<TreeLayout onResizeBorder={resizeBorder} />`. The internal resize handle runs on Pointer Events (`setPointerCapture`), so it works with mouse, touch, and pen alike. Ignored when either adjacent child is a `resizable: false` panel ([Panel locking](#panel-locking)).
 
 #### Selector tips
 
@@ -311,6 +349,9 @@ interface PanelNode {
   minHeight?: number;      // pixel min height (applies when child of a vertical split)
   maxWidth?: number;       // pixel max width
   maxHeight?: number;      // pixel max height
+  draggable?: boolean;     // default true — false: cannot be picked up by dragging
+  droppable?: boolean;     // default true — false: other panels cannot be dropped onto it
+  resizable?: boolean;     // default true — false: adjacent border Resizers are not rendered
 }
 
 interface SplitNode {
@@ -337,6 +378,9 @@ interface InsertPanelInit {
   minHeight?: number;
   maxWidth?: number;
   maxHeight?: number;
+  draggable?: boolean;
+  droppable?: boolean;
+  resizable?: boolean;
 }
 
 interface ComponentStore {

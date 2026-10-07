@@ -12,11 +12,13 @@ Tree 기반으로 크기 조절과 패널 이동이 가능한 React 레이아웃
 
 ---
 
-## 최근 변경 (0.5.0)
+## 최근 변경 (1.0.0)
 
-- 경계선 리사이즈 Pointer Events 전환 — 마우스·터치·펜 단일 경로
-- 터치 패널 드래그 — 핸들 또는 롱프레스(450ms)로 시작, floating ghost가 손가락 추적
-- 터치 기기에서 리사이저 항상 표시 (`@media (hover: none)`)
+첫 안정 버전입니다. 이후 공개 API의 호환성을 깨는 변경은 메이저 버전에서만 합니다. 0.5.x에서 코드 수정 없이 올릴 수 있습니다.
+
+- 패널 잠금 옵션 `draggable`/`droppable`/`resizable` — 패널별로 드래그·드롭·경계선 리사이즈 차단 (고정 사이드바 등). 드롭 불가 패널 위에서는 불가 표시 후 놓으면 취소
+- `movePanel`/`resizeBorder`가 잠금을 준수 — 위반 호출은 무시되고 dev 모드 경고
+- 수정: 미리보기로 소스 패널이 리마운트될 때 드래그 종료 이벤트가 유실되던 문제, 포인터 캡처를 잃은 경계선 리사이즈가 `user-select: none`을 남기던 문제
 
 전체 이력은 [CHANGELOG](./CHANGELOG.ko.md) 참고.
 
@@ -27,6 +29,7 @@ Tree 기반으로 크기 조절과 패널 이동이 가능한 React 레이아웃
 - **N-ary 트리 구조** — SplitNode가 2개 이상의 자식을 가질 수 있어 불필요한 중첩 없이 flat한 트리 유지
 - **경계선 드래그 리사이즈** — 패널 사이 경계선을 드래그해서 크기 조절 (Pointer Events 기반, requestAnimationFrame 최적화)
 - **패널 크기 제약** — `minWidth`/`minHeight`/`maxWidth`/`maxHeight`(px)로 최소·최대 크기 지정, 콘텐츠가 넘치면 자동 스크롤
+- **패널 잠금** — `draggable`/`droppable`/`resizable`로 패널별 드래그·드롭·경계선 리사이즈 차단 (고정 사이드바 등)
 - **드래그 앤 드롭 패널 이동** — 데스크톱은 HTML5 Drag & Drop, 터치는 롱프레스 기반 경로로 패널을 다른 위치로 이동
 - **터치·펜 지원** — 경계선 리사이즈와 패널 드래그 모두 터치·펜 입력에서 동작 (Pointer Events + 터치 드래그 경로)
 - **다단계 드롭 타겟 감지** — 패널 가장자리, 부모 split 가장자리, 루트 가장자리를 구분하여 depth 기반 배치
@@ -124,6 +127,18 @@ const togglePanel = (id: string, componentKey: string) => {
 ```
 
 `minWidth`/`minHeight`/`maxWidth`/`maxHeight`(px)는 패널이 **속한 split 방향 축**에만 적용됩니다(가로 split → width, 세로 split → height). 콘텐츠가 패널보다 커지면 잘리지 않고 스크롤됩니다. 자세한 내용은 [API → 패널 크기 제약](./doc/API.ko.md#패널-크기-제약).
+
+### 고정 사이드바
+
+```tsx
+{
+  type: "panel", id: "sidebar", size: 1, componentKey: "sidebar",
+  draggable: false, droppable: false, resizable: false,
+  minWidth: 240, maxWidth: 240,
+}
+```
+
+드래그로 옮길 수 없고, 다른 패널을 위에 놓을 수 없고, 옆 경계선도 없는 240px 고정 사이드바입니다. 드롭 불가 패널 위에서는 불가 표시가 나타나고, 놓으면 이동이 취소됩니다. 자세한 내용은 [API → 패널 잠금](./doc/API.ko.md#패널-잠금).
 
 ---
 

@@ -15,6 +15,7 @@ import {clampSplitResize} from "../tree/resize";
 import {getFirstPanelId, getPanelIds, findPanelWithAncestors} from "../tree/query";
 import {DEFAULT_SPLIT_RATIO, HORIZONTAL} from "../tree/constants";
 import {computeMoveResult} from "../tree/move";
+import {isPanelDraggable, isPanelDroppable, canResizeBetween} from "../tree/lock";
 
 let _idCounter = 0;
 const generatePanelId = (): string => {
@@ -56,6 +57,10 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
 
         const left = split.children[borderIndex];
         const right = split.children[borderIndex + 1];
+        if (!canResizeBetween(left, right)) {
+          devWarn(`resizeBorder: border ${borderIndex} at path [${path.join(", ")}] is adjacent to a non-resizable panel`);
+          return prev;
+        }
         const horiz = split.direction === HORIZONTAL;
         const pick = (n: LayoutNode) => ({
           size: n.size,
@@ -87,6 +92,7 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
       setTree((prev) =>
         withPanelCheck(prev, panelId, "splitPanel", (t) => {
           const newPanel: PanelNode = {
+            ...options?.newPanel,
             type: "panel",
             id: newId,
             size: options?.newPanel?.size ?? DEFAULT_SPLIT_RATIO,
@@ -111,9 +117,19 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
     (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number = 0) => {
       setTree((prev) =>
         withPanelCheck(prev, sourcePanelId, "movePanel: source", (t1) =>
-          withPanelCheck(t1, anchorPanelId, "movePanel: anchor", (t2) =>
-            computeMoveResult(t2, sourcePanelId, anchorPanelId, position, depth) ?? t2,
-          ),
+          withPanelCheck(t1, anchorPanelId, "movePanel: anchor", (t2) => {
+            const source = findPanelWithAncestors(t2, sourcePanelId)!.panel;
+            const anchor = findPanelWithAncestors(t2, anchorPanelId)!.panel;
+            if (!isPanelDraggable(source)) {
+              devWarn(`movePanel: panel "${sourcePanelId}" is not draggable`);
+              return t2;
+            }
+            if (!isPanelDroppable(anchor)) {
+              devWarn(`movePanel: panel "${anchorPanelId}" is not droppable`);
+              return t2;
+            }
+            return computeMoveResult(t2, sourcePanelId, anchorPanelId, position, depth) ?? t2;
+          }),
         ),
       );
     },
@@ -133,6 +149,9 @@ export const useLayoutTree = (initialTree: LayoutNode) => {
         minHeight: panel.minHeight,
         maxWidth: panel.maxWidth,
         maxHeight: panel.maxHeight,
+        draggable: panel.draggable,
+        droppable: panel.droppable,
+        resizable: panel.resizable,
       };
 
       setTree((prev) => insertPanelIntoTree(prev, newPanel, at));

@@ -132,6 +132,42 @@ const tree = JSON.parse(localStorage.getItem("layout")!) as LayoutNode;
 
 ---
 
+## 패널 잠금
+
+`PanelNode`의 `draggable`/`droppable`/`resizable`로 사이드바처럼 자리를 고정한 패널을 만들 수 있습니다. 세 옵션은 서로 독립적이며 모두 기본값은 `true`입니다.
+
+| 옵션 | `false`일 때 |
+|---|---|
+| `draggable` | 패널을 드래그로 들어올릴 수 없음 (마우스·드래그 핸들·터치 롱프레스 모두) |
+| `droppable` | 다른 패널을 이 패널 위에 놓을 수 없음 |
+| `resizable` | 이 패널과 인접 형제 사이의 경계선(Resizer)이 렌더되지 않음 |
+
+```ts
+{ type: "panel", id: "sidebar", size: 1, componentKey: "sidebar",
+  draggable: false, droppable: false, resizable: false }
+```
+
+### 드래그 중 동작
+
+드롭 불가 패널 위로 드래그하면 **직전 미리보기가 그대로 유지**되고, 놓을 수 없다는 표시가 나타납니다. 이 상태에서 놓으면 이동이 **취소**되어 원래 배치로 돌아갑니다.
+
+- 마우스: `not-allowed` 커서
+- 터치: ghost가 흐려지고 빨간 테두리 표시
+
+### 적용 범위
+
+- `movePanel` — source가 `draggable: false`이거나 anchor가 `droppable: false`면 호출을 무시하고 dev 모드 경고를 출력합니다.
+- `resizeBorder` — 경계선 양쪽 자식 중 `resizable: false` 패널이 있으면 호출을 무시하고 dev 모드 경고를 출력합니다.
+- `insertPanel`·`splitPanel`·`removePanel`과 `setTree` 직접 조작은 제한하지 않습니다. 잠금은 사용자 드래그·드롭·리사이즈만 대상으로 합니다.
+- 잠금은 `PanelNode`에만 있습니다. `resizable` 판정은 경계선 양쪽의 **직계 자식**만 보므로, 잠긴 패널이 중첩 split 안에 있으면 그 split 바깥쪽 경계선은 여전히 리사이즈됩니다.
+- 잠금은 "이 패널을 들어올리는 것"과 "이 패널 위에 놓는 것"을 막습니다. 다른 패널을 루트 가장자리 등에 놓아 트리 구조가 바뀌면 잠긴 패널의 상대 위치도 달라질 수 있습니다.
+
+### 고정 크기
+
+`resizable: false`는 경계선 드래그만 막습니다. 패널은 여전히 flex 비율로 배치되므로 창 크기가 바뀌면 함께 늘고 줄어듭니다. 고정 px 크기가 필요하면 `minWidth`와 `maxWidth`(세로 split이면 `minHeight`와 `maxHeight`)를 같은 값으로 지정하세요.
+
+---
+
 ## `useLayoutTree(initialTree)`
 
 레이아웃 트리 상태를 관리하는 훅. 현재 트리와 셀렉터, 조작 헬퍼를 반환합니다.
@@ -180,6 +216,7 @@ splitPanel("editor", "horizontal", {
 - `newPanel.id` 생략 시 `crypto.randomUUID()`로 자동 생성
 - `newPanel.size` 기본값 `0.5`
 - `newPanel.componentKey` 기본값 `""` (key를 지정하기 전까지 빈 패널로 렌더)
+- `newPanel`의 크기 제약(`minWidth` 등)과 잠금 옵션(`draggable` 등)도 새 패널에 그대로 적용
 
 #### `removePanel(panelId)`
 
@@ -191,6 +228,7 @@ splitPanel("editor", "horizontal", {
 
 - `position`: `"top" | "bottom" | "left" | "right"` — 앵커 기준 드롭 위치
 - `depth`: `0` = 패널 레벨(형제), `1` = 부모 split 레벨, 이상은 상위 조상 split 레벨
+- source가 `draggable: false`이거나 anchor가 `droppable: false`면 무시 ([패널 잠금](#패널-잠금))
 
 #### `insertPanel({ panel, at? })`
 
@@ -214,7 +252,7 @@ insertPanel({
 
 #### `resizeBorder(path, borderIndex, delta, totalPixels?)`
 
-`path`의 split 내부에서 인접한 두 자식 사이의 경계선을 리사이즈. 인접 자식의 split 방향 축 min/max(가로 split이면 `minWidth`/`maxWidth`, 세로 split이면 `minHeight`/`maxHeight`)를 준수합니다. 보통 `<TreeLayout onResizeBorder={resizeBorder} />`에 연결. 내부 리사이즈 핸들은 Pointer Events(`setPointerCapture`)로 동작하므로 마우스·터치·펜에서 모두 사용할 수 있습니다.
+`path`의 split 내부에서 인접한 두 자식 사이의 경계선을 리사이즈. 인접 자식의 split 방향 축 min/max(가로 split이면 `minWidth`/`maxWidth`, 세로 split이면 `minHeight`/`maxHeight`)를 준수합니다. 보통 `<TreeLayout onResizeBorder={resizeBorder} />`에 연결. 내부 리사이즈 핸들은 Pointer Events(`setPointerCapture`)로 동작하므로 마우스·터치·펜에서 모두 사용할 수 있습니다. 인접 자식 중 `resizable: false` 패널이 있으면 무시합니다([패널 잠금](#패널-잠금)).
 
 #### 셀렉터 팁
 
@@ -311,6 +349,9 @@ interface PanelNode {
   minHeight?: number;      // 픽셀 최소 높이 (세로 split의 자식일 때 적용)
   maxWidth?: number;       // 픽셀 최대 너비
   maxHeight?: number;      // 픽셀 최대 높이
+  draggable?: boolean;     // 기본 true — false면 드래그로 들어올릴 수 없음
+  droppable?: boolean;     // 기본 true — false면 다른 패널을 이 위에 놓을 수 없음
+  resizable?: boolean;     // 기본 true — false면 인접 경계선 Resizer 미렌더
 }
 
 interface SplitNode {
@@ -337,6 +378,9 @@ interface InsertPanelInit {
   minHeight?: number;
   maxWidth?: number;
   maxHeight?: number;
+  draggable?: boolean;
+  droppable?: boolean;
+  resizable?: boolean;
 }
 
 interface ComponentStore {
