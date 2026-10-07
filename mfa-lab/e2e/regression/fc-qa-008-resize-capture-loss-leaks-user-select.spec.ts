@@ -4,7 +4,6 @@ import { test, expect } from '../helpers/fixtures';
 import { resizeBorder } from '../helpers/resize';
 
 test('FC-QA-008 workbench telemetry|telemetry-x: after a resize dragged into the OOPIF, userSelect is restored and the resizer works again', { annotation: { type: 'issue', description: 'FC-QA-008' } }, async ({ lab, page }) => {
-  test.fail();   // 버그가 있는 동안 이 테스트는 실패해야 한다
   await lab.open({ layout: 'workbench' });
   await resizeBorder(page, { between: ['telemetry', 'telemetry-x'], delta: 120, steps: 10 });
   const userSelect = await page.evaluate(() => document.body.style.userSelect);
