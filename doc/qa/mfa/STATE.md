@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`B2-P1`
+`B2-END`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -77,7 +77,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R11 (두 번째 묶음) | df260e0 | 2026-10-07T03:13Z | 1 | fail(FC-QA-004, FC-QA-003) — copy 드롭 dropEffect가 move로 덮임, 잠긴 패널에서는 copy 드롭 거부, 단독 페이지 깨끗 |
 | [x] | R13 (두 번째 묶음) | 6427340 | 2026-10-07T03:16Z | 1 | fail(FC-QA-011) — ghost 토큰 유실, billing canvas 빈 캔버스, iframe ghost가 문서 재로드(mirror +1·요청 +1). spec-question |
 | [x] | R15 (두 번째 묶음) | 3b93e8c | 2026-10-07T03:18Z | 2 | fail(FC-QA-008) — same-site telemetry 옆은 깨끗, OOPIF telemetry-x 옆은 캡처 유실·userSelect 누수·재사용 불가 |
-| [ ] | B2-P1 | | | | |
+| [x] | B2-P1 | (P1 커밋) | 2026-10-07T03:21Z | 1 | fail(FC-QA-012) — 패널 모드 내용 드래그 충돌. 롱프레스·크기 pass, glide FC-QA-001/005, dev 모드·tarball not-run |
 | [ ] | B2-END | | | | |
 
 행의 순서가 실행 순서다. 시나리오 번호 순이 아니다. 시간이 모자라 끝에서부터 `not-run`으로 줄이는 것은 "두 번째 묶음"에서만 허용된다.
@@ -149,6 +149,6 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 
 ## 발견 ID
 
-- 다음 발견 ID: `FC-QA-012`
+- 다음 발견 ID: `FC-QA-013`
 
 `FC-QA-001`은 사전 등록돼 있다(`doc/qa/findings/`, 상태 `predicted`). ID는 전역이고 재사용하지 않는다. 세션 1은 ID를 발급하지 않는다. 세션 2가 발급할 때마다 이 줄과 [../README.md](../README.md)의 ID 대장을 함께 올린다. 둘이 다르면 README가 기준이다.

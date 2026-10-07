@@ -252,8 +252,9 @@ AI가 보고한 발견을 믿을 수 있게 하는 규칙이다. 하나라도 �
 | FC-QA-009 | [FC-QA-009-stale-preview-after-drop.md](./findings/FC-QA-009-stale-preview-after-drop.md) | `run01-tier1` | stale preview: 드롭 뒤 소스 shadow 잔존 (H-RAF-STALE, harness_amplified) |
 | FC-QA-010 | [FC-QA-010-resize-limit-px-mismatch.md](./findings/FC-QA-010-resize-limit-px-mismatch.md) | `run01-tier1` | 경계선 드래그 한계 px 불일치(자식 3개 split 상한 약 2/3) |
 | FC-QA-011 | [FC-QA-011-touch-ghost-clone-side-effects.md](./findings/FC-QA-011-touch-ghost-clone-side-effects.md) | `run01-tier1` | 터치 ghost 복제의 부작용: iframe 재로드·토큰·canvas·스크롤 유실 (H-GHOST-CLONE, 사용자 확인 대기) |
+| FC-QA-012 | [FC-QA-012-panel-drag-mode-steals-content-gestures.md](./findings/FC-QA-012-panel-drag-mode-steals-content-gestures.md) | `run01-tier1` | 핸들 없는 모드에서 내용 드래그(슬라이더·텍스트 선택)가 패널 드래그가 됨 (사용자 확인 대기) |
 
-**다음 빈 ID: FC-QA-012**
+**다음 빈 ID: FC-QA-013**
 
 ---
 

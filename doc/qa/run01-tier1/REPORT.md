@@ -141,12 +141,12 @@
 
 | 항목 | 관련 가설 | 입력 | 상태 | 관찰 기록 |
 |---|---|---|---|---|
-| 핸들 없는 모드의 상호작용, 남아 있는 `draggable` | H-HANDLE-STALE | mouse | not-run | |
-| 드래그 가능한 패널 롱프레스 (레인 B에서만) | H-TOUCH-NATIVE-RACE | touch-cdp-longpress | not-run | |
-| 크기·넘침 조합 | H-SIZING | mouse | not-run | |
-| workbench에서 여러 지점을 지나는 드래그(glide) | H-REMOUNT | mouse | not-run | |
-| dev 모드 host 콘솔 확인 | | mouse | not-run | |
-| 패키징한 tarball로 확인 | | mouse | not-run | |
+| 핸들 없는 모드의 상호작용, 남아 있는 `draggable` | H-HANDLE-STALE | mouse | fail(FC-QA-012) — 핸들 모드: 핸들 드래그+Esc 뒤 `draggable` `true` 잔존(관찰)이지만 다음 mousedown이 되돌려 영향 미관찰. `drag=panel`: 슬라이더·텍스트 선택 드래그가 패널 드래그로 바뀜. 픽스처에 `billing-stopprop`·`billing-text`가 없어 `billing-scroll`·`billing-input`·`billing-range`로 대체 | obs/P1-handle-stale-run{1,2}.json, obs/P1-panel-mode-run{1,2}.json |
+| 드래그 가능한 패널 롱프레스 (레인 B에서만) | H-TOUCH-NATIVE-RACE | touch-cdp-longpress | pass — 롱프레스 뒤 시작·커밋 `H[p-b,p-a]`, 신뢰된 `dragstart` 0, `touchcancel` 없음(S7b와 같다). Chromium CDP touch emulation, headless; not a real device | obs/P1-longpress-run{1,2}.json |
+| 크기·넘침 조합 | H-SIZING | mouse | pass — orders·billing·telemetry·control-iframe·control-mount × 1280x800·800x600: 패널 wrapper는 넘치지 않음, iframe 요소 = body 크기, 800에서 orders 표는 body가 가로·`orders-scroll`이 세로로 스크롤(축이 달라 같은 축 이중 스크롤 아님) | obs/P1-sizing-{1280x800,800x600}-run{1,2}.json |
+| workbench에서 여러 지점을 지나는 드래그(glide) | H-REMOUNT | mouse | fail(FC-QA-001, FC-QA-005) — 40단계 glide에서 서로 다른 미리보기 2개뿐(경로 대부분이 telemetry-x iframe 위라 dragover 없음 = FC-QA-005), board frame +1. 비례 관계는 이 경로로 판정 불가 | obs/P1-glide-churn-run{1,2}.json |
+| dev 모드 host 콘솔 확인 | | mouse | not-run(ctl에 dev 모드 없음) | |
+| 패키징한 tarball로 확인 | | mouse | not-run(루트 npm ci 금지) | |
 
 ---
 
@@ -166,6 +166,7 @@
 | [FC-QA-009](../findings/FC-QA-009-stale-preview-after-drop.md) | 드롭 직전 dragover의 rAF가 드래그 뒤 실행돼 소스 shadow가 남고, 다음 비패널 드롭이 그 미리보기를 커밋한다 (stale preview) | sev-2 | library-bug (`harness_amplified`) | open | 4/4 | R18, R08 | raf-not-cancelled-on-drop |
 | [FC-QA-010](../findings/FC-QA-010-resize-limit-px-mismatch.md) | 경계선 드래그의 최소·최대 한계가 설정 px과 다르다(자식 3개 split 상한 약 2/3) | sev-3 | library-bug | open | 2/2 | R19 | resize-flex-conversion |
 | [FC-QA-011](../findings/FC-QA-011-touch-ghost-clone-side-effects.md) | 터치 ghost 복제가 iframe 문서를 다시 로드하고 토큰·canvas·스크롤을 잃은 사본을 보여 준다 | sev-3 | spec-question | needs-user-confirmation | 2/2 | R13 | touch-ghost-clone |
+| [FC-QA-012](../findings/FC-QA-012-panel-drag-mode-steals-content-gestures.md) | 핸들 없는 모드에서 패널 안 슬라이더·텍스트 선택 드래그가 패널 드래그로 바뀐다 | sev-3 | spec-question | needs-user-confirmation | 2/2 | B2-P1 | panel-mode-draggable-container |
 | [FC-QA-006](../findings/FC-QA-006-oopif-release-no-dragend-harness.md) | (하네스) OOPIF 위 마우스 릴리스에서 dragend가 오지 않고 CDP 드래그 세션이 멈춘다 | sev-4 | harness-artifact | open | 2/2 | R12 | harness-cdp-drag-oopif |
 
 `predicted`였던 발견의 결과: FC-QA-001 — 관찰됨(R01에서 `open`으로 변경)
@@ -220,6 +221,7 @@
 |---|---|---|---|
 | FC-QA-007 | 핸들 모드 터치는 롱프레스 없이 8px 이동으로 시작한다(`useTouchDrag.ts:145-149`). `doc/API.ko.md:33`은 "핸들을 롱프레스(450ms)"라 하고 309행은 "핸들을 누르거나"라 한다. 어느 쪽이 의도인가? | (a) 코드가 맞다 → `doc/API.ko.md`·`doc/API.md` 33행을 "핸들은 8px 넘게 움직이면 바로 시작, 핸들이 없으면 롱프레스 450ms"로 고친다 (b) 문서가 맞다 → 핸들 모드에도 롱프레스를 적용(스크롤과의 충돌이 줄지만 핸들 드래그가 느려진다) | (a). 핸들은 명시적 손잡이라 즉시 시작이 자연스럽고 구현·주석·TODO 테스트가 모두 그 전제다 |
 | FC-QA-011 | 터치 ghost는 소스 패널의 "살아 있는" 모습(테마, canvas, 스크롤, iframe 내용)을 그대로 보여야 하는가, 아니면 단순화된 표현(헤더만, 스냅샷 이미지)이어도 되는가? 지금은 `cloneNode`라 iframe이 다시 로드되고 토큰·canvas·스크롤이 빠진다 | (a) 부작용 없어야 한다 → `library-bug`로 재분류: ghost를 헤더/외곽선만의 가벼운 요소로 바꾸거나 iframe·canvas를 플레이스홀더로 대체하고 `[data-theme]`를 복사 (b) 현재 동작 유지, 통합 가이드에 "iframe remote는 터치 드래그 시작 때 한 번 더 로드된다"를 적는다 | (a). iframe remote에 추가 요청·초기화 스크립트가 실행되는 것은 사용자 기대 밖이다 |
+| FC-QA-012 | 핸들 없는 모드(`dragHandleSelector` 미지정)에서 패널 안 컨트롤(입력창 텍스트 선택, range 슬라이더)의 드래그가 패널 드래그로 바뀌는 것을 허용하는가? | (a) 라이브러리가 상호작용 요소에서 시작한 드래그를 패널 드래그로 취급하지 않는다(`library-bug`로 재분류) (b) 현재 동작 유지 + 문서에 "패널 모드는 내용 상호작용과 충돌하므로 핸들 모드를 권장" 명시 | (b)를 먼저(문서 한 줄), 이어서 (a) 검토. 패널 모드는 명시적 선택이라 충돌을 알리면 우회 가능 |
 | FC-QA-004 | 레이아웃은 패널 드래그가 아닌 네이티브 드래그(remote 내부 DnD)에 투명해야 하는가? 지금은 패널이 그 drop의 전파를 막고(window 버블 리스너 미실행) `dropEffect`를 `move`로 덮어쓴다(R11: copy 드롭의 `dragend`가 `move`로 보고되고, 잠긴 패널에서는 copy 드롭이 거부된다) | (a) 투명해야 한다 → `library-bug`로 재분류, FC-QA-003과 함께 수정 (b) 현재 동작을 사양으로 두고 통합 가이드에 "remote는 window drop에 의존하지 말 것"을 적는다 | (a). 단독 페이지와 동작이 달라 remote 팀이 원인을 찾기 어렵다 |
 
 ### 라이브러리 수정 대상이 아닌 발견
@@ -271,6 +273,7 @@
 | Firefox / WebKit 마우스 | 이번 run은 Chromium만 실행했다. Firefox에는 소스 노드가 옮겨지면 `dragend`가 오지 않는 버그 보고가 있다 ([Bugzilla 460801](https://bugzilla.mozilla.org/show_bug.cgi?id=460801)) | 사용자 PC의 Firefox에서 R07의 취소 경로 | <미확인> |
 | 터치: 다른 Chromium major | 레인 하나만 실행했다. Chromium 141은 터치 롱프레스 네이티브 드래그가 꺼져 있고 153은 켜져 있다 | 다른 레인으로 S7b·R13·R14 재실행 | <미확인> |
 | 브라우저 창 밖에서 놓기 | 가로챈 드래그로는 창 밖 릴리스를 만들 수 없다 | 사용자 PC에서 패널을 창 밖으로 끌고 나가 놓기 | <미확인> |
+| 핸들 없는 모드의 텍스트 선택 (FC-QA-012) | 인터셉트된 드래그에서의 Chromium 판단이 실제 Chrome·Firefox와 같은지 이 환경으로 확인 불가 | 사용자 PC에서 `?layout=pair&drag=panel`: control-a 입력창 글자를 마우스로 끌어 선택되는지, 패널이 끌리는지(Chrome·Firefox) | <미확인> |
 | 스크롤바 시각 확인 | Playwright headless 실행은 `--hide-scrollbars`로 스크롤바를 그리지 않아 PNG로 "잘림 대 스크롤"을 판정할 수 없다(R17에서 DOM `scrollWidth/clientWidth`로 대체) | 사용자 PC에서 `?layout=workbench`의 좁은 board 패널을 가로 스크롤해 본다 | <미확인> |
 | OOPIF 쪽으로 경계선 리사이즈 (FC-QA-008 트리거) | CDP 마우스 입력이 OOPIF 위에서 host의 포인터 캡처를 따르지 않았다. 실제 Chrome의 입력 라우팅도 같은지는 이 환경으로 확인 불가 | 사용자 PC Chrome에서 `?layout=workbench`: telemetry\|telemetry-x 경계선을 오른쪽(telemetry-x 위)으로 끌고 놓은 뒤 (1) 경계선이 따라왔는지 (2) 페이지 텍스트 선택이 되는지 (3) 같은 경계선을 다시 잡을 수 있는지 | <미확인> |
 | cross-origin iframe 위 마우스 드래그 (GO 참고 사항) | CDP 드래그 이벤트가 cross-origin iframe 위에서 어느 문서에도 오지 않는다(부작용 #7). OOPIF 위 릴리스는 `dragend`도 오지 않는다(FC-QA-006) | 사용자 PC Chrome에서 `?layout=row3&b=telemetry&c=telemetry-x&iframeShield=0`: 패널을 telemetry-x 본문 위로 끌어 놓았을 때 (1) 미리보기가 생기는지(FC-QA-005 예측: 아니오) (2) 놓은 뒤 패널이 정상으로 돌아오는지(FC-QA-006 예측: 예) | <미확인> |
