@@ -5,7 +5,7 @@ import type { PanelProps } from '@harbor/contract';
 import { createProbe } from '@harbor/contract';
 import { App as BillingApp } from '@twin/billing';          // B1-04
 import { Panel as OrdersPanel } from '@twin/orders';        // B1-06
-// import { Panel as BoardPanel } from '@twin/board';       // B1-07
+import { Panel as BoardPanel } from '@twin/board';          // B1-07
 
 // 부모(래퍼)의 useState 초기화가 자식의 것보다 먼저 실행된다. 같은 번들(shell) 안이므로 contract의 probes Map도 하나다.
 // 뒤에 오는 Panel의 createProbe는 kind를 넘기지 않으므로 'local'이 유지되고, reactVersion·reactSame은 Panel이 스스로 계산한 값(twin에서는 true)으로 덮인다.
@@ -24,7 +24,7 @@ export const OrdersTwin = (p: PanelProps) => {
 };
 
 // B1-07
-// export const BoardTwin = (p: PanelProps) => {
-//   useState(() => createProbe(p.slot, localMeta('board')));
-//   return <BoardPanel {...p} />;
-// };
+export const BoardTwin = (p: PanelProps) => {
+  useState(() => createProbe(p.slot, localMeta('board')));
+  return <BoardPanel {...p} />;
+};
