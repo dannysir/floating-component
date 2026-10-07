@@ -3,7 +3,7 @@
 > **이 문서는**
 > - `@dannysir/floating-components`가 0.5.1에서 1.0.0으로 가는 동안 한 일을 블로그 글로 옮기기 위한 원고 겸 기록이다.
 > - 사실은 저장소 기록(커밋, `doc/qa/` 문서, CHANGELOG)에서 옮겼다. 확인하지 못한 것은 "미확인"으로 적었다.
-> - 작성: 2026-10-07. 이 시점에 1.0.0은 릴리스 브랜치(`release/1.0.0`)에만 있고 아직 배포 전이다.
+> - 작성: 2026-10-07. 1.0.0은 같은 날 05:52(UTC)에 npm에 배포됐다(GitHub Release 발행 → Trusted Publishing, provenance 포함).
 > - 검수 랩과 상세 기록은 `qa/mfa-lab` 브랜치에 있다(main에는 없다). 아래에서 `doc/qa/...` 경로는 그 브랜치 기준이다.
 
 ---
@@ -36,7 +36,7 @@
 | 0.4.0 | 2026-06-17 | 패널 크기 제약(`minWidth`/`maxWidth`/`minHeight`/`maxHeight`) |
 | 0.5.0 | 2026-06-24 | 터치 지원, 리사이즈를 Pointer Events로 전환 |
 | 0.5.1 | 2026-08-11 | npm Trusted Publishing(OIDC) + provenance |
-| **1.0.0** | (배포 예정) | 패널 잠금, 리사이즈 캡처 정리, 첫 안정 버전 |
+| **1.0.0** | 2026-10-07 | 패널 잠금, 리사이즈 캡처 정리, 첫 안정 버전 |
 
 ---
 
@@ -303,6 +303,11 @@ el.addEventListener("lostpointercapture", onEnd);   // 캡처가 끝나면 정�
 3. GitHub Release `v1.0.0` 발행. 워크플로가 `release: published`에서만 돌기 때문에, 버전 푸시만으로는 배포되지 않는다.
 4. GitHub Actions가 OIDC로 npm에 인증해 provenance와 함께 게시한다. npm 토큰을 저장소에 두지 않는다.
 
+실제 배포에서 겪은 일:
+
+- 2026-10-07 05:52(UTC)에 게시됐다. 레지스트리의 `gitHead`가 버전 커밋(`4665387`)과 같고, SLSA v1 provenance가 붙었다.
+- 게시 직후 npmjs.com 패키지 페이지는 한동안 0.5.1("11 Versions")로 남아 있었다. 레지스트리는 이미 `latest` = 1.0.0, 12개 버전이었고, 빈 프로젝트에서 `npm install`하면 1.0.0이 설치됐다. 웹 페이지는 레지스트리와 별도로 색인되어 늦게 반영된다. 이때 다시 배포하려고 하면 안 된다(같은 버전은 다시 올릴 수 없다).
+
 ---
 
 ## 9. 배운 것
@@ -346,3 +351,5 @@ el.addEventListener("lostpointercapture", onEnd);   // 캡처가 끝나면 정�
 | `caa911f` | FC-QA-008 수정(검수 쪽 원본) | `fix/fc-qa-008-resize-capture-cleanup` |
 | `2decb5f` | FC-QA-008 수정(cherry-pick) | `release/1.0.0` |
 | `00fbf78` | FC-QA-008 회귀 스펙 `test.fail()` 제거 | `fix/fc-qa-008-resize-capture-cleanup` |
+| `7fc519f` | `release/1.0.0` 머지 (PR #15) | `main` |
+| `4665387` | 버전 1.0.0 (`npm version major`, 태그 `v1.0.0`) | `main` |
