@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`R03`
+`R05`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -59,8 +59,8 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | B1-08 인계 | 2504c5e | 2026-10-07T01:38Z | 2 | 통과 (깨끗한 상태 `ctl up` 39초, smoke 3회 연속 초록(1회차 시도는 B1-06 시점 단언 `skipped=['board']`가 낡아 실패 → 갱신), S1·S3·S6 통과·S5 요구대로 실패, 문서 갱신, diff 검사 빈 출력, 서버 종료. SPIKE 권고 GO, 막히는 run 01 행 없음) |
 | [x] | B2-00 사전 점검 | 1989b98 | 2026-10-07T01:58Z | 1 | pass (GO caveat 없음 → blocked 행 없음. smoke 19 passed·1 skipped, S1·S3·S6 통과, S5 요구대로 실패, S7a 통과, 트리 해시 일치) |
 | [x] | R01 (필수 묶음) | 5d490ad | 2026-10-07T02:06Z | 2 | fail(FC-QA-001, FC-QA-002) — hover·Esc 모두 예측대로(2/2), 대조 bare도 재현 |
-| [x] | R02 (필수 묶음) | (R02 커밋) | 2026-10-07T02:08Z | 2 | fail(FC-QA-001, FC-QA-002) — 커밋은 미리보기와 같고 추가 리마운트 없음, hover분 리마운트·재삽입 그대로 |
-| [ ] | R03 (필수 묶음) | | | | |
+| [x] | R02 (필수 묶음) | 4d13a3d | 2026-10-07T02:08Z | 2 | fail(FC-QA-001, FC-QA-002) — 커밋은 미리보기와 같고 추가 리마운트 없음, hover분 리마운트·재삽입 그대로 |
+| [x] | R03 (필수 묶음) | (R03 커밋) | 2026-10-07T02:09Z | 2 | fail(FC-QA-001, FC-QA-002) — orders·billing·telemetry·telemetry-x 모두 예측 횟수대로 리마운트/재로드, 사다리(twin·control-mount·control-iframe)도 같은 횟수 |
 | [ ] | R05 (필수 묶음) | | | | |
 | [ ] | R07 (필수 묶음) | | | | |
 | [ ] | R09 (필수 묶음) | | | | |

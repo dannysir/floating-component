@@ -62,10 +62,14 @@
 | R01 | census / 전부 control | Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R01-esc-run1.json, obs/R01-esc-run2.json |
 | R01 (사다리) | census / bare-0..3 | hover + Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R01-bare-run1.json, obs/R01-bare-run2.json |
 | R02 | census / 전부 control | hover 후 drop (overShadow) | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R02-drop-run1.json, obs/R02-drop-run2.json |
-| R03 | census / b=orders | hover + Esc, hover + drop | mouse | not-run | | |
-| R03 | census / b=billing | hover + Esc, hover + drop | mouse | not-run | | |
-| R03 | census / b=telemetry | hover + Esc, hover + drop | mouse | not-run | | |
-| R03 | census / b=telemetry-x | hover + Esc, hover + drop | mouse | not-run | | |
+| R03 | census / b=orders | hover + Esc, hover + drop | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R03-orders-esc-run{1,2}.json, obs/R03-orders-drop-run{1,2}.json |
+| R03 | census / b=billing | hover + Esc, hover + drop | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R03-billing-{esc,drop}-run{1,2}.json |
+| R03 | census / b=telemetry | hover + Esc, hover + drop | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R03-telemetry-{esc,drop}-run{1,2}.json |
+| R03 | census / b=telemetry-x | hover + Esc, hover + drop | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R03-telemetry-x-{esc,drop}-run{1,2}.json (OOPIF yes, `--site-per-process`) |
+| R03 (사다리) | census / b=orders-local | hover + Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R03-ladder-orders-local-esc-run{1,2}.json |
+| R03 (사다리) | census / b=billing-local | hover + Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R03-ladder-billing-local-esc-run{1,2}.json |
+| R03 (사다리) | census / b=control-mount | hover + Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R03-ladder-control-mount-esc-run{1,2}.json |
+| R03 (사다리) | census / b=control-iframe | hover + Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R03-ladder-control-iframe-esc-run{1,2}.json |
 | R05 | census / a=orders, b=billing, c=telemetry, d=control | 루트 가장자리(top) hover, Esc | mouse | not-run | | |
 | R07 | locks / terminal=control | 소스 리마운트 후 Esc | mouse | not-run | | |
 | R07 | locks / terminal=control | 잠긴 nav 위에서 놓기 | mouse | not-run | | |

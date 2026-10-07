@@ -1,0 +1,174 @@
+{
+  "run": "run01-tier1",
+  "runNo": 1,
+  "scenario": "R03",
+  "case": "R03-telemetry-esc",
+  "expected": "`loads` +0, 프레임 안 입력·스크롤 유지",
+  "predicted": "`loads` +2, `docId` 두 번 바뀜, mirror +2, `:4304` 문서 요청 +2, frame +2, 프레임 안 상태 초기화",
+  "observed": "Esc 뒤 슬롯 B telemetry(p-b): frame+2 content+0 moves+0 loads+2 docId-changed input=\"\" counter=null scrollTop=0 [remounted]; frame-doc loads 1→3, docId changed=true, mirror={\"loads\":3,\"docIds\":[\"b6d68f32-a4d3-42db-82ee-06871b2fc863\",\"26dc84e1-70ee-4ff9-b63d-537e2601a04e\",\"1c73a8b6-aeec-412d-9d6f-feaef05aeff0\"],\"lastLoadedAt\":1791338853462}, :4304 문서 요청 +2. I1~I7 통과. 전체: control-a(p-a): frame+0 content+0 moves+1 input=\"seed-control-a\" counter=\"count 3\" scrollTop=0 [reinserted]; control-c(p-c): frame+2 content+2 moves+0 input=\"\" counter=\"count 0\" scrollTop=0 [remounted]; control-d(p-d): frame+0 content+0 moves+1 input=\"seed-control-d\" counter=\"count 3\" scrollTop=0 [reinserted]; telemetry(p-b): frame+2 content+0 moves+0 loads+2 docId-changed input=\"\" counter=null scrollTop=0 [remounted]",
+  "verdict": "as-predicted",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": true,
+      "detail": "no data-dragging-panel-id",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": true,
+      "detail": "userSelect restored",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[p-a,V[p-b,p-c],p-d]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (control-a,telemetry,control-c,control-d)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r03-census-remote-b/R03-telemetry-esc-run1"
+  ],
+  "extra": {
+    "deltas": {
+      "control-a": {
+        "slot": "control-a",
+        "panelId": "p-a",
+        "frame": 0,
+        "content": 0,
+        "moves": 1,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-a",
+        "counter": "count 3",
+        "scrollTop": 0,
+        "cls": "reinserted"
+      },
+      "control-c": {
+        "slot": "control-c",
+        "panelId": "p-c",
+        "frame": 2,
+        "content": 2,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "",
+        "counter": "count 0",
+        "scrollTop": 0,
+        "cls": "remounted"
+      },
+      "control-d": {
+        "slot": "control-d",
+        "panelId": "p-d",
+        "frame": 0,
+        "content": 0,
+        "moves": 1,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-d",
+        "counter": "count 3",
+        "scrollTop": 0,
+        "cls": "reinserted"
+      },
+      "telemetry": {
+        "slot": "telemetry",
+        "panelId": "p-b",
+        "frame": 2,
+        "content": 0,
+        "moves": 0,
+        "loads": 2,
+        "docIdChanged": true,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "",
+        "counter": null,
+        "scrollTop": 0,
+        "cls": "remounted"
+      }
+    },
+    "docRequests": 2,
+    "innerBefore": {
+      "slot": "telemetry",
+      "kind": "iframe",
+      "build": "20261007T013117Z-8cd7",
+      "loads": 1,
+      "docId": "b6d68f32-a4d3-42db-82ee-06871b2fc863",
+      "loadedAt": 1791338850370,
+      "seen": {
+        "dragenter": 0,
+        "dragover": 0,
+        "drop": 0,
+        "pointermove": 0,
+        "touchstart": 0
+      }
+    },
+    "innerAfter": {
+      "slot": "telemetry",
+      "kind": "iframe",
+      "build": "20261007T013117Z-8cd7",
+      "loads": 3,
+      "docId": "1c73a8b6-aeec-412d-9d6f-feaef05aeff0",
+      "loadedAt": 1791338853456,
+      "seen": {
+        "dragenter": 0,
+        "dragover": 0,
+        "drop": 0,
+        "pointermove": 0,
+        "touchstart": 0
+      }
+    }
+  }
+}

@@ -7,7 +7,7 @@ status: open
 confidence: high
 repro_rate: 2/2
 found_in: pre-run
-variants: [control-b, control-c, bare-1, bare-2]
+variants: [control-b, control-c, bare-1, bare-2, orders, billing, telemetry, telemetry-x, orders-local, billing-local, control-mount, control-iframe]
 input: mouse
 browser: chromium-153 headless-shell
 playwright: 1.63.0
@@ -135,6 +135,20 @@ fix_commit: none
 - 예측과 같다(`as-predicted`, 2/2). 커밋 없음: `onMovePanel` 0건, 트리 불변.
 - 불변식 I1~I7: Esc 뒤 전부 통과. `dragend`는 연결된 원본 노드(capture/target/bubble 모두 `isConnected: true`).
 - **R02** (같은 hover 뒤 `overShadow` 드롭, `R02-run{1,2}`): `p-b`·`p-c` 누적 frame +1 / content +1(hover 분만), 커밋 시점 추가 변화 없음. 커밋 트리 `H[p-d,p-a,V[p-b,p-c]]` = 미리보기, `onMovePanel('p-d','p-a','left',1)` 1건, `dragend.dropEffect = move`. 예측대로(2/2).
+- **R03** (`?layout=census&b=<slot>`, 같은 hover, Esc와 드롭 각각, 깨끗한 컨텍스트 2회씩, 전부 예측대로): 관찰 기록 `obs/R03-<slot>-{esc,drop}-run{1,2}.json`.
+
+| 슬롯 B | hover + Esc (누적) | hover + 드롭 (누적) |
+|---|---|---|
+| `orders` (same-tree, MF) | frame +2, content +2, `instanceSeq` 1→3, input·counter·scrollTop 초기화, `reactSame true` | frame +1, content +1 |
+| `billing` (mount, 자기 React) | frame +2, content +2, `mountCalls` +2, `unmountCalls` +2, `rootsAlive` 1, `lateResolves` 0, 상태 초기화 | 각 +1 |
+| `telemetry` (iframe, same-site) | frame +2, 프레임 안 `loads` 1→3, `docId` 바뀜, mirror `loads` 3, `:4304` 문서 요청 +2, 프레임 안 입력·스크롤 초기화 | frame +1, `loads` +1, 문서 요청 +1 |
+| `telemetry-x` (iframe, cross-site, OOPIF) | telemetry와 같은 수 | telemetry와 같은 수 |
+| 사다리 `orders-local` (twin) | frame +2, content +2 (remote와 같은 횟수) | — |
+| 사다리 `billing-local` (twin) | frame +2, content +2 | — |
+| 사다리 `control-mount` (host React 별도 루트) | frame +2, content +2, `mountCalls` +2, `unmountCalls` +2, `rootsAlive` 1 (billing과 같은 횟수) | — |
+| 사다리 `control-iframe` (srcdoc) | frame +2, `loads` +2 (telemetry와 같은 횟수) | — |
+
+  - 컨테이너와 Module Federation은 횟수를 바꾸지 않는다(twin = remote, 컨테이너 대조군 = remote). 결과만 다르다(별도 루트 재생성, iframe 문서 재로드).
 - 대조(bare, `R01-bare-run{1,2}`): `bare-1`·`bare-2` 내용 마운트 hover +1, Esc 뒤 +2. `bare-0` reinserted. 라이브러리만으로 재현된다.
 - 스크린샷 `02-mid.png`(직접 열어 확인): `control-d`가 점선·반투명(shadow)으로 맨 왼쪽, `control-b`·`control-c` 헤더 배지 `f2 c2`(로드 1 + 리마운트 1)와 빈 입력·`count 0`, `control-a`는 입력값 유지·목록이 맨 위(scrollTop 0).
 
@@ -203,7 +217,8 @@ fix_commit: none
 |---|---|---|
 | 1 재현 | 깨끗한 컨텍스트 2회 (R01) | 2/2, 수치 동일 |
 | 2 대조 교체 | bare(`a..d=bare-0..3`) | 재현(`bare-1`·`bare-2` 내용 마운트 hover +1). 라이브러리 단계에서 처음 나타남 → `library-bug` |
-| 3 입력·릴리스 교체 | (R02 드롭, R14·R13 터치에서 덧붙인다) | — |
+| 2b 컨테이너·MF 대조 (R03) | `orders` ↔ `orders-local`, `billing` ↔ `billing-local` ↔ `control-mount`, `telemetry` ↔ `control-iframe` | 모두 같은 횟수. MF·컨테이너 탓이 아니다 |
+| 3 입력·릴리스 교체 | R02 `overShadow` 드롭 | 드롭은 hover분에 아무것도 더하지 않는다. (터치는 R14·R13에서 덧붙인다) |
 | 4 하네스 점검 | 이벤트 순서를 S1 기준선과 비교 | 같은 순서(dragstart → dragenter → dragover(p-a) → Esc dragend). 알려진 부작용과 무관(카운터는 React 마운트) |
 | 5 픽스처 점검 | 해당 없음 | control·bare에서 재현되므로 remote 단독 페이지와 무관 |
 | 6 프로브 끄고 재실행 | 해당 없음 | 예측대로라 생략. `frameMounts`·`mounts`는 프로브가 아니라 픽스처 카운터다 |
