@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`B1-00`
+`B1-01`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -43,7 +43,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 
 | 완료 | 단계 | 커밋 | 날짜(UTC) | 시도 횟수 | 결과 한 줄 |
 |---|---|---|---|---|---|
-| [ ] | B1-00 환경 탐침 | | | | |
+| [x] | B1-00 환경 탐침 | e89991c | 2026-10-07T00:58Z | 1 | 통과 (Node v22.22.0, npm ping ok, 레인 후보 B, 트리 해시 일치) |
 | [ ] | B1-01 브라우저 확보 (S0) | | | | |
 | [ ] | B1-02 shell + `ctl.mjs` + 계측 | | | | |
 | [ ] | B1-03a 프로브·마우스 드래그 (S1) | | | | |
@@ -88,9 +88,9 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 
 | 항목 | 값 | 기록 단계 |
 |---|---|---|
-| 작업 브랜치 | | B1-00 (세션이 바뀌면 덧붙인다) |
-| Node 버전 | | B1-00 |
-| shallow clone 여부 (yes/no) | | B1-00 |
+| 작업 브랜치 | `qa/mfa-lab` | B1-00 (세션이 바뀌면 덧붙인다) |
+| Node 버전 | v22.22.0 (npm 10.9.4) | B1-00 |
+| shallow clone 여부 (yes/no) | yes | B1-00 |
 | 레인 (B/A/C) | | B1-01 |
 | Playwright | | B1-01 |
 | Chromium 빌드 | | B1-01 |
@@ -109,7 +109,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 |---|---|---|
 | 트리 해시 (1차 식별) | `c1da6c9dc03a4811eea42c220be309e5e73b0a4a` | `git rev-parse HEAD:src` |
 | 커밋 (2차 식별) | `ea25ff7` | `git rev-list -1 HEAD -- src` |
-| 시작 커밋 (diff 검사 기준) | (B1-00에서 기록) | `git rev-parse HEAD` |
+| 시작 커밋 (diff 검사 기준) | `e8e2d8f5bea60f800a83a095ae05d652ad114ea3` | `git rev-parse HEAD` |
 
 - 트리 해시는 shallow clone에서도 같다. 커밋 값은 shallow clone이면 달라질 수 있으므로 트리 해시를 기준으로 삼는다.
 - B1-00에서 트리 해시가 위 값과 다르면 `src/`가 문서 작성 뒤 바뀐 것이다. 실제 값으로 고치고 체크리스트 결과 칸에 적는다.
