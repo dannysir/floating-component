@@ -3,7 +3,7 @@ id: FC-QA-008
 title: 경계선 리사이즈가 포인터 캡처를 잃으면 body userSelect가 none으로 남고 그 Resizer를 다시 잡을 수 없다
 severity: sev-1
 class: library-bug
-status: open
+status: fixed
 confidence: high
 repro_rate: 4/4
 found_in: run01-tier1
@@ -21,7 +21,7 @@ root_cause_group: resize-capture-cleanup
 blocked_by: none
 dup_of: none
 repro_spec: mfa-lab/e2e/regression/fc-qa-008-resize-capture-loss-leaks-user-select.spec.ts
-fix_commit: none
+fix_commit: caa911f
 ---
 
 # FC-QA-008 경계선 리사이즈가 포인터 캡처를 잃으면 body userSelect가 none으로 남고 그 Resizer를 다시 잡을 수 없다
@@ -93,3 +93,4 @@ fix_commit: none
 - 시나리오: R17, 관찰 기록: doc/qa/run01-tier1/obs/R17-resize-run{1,2}.json. R15에서 iframe 옆 리사이즈로 증거를 덧붙인다.
 - 관련 발견: FC-QA-006(같은 OOPIF 입력 라우팅이 드래그 종료를 잃는 하네스 현상), 가설: H-RESIZE
 - 2026-10-07 R15(`?layout=row3&a=control-a&b=telemetry&c=telemetry-x`, 브리프 절차: iframe 쪽으로 150px + iframe 중앙에서 놓기 → 반대로 -150, 2/2씩): same-site `telemetry` 쪽은 캡처 획득, `pointerup` top, 포인터 이동 210.7px에 p-a +208.0, `userSelect` 복원, 반대 -148.1 — 깨끗(as-ideal). OOPIF `telemetry-x` 쪽은 캡처 없음, `pointermove` 16회·`pointerup`이 iframe 문서로(`seen.pointermove` 0→16), 크기 0, `userSelect` `none` 잔존(I4 실패), 반대 -150도 0(Resizer 다시 잡히지 않음), `onResizeBorder` 0건. R15의 "열린 질문"에 대한 이 환경의 답. 관찰 기록 `obs/R15-*-run{1,2}.json`.
+- 2026-10-07 수정(`caa911f`, 브랜치 `fix/fc-qa-008-resize-capture-cleanup`, 사용자 Windows 11 PC, 레인 B: Playwright 1.63.0 + Chromium 153.0.8010.12 headless shell, `--site-per-process`): 진단 결과 OOPIF 쪽으로 끌면 top 프레임은 `pointerdown` 뒤 `gotpointercapture`·`lostpointercapture`·`pointerup`을 하나도 받지 않고, 다음 이벤트는 Resizer로 돌아왔을 때의 `pointermove`(buttons 0)였다. 그래서 `useDragResize`가 `body.style.userSelect`를 `gotpointercapture`에서 바꾸고 캡처가 끝나면(`lostpointercapture`) 되돌리도록 했다. 캡처를 얻지 못한 세션은 버튼이 떼어진 `pointermove`나 다음 `pointerdown`에서 정리하고, `pointerup`·`pointercancel` 외에 window `blur`·unmount에서도 정리한다. F2 2/2 예상대로 실패(`userSelect` `"none"`) → F6 1회차에 예상과 달리 통과 → F7 `test.fail()` 제거 뒤 2/2 통과. F8: `ctl smoke` OK, `test smoke` 19 passed·1 skipped, 회귀 mouse 14 expected·1 skipped·0 unexpected, touch 15 expected·0 unexpected(이 발견만 통과, 나머지는 예상대로 실패), 스파이크 전체 통과(S7a·S7b는 touch 프로젝트로 통과). 같은 `root_cause_group`의 다른 발견은 없다. 실제 Chrome에서 OOPIF 쪽 리사이즈를 손으로 확인하는 일(REPORT 8절)은 남아 있다.
