@@ -73,11 +73,12 @@
 | R05 | census / a=orders, b=billing, c=telemetry, d=control | 루트 가장자리(top) hover, Esc | mouse | fail(FC-QA-001) | as-predicted | obs/R05-hover-esc-run{1,2}.json |
 | R05 (사다리) | census / 전부 control | 같은 제스처 | mouse | fail(FC-QA-001) | as-predicted | obs/R05-ladder-control-run{1,2}.json |
 | R05 (사다리) | census / bare | 같은 제스처 | mouse | fail(FC-QA-001) | as-predicted | obs/R05-ladder-bare-run{1,2}.json |
-| R07 | locks / terminal=control | 소스 리마운트 후 Esc | mouse | not-run | | |
-| R07 | locks / terminal=control | 잠긴 nav 위에서 놓기 | mouse | not-run | | |
-| R07 | locks / output=telemetry | iframe 본문 위에서 놓기 | mouse | not-run | | |
-| R07 | locks / terminal=control | workspace 여백에서 놓기 | mouse | not-run | | |
-| R07 | locks / terminal=telemetry | 소스 리마운트 후 Esc | mouse | not-run | | |
+| R07 | locks / terminal=control | 소스 리마운트 후 Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (취소 자체는 깨끗: I1~I7 통과, `dragend`는 분리된 원본에 `isConnected:false`) | obs/R07-esc-run{1,2}.json |
+| R07 | locks / terminal=control | 잠긴 nav 위에서 놓기 | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (`locked`, drop 없음, `dropEffect none`, 트리 불변) | obs/R07-nav-run{1,2}.json |
+| R07 | locks / output=telemetry | iframe 본문 위에서 놓기 | mouse | fail(FC-QA-001, FC-QA-002; iframe 드롭은 R12 발견 참고) | as-predicted (취소·미리보기 유지·트리 불변. "마지막 dragover가 :4304 프레임"은 관찰 불가: HARNESS 부작용 #7) | obs/R07-iframe-run{1,2}.json |
+| R07 (사다리) | locks / output=control-iframe | iframe 본문 위에서 놓기 | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (telemetry와 같음) | obs/R07-ladder-control-iframe-run{1,2}.json |
+| R07 | locks / terminal=control | workspace 여백에서 놓기 | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (루트 `dragleave`로 미리보기가 먼저 지워짐, drop 없음) | obs/R07-padding-run{1,2}.json |
+| R07 | locks / terminal=telemetry | 소스 리마운트 후 Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted (소스 iframe `loads` +2는 D3b) | obs/R07-iframe-source-run{1,2}.json |
 | R09 | row3 / a=board | 카드를 board 안에서 열 이동 | mouse | not-run | | |
 | R09 | row3 / a=board-local | 같은 동작 | mouse | not-run | | |
 | R09 | board 단독 페이지 (`http://127.0.0.1:4302/`) | 같은 동작 | mouse | not-run | | |

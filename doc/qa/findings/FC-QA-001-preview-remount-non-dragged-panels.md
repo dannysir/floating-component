@@ -150,6 +150,7 @@ fix_commit: none
 
   - 컨테이너와 Module Federation은 횟수를 바꾸지 않는다(twin = remote, 컨테이너 대조군 = remote). 결과만 다르다(별도 루트 재생성, iframe 문서 재로드).
 - **R05** (`?layout=census&a=orders&b=billing&c=telemetry&d=control-d`, `p-d` → `(p-a, top, 2)`, 미리보기 `V[p-d,H[p-a,V[p-b,p-c]]]`, hover + Esc, 2/2 예측대로): hover에서 `orders` frame +1·content +1, `billing` frame +1·`mountCalls`·`unmountCalls` +1(`rootsAlive` 1), `telemetry` frame +1·`loads` +1. Esc 뒤 셋 다 누적 +2. 소스 `p-d` frame +0, Esc에서 moves +1(D3b). 셋 다 입력·카운터·스크롤 초기화. 대조: 전부 control(`R05-ladder-control`)과 bare(`R05-ladder-bare`)에서 `p-a`·`p-b`·`p-c` 모두 같은 횟수로 리마운트 — 부모 변경(루트 감싸기, 추정 원인 3·4)도 라이브러리 단계에서 재현. 증거 `R05-02-mid.png`, `R05-03-after.png`(직접 열어 확인: 세 remote 배지 `f2`, telemetry `loads 2`). 리마운트된 패널의 `domMoves` +1은 같은 커밋 안에서 새 요소가 자리를 옮긴 기록이다(리마운트에 포함).
+- **R07** (`?layout=locks`, `terminal`(control-b) → `(editor, left, 0)`, 미리보기 `H[nav,terminal,editor,output]`, 다섯 가지 취소 경로 × 2회, 전부 예측대로): **드래그하지 않은 `output`**(control-c) frame +2·content +2(split `V[terminal,output]`이 풀려 부모가 바뀜, 추정 원인 3), `output=telemetry`면 frame +2·`loads` +2. 하위 관찰(D3b): 소스 `terminal` frame +2·content +2(`terminal=telemetry`면 `loads` +2), 원본 노드가 분리돼 `dragend`는 대상 리스너에만(`isConnected: false`). 모든 취소 경로에서 I1~I7 통과, 트리 불변. 관찰 기록 `obs/R07-*.json`.
 - 대조(bare, `R01-bare-run{1,2}`): `bare-1`·`bare-2` 내용 마운트 hover +1, Esc 뒤 +2. `bare-0` reinserted. 라이브러리만으로 재현된다.
 - 스크린샷 `02-mid.png`(직접 열어 확인): `control-d`가 점선·반투명(shadow)으로 맨 왼쪽, `control-b`·`control-c` 헤더 배지 `f2 c2`(로드 1 + 리마운트 1)와 빈 입력·`count 0`, `control-a`는 입력값 유지·목록이 맨 위(scrollTop 0).
 
