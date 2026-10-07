@@ -1,0 +1,31 @@
+{
+  "contract": 1,
+  "pins": {
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "vite": "7.3.6",
+    "@vitejs/plugin-react": "5.1.2",
+    "@module-federation/vite": "1.23.0"
+  },
+  "federation": { "shareStrategy": "loaded-first" },
+  "shell": {
+    "app": "shell", "team": "workspace-platform", "dir": "apps/shell",
+    "origin": "http://127.0.0.1:4300", "ready": "/"
+  },
+  "baseline": {
+    "npm051": {
+      "app": "shell-051", "dir": "apps/shell", "outDir": "dist-051",
+      "origin": "http://127.0.0.1:4390", "ready": "/",
+      "alias": "fc-051", "spec": "npm:@dannysir/floating-components@0.5.1"
+    }
+  },
+  "remotes": {
+    "orders":      { "app": "mfe-orders",    "team": "order-desk", "kind": "same-tree", "dir": "apps/mfe-orders",    "origin": "http://127.0.0.1:4301", "entry": "/mf-manifest.json", "expose": "./Panel", "twin": "orders-local" },
+    "board":       { "app": "mfe-board",     "team": "fulfilment", "kind": "same-tree", "dir": "apps/mfe-board",     "origin": "http://127.0.0.1:4302", "entry": "/mf-manifest.json", "expose": "./Panel", "twin": "board-local" },
+    "billing":     { "app": "mfe-billing",   "team": "billing",    "kind": "mount",     "dir": "apps/mfe-billing",   "origin": "http://127.0.0.1:4303", "entry": "/remote-entry.js", "twin": "billing-local" },
+    "telemetry":   { "app": "mfe-telemetry", "team": "telemetry",  "kind": "iframe",    "dir": "apps/mfe-telemetry", "origin": "http://127.0.0.1:4304", "entry": "/" },
+    "telemetry-x": { "app": "mfe-telemetry", "team": "telemetry",  "kind": "iframe",    "sameServerAs": "telemetry", "origin": "http://localhost:4304", "entry": "/" }
+  },
+  "reservedPorts": [4305, 4306, 4307, 4308],
+  "deadOrigin": "http://127.0.0.1:4399"
+}
