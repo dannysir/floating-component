@@ -6,6 +6,9 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { harnessError } from './errors';
 import { SLOT_PARAMS } from './presets';
+import { installProbe } from './probe.init';
+import { registerLabState } from './labstate';
+import type { ConsoleEntry, RequestEntry } from './labstate';
 import type { PresetName } from './presets';
 
 const here = (rel: string) => fileURLToPath(new URL(rel, import.meta.url));
@@ -35,8 +38,7 @@ export interface OpenResult {
   skipped: string[];
 }
 
-export interface ConsoleEntry { type: string; text: string; url: string }
-export interface RequestEntry { url: string; method: string; resourceType: string; frameUrl: string; isNavigation: boolean; t: number }
+export type { ConsoleEntry, RequestEntry };
 
 export interface Lab {
   open: (opts: OpenOptions) => Promise<OpenResult>;
@@ -106,7 +108,8 @@ const waitFor = async (fn: () => Promise<boolean>, timeoutMs: number, what: stri
 
 export const test = base.extend<{ lab: Lab; probe: boolean }>({
   probe: [true, { option: true }],
-  lab: async ({ page }, use) => {
+  lab: async ({ page, probe }, use) => {
+    if (probe) await installProbe(page.context());   // 모든 프레임에 window.__probe (test.use({ probe: false })로 끈다)
     const consoleLog: ConsoleEntry[] = [];
     const pageErrors: string[] = [];
     const requests: RequestEntry[] = [];
@@ -160,6 +163,10 @@ export const test = base.extend<{ lab: Lab; probe: boolean }>({
       if (!res || res.status() !== 200) throw harnessError(`standalone ${remote} not ready`);
     };
 
+    registerLabState(page, {
+      console: consoleLog, pageErrors, requests,
+      bodyUserSelect: () => bodyUserSelect, lastOpen: () => last, cursor: { console: 0, pageErrors: 0 },
+    });
     await use({
       open,
       openStandalone,

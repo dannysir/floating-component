@@ -1,0 +1,247 @@
+[
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousemove",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousemove",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointerdown",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointerdown",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousedown",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousedown",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointermove",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousemove",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "mousemove",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragstart",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragstart",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointercancel",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "pointercancel",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "capture",
+  "panelId": "p-a",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "bubble",
+  "panelId": "p-a",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragleave",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragleave",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragover",
+  "phase": "capture",
+  "panelId": "p-a",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragover",
+  "phase": "bubble",
+  "panelId": "p-a",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragenter",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragleave",
+  "phase": "capture",
+  "panelId": "p-a",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragleave",
+  "phase": "bubble",
+  "panelId": "p-a",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragover",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragover",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "drop",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "drop",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragend",
+  "phase": "capture",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragend",
+  "phase": "target",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragend",
+  "phase": "bubble",
+  "panelId": "p-d",
+  "isTrusted": true,
+  "top": true
+ }
+]

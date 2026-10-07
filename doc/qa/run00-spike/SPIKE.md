@@ -41,7 +41,7 @@
 | ID | 결과 | 시도 | 커밋 | 메모 |
 |---|---|---|---|---|
 | S0 | 통과 | 1 | 78f858f | `HeadlessChrome/153.0.8010.12`. rAF 실측 mouse 62/s, touch 61/s. CDP `Browser.getVersion` 성공. CDP `touchStart` → `isTrusted === true` touchstart: touch 프로젝트 `[true]`, mouse 프로젝트(`hasTouch` 없음)도 `[true]`, 오류 없음 → `hasTouch`가 trusted 여부에 필요하지 않다. 스크린샷 [evidence/s00-page.png](./evidence/s00-page.png)를 Read로 열어 "Harbor S0" 글자와 파란 상자를 확인 |
-| S1 | 미실행 | | | |
+| S1 | 통과 | 2 | (B1-03a 커밋) | 1회차 실패: hover 중 `domTree`가 `H[p-a,V[p-b,p-c],p-d]`(미리보기 없음). 프로브 로그상 teleport 한 번이 `dragenter(p-a)`·`dragleave(p-d)`만 만들고 `dragover`가 없었다 — Blink는 대상 요소가 바뀌는 갱신에서 dragover를 다음 갱신으로 미룬다. 수정: `teleport`가 이동 직후 프로브에 dragover가 없으면 같은 점으로 한 번 더 이동(그래도 teleport당 dragover 1회). 2회차 통과: trusted `dragstart→dragenter→dragover→drop→dragend`, hover `H[p-d,p-a,V[p-b,p-c]]` + p-d shadow, `onMovePanel(p-d,p-a,left,1)` 1건, 커밋 트리 = 미리보기, `dragend.dropEffect = move` |
 | S2 | 미실행 | | | |
 | S3 | 미실행 | | | |
 | S4 | 미실행 | | | |
@@ -55,7 +55,11 @@
 
 ## 4. 이벤트 로그 기준선
 
-(B1-03에서 기록)
+축소 형식 `{ type, phase, panelId, isTrusted, top }` 배열. 파일은 `evidence/baseline/<spike>.events.json`.
+
+| 스파이크 | 파일 | 드래그 이벤트 순서 (`type/phase/panelId`, pointer·mouse 생략) |
+|---|---|---|
+| S1 | [s01.events.json](./evidence/baseline/s01.events.json) | dragstart(p-d) → pointercancel(p-d) → dragenter(p-d) → [teleport] dragenter(p-a), dragleave(p-d), dragover(p-a) → [overShadow 이동] dragenter(p-d), dragleave(p-a) → [mouse.up] dragover(p-d) → drop(p-d) → dragend capture(p-d) / target(p-d, connected) / bubble(p-d). 모두 `isTrusted: true`, 메인 프레임 |
 
 ## 5. S8 비율 표
 
@@ -73,7 +77,7 @@
 
 판단은 세션 2로 넘긴다. 발견 ID는 붙이지 않는다.
 
-- (없음)
+- **S1 미리보기 중 드래그하지 않은 패널의 리마운트·재삽입** (B1-03a, 관찰): `census` bare에서 p-d를 (p-a, left, 1)로 hover하는 미리보기 한 번에 프로브 `domLog`가 `p-b`·`p-c` = `remounted`(새 요소), `p-a` = `reinserted`(같은 요소의 제거 후 삽입)를 기록했다. 사전 등록된 FC-QA-001(`predicted`, D3)·D3a의 예측과 같은 모양이다. 재현: `node mfa-lab/scripts/ctl.mjs test spike/s01` 출력의 `[S1] domLog` 줄. 관련 스펙 `mfa-lab/e2e/spike/s01-mouse-drag-commit.spec.ts`.
 
 ## 9. HANDOFF
 
