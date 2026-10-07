@@ -40,7 +40,7 @@
 
 | ID | 결과 | 시도 | 커밋 | 메모 |
 |---|---|---|---|---|
-| S0 | 통과 | 1 | (B1-01 커밋) | `HeadlessChrome/153.0.8010.12`. rAF 실측 mouse 62/s, touch 61/s. CDP `Browser.getVersion` 성공. CDP `touchStart` → `isTrusted === true` touchstart: touch 프로젝트 `[true]`, mouse 프로젝트(`hasTouch` 없음)도 `[true]`, 오류 없음 → `hasTouch`가 trusted 여부에 필요하지 않다. 스크린샷 [evidence/s00-page.png](./evidence/s00-page.png)를 Read로 열어 "Harbor S0" 글자와 파란 상자를 확인 |
+| S0 | 통과 | 1 | 78f858f | `HeadlessChrome/153.0.8010.12`. rAF 실측 mouse 62/s, touch 61/s. CDP `Browser.getVersion` 성공. CDP `touchStart` → `isTrusted === true` touchstart: touch 프로젝트 `[true]`, mouse 프로젝트(`hasTouch` 없음)도 `[true]`, 오류 없음 → `hasTouch`가 trusted 여부에 필요하지 않다. 스크린샷 [evidence/s00-page.png](./evidence/s00-page.png)를 Read로 열어 "Harbor S0" 글자와 파란 상자를 확인 |
 | S1 | 미실행 | | | |
 | S2 | 미실행 | | | |
 | S3 | 미실행 | | | |
