@@ -242,7 +242,7 @@ AI가 보고한 발견을 믿을 수 있게 하는 규칙이다. 하나라도 �
 | ID | 발견 파일 | found_in | 한 줄 요약 |
 |---|---|---|---|
 | FC-QA-001 | [FC-QA-001-preview-remount-non-dragged-panels.md](./findings/FC-QA-001-preview-remount-non-dragged-panels.md) | `pre-run` (실행 전 선등록) | 미리보기 때문에 드래그하지 않은 패널이 리마운트됨 (D3) |
-| FC-QA-002 | [FC-QA-002-preview-reinserts-non-dragged-panels.md](./findings/FC-QA-002-preview-reinserts-non-dragged-panels.md) | `run01-tier1` | 미리보기 때문에 드래그하지 않은 패널이 리마운트 없이 DOM 재삽입되어 스크롤을 잃음 (D3a) |
+| FC-QA-002 | [FC-QA-002-preview-reinserts-non-dragged-panels.md](./findings/FC-QA-002-preview-reinserts-non-dragged-panels.md) | `run01-tier1` | 미리보기 때문에 드래그하지 않은 패널이 리마운트 없이 DOM 재삽입되어 스크롤을 잃고 iframe이 재로드됨 (D3a) |
 | FC-QA-003 | [FC-QA-003-content-native-drag-becomes-panel-drag.md](./findings/FC-QA-003-content-native-drag-becomes-panel-drag.md) | `run01-tier1` | 패널 내용의 네이티브 드래그가 패널 드래그로 처리됨 (H-FOREIGN-DRAG) |
 | FC-QA-004 | [FC-QA-004-layout-hijacks-non-panel-drag.md](./findings/FC-QA-004-layout-hijacks-non-panel-drag.md) | `run01-tier1` | 패널이 패널 드래그가 아닌 드래그의 drop 전파를 막고 dropEffect를 덮어씀 (H-DROP-HIJACK, 사용자 확인 대기) |
 | FC-QA-005 | [FC-QA-005-iframe-panel-not-mouse-drop-target.md](./findings/FC-QA-005-iframe-panel-not-mouse-drop-target.md) | `run01-tier1` | iframe 패널이 마우스 드롭 대상이 안 되는데 터치는 됨 (H-IFRAME-DEAD, 경로 불일치) |

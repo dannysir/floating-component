@@ -1,13 +1,13 @@
 ---
 id: FC-QA-002
-title: 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM에서 떼었다 다시 붙여 스크롤 위치를 잃게 한다
-severity: sev-3
+title: 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM에서 떼었다 다시 붙여 스크롤 위치를 잃게 하고 iframe은 다시 로드되게 한다
+severity: sev-2
 class: library-bug
 status: open
 confidence: high
 repro_rate: 2/2
 found_in: run01-tier1
-variants: [control-a, bare-0]
+variants: [control-a, bare-0, orders, billing, telemetry, control-iframe]
 input: mouse
 browser: chromium-153 headless-shell
 playwright: 1.63.0
@@ -24,7 +24,7 @@ repro_spec: mfa-lab/e2e/regression/fc-qa-002-preview-reinserts-non-dragged-panel
 fix_commit: none
 ---
 
-# FC-QA-002 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM에서 떼었다 다시 붙여 스크롤 위치를 잃게 한다
+# FC-QA-002 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM에서 떼었다 다시 붙여 스크롤 위치를 잃게 하고 iframe은 다시 로드되게 한다
 
 ## 전제
 
@@ -95,3 +95,6 @@ fix_commit: none
 - 2026-10-07 R16-others(`?layout=workbench`, billing → board 왼쪽): 드래그하지 않은 `board` frame +0·moves +1(같은 H split 안 keyed 순서 변경). R14(터치)에서도 `editor` moves +1·scrollTop 0 — 입력 방식과 무관.
 - 시나리오: R01, 관찰 기록: doc/qa/run01-tier1/obs/R01-hover-run1.json, R01-esc-run1.json, R01-bare-run1.json (run2도 같다)
 - 관련 발견: FC-QA-001(같은 미리보기에서 생기는 React 리마운트, D3), 가설: H-REINSERT
+- 2026-10-07 R04(`?layout=census&a=<remote>`, R01과 같은 제스처, 2/2씩): `orders`·`billing`(mount, `mountCalls`·`unmountCalls` +0, `rootsAlive` 1) 모두 frame +0·content +0·moves +1·scrollTop 120 → 0, 입력·카운터 유지. **`telemetry`(iframe)는 frame +0인데 `loads` +1·`docId` 변경·iframe 문서 요청 +1, 프레임 안 입력값 소실**(재삽입 = 재로드). same-origin `control-iframe`도 같다(컨테이너 고유 현상). iframe 패널은 `(p-a, left, 1)` 점이 iframe 본문이라 `iframeShield=1`로 측정(FC-QA-005). 관찰 기록 `obs/R04-*-run{1,2}.json`.
+- 2026-10-07 R06(`?layout=row3&b=telemetry`, 2/2씩, 리마운트 0): R06-a(`p-c` → `(p-a, left, 1)`) hover에서 `p-a`·`p-b` moves +1, telemetry(p-b) `loads` +1 — **hover 때 재로드**. R06-b(`p-a` → `(p-c, right, 1)`) hover에서는 소스만 moves +1, Esc에서 `p-b`·`p-c` moves +1, telemetry `loads` +1 — **취소 때 재로드**. 드롭은 hover 뒤 추가 없음. React keyed 순서 변경의 `lastPlacedIndex` 규칙과 일치. 관찰 기록 `obs/R06-{a,b}-run{1,2}.json`. 회귀 스펙에 R06-a 케이스 추가(iframe `loads` +0 단언, "예상대로 실패").
+- 2026-10-07 심각도 sev-3 → **sev-2**: iframe 재로드가 관찰돼 분류 기본값("sev-2(iframe 재로드) / sev-3(스크롤만)")을 적용. 제목에 재로드를 더했다.

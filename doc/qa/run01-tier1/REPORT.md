@@ -115,9 +115,10 @@
 
 | ID | 변형 (레이아웃 / 슬롯) | 케이스 | 입력 | 상태 | 기대 대비 | 관찰 기록 |
 |---|---|---|---|---|---|---|
-| R04 | census / a=orders | hover + Esc | mouse | not-run | | |
-| R04 | census / a=billing | hover + Esc | mouse | not-run | | |
-| R04 | census / a=telemetry | hover + Esc | mouse | not-run | | |
+| R04 | census / a=orders | hover + Esc | mouse | fail(FC-QA-002, FC-QA-001) | as-predicted (p-a frame +0·content +0·moves +1, `orders-scroll` 120 → 0, 입력·카운터 유지, Esc 추가 없음. p-b·p-c 리마운트) | obs/R04-orders-run{1,2}.json |
+| R04 | census / a=billing | hover + Esc | mouse | fail(FC-QA-002, FC-QA-001) | as-predicted (같다. `mountCalls`·`unmountCalls` +0, `rootsAlive` 1, scrollTop 초기화) | obs/R04-billing-run{1,2}.json |
+| R04 | census / a=telemetry | hover + Esc | mouse | fail(FC-QA-002, FC-QA-001) | as-predicted (`iframeShield=1`로 측정: 브리프 지점이 iframe 본문이라 shield 없이는 미리보기가 없다 = FC-QA-005. frame +0인데 `loads` +1·`docId` 변경·문서 요청 +1, 프레임 안 상태 소실, Esc 추가 없음) | obs/R04-telemetry-run{1,2}.json |
+| R04 (사다리) | census / a=control-iframe (`iframeShield=1`) | hover + Esc | mouse | fail(FC-QA-002) | as-predicted (telemetry와 같음 → 컨테이너 고유) | obs/R04-ladder-control-iframe-run{1,2}.json |
 | R06 | row3 / b=telemetry | (a) p-c → p-a 왼쪽: hover + Esc, hover + drop | mouse | not-run | | |
 | R06 | row3 / b=telemetry | (b) 새 페이지, p-a → p-c 오른쪽: hover + Esc, hover + drop | mouse | not-run | | |
 | R08 | census / bare | (a) stale preview 강제 (다른 패널 위에서 immediate 릴리스) | mouse | not-run | | |
@@ -153,7 +154,7 @@
 | ID | 제목 | 심각도 | class | status | 재현율 | 시나리오 | root_cause_group |
 |---|---|---|---|---|---|---|---|
 | [FC-QA-001](../findings/FC-QA-001-preview-remount-non-dragged-panels.md) | 드래그 미리보기가 드래그하지 않은 패널을 리마운트한다 | sev-2 | library-bug | open | 2/2 | R01 | split-index-key |
-| [FC-QA-002](../findings/FC-QA-002-preview-reinserts-non-dragged-panels.md) | 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM 재삽입해 스크롤을 잃게 한다 | sev-3 | library-bug | open | 2/2 | R01 | keyed-reorder-reinsert |
+| [FC-QA-002](../findings/FC-QA-002-preview-reinserts-non-dragged-panels.md) | 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM 재삽입해 스크롤을 잃게 하고 iframe을 다시 로드시킨다 | sev-2 | library-bug | open | 2/2 | R01 | keyed-reorder-reinsert |
 | [FC-QA-003](../findings/FC-QA-003-content-native-drag-becomes-panel-drag.md) | 패널 내용(remote 칸반 카드)의 네이티브 드래그가 패널 드래그로 처리된다 | sev-2 | library-bug | open | 2/2 | R09 | foreign-dragstart-unguarded |
 | [FC-QA-004](../findings/FC-QA-004-layout-hijacks-non-panel-drag.md) | 패널이 패널 드래그가 아닌 드래그의 drop 전파를 막고 dropEffect를 덮어쓴다 | sev-2 | spec-question | needs-user-confirmation | 2/2 | R09 | foreign-drag-handlers-unguarded |
 | [FC-QA-005](../findings/FC-QA-005-iframe-panel-not-mouse-drop-target.md) | iframe 패널은 마우스 드롭 대상이 되지 않는데 터치에서는 된다 (경로 불일치) | sev-3 | library-bug | open | 2/2 | R12 | iframe-drop-target-mouse |
