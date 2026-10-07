@@ -138,7 +138,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 ## 차단 사항
 
 - (없음)
-- BLOCKED-ENV-WIN, FIXING F1(FC-QA-008 수정 세션, 사용자 Windows PC), 2026-10-07: `ctl up`이 doctor의 `npm.cmd` execFile에서 `spawn EINVAL`, `ctl smoke`는 OK 출력 뒤 종료 시 libuv assertion(exit 127). 자세한 내용 `doc/qa/BLOCKED.md`
+- BLOCKED-ENV-WIN, FIXING F1(FC-QA-008 수정 세션, 사용자 Windows PC), 2026-10-07: `ctl up`이 doctor의 `npm.cmd` execFile에서 `spawn EINVAL`, `ctl smoke`는 OK 출력 뒤 종료 시 libuv assertion(exit 127). 자세한 내용 `doc/qa/BLOCKED.md`. 해소: 2026-10-07, `5ab2a06`(사용자 승인 하에 `execText` win32 `.cmd` shell 실행, `ctl.mjs` `process.exitCode`로 자연 종료)
 
 중단 조건으로 멈추면 코드(`BLOCKED-...`), 단계, 날짜를 한 줄로 적는다. 자세한 내용은 `doc/qa/BLOCKED.md`에 쓴다. 해소되면 줄을 지우지 말고 "해소: <날짜>, <커밋>"을 덧붙인다.
 
@@ -159,3 +159,4 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | 발견 | 작업 브랜치 | 날짜(UTC) | 결과 |
 |---|---|---|---|
 | FC-QA-008 | fix/fc-qa-008-resize-capture-cleanup | 2026-10-07T04:47Z | blocked(F1, BLOCKED-ENV-WIN: Windows에서 ctl up·ctl smoke 종료 코드 실패. doc/qa/BLOCKED.md) |
+| FC-QA-008 | fix/fc-qa-008-resize-capture-cleanup | 2026-10-07T05:06Z | fixed(caa911f) — 하네스 Windows 수정 `5ab2a06` 뒤 F1부터 재개, F8 통과 |

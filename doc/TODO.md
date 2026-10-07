@@ -56,6 +56,25 @@
 - ⚠️ 마우스 취소는 `dragend`를 새로 마운트된 소스 요소에, 터치 이동·종료는 `document`에 직접 dispatch해서 검증함. 실제 브라우저의 이벤트 대상과 달라, 아래 문제가 검증에서 가려졌음
   - → 수정 후 **원본(분리된) 요소에 dispatch**하는 방식으로 재검증 (아래 섹션 검증 표)
 
+### QA 발견 수정 (run 01)
+
+> 발견 문서 [doc/qa/findings/](./qa/findings/), 결과 요약 [REPORT.md](./qa/run01-tier1/REPORT.md), 절차 [FIXING.md](./qa/FIXING.md)
+
+- [x] FC-QA-008 경계선 리사이즈가 포인터 캡처를 잃으면 body userSelect가 none으로 남고 그 Resizer를 다시 잡을 수 없다 — sev-1, `resize-capture-cleanup`, 수정 `caa911f`
+- [ ] FC-QA-001 드래그 미리보기가 드래그하지 않은 패널을 리마운트한다 — sev-2, `split-index-key`
+- [ ] FC-QA-002 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM에서 떼었다 다시 붙여 스크롤 위치를 잃게 하고 iframe은 다시 로드되게 한다 — sev-2, `keyed-reorder-reinsert`
+- [ ] FC-QA-003 패널 내용(remote의 칸반 카드)에서 시작한 네이티브 드래그가 패널 드래그로 처리된다 — sev-2, `foreign-dragstart-unguarded`
+- [ ] FC-QA-009 드롭 직전 마지막 dragover가 예약한 미리보기가 드래그가 끝난 뒤 실행돼 소스 패널의 shadow가 남는다 (stale preview) — sev-2, `raf-not-cancelled-on-drop`
+- [ ] FC-QA-010 경계선 드래그의 최소·최대 한계가 설정 px과 다르다 (자식 3개 split에서 상한이 약 2/3, 바깥으로 끌면 패널이 줄어듦) — sev-3, `resize-flex-conversion`
+- [ ] FC-QA-005 iframe 패널은 마우스 드래그의 드롭 대상이 되지 않는데 터치 드래그에서는 된다 (경로 불일치) — sev-3, `iframe-drop-target-mouse`
+
+사용자 결정 대기:
+
+- FC-QA-007 핸들 모드 터치 드래그가 문서와 달리 롱프레스 없이 8px 이동만으로 시작된다 — 코드(즉시 시작)와 문서(롱프레스 450ms) 중 어느 쪽이 의도인가
+- FC-QA-011 터치 ghost가 소스 패널을 통째로 복제해 iframe 문서를 한 번 더 로드하고, 테마 토큰·canvas·스크롤 위치를 잃은 사본을 보여 준다 — ghost가 부작용 없는 단순화된 표현이어도 되는가
+- FC-QA-012 핸들 없는 모드(drag=panel)에서 패널 안 슬라이더·텍스트 선택 드래그가 패널 드래그로 바뀐다 — 허용(문서로 핸들 모드 권장)인가, 라이브러리가 막아야 하는가
+- FC-QA-004 패널이 패널 드래그가 아닌 드래그의 drop 전파를 막고 dropEffect를 덮어쓴다 — 레이아웃이 패널 드래그가 아닌 네이티브 드래그에 투명해야 하는가
+
 ---
 
 ## 해결: 드래그 중 소스 DOM 교체로 종료 이벤트 유실

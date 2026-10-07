@@ -1,5 +1,7 @@
 # BLOCKED — BLOCKED-ENV-WIN (FIXING F1, FC-QA-008)
 
+> **해소: 2026-10-07, `5ab2a06`.** 사용자가 선택지 A(하네스 Windows 수정)를 승인했다. `execText`가 win32 `.cmd`를 shell로 실행하고 동기 예외를 잡으며, `ctl.mjs`는 `process.exitCode`로 자연 종료한다. 수정 뒤 `ctl up` exit 0, `ctl smoke` exit 0, `test smoke` 19 passed·1 skipped, 스파이크 S1·S3·S5·S6 통과. FC-QA-008 회귀 스펙은 변경 전후 모두 같은 단언(`userSelect` `"none"`)에서 예상대로 실패했다. 이어서 F1부터 재개해 FC-QA-008을 `caa911f`로 고쳤다. 아래는 중단 당시의 기록이다.
+
 - 작성: 2026-10-07T04:47Z
 - 작업 브랜치: fix/fc-qa-008-resize-capture-cleanup, 마지막 커밋: d303069 (`qa/mfa-lab`과 같음. `src/` 변경 없음)
 - 환경: 사용자 Windows PC (Windows 11 Enterprise 10.0.26200, x64), Node v24.18.0, npm 11.16.0, 저장소 경로 `C:\SSAFY\서산\floating-component`
