@@ -1,0 +1,587 @@
+{
+ "step": "03-after",
+ "url": "http://127.0.0.1:4300/?layout=workbench",
+ "lib": {
+  "source": "src",
+  "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+  "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+ },
+ "settle": {
+  "stable": true,
+  "reads": 2,
+  "ms": 234
+ },
+ "tree": {
+  "type": "split",
+  "direction": "horizontal",
+  "size": 1,
+  "children": [
+   {
+    "type": "panel",
+    "id": "nav",
+    "size": 1,
+    "componentKey": "nav",
+    "minWidth": 200,
+    "maxWidth": 200,
+    "draggable": false,
+    "droppable": false,
+    "resizable": false
+   },
+   {
+    "type": "split",
+    "direction": "vertical",
+    "size": 3,
+    "children": [
+     {
+      "type": "split",
+      "direction": "vertical",
+      "size": 1,
+      "children": [
+       {
+        "type": "panel",
+        "id": "orders",
+        "size": 1,
+        "componentKey": "orders",
+        "minWidth": 320
+       },
+       {
+        "type": "panel",
+        "id": "billing",
+        "size": 1,
+        "componentKey": "billing"
+       }
+      ]
+     },
+     {
+      "type": "panel",
+      "id": "board",
+      "size": 1,
+      "componentKey": "board"
+     },
+     {
+      "type": "split",
+      "direction": "horizontal",
+      "size": 1,
+      "children": [
+       {
+        "type": "panel",
+        "id": "telemetry",
+        "size": 1,
+        "componentKey": "telemetry"
+       },
+       {
+        "type": "panel",
+        "id": "telemetry-x",
+        "size": 1,
+        "componentKey": "telemetry-x"
+       }
+      ],
+      "minHeight": 160
+     }
+    ]
+   }
+  ]
+ },
+ "treeNotation": "H[nav,V[V[orders,billing],board,H[telemetry,telemetry-x]]]",
+ "treeVersion": 3,
+ "calls": [
+  {
+   "seq": 1,
+   "fn": "onMovePanel",
+   "args": [
+    "orders",
+    "billing",
+    "top",
+    0
+   ],
+   "treeVersionBefore": 0
+  },
+  {
+   "seq": 2,
+   "fn": "onMovePanel",
+   "args": [
+    "board",
+    "telemetry",
+    "top",
+    1
+   ],
+   "treeVersionBefore": 1
+  },
+  {
+   "seq": 3,
+   "fn": "onMovePanel",
+   "args": [
+    "board",
+    "telemetry",
+    "top",
+    1
+   ],
+   "treeVersionBefore": 2
+  }
+ ],
+ "dom": {
+  "domTree": "H[nav,V[V[orders,billing],board,H[telemetry,telemetry-x]]]",
+  "draggingPanelId": null,
+  "panels": {
+   "nav": {
+    "slot": "nav",
+    "rect": {
+     "x": 12,
+     "y": 52,
+     "width": 200,
+     "height": 736
+    },
+    "draggable": false,
+    "droppable": false,
+    "shadow": false,
+    "elementSeq": 1
+   },
+   "orders": {
+    "slot": "orders",
+    "rect": {
+     "x": 212,
+     "y": 52,
+     "width": 1056,
+     "height": 116
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 12
+   },
+   "billing": {
+    "slot": "billing",
+    "rect": {
+     "x": 212,
+     "y": 176,
+     "width": 1056,
+     "height": 116
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 13
+   },
+   "board": {
+    "slot": "board",
+    "rect": {
+     "x": 212,
+     "y": 300,
+     "width": 1056,
+     "height": 240
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 14
+   },
+   "telemetry": {
+    "slot": "telemetry",
+    "rect": {
+     "x": 212,
+     "y": 548,
+     "width": 524,
+     "height": 240
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 15
+   },
+   "telemetry-x": {
+    "slot": "telemetry-x",
+    "rect": {
+     "x": 744,
+     "y": 548,
+     "width": 524,
+     "height": 240
+    },
+    "draggable": false,
+    "droppable": true,
+    "shadow": false,
+    "elementSeq": 16
+   }
+  },
+  "resizerCount": 4,
+  "resizers": [
+   {
+    "rect": {
+     "x": 212,
+     "y": 168,
+     "width": 1056,
+     "height": 8
+    },
+    "axis": "y"
+   },
+   {
+    "rect": {
+     "x": 212,
+     "y": 292,
+     "width": 1056,
+     "height": 8
+    },
+    "axis": "y"
+   },
+   {
+    "rect": {
+     "x": 212,
+     "y": 540,
+     "width": 1056,
+     "height": 8
+    },
+    "axis": "y"
+   },
+   {
+    "rect": {
+     "x": 736,
+     "y": 548,
+     "width": 8,
+     "height": 240
+    },
+    "axis": "x"
+   }
+  ],
+  "ghosts": [],
+  "bodyUserSelect": ""
+ },
+ "counters": {
+  "frames": {
+   "nav": {
+    "kind": "local",
+    "frameMounts": 1,
+    "frameUnmounts": 0,
+    "state": "ready"
+   },
+   "orders": {
+    "kind": "same-tree",
+    "frameMounts": 3,
+    "frameUnmounts": 2,
+    "state": "ready"
+   },
+   "board": {
+    "kind": "same-tree",
+    "frameMounts": 3,
+    "frameUnmounts": 2,
+    "state": "ready"
+   },
+   "billing": {
+    "kind": "mount",
+    "frameMounts": 3,
+    "frameUnmounts": 2,
+    "state": "ready"
+   },
+   "telemetry": {
+    "kind": "iframe",
+    "frameMounts": 3,
+    "frameUnmounts": 2,
+    "state": "ready",
+    "mirror": {
+     "loads": 3,
+     "docIds": [
+      "bad39617-0851-4d23-b369-634ff567299f",
+      "f59b7811-1544-443a-a0fb-17a67e39d71b",
+      "770d7841-b00d-43d5-929b-4a8872a39665"
+     ],
+     "lastLoadedAt": 1791342640493
+    }
+   },
+   "telemetry-x": {
+    "kind": "iframe",
+    "frameMounts": 3,
+    "frameUnmounts": 2,
+    "state": "ready",
+    "mirror": {
+     "loads": 3,
+     "docIds": [
+      "301c7156-4ea3-45d6-bd2e-9383e75c29ac",
+      "b7253d22-d784-4f9a-830a-0b73b7e73a81",
+      "51475d37-82f5-4b3e-ac44-865a8993b413"
+     ],
+     "lastLoadedAt": 1791342640487
+    }
+   }
+  },
+  "mfe": {
+   "billing": {
+    "slot": "billing",
+    "kind": "mount",
+    "mounts": 3,
+    "unmounts": 2,
+    "instanceSeq": 3,
+    "reactVersion": "19.2.4",
+    "reactSame": false,
+    "remote": "billing",
+    "build": "20261007T013114Z-f6e7",
+    "mountCalls": 3,
+    "rootsAlive": 1,
+    "unmountCalls": 2
+   },
+   "board": {
+    "slot": "board",
+    "kind": "same-tree",
+    "mounts": 3,
+    "unmounts": 2,
+    "instanceSeq": 3,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "board",
+    "build": "20261007T021650Z-4e0b",
+    "dnd": {
+     "cardMoves": 0,
+     "zoneDrops": 0,
+     "copyDrops": 0,
+     "lastDragend": null,
+     "lastTypes": []
+    }
+   },
+   "orders": {
+    "slot": "orders",
+    "kind": "same-tree",
+    "mounts": 3,
+    "unmounts": 2,
+    "instanceSeq": 3,
+    "reactVersion": "19.2.4",
+    "reactSame": true,
+    "remote": "orders",
+    "build": "20261007T013107Z-6373"
+   }
+  },
+  "iframes": {
+   "telemetry": {
+    "loads": 3,
+    "docId": "770d7841-b00d-43d5-929b-4a8872a39665",
+    "frameUrl": "http://127.0.0.1:4304/?slot=telemetry&parent=http%3A%2F%2F127.0.0.1%3A4300"
+   },
+   "telemetry-x": {
+    "loads": 3,
+    "docId": "51475d37-82f5-4b3e-ac44-865a8993b413",
+    "frameUrl": "http://localhost:4304/?slot=telemetry-x&parent=http%3A%2F%2F127.0.0.1%3A4300"
+   }
+  },
+  "domMoves": {},
+  "domLog": [
+   {
+    "seq": 1,
+    "t": 107.09999999962747,
+    "panelId": "nav",
+    "kind": "added",
+    "elementSeq": 1
+   },
+   {
+    "seq": 2,
+    "t": 107.09999999962747,
+    "panelId": "orders",
+    "kind": "added",
+    "elementSeq": 2
+   },
+   {
+    "seq": 3,
+    "t": 107.09999999962747,
+    "panelId": "board",
+    "kind": "added",
+    "elementSeq": 3
+   },
+   {
+    "seq": 4,
+    "t": 107.09999999962747,
+    "panelId": "billing",
+    "kind": "added",
+    "elementSeq": 4
+   },
+   {
+    "seq": 5,
+    "t": 107.19999999925494,
+    "panelId": "telemetry",
+    "kind": "added",
+    "elementSeq": 5
+   },
+   {
+    "seq": 6,
+    "t": 107.19999999925494,
+    "panelId": "telemetry-x",
+    "kind": "added",
+    "elementSeq": 6
+   },
+   {
+    "seq": 7,
+    "t": 1207,
+    "panelId": "orders",
+    "kind": "removed",
+    "elementSeq": 2
+   },
+   {
+    "seq": 8,
+    "t": 1207,
+    "panelId": "board",
+    "kind": "removed",
+    "elementSeq": 3
+   },
+   {
+    "seq": 9,
+    "t": 1207,
+    "panelId": "billing",
+    "kind": "removed",
+    "elementSeq": 4
+   },
+   {
+    "seq": 10,
+    "t": 1207,
+    "panelId": "telemetry",
+    "kind": "removed",
+    "elementSeq": 5
+   },
+   {
+    "seq": 11,
+    "t": 1207,
+    "panelId": "telemetry-x",
+    "kind": "removed",
+    "elementSeq": 6
+   },
+   {
+    "seq": 12,
+    "t": 1207.0999999996275,
+    "panelId": "board",
+    "kind": "remounted",
+    "elementSeq": 7
+   },
+   {
+    "seq": 13,
+    "t": 1207.0999999996275,
+    "panelId": "orders",
+    "kind": "remounted",
+    "elementSeq": 8
+   },
+   {
+    "seq": 14,
+    "t": 1207.0999999996275,
+    "panelId": "billing",
+    "kind": "remounted",
+    "elementSeq": 9
+   },
+   {
+    "seq": 15,
+    "t": 1207.0999999996275,
+    "panelId": "telemetry",
+    "kind": "remounted",
+    "elementSeq": 10
+   },
+   {
+    "seq": 16,
+    "t": 1207.0999999996275,
+    "panelId": "telemetry-x",
+    "kind": "remounted",
+    "elementSeq": 11
+   },
+   {
+    "seq": 17,
+    "t": 3007.7999999998137,
+    "panelId": "telemetry",
+    "kind": "removed",
+    "elementSeq": 10
+   },
+   {
+    "seq": 18,
+    "t": 3007.7999999998137,
+    "panelId": "telemetry-x",
+    "kind": "removed",
+    "elementSeq": 11
+   },
+   {
+    "seq": 19,
+    "t": 3007.7999999998137,
+    "panelId": "board",
+    "kind": "removed",
+    "elementSeq": 7
+   },
+   {
+    "seq": 20,
+    "t": 3007.7999999998137,
+    "panelId": "orders",
+    "kind": "removed",
+    "elementSeq": 8
+   },
+   {
+    "seq": 21,
+    "t": 3007.7999999998137,
+    "panelId": "billing",
+    "kind": "removed",
+    "elementSeq": 9
+   },
+   {
+    "seq": 22,
+    "t": 3007.7999999998137,
+    "panelId": "orders",
+    "kind": "remounted",
+    "elementSeq": 12
+   },
+   {
+    "seq": 23,
+    "t": 3007.7999999998137,
+    "panelId": "billing",
+    "kind": "remounted",
+    "elementSeq": 13
+   },
+   {
+    "seq": 24,
+    "t": 3007.7999999998137,
+    "panelId": "board",
+    "kind": "remounted",
+    "elementSeq": 14
+   },
+   {
+    "seq": 25,
+    "t": 3007.7999999998137,
+    "panelId": "telemetry",
+    "kind": "remounted",
+    "elementSeq": 15
+   },
+   {
+    "seq": 26,
+    "t": 3007.7999999998137,
+    "panelId": "telemetry-x",
+    "kind": "remounted",
+    "elementSeq": 16
+   }
+  ]
+ },
+ "content": {
+  "orders": {
+   "input": "",
+   "counter": "count 0",
+   "scrollTop": 0,
+   "focused": false
+  },
+  "billing": {
+   "input": "",
+   "counter": "count 0",
+   "scrollTop": 0,
+   "focused": false
+  },
+  "board": {
+   "input": "",
+   "counter": "count 0",
+   "scrollTop": 0,
+   "focused": false
+  },
+  "telemetry": {
+   "input": "",
+   "counter": null,
+   "scrollTop": 0,
+   "focused": false
+  },
+  "telemetry-x": {
+   "input": "",
+   "counter": null,
+   "scrollTop": 0,
+   "focused": false
+  }
+ },
+ "activeTestid": null,
+ "console": [],
+ "pageErrors": [],
+ "documentRequests": {
+  "http://127.0.0.1:4300": 1,
+  "http://127.0.0.1:4304": 3,
+  "http://localhost:4304": 3
+ }
+}

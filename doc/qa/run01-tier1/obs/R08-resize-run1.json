@@ -1,0 +1,75 @@
+{
+  "run": "run01-tier1",
+  "runNo": 1,
+  "scenario": "R08",
+  "case": "R08-resize",
+  "expected": "보이는 경계선을 끌면 그 양쪽 패널이 변한다",
+  "predicted": "렌더된(미리보기) 트리의 `path`가 커밋된 트리에 적용돼 엉뚱한 쌍이 변하거나(`treeVersion` +1인데 끈 경계선 양쪽 rect는 그대로) 경로가 없어 무시된다(`treeVersion` 그대로)",
+  "observed": "not-run(R08-stale 미재현)",
+  "verdict": "as-ideal",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": true,
+      "detail": "no data-dragging-panel-id",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": true,
+      "detail": "userSelect restored",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[p-a,V[p-b,p-c],p-d]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (bare-0,bare-1,bare-2,bare-3)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r08-census-bare-stale/R08-resize-run1"
+  ]
+}

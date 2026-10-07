@@ -1,13 +1,13 @@
 ---
 id: FC-QA-009
 title: 드롭 직전 마지막 dragover가 예약한 미리보기가 드래그가 끝난 뒤 실행돼 소스 패널의 shadow가 남는다 (stale preview)
-severity: sev-3
+severity: sev-2
 class: library-bug
 status: open
 confidence: high
-repro_rate: 2/2
+repro_rate: 4/4
 found_in: run01-tier1
-variants: [board]
+variants: [board, ext-chip-commit]
 input: mouse
 browser: chromium-153 headless-shell
 playwright: 1.63.0
@@ -93,3 +93,6 @@ fix_commit: none
 
 - 시나리오: R18(탐색 #13 → `explore/r18-x01-header-release-after-root-preview.spec.ts`), R08(예정). 로그 `doc/qa/run01-tier1/obs/R18-log.json` n=13.
 - 가설: H-RAF-STALE
+- 2026-10-07 R08(`?layout=census` bare, 브리프의 `immediate` 유도): 0/5 × 2 — 미리보기 리플로로 커서 아래 요소가 바뀌어 `mouse.up`의 dragover가 미뤄지고(HARNESS 부작용 #17) drop 없이 취소된다. 이 환경에서 그 유도 경로는 stale을 만들지 못한다. `obs/R08-stale-run{1,2}.json`.
+- 2026-10-07 R08 대체 유도(R18-x01 경로, `obs/R08-chip-alt-run{1,2}.json`, 2/2): stale 상태에서 **패널 드래그가 아닌** ext-chip(`application/x-harbor-chip`, `data-dragging-panel-id` 없음)을 orders 위에 놓으면 패널 `handleDrop`이 `isPreviewActive`로 통과하고 루트 `onDrop`이 stale 미리보기를 커밋한다: `onMovePanel('board','telemetry','top',1)` 1건, `treeVersion` 2→3. 이 경우 미리보기 트리가 커밋 트리와 같아 화면은 그대로지만, 호스트는 사용자가 하지 않은 이동 콜백을 받는다. 대조(stale 없음, `obs/R08-chip-control-run{1,2}.json`): `onMovePanel` 0건, drop `stopped`.
+- 2026-10-07 심각도 sev-3 → **sev-2**: 분류 기본값("sev-2(`R08-chip`의 stale 커밋이 관찰되면)"). 증거 `R08c-03-after.png`.

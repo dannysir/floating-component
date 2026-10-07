@@ -7,7 +7,7 @@ status: needs-user-confirmation
 confidence: high
 repro_rate: 2/2
 found_in: run01-tier1
-variants: [board, board-local]
+variants: [board, board-local, ext-chip]
 input: mouse
 browser: chromium-153 headless-shell
 playwright: 1.63.0
@@ -92,3 +92,4 @@ fix_commit: none
 
 - 시나리오: R09, 관찰 기록: doc/qa/run01-tier1/obs/R09-board-run1.json, R09-standalone-run1.json (run2도 같다)
 - 관련 발견: FC-QA-003(같은 드래그가 패널 드래그로 등록됨), 가설: H-DROP-HIJACK
+- 2026-10-07 R08 대조(`?layout=census` bare, stale 없음, `obs/R08-chip-control-run{1,2}.json`): 셸의 ext-chip(패널 밖에서 시작한 네이티브 드래그)을 `p-c` 위에 놓으면 `drop`이 capture만 찍히고 `stopped`(패널 `handleDrop`의 `stopPropagation`), `dragend dropEffect 'move'`. 패널 내용뿐 아니라 레이아웃 밖에서 들어온 드래그에도 같다.

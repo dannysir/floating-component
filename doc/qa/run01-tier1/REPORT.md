@@ -121,9 +121,11 @@
 | R04 (사다리) | census / a=control-iframe (`iframeShield=1`) | hover + Esc | mouse | fail(FC-QA-002) | as-predicted (telemetry와 같음 → 컨테이너 고유) | obs/R04-ladder-control-iframe-run{1,2}.json |
 | R06 | row3 / b=telemetry | (a) p-c → p-a 왼쪽: hover + Esc, hover + drop | mouse | fail(FC-QA-002) | as-predicted (리마운트 0. hover에서 p-a·p-b moves +1, telemetry `loads` +1(hover 때 재로드), Esc는 소스만 moves +1, 드롭 추가 없음, 커밋 `H[p-c,p-a,p-b]`) | obs/R06-a-run{1,2}.json |
 | R06 | row3 / b=telemetry | (b) 새 페이지, p-a → p-c 오른쪽: hover + Esc, hover + drop | mouse | fail(FC-QA-002) | as-predicted (hover는 소스만 moves +1, Esc에서 p-b·p-c moves +1·telemetry `loads` +1(취소 때 재로드), 드롭 추가 없음, 커밋 `H[p-b,p-c,p-a]`) | obs/R06-b-run{1,2}.json |
-| R08 | census / bare | (a) stale preview 강제 (다른 패널 위에서 immediate 릴리스) | mouse | not-run | | |
-| R08 | census / bare | (b) stale 상태에서 ext-chip을 패널에 놓기 | mouse | not-run | | |
-| R08 | census / bare | (c) 새 페이지, stale 상태에서 경계선 리사이즈 | mouse | not-run | | |
+| R08 | census / bare | (a) stale preview 강제 (다른 패널 위에서 immediate 릴리스) | mouse | pass (not-reproduced 0/5 ×2) | 시그니처 없음: 매번 `under 'outside'`, drop 없이 취소, I1~I7 통과. 원인은 하네스 부작용 #17(미리보기 리플로로 커서 아래 요소가 바뀌어 release의 dragover가 미뤄짐). stale 자체는 R18-x01 경로로 재현됨 → FC-QA-009 | obs/R08-stale-run{1,2}.json |
+| R08 | census / bare | (b) stale 상태에서 ext-chip을 패널에 놓기 | mouse | not-run(R08-stale 미재현) | 브리프 규칙대로. 아래 대체 유도 행 참고 | obs/R08-chip-run{1,2}.json |
+| R08 (대조) | census / bare, stale 없음 | ext-chip을 p-c에 놓기 | mouse | fail(FC-QA-004) | as-predicted (`onMovePanel` 0건, drop capture만 `stopped`, `dragend move`) | obs/R08-chip-control-run{1,2}.json |
+| R08 (대체 유도) | workbench, R18-x01 경로로 stale | ext-chip을 orders에 놓기 | mouse | fail(FC-QA-009) | as-predicted (**패널 드래그 없이 `onMovePanel('board','telemetry','top',1)` 1건, `treeVersion` +1**, 이후 I1~I7 통과) → FC-QA-009 sev-2 | obs/R08-chip-alt-run{1,2}.json |
+| R08 | census / bare | (c) 새 페이지, stale 상태에서 경계선 리사이즈 | mouse | not-run(R08-stale 미재현) | 대체 유도 경로의 stale 미리보기는 커밋 트리와 같은 모양이라 경로 불일치를 볼 수 없어 대체 실행하지 않음 | obs/R08-resize-run{1,2}.json |
 | R11 | row3 / a=board | copy 소스 → copy 영역, `dragend`의 `dropEffect` | mouse | not-run | | |
 | R11 | row3 / a=board (`lock=p-a:draggable`) | 같은 동작 | mouse | not-run | | |
 | R11 | board 단독 페이지 | 같은 동작 | mouse | not-run | | |
@@ -160,7 +162,7 @@
 | [FC-QA-005](../findings/FC-QA-005-iframe-panel-not-mouse-drop-target.md) | iframe 패널은 마우스 드롭 대상이 되지 않는데 터치에서는 된다 (경로 불일치) | sev-3 | library-bug | open | 2/2 | R12 | iframe-drop-target-mouse |
 | [FC-QA-007](../findings/FC-QA-007-handle-touch-starts-without-long-press.md) | 핸들 모드 터치 드래그가 문서와 달리 롱프레스 없이 8px 이동으로 시작 | sev-4 | spec-question | needs-user-confirmation | 2/2 | S7a·R12·R14 | docs-touch-handle-start |
 | [FC-QA-008](../findings/FC-QA-008-resize-capture-loss-leaks-user-select.md) | 경계선 리사이즈가 포인터 캡처를 잃으면 userSelect가 none으로 남고 그 Resizer를 다시 잡을 수 없다 | sev-1 | library-bug | open | 2/2 | R17 | resize-capture-cleanup |
-| [FC-QA-009](../findings/FC-QA-009-stale-preview-after-drop.md) | 드롭 직전 dragover의 rAF가 드래그 뒤 실행돼 소스 shadow가 남는다 (stale preview) | sev-3 | library-bug (`harness_amplified`) | open | 2/2 | R18 | raf-not-cancelled-on-drop |
+| [FC-QA-009](../findings/FC-QA-009-stale-preview-after-drop.md) | 드롭 직전 dragover의 rAF가 드래그 뒤 실행돼 소스 shadow가 남고, 다음 비패널 드롭이 그 미리보기를 커밋한다 (stale preview) | sev-2 | library-bug (`harness_amplified`) | open | 4/4 | R18, R08 | raf-not-cancelled-on-drop |
 | [FC-QA-010](../findings/FC-QA-010-resize-limit-px-mismatch.md) | 경계선 드래그의 최소·최대 한계가 설정 px과 다르다(자식 3개 split 상한 약 2/3) | sev-3 | library-bug | open | 2/2 | R19 | resize-flex-conversion |
 | [FC-QA-006](../findings/FC-QA-006-oopif-release-no-dragend-harness.md) | (하네스) OOPIF 위 마우스 릴리스에서 dragend가 오지 않고 CDP 드래그 세션이 멈춘다 | sev-4 | harness-artifact | open | 2/2 | R12 | harness-cdp-drag-oopif |
 

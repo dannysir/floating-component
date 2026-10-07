@@ -1,0 +1,830 @@
+[
+ {
+  "seq": 69,
+  "eid": 36,
+  "t": 6030.799999999814,
+  "wall": 1791342643453,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 478.8828125,
+  "y": 19.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 70,
+  "eid": 36,
+  "t": 6030.899999999441,
+  "wall": 1791342643453,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 478.8828125,
+  "y": 19.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 71,
+  "eid": 37,
+  "t": 6030.899999999441,
+  "wall": 1791342643453,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 478,
+  "y": 19
+ },
+ {
+  "seq": 72,
+  "eid": 37,
+  "t": 6030.899999999441,
+  "wall": 1791342643453,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 478,
+  "y": 19
+ },
+ {
+  "seq": 73,
+  "eid": 38,
+  "t": 6043.5,
+  "wall": 1791342643465,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 478.8828125,
+  "y": 19.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 74,
+  "eid": 38,
+  "t": 6043.699999999255,
+  "wall": 1791342643465,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 478.8828125,
+  "y": 19.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 75,
+  "eid": 39,
+  "t": 6043.699999999255,
+  "wall": 1791342643465,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "mousedown",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 478,
+  "y": 19
+ },
+ {
+  "seq": 76,
+  "eid": 39,
+  "t": 6043.699999999255,
+  "wall": 1791342643465,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "mousedown",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 478,
+  "y": 19
+ },
+ {
+  "seq": 77,
+  "eid": 40,
+  "t": 6061.0999999996275,
+  "wall": 1791342643483,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 481.8828125,
+  "y": 19.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 78,
+  "eid": 40,
+  "t": 6061.299999999814,
+  "wall": 1791342643483,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 481.8828125,
+  "y": 19.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 79,
+  "eid": 41,
+  "t": 6061.299999999814,
+  "wall": 1791342643483,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 481,
+  "y": 19
+ },
+ {
+  "seq": 80,
+  "eid": 41,
+  "t": 6061.399999999441,
+  "wall": 1791342643483,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 481,
+  "y": 19
+ },
+ {
+  "seq": 81,
+  "eid": 42,
+  "t": 6077.699999999255,
+  "wall": 1791342643500,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 484.8828125,
+  "y": 19.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 82,
+  "eid": 42,
+  "t": 6077.899999999441,
+  "wall": 1791342643500,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 484.8828125,
+  "y": 19.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 83,
+  "eid": 43,
+  "t": 6077.899999999441,
+  "wall": 1791342643500,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 484,
+  "y": 19
+ },
+ {
+  "seq": 84,
+  "eid": 43,
+  "t": 6078,
+  "wall": 1791342643500,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 484,
+  "y": 19
+ },
+ {
+  "seq": 85,
+  "eid": 44,
+  "t": 6078.199999999255,
+  "wall": 1791342643500,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragstart",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 478,
+  "y": 19,
+  "dropEffect": "none",
+  "effectAllowed": "uninitialized",
+  "types": []
+ },
+ {
+  "seq": 86,
+  "eid": 44,
+  "t": 6078.299999999814,
+  "wall": 1791342643500,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragstart",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 478,
+  "y": 19,
+  "dropEffect": "none",
+  "effectAllowed": "uninitialized",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 87,
+  "eid": 45,
+  "t": 6078.5999999996275,
+  "wall": 1791342643500,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 88,
+  "eid": 45,
+  "t": 6078.5999999996275,
+  "wall": 1791342643500,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 89,
+  "eid": 46,
+  "t": 6082.199999999255,
+  "wall": 1791342643504,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 484,
+  "y": 19,
+  "dropEffect": "copy",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 90,
+  "eid": 46,
+  "t": 6082.299999999814,
+  "wall": 1791342643504,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 484,
+  "y": 19,
+  "dropEffect": "copy",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 91,
+  "eid": 47,
+  "t": 6381.399999999441,
+  "wall": 1791342643803,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "body-orders",
+   "panelId": "orders",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "copy",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 92,
+  "eid": 47,
+  "t": 6381.5,
+  "wall": 1791342643803,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "body-orders",
+   "panelId": "orders",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "copy",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 93,
+  "eid": 48,
+  "t": 6381.5,
+  "wall": 1791342643803,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragleave",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "none",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 94,
+  "eid": 48,
+  "t": 6381.5,
+  "wall": 1791342643803,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragleave",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "none",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 95,
+  "eid": 49,
+  "t": 6393.899999999441,
+  "wall": 1791342643816,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "body-orders",
+   "panelId": "orders",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "copy",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 96,
+  "eid": 49,
+  "t": 6394,
+  "wall": 1791342643816,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "body-orders",
+   "panelId": "orders",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "move",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 97,
+  "eid": 50,
+  "t": 6601.5999999996275,
+  "wall": 1791342644023,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "body-orders",
+   "panelId": "orders",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "copy",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 98,
+  "eid": 50,
+  "t": 6601.799999999814,
+  "wall": 1791342644024,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "body-orders",
+   "panelId": "orders",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "move",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 99,
+  "eid": 51,
+  "t": 6602.399999999441,
+  "wall": 1791342644024,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "drop",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "body-orders",
+   "panelId": "orders",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "move",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 100,
+  "eid": 51,
+  "t": 6604.199999999255,
+  "wall": 1791342644026,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "drop",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "body-orders",
+   "panelId": "orders",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "move",
+  "effectAllowed": "all",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 101,
+  "eid": 52,
+  "t": 6604.899999999441,
+  "wall": 1791342644027,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragend",
+  "phase": "capture",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "move",
+  "effectAllowed": "uninitialized",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 102,
+  "eid": 52,
+  "t": 6605,
+  "wall": 1791342644027,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragend",
+  "phase": "target",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "move",
+  "effectAllowed": "uninitialized",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ },
+ {
+  "seq": 103,
+  "eid": 52,
+  "t": 6605.199999999255,
+  "wall": 1791342644027,
+  "frame": "http://127.0.0.1:4300/?layout=workbench",
+  "top": true,
+  "type": "dragend",
+  "phase": "bubble",
+  "target": {
+   "tag": "SPAN",
+   "testid": "ext-chip",
+   "panelId": null,
+   "droppable": null
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 740,
+  "y": 92,
+  "dropEffect": "move",
+  "effectAllowed": "uninitialized",
+  "types": [
+   "application/x-harbor-chip"
+  ]
+ }
+]
