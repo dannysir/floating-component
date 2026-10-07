@@ -247,8 +247,9 @@ fix_commit: none
 
 - 가설: [../mfa/HYPOTHESES.md](../mfa/HYPOTHESES.md) H-REMOUNT(이 발견), H-REINSERT(DOM 재삽입, 별도 발견), H-DRAGEND(소스 리마운트 때문에 생긴 종료 이벤트 문제)
 - 결정: D3(넓은 미리보기 리마운트는 결함), D3a(리마운트 없는 재삽입도 결함, 별도 발견), D3b(소스 자신의 리마운트·재삽입은 하위 관찰) — [../README.md](../README.md) 결정 로그
-- 시나리오: R01, R02, R03, R05 — [../mfa/BRIEF-2-inspect.md](../mfa/BRIEF-2-inspect.md) 「시나리오 표」, 「기대와 예측」
+- 시나리오: R01, R02, R03, R05, R07, R14, R16, R17, R18 — [../mfa/BRIEF-2-inspect.md](../mfa/BRIEF-2-inspect.md) 「시나리오 표」, 「기대와 예측」
 - 기존 기록: [../../TODO.md](../../TODO.md) "해결: 드래그 중 소스 DOM 교체로 종료 이벤트 유실" — 소스 패널의 리마운트와 그로 인한 `dragend` 유실 수정(`ea25ff7`). 드래그하지 않은 패널의 리마운트는 거기에 적혀 있지 않다
 - 설계 원칙: `CLAUDE.md` "SplitNode에 ID 추가하지 않음 — path(number[])로 식별", [../../API.ko.md](../../API.ko.md) "설계 노트"
 - 수정 절차: [../FIXING.md](../FIXING.md)
 - 2026-10-07 run 01: R01에서 관측, `status: open`. 관찰 기록 `doc/qa/run01-tier1/obs/R01-*.json`, 회귀 스펙 `mfa-lab/e2e/regression/fc-qa-001-preview-remount-non-dragged-panels.spec.ts`(케이스 (a)·(b) 모두 "예상대로 실패": (a) `control-b frameMounts`, (b) `control-a frameMounts` 단언에서 실패)
+- 2026-10-07 R18 탐색(마우스 22회·터치 10회, `doc/qa/run01-tier1/obs/R18-log.json`): hover·커밋·취소(Resizer·상단 바 위 릴리스, touchCancel 포함)마다 드래그하지 않은 패널의 리마운트가 같은 메커니즘으로 반복된다. Esc 취소 직후 새 드래그(#11)는 한 제스처 구간에 frame +3까지 누적. 새 종류의 리마운트는 없음.
