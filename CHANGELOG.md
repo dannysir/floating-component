@@ -6,7 +6,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.6.0] - 2026-10-07
+## [1.0.0] - 2026-10-07
+
+First stable release. With tree layout, border resize, drag and drop, serialization, size constraints, touch, and panel locks in place, this milestone is marked as 1.0.0. From this version on, breaking changes to the public API only ship in major versions. Upgrading from 0.5.x requires no code changes (no breaking changes).
 
 ### Added
 

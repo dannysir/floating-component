@@ -12,7 +12,9 @@ Tree-based resizable and reorderable panel layout for React. Split panels horizo
 
 ---
 
-## What's New (0.6.0)
+## What's New (1.0.0)
+
+First stable release — from here on, breaking changes to the public API only ship in major versions. Upgrading from 0.5.x requires no code changes.
 
 - Panel lock options `draggable`/`droppable`/`resizable` — block dragging, dropping, and border resizing per panel (e.g. a fixed sidebar). Over a non-droppable panel a "can't drop" indicator is shown and releasing cancels the move
 - `movePanel`/`resizeBorder` honor locks — violating calls are ignored with a dev-mode warning
