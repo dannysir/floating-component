@@ -4,7 +4,7 @@ import { useState } from 'react';
 import type { PanelProps } from '@harbor/contract';
 import { createProbe } from '@harbor/contract';
 import { App as BillingApp } from '@twin/billing';          // B1-04
-// import { Panel as OrdersPanel } from '@twin/orders';     // B1-06
+import { Panel as OrdersPanel } from '@twin/orders';        // B1-06
 // import { Panel as BoardPanel } from '@twin/board';       // B1-07
 
 // 부모(래퍼)의 useState 초기화가 자식의 것보다 먼저 실행된다. 같은 번들(shell) 안이므로 contract의 probes Map도 하나다.
@@ -18,10 +18,10 @@ export const BillingTwin = (p: PanelProps) => {
 };
 
 // B1-06
-// export const OrdersTwin = (p: PanelProps) => {
-//   useState(() => createProbe(p.slot, localMeta('orders')));
-//   return <OrdersPanel {...p} />;
-// };
+export const OrdersTwin = (p: PanelProps) => {
+  useState(() => createProbe(p.slot, localMeta('orders')));
+  return <OrdersPanel {...p} />;
+};
 
 // B1-07
 // export const BoardTwin = (p: PanelProps) => {

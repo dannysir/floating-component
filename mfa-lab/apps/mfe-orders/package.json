@@ -1,0 +1,13 @@
+{
+  "name": "@harbor/mfe-orders",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": { "build": "vite build", "preview": "vite preview" },
+  "dependencies": { "react": "19.2.4", "react-dom": "19.2.4" },
+  "devDependencies": {
+    "vite": "7.3.6",
+    "@vitejs/plugin-react": "5.1.2",
+    "@module-federation/vite": "1.23.0"
+  }
+}
