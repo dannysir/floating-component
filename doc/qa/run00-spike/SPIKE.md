@@ -45,7 +45,7 @@
 | S2 | 통과 | 1 | 97d303d | hover `H[nav,V[terminal,output],editor]` + editor shadow. nav 위로 teleport 뒤 `settled` 릴리스: nav의 bubble dragover `dropEffect: none`, `drop` 없음, `dragleave(nav)` + `dragend(editor, dropEffect none)`. `onMovePanel` 0건, 트리·`treeVersion` 불변, I1~I7 통과 |
 | S3 | 통과 | 1 | 97d303d | hover `H[nav,terminal,editor,output]`, 미리보기가 소스 `terminal`을 리마운트(`domLog` remounted). Esc 뒤 `dragend`는 window에 없고 원본 노드에 건 리스너에만 `phase: target, isConnected: false, isTrusted: true`로 찍혔다. `onMovePanel` 0건, 트리 불변, I1~I7 통과 |
 | S4 | 통과 | 1 | 97d303d | S3의 hover 뒤 nav 위 `settled` 릴리스: `drop` 없음, `dragend`는 분리된 원본에만(`isConnected: false`). 트리 불변, I1~I7 통과 |
-| S5 | 요구대로 실패 | 1 | (B1-03c 커밋) | `:4390` `lib.source = npm051`. `fc-051/dist/index.js`를 직접 열어 루트의 `onDragEnd: () => L()`가 있고 원본 노드 리스너가 없음을 확인. 전제: hover `H[nav,terminal,editor,output]`, 소스 `terminal` 리마운트, 드래그 중 I1·I2 선택자가 상태를 잡음. Esc 뒤 `dragend`는 분리된 원본에만(`isConnected: false`) → **I1 실패(`data-dragging-panel-id=terminal` 잔존), I2 실패(terminal shadow 잔존)**, I5도 실패. I3·I4·I6·I7 통과 |
+| S5 | 요구대로 실패 | 1 | 69e663b | `:4390` `lib.source = npm051`. `fc-051/dist/index.js`를 직접 열어 루트의 `onDragEnd: () => L()`가 있고 원본 노드 리스너가 없음을 확인. 전제: hover `H[nav,terminal,editor,output]`, 소스 `terminal` 리마운트, 드래그 중 I1·I2 선택자가 상태를 잡음. Esc 뒤 `dragend`는 분리된 원본에만(`isConnected: false`) → **I1 실패(`data-dragging-panel-id=terminal` 잔존), I2 실패(terminal shadow 잔존)**, I5도 실패. I3·I4·I6·I7 통과 |
 | S6 | 미실행 | | | |
 | S7a | 미실행 | | | |
 | S7b | 미실행 | | | |
