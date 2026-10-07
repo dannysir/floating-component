@@ -134,6 +134,7 @@ fix_commit: none
 
 - 예측과 같다(`as-predicted`, 2/2). 커밋 없음: `onMovePanel` 0건, 트리 불변.
 - 불변식 I1~I7: Esc 뒤 전부 통과. `dragend`는 연결된 원본 노드(capture/target/bubble 모두 `isConnected: true`).
+- **R02** (같은 hover 뒤 `overShadow` 드롭, `R02-run{1,2}`): `p-b`·`p-c` 누적 frame +1 / content +1(hover 분만), 커밋 시점 추가 변화 없음. 커밋 트리 `H[p-d,p-a,V[p-b,p-c]]` = 미리보기, `onMovePanel('p-d','p-a','left',1)` 1건, `dragend.dropEffect = move`. 예측대로(2/2).
 - 대조(bare, `R01-bare-run{1,2}`): `bare-1`·`bare-2` 내용 마운트 hover +1, Esc 뒤 +2. `bare-0` reinserted. 라이브러리만으로 재현된다.
 - 스크린샷 `02-mid.png`(직접 열어 확인): `control-d`가 점선·반투명(shadow)으로 맨 왼쪽, `control-b`·`control-c` 헤더 배지 `f2 c2`(로드 1 + 리마운트 1)와 빈 입력·`count 0`, `control-a`는 입력값 유지·목록이 맨 위(scrollTop 0).
 

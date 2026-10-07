@@ -61,7 +61,7 @@
 | R01 | census / 전부 control | hover | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R01-hover-run1.json, obs/R01-hover-run2.json |
 | R01 | census / 전부 control | Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R01-esc-run1.json, obs/R01-esc-run2.json |
 | R01 (사다리) | census / bare-0..3 | hover + Esc | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R01-bare-run1.json, obs/R01-bare-run2.json |
-| R02 | census / 전부 control | hover 후 drop (overShadow) | mouse | not-run | | |
+| R02 | census / 전부 control | hover 후 drop (overShadow) | mouse | fail(FC-QA-001, FC-QA-002) | as-predicted | obs/R02-drop-run1.json, obs/R02-drop-run2.json |
 | R03 | census / b=orders | hover + Esc, hover + drop | mouse | not-run | | |
 | R03 | census / b=billing | hover + Esc, hover + drop | mouse | not-run | | |
 | R03 | census / b=telemetry | hover + Esc, hover + drop | mouse | not-run | | |
