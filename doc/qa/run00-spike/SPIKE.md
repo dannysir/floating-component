@@ -105,6 +105,7 @@
 
 판단은 세션 2로 넘긴다. 발견 ID는 붙이지 않는다.
 
+- **workbench Nav 토글 전후 `getTree()` size 차이** (B1-07, 관찰): 토글 전 `V[ H[board,billing](size 2), H[telemetry,telemetry-x](size 1) ]`. `removePanel('board')` 뒤 `H[board,billing]`이 billing 하나로 풀리면서 그 자리의 size가 split의 2가 아니라 **billing의 1**이 된다. `insertPanel({ board, at: billing/left })`로 다시 만든 `H[board,billing]`의 size도 **1**이다. 즉 토글 한 번으로 아래쪽 V split의 비율이 2:1에서 1:1로 바뀐다(`domTree`는 같다). 근거 줄: `src/tree/helpers.ts:45`, `src/tree/insert.ts:71`(BRIEF-1 B1-07). 재현: `node mfa-lab/scripts/ctl.mjs test smoke/workbench`의 `[workbench] sizes ...` 줄. 판단은 세션 2.
 - **S8 stale preview (H-RAF-STALE)** (B1-03f, 관찰): 마지막 dragover가 소스가 아닌 droppable 패널(p-a)에 떨어지는 릴리스에서 릴리스 뒤 미리보기 shadow가 남는다(`settled` 6/10, `immediate` 8/10, I1은 통과). 하네스가 빈도를 키운 경합(`harness_amplified`). 재현: `node mfa-lab/scripts/ctl.mjs test spike/s08`. 관련 스펙 `mfa-lab/e2e/spike/s08-raf-stale-ratio.spec.ts`.
 
 - **S1 미리보기 중 드래그하지 않은 패널의 리마운트·재삽입** (B1-03a, 관찰): `census` bare에서 p-d를 (p-a, left, 1)로 hover하는 미리보기 한 번에 프로브 `domLog`가 `p-b`·`p-c` = `remounted`(새 요소), `p-a` = `reinserted`(같은 요소의 제거 후 삽입)를 기록했다. 사전 등록된 FC-QA-001(`predicted`, D3)·D3a의 예측과 같은 모양이다. 재현: `node mfa-lab/scripts/ctl.mjs test spike/s01` 출력의 `[S1] domLog` 줄. 관련 스펙 `mfa-lab/e2e/spike/s01-mouse-drag-commit.spec.ts`.

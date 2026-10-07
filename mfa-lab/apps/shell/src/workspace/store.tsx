@@ -29,6 +29,6 @@ export const components = createComponentStore({
   orders: <PanelFrame slot="orders" kind="same-tree" title="Orders" team="order-desk"><SameTreeRemote slot="orders" /></PanelFrame>,
   'orders-local': <PanelFrame slot="orders-local" kind="local" title="orders-local" team="order-desk"><OrdersTwin slot="orders-local" bus={bus} /></PanelFrame>,
   // B1-07
-  // board: <PanelFrame slot="board" kind="same-tree" title="Board" team="fulfilment"><SameTreeRemote slot="board" /></PanelFrame>,
+  board: <PanelFrame slot="board" kind="same-tree" title="Board" team="fulfilment"><SameTreeRemote slot="board" /></PanelFrame>,
   'board-local': <PanelFrame slot="board-local" kind="local" title="board-local" team="fulfilment"><BoardTwin slot="board-local" bus={bus} /></PanelFrame>,
 });

@@ -4,5 +4,5 @@ import type { PanelProps } from '@harbor/contract';
 export type PanelModule = { Panel: ComponentType<PanelProps> };
 export const loaders: Record<string, () => Promise<PanelModule>> = {
   orders: () => import('orders/Panel'),      // B1-06
-  // board: () => import('board/Panel'),     // B1-07
+  board: () => import('board/Panel'),       // B1-07
 };
