@@ -74,7 +74,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R04 (두 번째 묶음) | a9dc300 | 2026-10-07T03:08Z | 2 | fail(FC-QA-002, FC-QA-001) — remote(orders·billing) 재삽입 = 스크롤 초기화, iframe(telemetry·control-iframe) 재삽입 = 재로드(shield로 측정). FC-QA-002 sev-2로 |
 | [x] | R06 (두 번째 묶음) | 1412937 | 2026-10-07T03:08Z | 1 | fail(FC-QA-002) — 리마운트 없이 재삽입만. iframe 재로드 시점이 이동 방향에 따라 hover(a) 또는 취소(b) |
 | [x] | R08 (두 번째 묶음) | 544cb56 | 2026-10-07T03:11Z | 2 | fail(FC-QA-009, FC-QA-004) — 브리프 유도 0/5×2(부작용 #17). 대체 유도로 stale 상태 ext-chip 드롭이 onMovePanel 커밋 → FC-QA-009 sev-2. 대조 chip drop stopped |
-| [x] | R11 (두 번째 묶음) | (R11 커밋) | 2026-10-07T03:13Z | 1 | fail(FC-QA-004, FC-QA-003) — copy 드롭 dropEffect가 move로 덮임, 잠긴 패널에서는 copy 드롭 거부, 단독 페이지 깨끗 |
+| [x] | R11 (두 번째 묶음) | df260e0 | 2026-10-07T03:13Z | 1 | fail(FC-QA-004, FC-QA-003) — copy 드롭 dropEffect가 move로 덮임, 잠긴 패널에서는 copy 드롭 거부, 단독 페이지 깨끗 |
 | [ ] | R13 (두 번째 묶음) | | | | |
 | [ ] | R15 (두 번째 묶음) | | | | |
 | [ ] | B2-P1 | | | | |
