@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`B1-02`
+`B1-03a`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -45,7 +45,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 |---|---|---|---|---|---|
 | [x] | B1-00 환경 탐침 | e89991c | 2026-10-07T00:58Z | 1 | 통과 (Node v22.22.0, npm ping ok, 레인 후보 B, 트리 해시 일치) |
 | [x] | B1-01 브라우저 확보 (S0) | 78f858f | 2026-10-07T01:01Z | 1 | 통과 (레인 B 첫 시도, rAF 62/s, CDP 터치 trusted) |
-| [ ] | B1-02 shell + `ctl.mjs` + 계측 | | | | |
+| [x] | B1-02 shell + `ctl.mjs` + 계측 | 803de8b | 2026-10-07T01:08Z | 1 | 통과 (`ctl smoke` OK, `smoke/shell` 5/5, 소스 alias + dedupe, 루트 node_modules 없음) |
 | [ ] | B1-03a 프로브·마우스 드래그 (S1) | | | | |
 | [ ] | B1-03b 불변식·취소 경로 (S2~S4) | | | | |
 | [ ] | B1-03c npm 0.5.1 양성 대조 (S5) | | | | |
@@ -94,8 +94,8 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | 레인 (B/A/C) | B | B1-01 |
 | Playwright | 1.63.0 | B1-01 |
 | Chromium 빌드 | 153.0.8010.12 (리비전 1243, headless shell) | B1-01 |
-| detached 서버 생존 (yes/no) | | B1-02 |
-| 라이브러리 소스 (src/dist) | | B1-02 |
+| detached 서버 생존 (yes/no) | yes (새 Bash 호출의 `ctl status` = alive·ready) | B1-02 |
+| 라이브러리 소스 (src/dist) | src | B1-02 |
 | 터치 (ok/env-limit) | | B1-03e |
 | telemetry-x OOPIF (yes/no/env-limit) | | B1-05 |
 | MF (on/degraded) | | B1-06 |
