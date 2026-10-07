@@ -22,4 +22,5 @@ if (!run) {
   console.error(`usage: node mfa-lab/scripts/ctl.mjs <${Object.keys(commands).join('|')}> [...]`);
   process.exit(2);
 }
-run({ flags, positional }).then((code) => process.exit(code ?? 0), (err) => { console.error(err?.stack ?? err); process.exit(1); });
+// process.exit()는 Windows에서 fetch 핸들이 닫히는 중이면 libuv assertion(src\win\async.c)으로 죽는다. 종료 코드만 두고 자연 종료한다.
+run({ flags, positional }).then((code) => { process.exitCode = code ?? 0; }, (err) => { console.error(err?.stack ?? err); process.exitCode = 1; });

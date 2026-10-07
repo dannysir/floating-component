@@ -43,7 +43,12 @@ export const playwrightInstallEnv = () => {
   return { ...env, PLAYWRIGHT_BROWSERS_PATH: path.join(runDir, 'pw-browsers') };
 };
 
+// win32의 .cmd(npm.cmd)는 shell 없이 spawn하면 Node 18.20.2/20.12.2 이후 EINVAL을 동기로 던진다(CVE-2024-27980). 인자는 고정 목록만 넘긴다.
 export const execText = (file, args, opts = {}) => new Promise((resolve) => {
-  execFile(file, args, { encoding: 'utf8', timeout: opts.timeout ?? 20000, cwd: opts.cwd, maxBuffer: 16 * 1024 * 1024, env: { ...process.env, ...(opts.env ?? {}) } }, (err, stdout, stderr) =>
-    resolve({ ok: !err, code: err?.code ?? 0, stdout: String(stdout ?? ''), stderr: String(stderr ?? '') }));
+  try {
+    execFile(file, args, { encoding: 'utf8', timeout: opts.timeout ?? 20000, cwd: opts.cwd, maxBuffer: 16 * 1024 * 1024, env: { ...process.env, ...(opts.env ?? {}) }, shell: isWin && /\.cmd$/i.test(file) }, (err, stdout, stderr) =>
+      resolve({ ok: !err, code: err?.code ?? 0, stdout: String(stdout ?? ''), stderr: String(stderr ?? '') }));
+  } catch (err) {
+    resolve({ ok: false, code: err?.code ?? 1, stdout: '', stderr: String(err?.message ?? err) });
+  }
 });
