@@ -92,5 +92,6 @@ fix_commit: none
 ## 관련
 
 - 2026-10-07 R02·R03·R05: R02·R03에서도 `control-a`(p-a) moves +1·scrollTop 0(같은 제스처). R07(`?layout=locks`, `terminal` → `(editor, left, 0)`): 드래그하지 않은 `editor`(control-a) frame +0·content +0·moves +1, scrollTop 120 → 0, 다섯 취소 경로 모두 2/2.
+- 2026-10-07 R16-others(`?layout=workbench`, billing → board 왼쪽): 드래그하지 않은 `board` frame +0·moves +1(같은 H split 안 keyed 순서 변경). R14(터치)에서도 `editor` moves +1·scrollTop 0 — 입력 방식과 무관.
 - 시나리오: R01, 관찰 기록: doc/qa/run01-tier1/obs/R01-hover-run1.json, R01-esc-run1.json, R01-bare-run1.json (run2도 같다)
 - 관련 발견: FC-QA-001(같은 미리보기에서 생기는 React 리마운트, D3), 가설: H-REINSERT

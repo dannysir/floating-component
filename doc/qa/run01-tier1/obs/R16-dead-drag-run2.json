@@ -1,0 +1,84 @@
+{
+  "run": "run01-tier1",
+  "runNo": 2,
+  "scenario": "R16",
+  "case": "R16-dead-drag",
+  "expected": "죽은 패널도 핸들로 끌 수 있다",
+  "predicted": "통과. 에러 카드가 함께 이동",
+  "observed": "dragstart capture/workspace/trusted=true bubble/workspace/trusted=true; hover H[nav,V[H[board,billing],H[telemetry,telemetry-x]],orders]; under=source; 커밋 H[nav,V[H[board,billing],H[telemetry,telemetry-x]],orders]; 에러 카드 [{\"testid\":\"error-orders\",\"panel\":\"orders\"}]; 새 콘솔 에러 0; I1~I7 통과. 누적: board(board): frame+1 content+1 moves+0 input=\"\" counter=\"count 0\" scrollTop=0 [remounted]; billing(billing): frame+1 content+1 moves+0 mountCalls+1 unmountCalls+1 rootsAlive=1 input=\"\" counter=\"count 0\" scrollTop=0 [remounted]; telemetry(telemetry): frame+1 content+0 moves+0 loads+1 docId-changed input=\"\" counter=null scrollTop=0 [remounted]; telemetry-x(telemetry-x): frame+1 content+0 moves+0 loads+1 docId-changed input=\"\" counter=null scrollTop=0 [remounted]; nav(nav): frame+0 content+0 moves+0 input=null counter=null scrollTop=null [untouched]; orders(orders): frame+0 content+0 moves+1 input=null counter=null scrollTop=null [reinserted]",
+  "verdict": "as-ideal",
+  "labels": {
+    "input": "mouse",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": true,
+      "detail": "no data-dragging-panel-id",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": true,
+      "detail": "userSelect restored",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[nav,V[H[board,billing],H[telemetry,telemetry-x]],orders]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "console.error: Failed to load resource: net::ERR_FAILED; console.error: Error: [ Federation Runtime ]: Failed to get manifest. #RUNTIME-003\nargs: {\"manifestUrl\":\"http://127.0.0.1:4301/mf-manifest.json\",\"moduleName\":\"__mfe_internal__shell__mf_owner__52876004642761__orders\",\"hostName\":\"shell\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/runtime#runtime-003\nOriginal Error Message:\n TypeError: Failed to fetch\n    at http://127.0.0.1:4300/assets/index-D7ga9KEO.js:6:190\n    at tr (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:6:37)\n    at R (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:6:167)\n    at http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:13950\n    at async o (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:14914)\n    at async Io.loadRemoteSnapshotInfo (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:12544)\n    at async Array.afterResolve (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:6944)\n    at async Ao.getRemoteModuleAndOptions (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:28297)\n    at async Ao.loadRemote (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:25010)",
+      "violations": [],
+      "allowed": [
+        {
+          "key": "http://127.0.0.1:4301/mf-manifest.json",
+          "message": "console.error: Failed to load resource: net::ERR_FAILED"
+        },
+        {
+          "key": "http://127.0.0.1:4300/assets/_virtual_mf___mfe_internal__shell__mf_owner__52876004642761__loadShare__react_mf_2_dom_mf_1_client__loadShare__.js-DtyFiezB.js",
+          "message": "console.error: Error: [ Federation Runtime ]: Failed to get manifest. #RUNTIME-003\nargs: {\"manifestUrl\":\"http://127.0.0.1:4301/mf-manifest.json\",\"moduleName\":\"__mfe_internal__shell__mf_owner__52876004642761__orders\",\"hostName\":\"shell\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/runtime#runtime-003\nOriginal Error Message:\n TypeError: Failed to fetch\n    at http://127.0.0.1:4300/assets/index-D7ga9KEO.js:6:190\n    at tr (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:6:37)\n    at R (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:6:167)\n    at http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:13950\n    at async o (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:14914)\n    at async Io.loadRemoteSnapshotInfo (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:12544)\n    at async Array.afterResolve (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:6944)\n    at async Ao.getRemoteModuleAndOptions (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:28297)\n    at async Ao.loadRemote (http://127.0.0.1:4300/assets/index-D7ga9KEO.js:7:25010)"
+        }
+      ]
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (nav,board,billing,telemetry,telemetry-x,orders)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r16-dead-remote/R16-dead-drag-run2"
+  ]
+}

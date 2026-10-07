@@ -94,9 +94,9 @@
 | R12 | row3 / 같은 배치 (`iframeShield=1`) | telemetry, telemetry-x 위 hover, 놓기 | mouse | pass | as-ideal(= 예측: 미리보기 `H[p-b,p-a,p-c]`, `overShadow` 커밋, `calls` 1건, I1~I7 통과) | obs/R12-shield-p-{b,c}-run{1,2}.json |
 | R14 | locks | terminal 터치 드래그 → editor 왼쪽 → nav 위(차단 ghost) → 놓기 | touch-cdp-handle | fail(FC-QA-001, FC-QA-002, FC-QA-007) | as-predicted (취소 자체는 깨끗: ghost 1개, nav 위 `opacity 0.4` + `rgba(232,17,35,0.8)` outline, `onMovePanel` 0건, 트리 불변, ghost 제거, `touchend`는 분리된 원본에 `isConnected false`, I1~I7 통과. `terminal`·`output` frame +2, `editor` moves +1. 롱프레스 없이 시작 = FC-QA-007. Chromium CDP touch emulation, headless; not a real device) | obs/R14-blocked-run{1,2}.json |
 | R14 | locks | 이어서 두 번째 드래그 | touch-cdp-handle | pass (FC-QA-001 증거 포함) | as-ideal(= 예측: 새 세션 시작, `onMovePanel('terminal','editor','left',0)` 1건, 트리 `H[nav,terminal,editor,output]`, I1~I7 통과). 커밋 때 `output` frame +1 더(split 풀림 → FC-QA-001) | obs/R14-second-run{1,2}.json |
-| R16 | workbench / orders origin 차단 | 로드 | mouse | not-run | | |
-| R16 | workbench / orders origin 차단 | 다른 패널 드래그·리사이즈 | mouse | not-run | | |
-| R16 | workbench / orders origin 차단 | 죽은 패널을 핸들로 드래그 | mouse | not-run | | |
+| R16 | workbench / orders origin 차단 | 로드 | mouse | pass | as-ideal(= 예측: orders만 `error`·에러 카드·retry, 나머지 5슬롯 ready, `shell-error` 없음, 콘솔 에러는 :4301 manifest 실패 2건뿐(허용 목록), I1~I7 통과) | obs/R16-load-run{1,2}.json |
+| R16 | workbench / orders origin 차단 | 다른 패널 드래그·리사이즈 | mouse | pass (FC-QA-002 증거 포함) | as-ideal(= 예측: billing → board 왼쪽 커밋, orders\|V 경계선 120px → orders +116.8px, 캡처 획득·해제, `userSelect` 복원, 에러 카드는 orders에만). 드래그하지 않은 `board` moves +1(재삽입) | obs/R16-others-run{1,2}.json |
+| R16 | workbench / orders origin 차단 | 죽은 패널을 핸들로 드래그 | mouse | pass (FC-QA-001 증거 포함) | as-ideal(= 예측: 핸들 드래그 시작, 에러 카드가 함께 이동, 새 콘솔 에러 없음, I1~I7 통과). 좌표 대체: 브리프의 `(billing, right, 0)`은 도달 불가 → `(billing, right, 3)`, 커밋 `H[nav,V[...],orders]`(10절). 드래그하지 않은 board·billing·telemetry·telemetry-x 모두 frame +1(iframe 둘은 `loads` +1) | obs/R16-dead-drag-run{1,2}.json |
 | R17 | workbench | 드래그 가능한 패널을 하나씩 핸들로 이동 | mouse | not-run | | |
 | R17 | workbench | 모든 경계선 리사이즈 | mouse | not-run | | |
 | R17 | workbench | Nav에서 board 닫기·다시 열기 (`removePanel`/`insertPanel`) | mouse | not-run | | |
@@ -228,7 +228,7 @@
 |---|---|---|---|
 | iframe 내용 안에서는 패널 드래그를 시작할 수 없다 (결정 D4) | <R12, R13> | 핸들을 host가 그리고 `dragHandleSelector="[data-drag-handle]"`를 쓴다 | <확인 \| 미확인> |
 | iframe 패널 위에서는 마우스 드롭 대상 판정이 되지 않는다 (FC-QA-005가 고쳐질 때까지) | R12: shield 없이 마우스 미리보기 없음(`obs/R12-ladder-control-iframe-run1.json`), `iframeShield=1`이면 커밋(`obs/R12-shield-p-b-run1.json`, `R12-shield-p-c-run1.json`) | 드래그 중 `[data-dragging-panel-id] iframe { pointer-events: none }` | 확인 |
-| remote가 죽어도 레이아웃이 유지되려면 경계가 패널 안에 있어야 한다 | <R16> | 패널 내용마다 에러 경계·Suspense를 두고, `TreeLayout` 바깥에는 두지 않는다. 핸들은 경계 밖에 둔다 | <확인 \| 미확인> |
+| remote가 죽어도 레이아웃이 유지되려면 경계가 패널 안에 있어야 한다 | R16: 픽스처의 패널별 `RemoteErrorBoundary`로 orders만 에러 카드, 나머지 조작 가능, 죽은 패널도 host 핸들로 이동(`obs/R16-*.json`). 라이브러리에는 경계가 없다(`PanelNodeRenderer.tsx:155`) | 패널 내용마다 에러 경계·Suspense를 두고, `TreeLayout` 바깥에는 두지 않는다. 핸들은 경계 밖에 둔다 | 확인 |
 
 ---
 
@@ -291,6 +291,12 @@
 | `diff`가 `focused`를 내용 상태로 비교해 포커스만 잃은 소스를 `content-reset`으로 분류 → `focused` 제외(마우스 시나리오는 포커스를 판정하지 않는다) | R01 `test:` 커밋 | 같은 재실행. 영향받은 행은 분류 라벨뿐(카운터 무관) |
 | `promote`가 대상 디렉터리를 통째로 비워 여러 시나리오의 증거를 한 발견에 모을 수 없음 → 선택적 `prefix`(예: `R05-`)로 그 접두어 파일만 갱신 | R05 `test:` 커밋 | smoke 19 passed, S1·S3·S6 통과, S5 요구대로 실패 |
 | (픽스처) mfe-board: 드롭이 성공하면 카드가 다른 열로 옮겨져 원본 노드가 분리되고, 분리된 노드의 `dragend`가 React 루트에 오지 않아 `dnd.lastDragend`가 `null`로 남음(단독 페이지 포함 모든 R09 케이스, 첫 실행에서 standalone이 `deviates`) → `dragstart` 때 원본 카드 노드에 네이티브 `dragend` 리스너를 걸고 분리된 경우에만 기록. 라이브러리 동작은 우회하지 않는다 | R09 `test: [R09] fix` 커밋 | `build --only mfe-board,shell` 뒤 ctl smoke OK, smoke 19 passed, S1·S3·S6 통과, S5 요구대로 실패. board 슬롯을 쓰는 닫힌 행 없음. R09 재실행: `lastDragend {move, move}` 외 값 동일, 첫 실행 관찰 기록은 재측정으로 덮었다 |
+
+### 브리프 좌표 대체
+
+| 시나리오 | 브리프 | 대체 | 이유 |
+|---|---|---|---|
+| R16-dead-drag | `dropPoint('billing','right',0)` | `dropPoint('billing','right',3)` | `billing`의 오른쪽 가장자리가 바깥 split들과 겹쳐 드롭 판정이 바깥 split(15% 띠)을 먼저 잡는다. `billing`의 `right`는 깊이 3·4만 도달 가능(`helpers/geometry.ts` 판정 재현으로 열거). 사례의 목적(죽은 패널을 핸들로 이동)은 그대로 |
 
 ### HARNESS.md 「알려진 하네스 부작용」 추가 제안
 
