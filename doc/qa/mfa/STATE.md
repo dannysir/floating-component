@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`B2-END`
+`B2-END 완료 (사용자: REPORT.md 확인, PR 머지)`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -78,7 +78,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R13 (두 번째 묶음) | 6427340 | 2026-10-07T03:16Z | 1 | fail(FC-QA-011) — ghost 토큰 유실, billing canvas 빈 캔버스, iframe ghost가 문서 재로드(mirror +1·요청 +1). spec-question |
 | [x] | R15 (두 번째 묶음) | 3b93e8c | 2026-10-07T03:18Z | 2 | fail(FC-QA-008) — same-site telemetry 옆은 깨끗, OOPIF telemetry-x 옆은 캡처 유실·userSelect 누수·재사용 불가 |
 | [x] | B2-P1 | ac70a2d | 2026-10-07T03:21Z | 1 | fail(FC-QA-012) — 패널 모드 내용 드래그 충돌. 롱프레스·크기 pass, glide FC-QA-001/005, dev 모드·tarball not-run |
-| [ ] | B2-END | | | | |
+| [x] | B2-END | (END 커밋) | 2026-10-07T03:25Z | 1 | 회귀 스위트 2회×(mouse·touch) 초록, REPORT 0~10 완성, 보호 경로 diff 없음, ctl stop. 발견 12건(library-bug 7, spec-question 4, harness-artifact 1) |
 
 행의 순서가 실행 순서다. 시나리오 번호 순이 아니다. 시간이 모자라 끝에서부터 `not-run`으로 줄이는 것은 "두 번째 묶음"에서만 허용된다.
 

@@ -1,0 +1,1940 @@
+[
+ {
+  "seq": 1,
+  "eid": 1,
+  "t": 283.29999999981374,
+  "wall": 1791343170873,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 262.79998779296875,
+  "y": 145,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 2,
+  "eid": 1,
+  "t": 283.5,
+  "wall": 1791343170874,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 262.79998779296875,
+  "y": 145,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 3,
+  "eid": 2,
+  "t": 283.59999999962747,
+  "wall": 1791343170874,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 262,
+  "y": 145
+ },
+ {
+  "seq": 4,
+  "eid": 2,
+  "t": 283.79999999981374,
+  "wall": 1791343170874,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 262,
+  "y": 145
+ },
+ {
+  "seq": 5,
+  "eid": 3,
+  "t": 290.09999999962747,
+  "wall": 1791343170880,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 262.79998779296875,
+  "y": 145,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 6,
+  "eid": 3,
+  "t": 290.3999999994412,
+  "wall": 1791343170881,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 262.79998779296875,
+  "y": 145,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 7,
+  "eid": 4,
+  "t": 290.5,
+  "wall": 1791343170881,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousedown",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 262,
+  "y": 145
+ },
+ {
+  "seq": 8,
+  "eid": 4,
+  "t": 290.69999999925494,
+  "wall": 1791343170881,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousedown",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 262,
+  "y": 145
+ },
+ {
+  "seq": 9,
+  "eid": 5,
+  "t": 309.69999999925494,
+  "wall": 1791343170900,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "gotpointercapture",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 293.3999938964844,
+  "y": 145,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 10,
+  "eid": 5,
+  "t": 310,
+  "wall": 1791343170900,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "gotpointercapture",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 293.3999938964844,
+  "y": 145,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 11,
+  "eid": 6,
+  "t": 310,
+  "wall": 1791343170900,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 293.3999938964844,
+  "y": 145,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 12,
+  "eid": 6,
+  "t": 310.09999999962747,
+  "wall": 1791343170900,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 293.3999938964844,
+  "y": 145,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 13,
+  "eid": 7,
+  "t": 310.19999999925494,
+  "wall": 1791343170900,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 293,
+  "y": 145
+ },
+ {
+  "seq": 14,
+  "eid": 7,
+  "t": 310.3999999994412,
+  "wall": 1791343170901,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 293,
+  "y": 145
+ },
+ {
+  "seq": 15,
+  "eid": 8,
+  "t": 314,
+  "wall": 1791343170904,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragstart",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 262,
+  "y": 145,
+  "dropEffect": "none",
+  "effectAllowed": "uninitialized",
+  "types": []
+ },
+ {
+  "seq": 16,
+  "eid": 8,
+  "t": 314.5,
+  "wall": 1791343170905,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragstart",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 262,
+  "y": 145,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 17,
+  "eid": 9,
+  "t": 317.5,
+  "wall": 1791343170908,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 18,
+  "eid": 9,
+  "t": 317.69999999925494,
+  "wall": 1791343170908,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 19,
+  "eid": 10,
+  "t": 317.69999999925494,
+  "wall": 1791343170908,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "lostpointercapture",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 20,
+  "eid": 10,
+  "t": 317.79999999981374,
+  "wall": 1791343170908,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "lostpointercapture",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 21,
+  "eid": 11,
+  "t": 323.19999999925494,
+  "wall": 1791343170914,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 293,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 22,
+  "eid": 11,
+  "t": 323.3999999994412,
+  "wall": 1791343170914,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 293,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 23,
+  "eid": 12,
+  "t": 324.3999999994412,
+  "wall": 1791343170915,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 324,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 24,
+  "eid": 12,
+  "t": 324.79999999981374,
+  "wall": 1791343170915,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 324,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 25,
+  "eid": 13,
+  "t": 325.79999999981374,
+  "wall": 1791343170916,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 354,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 26,
+  "eid": 13,
+  "t": 325.8999999994412,
+  "wall": 1791343170916,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 354,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 27,
+  "eid": 14,
+  "t": 326.79999999981374,
+  "wall": 1791343170917,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 385,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 28,
+  "eid": 14,
+  "t": 326.79999999981374,
+  "wall": 1791343170917,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 385,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 29,
+  "eid": 15,
+  "t": 327.59999999962747,
+  "wall": 1791343170918,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 415,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 30,
+  "eid": 15,
+  "t": 327.69999999925494,
+  "wall": 1791343170918,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 415,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 31,
+  "eid": 16,
+  "t": 328.29999999981374,
+  "wall": 1791343170919,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 446,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 32,
+  "eid": 16,
+  "t": 328.3999999994412,
+  "wall": 1791343170919,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 446,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 33,
+  "eid": 17,
+  "t": 329,
+  "wall": 1791343170919,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 477,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 34,
+  "eid": 17,
+  "t": 329.09999999962747,
+  "wall": 1791343170919,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 477,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 35,
+  "eid": 18,
+  "t": 329.69999999925494,
+  "wall": 1791343170920,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 507,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 36,
+  "eid": 18,
+  "t": 329.79999999981374,
+  "wall": 1791343170920,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 507,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 37,
+  "eid": 19,
+  "t": 464.29999999981374,
+  "wall": 1791343171055,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 507,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 38,
+  "eid": 19,
+  "t": 464.59999999962747,
+  "wall": 1791343171055,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 507,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 39,
+  "eid": 20,
+  "t": 465.09999999962747,
+  "wall": 1791343171055,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "drop",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-range",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 507,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ],
+  "stopped": true
+ },
+ {
+  "seq": 40,
+  "eid": 21,
+  "t": 465.79999999981374,
+  "wall": 1791343171056,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragend",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 507,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 41,
+  "eid": 21,
+  "t": 465.8999999994412,
+  "wall": 1791343171056,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragend",
+  "phase": "target",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 507,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 42,
+  "eid": 21,
+  "t": 466.09999999962747,
+  "wall": 1791343171056,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragend",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 507,
+  "y": 145,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 43,
+  "eid": 22,
+  "t": 621.6999999992549,
+  "wall": 1791343171212,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 20,
+  "y": 95.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 44,
+  "eid": 22,
+  "t": 621.7999999998137,
+  "wall": 1791343171212,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 20,
+  "y": 95.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 45,
+  "eid": 23,
+  "t": 621.7999999998137,
+  "wall": 1791343171212,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 20,
+  "y": 95
+ },
+ {
+  "seq": 46,
+  "eid": 23,
+  "t": 621.8999999994412,
+  "wall": 1791343171212,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 20,
+  "y": 95
+ },
+ {
+  "seq": 47,
+  "eid": 24,
+  "t": 627.3999999994412,
+  "wall": 1791343171218,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 20,
+  "y": 95.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 48,
+  "eid": 24,
+  "t": 627.5,
+  "wall": 1791343171218,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 20,
+  "y": 95.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 49,
+  "eid": 25,
+  "t": 627.5,
+  "wall": 1791343171218,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousedown",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 20,
+  "y": 95
+ },
+ {
+  "seq": 50,
+  "eid": 25,
+  "t": 627.5999999996275,
+  "wall": 1791343171218,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousedown",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 20,
+  "y": 95
+ },
+ {
+  "seq": 51,
+  "eid": 26,
+  "t": 637.7999999998137,
+  "wall": 1791343171228,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 95.25,
+  "y": 95.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 52,
+  "eid": 26,
+  "t": 638,
+  "wall": 1791343171228,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 95.25,
+  "y": 95.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 53,
+  "eid": 27,
+  "t": 638,
+  "wall": 1791343171228,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 95,
+  "y": 95
+ },
+ {
+  "seq": 54,
+  "eid": 27,
+  "t": 638.0999999996275,
+  "wall": 1791343171228,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 95,
+  "y": 95
+ },
+ {
+  "seq": 55,
+  "eid": 28,
+  "t": 638.1999999992549,
+  "wall": 1791343171228,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragstart",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 20,
+  "y": 95,
+  "dropEffect": "none",
+  "effectAllowed": "uninitialized",
+  "types": []
+ },
+ {
+  "seq": 56,
+  "eid": 28,
+  "t": 638.3999999994412,
+  "wall": 1791343171229,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragstart",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 20,
+  "y": 95,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 57,
+  "eid": 29,
+  "t": 641.7999999998137,
+  "wall": 1791343171232,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 58,
+  "eid": 29,
+  "t": 642,
+  "wall": 1791343171232,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 59,
+  "eid": 30,
+  "t": 646.0999999996275,
+  "wall": 1791343171236,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 95,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 60,
+  "eid": 30,
+  "t": 646.1999999992549,
+  "wall": 1791343171236,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 95,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 61,
+  "eid": 31,
+  "t": 646.7999999998137,
+  "wall": 1791343171237,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 170,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 62,
+  "eid": 31,
+  "t": 646.8999999994412,
+  "wall": 1791343171237,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 170,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 63,
+  "eid": 32,
+  "t": 647.5999999996275,
+  "wall": 1791343171238,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 245,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 64,
+  "eid": 32,
+  "t": 647.5999999996275,
+  "wall": 1791343171238,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 245,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 65,
+  "eid": 33,
+  "t": 648.1999999992549,
+  "wall": 1791343171238,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 321,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 66,
+  "eid": 33,
+  "t": 648.1999999992549,
+  "wall": 1791343171239,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 321,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 67,
+  "eid": 34,
+  "t": 648.7999999998137,
+  "wall": 1791343171239,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 396,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 68,
+  "eid": 34,
+  "t": 648.8999999994412,
+  "wall": 1791343171239,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 396,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 69,
+  "eid": 35,
+  "t": 649.7999999998137,
+  "wall": 1791343171240,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 471,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 70,
+  "eid": 35,
+  "t": 649.8999999994412,
+  "wall": 1791343171240,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 471,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 71,
+  "eid": 36,
+  "t": 652.1999999992549,
+  "wall": 1791343171242,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 546,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 72,
+  "eid": 36,
+  "t": 652.1999999992549,
+  "wall": 1791343171243,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 546,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 73,
+  "eid": 37,
+  "t": 653,
+  "wall": 1791343171243,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 622,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 74,
+  "eid": 37,
+  "t": 653.0999999996275,
+  "wall": 1791343171243,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 622,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 75,
+  "eid": 38,
+  "t": 761.3999999994412,
+  "wall": 1791343171352,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 622,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 76,
+  "eid": 38,
+  "t": 761.5,
+  "wall": 1791343171352,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragover",
+  "phase": "bubble",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": true,
+  "x": 622,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 77,
+  "eid": 39,
+  "t": 762.1999999992549,
+  "wall": 1791343171352,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "drop",
+  "phase": "capture",
+  "target": {
+   "tag": "INPUT",
+   "testid": "billing-input",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 622,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ],
+  "stopped": true
+ },
+ {
+  "seq": 78,
+  "eid": 40,
+  "t": 762.5999999996275,
+  "wall": 1791343171353,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragend",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 622,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 79,
+  "eid": 40,
+  "t": 762.6999999992549,
+  "wall": 1791343171353,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragend",
+  "phase": "target",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 622,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 80,
+  "eid": 40,
+  "t": 762.6999999992549,
+  "wall": 1791343171353,
+  "frame": "http://127.0.0.1:4300/?layout=pair&a=billing&b=control-b&drag=panel",
+  "top": true,
+  "type": "dragend",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 622,
+  "y": 95,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ }
+]

@@ -56,6 +56,14 @@ fix_commit: none
 
 ## 증거
 
+경로 `doc/qa/run01-tier1/evidence/FC-QA-012/` (P1-panel-mode-run1 산출물을 복사).
+
+| 파일 | 무엇을 보여 주는가 |
+|---|---|
+| events.json | 슬라이더·입력창 드래그 구간의 신뢰된 `dragstart`(패널 드래그로 시작됨) |
+| 03-after.png / tree-after.json | Esc 취소 뒤 상태(트리 불변) |
+| console.txt | 비어 있음 |
+
 - 관찰 기록: doc/qa/run01-tier1/obs/P1-panel-mode-run{1,2}.json, P1-handle-stale-run{1,2}.json
 - 재현: 회귀 스펙(test.fail 제거 시 `panel drag started from text selection: "p-a"`로 실패)
 

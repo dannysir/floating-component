@@ -1,0 +1,406 @@
+[
+ {
+  "seq": 37,
+  "eid": 19,
+  "t": 1500.5999999998603,
+  "wall": 1791339833579,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 218.6640625,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 38,
+  "eid": 19,
+  "t": 1500.6999999999534,
+  "wall": 1791339833579,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 218.6640625,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 39,
+  "eid": 20,
+  "t": 1500.6999999999534,
+  "wall": 1791339833579,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 218,
+  "y": 66
+ },
+ {
+  "seq": 40,
+  "eid": 20,
+  "t": 1500.8000000000466,
+  "wall": 1791339833579,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 218,
+  "y": 66
+ },
+ {
+  "seq": 41,
+  "eid": 21,
+  "t": 1516.8999999999069,
+  "wall": 1791339833596,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 218.6640625,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 42,
+  "eid": 21,
+  "t": 1517,
+  "wall": 1791339833596,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "pointerdown",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 218.6640625,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 43,
+  "eid": 22,
+  "t": 1517,
+  "wall": 1791339833596,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "mousedown",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 218,
+  "y": 66
+ },
+ {
+  "seq": 44,
+  "eid": 22,
+  "t": 1517.3000000000466,
+  "wall": 1791339833596,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "mousedown",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 218,
+  "y": 66
+ },
+ {
+  "seq": 45,
+  "eid": 23,
+  "t": 1550,
+  "wall": 1791339833629,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "pointermove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 224.6640625,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 46,
+  "eid": 23,
+  "t": 1550.1999999999534,
+  "wall": 1791339833629,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "pointermove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 224.6640625,
+  "y": 66.5,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 47,
+  "eid": 24,
+  "t": 1550.1999999999534,
+  "wall": 1791339833629,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "mousemove",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 224,
+  "y": 66
+ },
+ {
+  "seq": 48,
+  "eid": 24,
+  "t": 1550.3999999999069,
+  "wall": 1791339833629,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "mousemove",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 224,
+  "y": 66
+ },
+ {
+  "seq": 49,
+  "eid": 25,
+  "t": 1550.6999999999534,
+  "wall": 1791339833629,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "dragstart",
+  "phase": "capture",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 218,
+  "y": 66,
+  "dropEffect": "none",
+  "effectAllowed": "uninitialized",
+  "types": []
+ },
+ {
+  "seq": 50,
+  "eid": 25,
+  "t": 1551.3000000000466,
+  "wall": 1791339833630,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "dragstart",
+  "phase": "bubble",
+  "target": {
+   "tag": "DIV",
+   "testid": "workspace",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 218,
+  "y": 66,
+  "dropEffect": "none",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 51,
+  "eid": 26,
+  "t": 1554.8000000000466,
+  "wall": 1791339833633,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 52,
+  "eid": 26,
+  "t": 1554.8999999999069,
+  "wall": 1791339833634,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "pointercancel",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 0,
+  "y": 0,
+  "pointerType": "mouse"
+ },
+ {
+  "seq": 53,
+  "eid": 27,
+  "t": 1560.3000000000466,
+  "wall": 1791339833639,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "dragenter",
+  "phase": "capture",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 224,
+  "y": 66,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ },
+ {
+  "seq": 54,
+  "eid": 27,
+  "t": 1560.3999999999069,
+  "wall": 1791339833639,
+  "frame": "http://127.0.0.1:4300/?layout=row3&a=control-a&b=telemetry&c=telemetry-x&iframeShield=0",
+  "top": true,
+  "type": "dragenter",
+  "phase": "bubble",
+  "target": {
+   "tag": "HEADER",
+   "testid": "handle-control-a",
+   "panelId": "p-a",
+   "droppable": true
+  },
+  "isTrusted": true,
+  "isConnected": true,
+  "defaultPrevented": false,
+  "x": 224,
+  "y": 66,
+  "dropEffect": "move",
+  "effectAllowed": "move",
+  "types": [
+   "text/panel-id"
+  ]
+ }
+]

@@ -55,6 +55,15 @@ fix_commit: none
 
 ## 증거
 
+경로 `doc/qa/run01-tier1/evidence/FC-QA-006/` (R12-telemetry-x-run1 산출물을 복사).
+
+| 파일 | 무엇을 보여 주는가 |
+|---|---|
+| 02-mid.png | telemetry-x(OOPIF) 본문 위 hover, 미리보기 없음 |
+| 03-after.png / tree-after.json | 놓은 뒤에도 루트 `draggingPanelId: "p-a"`가 남음(I1 실패) |
+| events.json | dragstart·dragenter 뒤 `dragleave`·`dragend` 없음 |
+| console.txt | 비어 있음 |
+
 - 관찰 기록: doc/qa/run01-tier1/obs/R12-telemetry-x-run{1,2}.json (`labels.harness_artifact`)
 - 재현: `node mfa-lab/scripts/ctl.mjs test explore/r12c` — `[diag spp]`와 `[diag nospp]` 로그 줄(이 run의 출력은 위 표)
 
