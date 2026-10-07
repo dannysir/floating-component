@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`B1-03b`
+`B1-03c`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -47,7 +47,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | B1-01 브라우저 확보 (S0) | 78f858f | 2026-10-07T01:01Z | 1 | 통과 (레인 B 첫 시도, rAF 62/s, CDP 터치 trusted) |
 | [x] | B1-02 shell + `ctl.mjs` + 계측 | 803de8b | 2026-10-07T01:08Z | 1 | 통과 (`ctl smoke` OK, `smoke/shell` 5/5, 소스 alias + dedupe, 루트 node_modules 없음) |
 | [x] | B1-03a 프로브·마우스 드래그 (S1) | e032a1c | 2026-10-07T01:20Z | 2 | 통과 (1회차: 대상이 바뀌는 teleport에서 Blink가 dragover를 미룸 → teleport에 같은 점 재이동 추가) |
-| [ ] | B1-03b 불변식·취소 경로 (S2~S4) | | | | |
+| [x] | B1-03b 불변식·취소 경로 (S2~S4) | 97d303d | 2026-10-07T01:12Z | 1 | 통과 (S1~S4 + I1~I7, S3·S4의 dragend는 분리된 원본에만 기록) |
 | [ ] | B1-03c npm 0.5.1 양성 대조 (S5) | | | | |
 | [ ] | B1-03d 리사이즈 (S6) | | | | |
 | [ ] | B1-03e 터치 (S7a, S7b) | | | | |
