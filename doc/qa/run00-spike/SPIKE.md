@@ -49,9 +49,9 @@
 | S6 | 통과 | 1 | 3930df3 | `row3` p-a|p-b 경계 +150 px / 10 step: resizer에 `gotpointercapture`·`lostpointercapture`. p-a 413.3→561.4(+148.1), p-b 413.3→265.3(−148.1), 오차 1.9 px ≤ 3. 리사이즈 중 `body.style.userSelect = none`, 뒤에 로드 직후 값(`''`)으로 복원. `onResizeBorder` 10건. 리사이즈 시작 전 hover 이동의 mousemove 2건 외에 드래그 구간 mousemove 없음. I1~I7 통과 |
 | S7a | 통과 | 2 | 831126e | touch 프로젝트. 1회차 실패: 핸들에서 12 px `touchMove` 한 번은 `pointermove`만 만들고 `touchmove`가 페이지에 오지 않아(Chromium의 touch slop 억제) ghost가 생기지 않았다. 수정(사다리 2): 첫 이동을 12 px → 24 px 두 번으로 나눔. 2회차 통과: (1) `pair` p-a → p-b 오른쪽 커밋, touch 이벤트 전부 trusted, 드래그 중 ghost 정확히 1개·끝난 뒤 0, `onMovePanel` 1건, 트리 `H[p-b,p-a]` (2) `locks` editor → terminal 위 → nav 위: ghost `opacity 0.4` + `rgba(232, 17, 35, 0.8) solid 2px`, 떼면 `onMovePanel` 0건·트리 불변, 이어서 두 번째 드래그(control-b)가 시작되고 취소됨. 모두 I1~I7 통과. 롱프레스 없이 시작함을 확인(오라클 = 코드) |
 | S7b | 기록 | 1 | 831126e | 7절 참고. 레인 B(153) headless shell에서 네이티브 `dragstart`·`touchcancel` 없음, 롱프레스 드래그가 커밋됨 |
-| S8 | 미실행 | | | |
+| S8 | 기록 (게이트 충족) | 1 | (B1-03f 커밋) | 5절 표. `overShadow` 0/10 |
 | S9 | 미실행 | | | |
-| S10 | 미실행 | | | |
+| S10 | 통과 (선택) | 2 | (B1-03f 커밋) | 프로젝트 `mouse-full`(`channel: 'chromium'`, 풀 바이너리 `chromium-1243`, 새 headless). 1회차: 풀 바이너리는 `/favicon.ico`를 요청해 404 콘솔 에러로 I6 실패(headless shell은 요청하지 않음) → shell `index.html`에 `<link rel="icon" href="data:,">` 추가(픽스처 수정). 2회차 S1·S2·S3 통과, 축소 이벤트 로그가 headless shell 기준선과 **완전히 같다**(파일 diff 없음) |
 
 ## 4. 이벤트 로그 기준선
 
@@ -66,7 +66,19 @@
 
 ## 5. S8 비율 표
 
-(B1-03f에서 기록)
+`census` bare, p-d를 (p-a, left, 1)로 hover(`H[p-d,p-a,V[p-b,p-c]]`)한 뒤 칸마다 10회, 드롭마다 새 페이지. stale preview = 릴리스·settle 뒤 I1 통과 + (I2 또는 I5 실패). 릴리스 지점: `source` = 소스 shadow 헤더, `other-droppable` = 미리보기 안 p-a 중앙(같은 미리보기를 다시 만든다). 원자료 [evidence/s08-ratio.json](./evidence/s08-ratio.json), 커밋 (B1-03f 커밋).
+
+| 릴리스 모드 | 커서 아래 | stale preview | 마지막 dragover 대상 |
+|---|---|---|---|
+| `overShadow` | `source` | **0/10** | p-d |
+| `settled` | `source` | 0/10 | p-d |
+| `settled` | `other-droppable` | 6/10 | p-a |
+| `immediate` | `source` | 0/10 | p-d |
+| `immediate` | `other-droppable` | 8/10 | p-a |
+
+- `overShadow` × `other-droppable` 칸은 없다(정의상 소스 shadow 헤더에서 놓으므로 만들 수 없는 조합).
+- `immediate`의 비율은 하네스가 만든 값이다(CDP `mouse.up`이 dragover + drop + dragend를 연달아 보낸다). **사용자 체감 빈도가 아니다.** `settled`도 마지막 dragover가 소스가 아닌 droppable 패널이면 경합이 남는다는 점이 예측(H-RAF-STALE: 결정 변수는 릴리스 순간 커서 아래)과 맞다.
+- 기본 릴리스 `overShadow`는 경합에서 자유롭다(0/10). 세션 2의 커밋 측정은 `overShadow`를 쓴다.
 
 ## 6. S9 iframe 사실
 
@@ -83,6 +95,8 @@
 ## 8. 라이브러리 버그 의심 메모
 
 판단은 세션 2로 넘긴다. 발견 ID는 붙이지 않는다.
+
+- **S8 stale preview (H-RAF-STALE)** (B1-03f, 관찰): 마지막 dragover가 소스가 아닌 droppable 패널(p-a)에 떨어지는 릴리스에서 릴리스 뒤 미리보기 shadow가 남는다(`settled` 6/10, `immediate` 8/10, I1은 통과). 하네스가 빈도를 키운 경합(`harness_amplified`). 재현: `node mfa-lab/scripts/ctl.mjs test spike/s08`. 관련 스펙 `mfa-lab/e2e/spike/s08-raf-stale-ratio.spec.ts`.
 
 - **S1 미리보기 중 드래그하지 않은 패널의 리마운트·재삽입** (B1-03a, 관찰): `census` bare에서 p-d를 (p-a, left, 1)로 hover하는 미리보기 한 번에 프로브 `domLog`가 `p-b`·`p-c` = `remounted`(새 요소), `p-a` = `reinserted`(같은 요소의 제거 후 삽입)를 기록했다. 사전 등록된 FC-QA-001(`predicted`, D3)·D3a의 예측과 같은 모양이다. 재현: `node mfa-lab/scripts/ctl.mjs test spike/s01` 출력의 `[S1] domLog` 줄. 관련 스펙 `mfa-lab/e2e/spike/s01-mouse-drag-commit.spec.ts`.
 

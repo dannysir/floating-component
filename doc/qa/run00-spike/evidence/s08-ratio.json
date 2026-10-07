@@ -1,0 +1,50 @@
+{
+  "runId": "b103f-1",
+  "table": [
+    {
+      "mode": "overShadow",
+      "under": "source",
+      "stale": 0,
+      "total": 10,
+      "lastDragover": [
+        "p-d"
+      ]
+    },
+    {
+      "mode": "settled",
+      "under": "source",
+      "stale": 0,
+      "total": 10,
+      "lastDragover": [
+        "p-d"
+      ]
+    },
+    {
+      "mode": "settled",
+      "under": "other-droppable",
+      "stale": 6,
+      "total": 10,
+      "lastDragover": [
+        "p-a"
+      ]
+    },
+    {
+      "mode": "immediate",
+      "under": "source",
+      "stale": 0,
+      "total": 10,
+      "lastDragover": [
+        "p-d"
+      ]
+    },
+    {
+      "mode": "immediate",
+      "under": "other-droppable",
+      "stale": 8,
+      "total": 10,
+      "lastDragover": [
+        "p-a"
+      ]
+    }
+  ]
+}

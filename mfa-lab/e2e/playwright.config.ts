@@ -35,6 +35,6 @@ export default defineConfig({
   projects: [
     { name: 'mouse', use: {} },
     { name: 'touch', use: { hasTouch: true } },
-    // S10에서만 추가: { name: 'mouse-full', use: { channel: 'chromium' } },
+    { name: 'mouse-full', use: { channel: 'chromium' } },                  // S10(선택): 풀 바이너리(새 headless). 레인 B는 chromium-1243이 함께 설치된다
   ],
 });
