@@ -73,7 +73,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R19 (필수 묶음) | 1639e37 | 2026-10-07T03:04Z | 2 | fail(FC-QA-010) — 직렬화·미등록 키·복원 뒤 DnD·오버플로우 pass. 경계선 드래그 한계 px 불일치(row3 상한 약 2/3, 바깥으로 끌면 줄어듦) |
 | [x] | R04 (두 번째 묶음) | a9dc300 | 2026-10-07T03:08Z | 2 | fail(FC-QA-002, FC-QA-001) — remote(orders·billing) 재삽입 = 스크롤 초기화, iframe(telemetry·control-iframe) 재삽입 = 재로드(shield로 측정). FC-QA-002 sev-2로 |
 | [x] | R06 (두 번째 묶음) | 1412937 | 2026-10-07T03:08Z | 1 | fail(FC-QA-002) — 리마운트 없이 재삽입만. iframe 재로드 시점이 이동 방향에 따라 hover(a) 또는 취소(b) |
-| [x] | R08 (두 번째 묶음) | (R08 커밋) | 2026-10-07T03:11Z | 2 | fail(FC-QA-009, FC-QA-004) — 브리프 유도 0/5×2(부작용 #17). 대체 유도로 stale 상태 ext-chip 드롭이 onMovePanel 커밋 → FC-QA-009 sev-2. 대조 chip drop stopped |
+| [x] | R08 (두 번째 묶음) | 544cb56 | 2026-10-07T03:11Z | 2 | fail(FC-QA-009, FC-QA-004) — 브리프 유도 0/5×2(부작용 #17). 대체 유도로 stale 상태 ext-chip 드롭이 onMovePanel 커밋 → FC-QA-009 sev-2. 대조 chip drop stopped |
 | [ ] | R11 (두 번째 묶음) | | | | |
 | [ ] | R13 (두 번째 묶음) | | | | |
 | [ ] | R15 (두 번째 묶음) | | | | |
