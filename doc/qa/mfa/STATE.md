@@ -57,7 +57,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | B1-06 `mfe-orders` (twin → federation) | 2235019 | 2026-10-07T01:28Z | 1 | 통과 (사다리 단: 기본 설정. (a) orders same-tree·reactSame true·mf on·manifest/remoteEntry 요청, (b) :4301 차단 시 census 정상·workbench는 error-orders만, (c) deploy-2 독립 배포·shell buildId 불변, (d) S1·S2·S3·S6 기준선 동일·S5 요구대로 실패) |
 | [x] | B1-07 `mfe-board` | 268e694 | 2026-10-07T01:30Z | 1 | 통과 (B1-06과 같은 기본 설정 단. board·orders reactSame true 동시, 단독 페이지, :4302/:4301 차단 시 해당 패널만 error, workbench 6슬롯 ready, Nav 토글 domTree 복원. size 차이는 SPIKE 8절) |
 | [x] | B1-08 인계 | 2504c5e | 2026-10-07T01:38Z | 2 | 통과 (깨끗한 상태 `ctl up` 39초, smoke 3회 연속 초록(1회차 시도는 B1-06 시점 단언 `skipped=['board']`가 낡아 실패 → 갱신), S1·S3·S6 통과·S5 요구대로 실패, 문서 갱신, diff 검사 빈 출력, 서버 종료. SPIKE 권고 GO, 막히는 run 01 행 없음) |
-| [x] | B2-00 사전 점검 | (B2-00 커밋) | 2026-10-07T01:58Z | 1 | pass (GO caveat 없음 → blocked 행 없음. smoke 19 passed·1 skipped, S1·S3·S6 통과, S5 요구대로 실패, S7a 통과, 트리 해시 일치) |
+| [x] | B2-00 사전 점검 | 1989b98 | 2026-10-07T01:58Z | 1 | pass (GO caveat 없음 → blocked 행 없음. smoke 19 passed·1 skipped, S1·S3·S6 통과, S5 요구대로 실패, S7a 통과, 트리 해시 일치) |
 | [ ] | R01 (필수 묶음) | | | | |
 | [ ] | R02 (필수 묶음) | | | | |
 | [ ] | R03 (필수 묶음) | | | | |
