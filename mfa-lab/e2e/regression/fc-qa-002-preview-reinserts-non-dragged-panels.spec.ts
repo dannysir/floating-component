@@ -19,3 +19,15 @@ test('FC-QA-002 census hover p-d -> (p-a, left, 1): p-a keeps its DOM node and s
   expect(Number(mid.counters.domMoves['p-a'] ?? 0) - Number(before.counters.domMoves['p-a'] ?? 0), 'p-a domMoves').toBe(0);
   expect(mid.content['control-a'].scrollTop, 'control-a scrollTop').toBe(120);
 });
+
+test('FC-QA-002 row3 b=telemetry hover p-c -> (p-a, left, 1): the non-dragged iframe panel is not reloaded', { annotation: { type: 'issue', description: 'FC-QA-002' } }, async ({ lab, page }) => {
+  test.fail();   // 버그가 있는 동안 이 테스트는 실패해야 한다 (R06-a: 재삽입된 iframe이 다시 로드된다)
+  await lab.open({ layout: 'row3', slots: { b: 'telemetry' } });
+  const before = await snapshot(page, 'before');
+  const c = await begin(page, 'control-c');
+  await c.teleport(await dropPoint(page, 'p-a', 'left', 1));
+  expect.soft(await domTree(page), 'precondition: preview tree').toBe('H[p-c,p-a,p-b]');
+  const mid = await snapshot(page, 'mid');
+  await c.cancelEsc();
+  expect(Number(mid.counters.iframes.telemetry?.loads ?? 0) - Number(before.counters.iframes.telemetry?.loads ?? 0), 'telemetry loads during hover').toBe(0);
+});
