@@ -77,7 +77,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | R11 (두 번째 묶음) | df260e0 | 2026-10-07T03:13Z | 1 | fail(FC-QA-004, FC-QA-003) — copy 드롭 dropEffect가 move로 덮임, 잠긴 패널에서는 copy 드롭 거부, 단독 페이지 깨끗 |
 | [x] | R13 (두 번째 묶음) | 6427340 | 2026-10-07T03:16Z | 1 | fail(FC-QA-011) — ghost 토큰 유실, billing canvas 빈 캔버스, iframe ghost가 문서 재로드(mirror +1·요청 +1). spec-question |
 | [x] | R15 (두 번째 묶음) | 3b93e8c | 2026-10-07T03:18Z | 2 | fail(FC-QA-008) — same-site telemetry 옆은 깨끗, OOPIF telemetry-x 옆은 캡처 유실·userSelect 누수·재사용 불가 |
-| [x] | B2-P1 | (P1 커밋) | 2026-10-07T03:21Z | 1 | fail(FC-QA-012) — 패널 모드 내용 드래그 충돌. 롱프레스·크기 pass, glide FC-QA-001/005, dev 모드·tarball not-run |
+| [x] | B2-P1 | ac70a2d | 2026-10-07T03:21Z | 1 | fail(FC-QA-012) — 패널 모드 내용 드래그 충돌. 롱프레스·크기 pass, glide FC-QA-001/005, dev 모드·tarball not-run |
 | [ ] | B2-END | | | | |
 
 행의 순서가 실행 순서다. 시나리오 번호 순이 아니다. 시간이 모자라 끝에서부터 `not-run`으로 줄이는 것은 "두 번째 묶음"에서만 허용된다.
