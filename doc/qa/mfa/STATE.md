@@ -8,7 +8,7 @@
 
 ## 다음 작업
 
-`B1-07`
+`B1-08`
 
 이 줄은 항상 한 줄이다. 단계를 닫을 때마다 다음 단계 ID로 바꾼다. 중단 조건으로 멈췄으면 같은 단계 ID 뒤에 `(doc/qa/BLOCKED.md 참고)`를 붙인다. B1-08을 닫으면 `B2-00 (사용자 GO 결정 대기)`로 적는다.
 
@@ -55,7 +55,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | [x] | B1-04 `mfe-billing` + mount 어댑터 | 9120d55 | 2026-10-07T01:21Z | 1 | 통과 (`ctl smoke` remote-entry.js 본문·단독 페이지, `smoke/billing` 3/3: billing reactSame false·rootsAlive 1·lateResolves 0, control-mount·billing-local reactSame true) |
 | [x] | B1-05 `mfe-telemetry` + iframe 어댑터 (S9) | c6c78c7 | 2026-10-07T01:24Z | 1 | 통과 (`smoke/telemetry`: telemetry·telemetry-x·control-iframe 모두 loads 1, mirror 1, 문서 요청 1. S9 기록: OOPIF는 `--site-per-process`로 yes, cross-origin iframe 위 CDP 드래그 이벤트는 어느 프레임에도 안 찍힘) |
 | [x] | B1-06 `mfe-orders` (twin → federation) | 2235019 | 2026-10-07T01:28Z | 1 | 통과 (사다리 단: 기본 설정. (a) orders same-tree·reactSame true·mf on·manifest/remoteEntry 요청, (b) :4301 차단 시 census 정상·workbench는 error-orders만, (c) deploy-2 독립 배포·shell buildId 불변, (d) S1·S2·S3·S6 기준선 동일·S5 요구대로 실패) |
-| [ ] | B1-07 `mfe-board` | | | | |
+| [x] | B1-07 `mfe-board` | 268e694 | 2026-10-07T01:30Z | 1 | 통과 (B1-06과 같은 기본 설정 단. board·orders reactSame true 동시, 단독 페이지, :4302/:4301 차단 시 해당 패널만 error, workbench 6슬롯 ready, Nav 토글 domTree 복원. size 차이는 SPIKE 8절) |
 | [ ] | B1-08 인계 | | | | |
 | [ ] | B2-00 사전 점검 | | | | |
 | [ ] | R01 (필수 묶음) | | | | |
@@ -99,7 +99,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 | 터치 (ok/env-limit) | ok | B1-03e |
 | telemetry-x OOPIF (yes/no/env-limit) | yes (`--site-per-process` 인자로. 인자 없이는 no). 호스트 `localhost` | B1-05 |
 | MF (on/degraded) | on (`shareStrategy: 'loaded-first'`, 기본 설정 단) | B1-06 |
-| blocked 변형 | | B1-04~B1-07 |
+| blocked 변형 | 없음 | B1-04~B1-07 |
 
 ## 라이브러리 식별
 
