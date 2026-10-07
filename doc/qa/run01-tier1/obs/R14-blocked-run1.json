@@ -1,0 +1,167 @@
+{
+  "run": "run01-tier1",
+  "runNo": 1,
+  "scenario": "R14",
+  "case": "R14-blocked",
+  "expected": "핸들 터치 드래그가 시작되고, `nav` 위에서 ghost가 차단 표시로 바뀌며, 떼면 취소된다. I1~I7 통과",
+  "predicted": "통과. 핸들 모드는 롱프레스 없이 8px 초과 이동에서 시작(문서 33행과 다름 — 7절 문서 불일치). ghost 1개, `nav` 위에서 `opacity 0.4` + 빨간 outline, `touchend` → `endSession(false)`. `onMovePanel` 0건, 트리 불변, ghost 제거. `touchend`는 분리된 원본 노드에 `isConnected false`. `terminal` frame +2, `output` frame +2(D3), `editor` moves +1",
+  "observed": "ghost 시작 {\"count\":1,\"opacity\":\"0.7\",\"outline\":\"\"}(12px 뒤 0개), editor 위 {\"count\":1,\"opacity\":\"0.7\",\"outline\":\"\"} domTree H[nav,terminal,editor,output], nav 위 {\"count\":1,\"opacity\":\"0.4\",\"outline\":\"rgba(232, 17, 35, 0.8) solid 2px\"} under nav(droppable=false), 02-mid domTree H[nav,terminal,editor,output]; touchend [target/terminal/connected=false]; onMovePanel 0건, 트리 불변=true, ghost 잔존 0; I1~I7 통과. 누적: control-a(editor): frame+0 content+0 moves+1 input=\"seed-control-a\" counter=\"count 3\" scrollTop=0 [reinserted]; control-b(terminal): frame+2 content+2 moves+0 input=\"\" counter=\"count 0\" scrollTop=0 [remounted]; control-c(output): frame+2 content+2 moves+0 input=\"\" counter=\"count 0\" scrollTop=0 [remounted]; nav(nav): frame+0 content+0 moves+0 input=null counter=null scrollTop=null [untouched]",
+  "verdict": "as-predicted",
+  "labels": {
+    "input": "touch-cdp-handle",
+    "browser": "chromium-153 headless-shell",
+    "playwright": "1.63.0",
+    "native_touch_drag": "on",
+    "touch": "Chromium CDP touch emulation, headless; not a real device"
+  },
+  "lib": {
+    "source": "src",
+    "tree": "c1da6c9dc03a4811eea42c220be309e5e73b0a4a",
+    "commit": "ea25ff79f24009137315938e5e2b840b1ab678cd"
+  },
+  "invariants": [
+    {
+      "id": "I1",
+      "pass": true,
+      "detail": "no data-dragging-panel-id",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I2",
+      "pass": true,
+      "detail": "no shadow style",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I3",
+      "pass": true,
+      "detail": "no ghost",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I4",
+      "pass": true,
+      "detail": "userSelect restored",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I5",
+      "pass": true,
+      "detail": "domTree = tree = H[nav,editor,V[terminal,output]]",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I6",
+      "pass": true,
+      "detail": "no console errors",
+      "violations": [],
+      "allowed": []
+    },
+    {
+      "id": "I7",
+      "pass": true,
+      "detail": "one live instance per slot (nav,control-a,control-b,control-c)",
+      "violations": [],
+      "allowed": []
+    }
+  ],
+  "artifacts": [
+    "r14-locks-touch-cancel/R14-run1"
+  ],
+  "extra": {
+    "events": "touchstart/capture/terminal touchstart/bubble/terminal touchmove/capture/terminal touchmove/bubble/terminal touchmove/capture/terminal touchmove/bubble/terminal touchend/target/terminal(connected=false)",
+    "deltas": {
+      "control-a": {
+        "slot": "control-a",
+        "panelId": "editor",
+        "frame": 0,
+        "content": 0,
+        "moves": 1,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "seed-control-a",
+        "counter": "count 3",
+        "scrollTop": 0,
+        "cls": "reinserted"
+      },
+      "control-b": {
+        "slot": "control-b",
+        "panelId": "terminal",
+        "frame": 2,
+        "content": 2,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "",
+        "counter": "count 0",
+        "scrollTop": 0,
+        "cls": "remounted"
+      },
+      "control-c": {
+        "slot": "control-c",
+        "panelId": "output",
+        "frame": 2,
+        "content": 2,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": "",
+        "counter": "count 0",
+        "scrollTop": 0,
+        "cls": "remounted"
+      },
+      "nav": {
+        "slot": "nav",
+        "panelId": "nav",
+        "frame": 0,
+        "content": 0,
+        "moves": 0,
+        "loads": null,
+        "docIdChanged": false,
+        "mountCalls": 0,
+        "unmountCalls": 0,
+        "rootsAlive": null,
+        "input": null,
+        "counter": null,
+        "scrollTop": null,
+        "cls": "untouched"
+      }
+    },
+    "ghosts": {
+      "g1": {
+        "count": 0,
+        "opacity": null,
+        "outline": null
+      },
+      "gStart": {
+        "count": 1,
+        "opacity": "0.7",
+        "outline": ""
+      },
+      "gEditor": {
+        "count": 1,
+        "opacity": "0.7",
+        "outline": ""
+      },
+      "gNav": {
+        "count": 1,
+        "opacity": "0.4",
+        "outline": "rgba(232, 17, 35, 0.8) solid 2px"
+      }
+    }
+  }
+}

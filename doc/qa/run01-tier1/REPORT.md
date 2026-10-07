@@ -92,8 +92,8 @@
 | R12 (사다리) | row3 / b=control-iframe (`iframeShield=0`) | iframe 위 hover, 놓기 | mouse | fail(FC-QA-005) | as-predicted (same-origin에서도 미리보기 없음, `under 'iframe'`, drop 없음, I1~I7 통과) | obs/R12-ladder-control-iframe-run{1,2}.json |
 | R12 (사다리 3) | row3 / telemetry, telemetry-x, control-iframe | 핸들 터치 드래그로 같은 지점에 놓기 | touch-cdp-handle | fail(FC-QA-005) | as-predicted (세 대상 모두 **커밋** `H[p-b,p-a,p-c]` → 마우스와 경로 불일치. Chromium CDP touch emulation, headless; not a real device) | obs/R12-touch-{telemetry,telemetry-x,control-iframe}-run{1,2}.json |
 | R12 | row3 / 같은 배치 (`iframeShield=1`) | telemetry, telemetry-x 위 hover, 놓기 | mouse | pass | as-ideal(= 예측: 미리보기 `H[p-b,p-a,p-c]`, `overShadow` 커밋, `calls` 1건, I1~I7 통과) | obs/R12-shield-p-{b,c}-run{1,2}.json |
-| R14 | locks | terminal 터치 드래그 → editor 왼쪽 → nav 위(차단 ghost) → 놓기 | touch-cdp-handle | not-run | | |
-| R14 | locks | 이어서 두 번째 드래그 | touch-cdp-handle | not-run | | |
+| R14 | locks | terminal 터치 드래그 → editor 왼쪽 → nav 위(차단 ghost) → 놓기 | touch-cdp-handle | fail(FC-QA-001, FC-QA-002, FC-QA-007) | as-predicted (취소 자체는 깨끗: ghost 1개, nav 위 `opacity 0.4` + `rgba(232,17,35,0.8)` outline, `onMovePanel` 0건, 트리 불변, ghost 제거, `touchend`는 분리된 원본에 `isConnected false`, I1~I7 통과. `terminal`·`output` frame +2, `editor` moves +1. 롱프레스 없이 시작 = FC-QA-007. Chromium CDP touch emulation, headless; not a real device) | obs/R14-blocked-run{1,2}.json |
+| R14 | locks | 이어서 두 번째 드래그 | touch-cdp-handle | pass (FC-QA-001 증거 포함) | as-ideal(= 예측: 새 세션 시작, `onMovePanel('terminal','editor','left',0)` 1건, 트리 `H[nav,terminal,editor,output]`, I1~I7 통과). 커밋 때 `output` frame +1 더(split 풀림 → FC-QA-001) | obs/R14-second-run{1,2}.json |
 | R16 | workbench / orders origin 차단 | 로드 | mouse | not-run | | |
 | R16 | workbench / orders origin 차단 | 다른 패널 드래그·리사이즈 | mouse | not-run | | |
 | R16 | workbench / orders origin 차단 | 죽은 패널을 핸들로 드래그 | mouse | not-run | | |
@@ -156,6 +156,7 @@
 | [FC-QA-003](../findings/FC-QA-003-content-native-drag-becomes-panel-drag.md) | 패널 내용(remote 칸반 카드)의 네이티브 드래그가 패널 드래그로 처리된다 | sev-2 | library-bug | open | 2/2 | R09 | foreign-dragstart-unguarded |
 | [FC-QA-004](../findings/FC-QA-004-layout-hijacks-non-panel-drag.md) | 패널이 패널 드래그가 아닌 드래그의 drop 전파를 막고 dropEffect를 덮어쓴다 | sev-2 | spec-question | needs-user-confirmation | 2/2 | R09 | foreign-drag-handlers-unguarded |
 | [FC-QA-005](../findings/FC-QA-005-iframe-panel-not-mouse-drop-target.md) | iframe 패널은 마우스 드롭 대상이 되지 않는데 터치에서는 된다 (경로 불일치) | sev-3 | library-bug | open | 2/2 | R12 | iframe-drop-target-mouse |
+| [FC-QA-007](../findings/FC-QA-007-handle-touch-starts-without-long-press.md) | 핸들 모드 터치 드래그가 문서와 달리 롱프레스 없이 8px 이동으로 시작 | sev-4 | spec-question | needs-user-confirmation | 2/2 | S7a·R12·R14 | docs-touch-handle-start |
 | [FC-QA-006](../findings/FC-QA-006-oopif-release-no-dragend-harness.md) | (하네스) OOPIF 위 마우스 릴리스에서 dragend가 오지 않고 CDP 드래그 세션이 멈춘다 | sev-4 | harness-artifact | open | 2/2 | R12 | harness-cdp-drag-oopif |
 
 `predicted`였던 발견의 결과: FC-QA-001 — 관찰됨(R01에서 `open`으로 변경)
@@ -208,6 +209,7 @@
 
 | ID | 물어볼 것 | 선택지 | 권고 |
 |---|---|---|---|
+| FC-QA-007 | 핸들 모드 터치는 롱프레스 없이 8px 이동으로 시작한다(`useTouchDrag.ts:145-149`). `doc/API.ko.md:33`은 "핸들을 롱프레스(450ms)"라 하고 309행은 "핸들을 누르거나"라 한다. 어느 쪽이 의도인가? | (a) 코드가 맞다 → `doc/API.ko.md`·`doc/API.md` 33행을 "핸들은 8px 넘게 움직이면 바로 시작, 핸들이 없으면 롱프레스 450ms"로 고친다 (b) 문서가 맞다 → 핸들 모드에도 롱프레스를 적용(스크롤과의 충돌이 줄지만 핸들 드래그가 느려진다) | (a). 핸들은 명시적 손잡이라 즉시 시작이 자연스럽고 구현·주석·TODO 테스트가 모두 그 전제다 |
 | FC-QA-004 | 레이아웃은 패널 드래그가 아닌 네이티브 드래그(remote 내부 DnD)에 투명해야 하는가? 지금은 패널이 그 drop의 전파를 막고(window 버블 리스너 미실행) `dropEffect`를 `move`로 덮어쓴다(R11에서 copy 드롭 영향 확인 예정) | (a) 투명해야 한다 → `library-bug`로 재분류, FC-QA-003과 함께 수정 (b) 현재 동작을 사양으로 두고 통합 가이드에 "remote는 window drop에 의존하지 말 것"을 적는다 | (a). 단독 페이지와 동작이 달라 remote 팀이 원인을 찾기 어렵다 |
 
 ### 라이브러리 수정 대상이 아닌 발견
@@ -237,7 +239,7 @@
 | TODO.md 항목 | TODO.md 위치 | 확인한 시나리오 | 결과 | 남은 수동 확인 |
 |---|---|---|---|---|
 | 실제 마우스로 `not-allowed` 커서 표시 확인 | "PanelNode lock options" → "남은 일" | S2, R07 (대용: `dragend`의 `dropEffect`가 `none`, `drop` 없음) | | 커서 글리프 자체 |
-| 실기기로 터치 경로 확인 | 같은 곳 | S7a, R13, R14 (CDP 터치 에뮬레이션) | | 실기기 Android·iOS |
+| 실기기로 터치 경로 확인 | 같은 곳 | S7a, R13, R14 (CDP 터치 에뮬레이션) | R14: 잠긴 nav 위 차단 ghost·취소·두 번째 드래그 모두 문서대로(에뮬레이션). 단 핸들 모드 시작 조건이 문서(롱프레스)와 다름 → FC-QA-007 | 실기기 Android·iOS |
 | 소스 DOM 교체 시 종료 이벤트 유실 수정을 실제 입력으로 확인 | "해결: 드래그 중 소스 DOM 교체로 종료 이벤트 유실" → "확실성" | S3, S4, S5(0.5.1 양성 대조), R07, R14 | | |
 | 직렬화 (0.3.0) | "남은 검증" | R19 | | |
 | 패널 크기 제약 (0.4.0) | "남은 검증" | R19 | | |
