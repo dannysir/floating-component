@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from "react";
-import type { LayoutNode, DropPosition, LayoutDirection, SplitDirection } from "../tree/types";
-import type { ComponentStore } from "../tree/componentStore";
+import type { LayoutNode, DropPosition, SplitDirection } from "../tree/types";
+import type { RegisterElement } from "../hooks/usePanelPlacement";
 import { Resizer } from "./Resizer";
-import { PanelNodeRenderer } from "./PanelNodeRenderer";
+import { PanelSlot } from "./PanelSlot";
 import { HORIZONTAL } from "../tree/constants";
 import { panelSizeStyle } from "./panelSizeStyle";
 import { canResizeBetween } from "../tree/lock";
@@ -24,31 +24,21 @@ export interface ResizerTheme {
 
 interface LayoutNodeRendererProps {
   node: LayoutNode;
-  components: ComponentStore;
   path?: number[];
   onResizeBorder?: (path: number[], borderIndex: number, delta: number, totalPixels?: number) => void;
-  onMovePanel?: (sourcePanelId: string, anchorPanelId: string, position: DropPosition, depth: number) => void;
-  onDropPreviewChange?: (preview: DropPreview | null) => void;
-  shadowPanelId?: string;
-  isPreviewActive?: boolean;
   resizerTheme?: ResizerTheme;
-  dragHandleSelector?: string;
-  direction: LayoutDirection;
+  registerSlot: RegisterElement;
   parentDirection?: SplitDirection;
 }
 
+// 레이아웃 골격: 트리 모양대로 split(flex)과 Resizer를 그리고, 패널 자리에는 빈 slot만 둔다.
+// 패널 자체는 TreeLayout이 slot 위치로 배치한다.
 export const LayoutNodeRenderer = ({
   node,
-  components,
   path = [],
   onResizeBorder,
-  onMovePanel,
-  onDropPreviewChange,
-  shadowPanelId,
-  isPreviewActive,
   resizerTheme,
-  dragHandleSelector,
-  direction,
+  registerSlot,
   parentDirection,
 }: LayoutNodeRendererProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -70,19 +60,7 @@ export const LayoutNodeRenderer = ({
   );
 
   if (node.type === "panel") {
-    return (
-      <PanelNodeRenderer
-        node={node}
-        components={components}
-        onMovePanel={onMovePanel}
-        onDropPreviewChange={onDropPreviewChange}
-        shadowPanelId={shadowPanelId}
-        isPreviewActive={isPreviewActive}
-        dragHandleSelector={dragHandleSelector}
-        direction={direction}
-        parentDirection={parentDirection}
-      />
-    );
+    return <PanelSlot node={node} parentDirection={parentDirection} registerSlot={registerSlot} />;
   }
 
   const elements: React.ReactNode[] = [];
@@ -91,16 +69,10 @@ export const LayoutNodeRenderer = ({
       <LayoutNodeRenderer
         key={child.type === "panel" ? child.id : `split-${i}`}
         node={child}
-        components={components}
         path={[...path, i]}
         onResizeBorder={onResizeBorder}
-        onMovePanel={onMovePanel}
-        onDropPreviewChange={onDropPreviewChange}
-        shadowPanelId={shadowPanelId}
-        isPreviewActive={isPreviewActive}
         resizerTheme={resizerTheme}
-        dragHandleSelector={dragHandleSelector}
-        direction={direction}
+        registerSlot={registerSlot}
         parentDirection={node.direction}
       />
     );

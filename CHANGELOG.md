@@ -6,6 +6,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Fixed
+
+- Dragging a panel remounted, or detached and reattached in the DOM, panels that were not being dragged, on every preview change, cancel, and drop ([#19](https://github.com/dannysir/floating-component/issues/19), [#20](https://github.com/dannysir/floating-component/issues/20)) — their input values, component state, and scroll position were reset, and iframe panels reloaded their document. The same happened when `movePanel`/`insertPanel`/`removePanel` changed the tree shape. Panels now keep the same DOM node until they leave the tree
+
+### Changed
+
+- Render structure — splits and resizers are still rendered in the shape of the tree, but panel positions hold only an empty slot (`[data-panel-slot]`); panels (`[data-panel-id]`) are rendered with `position: absolute` directly under the root (`[data-tree-root]`, now `position: relative`) and sized to their slot. The public API and tree format are unchanged
+  - The DOM order of panels is the order they first appeared, not the visual order (affects Tab focus and screen reader order)
+  - Panel positions are set on the client, so SSR HTML has no panel positions
+  - CSS that assumed `[data-panel-id]` is a flex item inside a split element should target the slot instead
+
 ## [1.0.0] - 2026-10-07
 
 First stable release. With tree layout, border resize, drag and drop, serialization, size constraints, touch, and panel locks in place, this milestone is marked as 1.0.0. From this version on, breaking changes to the public API only ship in major versions. Upgrading from 0.5.x requires no code changes (no breaking changes).
