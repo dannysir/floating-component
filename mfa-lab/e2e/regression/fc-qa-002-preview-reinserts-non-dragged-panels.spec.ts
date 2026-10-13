@@ -6,7 +6,6 @@ import { settle } from '../helpers/settle';
 import { seedContent, snapshot } from '../helpers/snapshot';
 
 test('FC-QA-002 census hover p-d -> (p-a, left, 1): p-a keeps its DOM node and scrollTop', { annotation: { type: 'issue', description: 'FC-QA-002' } }, async ({ lab, page }) => {
-  test.fail();   // 버그가 있는 동안 이 테스트는 실패해야 한다
   await lab.open({ layout: 'census' });
   await seedContent(page, 'control-a');
   await settle(page);
@@ -21,7 +20,6 @@ test('FC-QA-002 census hover p-d -> (p-a, left, 1): p-a keeps its DOM node and s
 });
 
 test('FC-QA-002 row3 b=telemetry hover p-c -> (p-a, left, 1): the non-dragged iframe panel is not reloaded', { annotation: { type: 'issue', description: 'FC-QA-002' } }, async ({ lab, page }) => {
-  test.fail();   // 버그가 있는 동안 이 테스트는 실패해야 한다 (R06-a: 재삽입된 iframe이 다시 로드된다)
   await lab.open({ layout: 'row3', slots: { b: 'telemetry' } });
   const before = await snapshot(page, 'before');
   const c = await begin(page, 'control-c');
