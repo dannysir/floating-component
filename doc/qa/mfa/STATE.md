@@ -161,3 +161,5 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 |---|---|---|---|
 | FC-QA-008 | fix/fc-qa-008-resize-capture-cleanup | 2026-10-07T04:47Z | blocked(F1, BLOCKED-ENV-WIN: Windows에서 ctl up·ctl smoke 종료 코드 실패. doc/qa/BLOCKED.md) |
 | FC-QA-008 | fix/fc-qa-008-resize-capture-cleanup | 2026-10-07T05:06Z | fixed(caa911f) — 하네스 Windows 수정 `5ab2a06` 뒤 F1부터 재개, F8 통과 |
+| FC-QA-001 | fix/fc-qa-001-002-panel-layer | 2026-10-13T02:56Z | fixed(daee5a0) — 하네스 `f4c1598`(geometry slot), `679469d`(S3·기준선). F8 통과: smoke 19/1 skipped, regression 마우스 14/1 skipped·터치 15, spike 59/3 skipped |
+| FC-QA-002 | fix/fc-qa-001-002-panel-layer | 2026-10-13T02:56Z | fixed(daee5a0) — FC-QA-001과 같은 수정 |
