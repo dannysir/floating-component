@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
 import type { LayoutDirection, DropPosition } from "../tree/types";
 import type { DropPreview } from "../components/LayoutNodeRenderer";
+import type { GetSlot } from "./usePanelPlacement";
 import { getDropTarget } from "../dnd/dropTarget";
 import { createRafScheduler } from "../utils/rafScheduler";
 
@@ -24,6 +25,7 @@ interface DragSession {
     position: DropPosition,
     depth: number
   ) => void;
+  getSlot: GetSlot;
   touchId: number;
   startX: number;
   startY: number;
@@ -39,8 +41,8 @@ interface DragSession {
 }
 
 // 드래그 세션을 컴포넌트 생명주기와 분리한다. 터치 이벤트는 touchstart가 발생한 노드로
-// 고정돼 전달되므로, 리스너를 그 노드에 직접 건다. 드래그 중 소스 패널이 preview 리렌더로
-// 리마운트돼 노드가 문서에서 분리되면 이벤트가 document까지 버블링되지 않지만,
+// 고정돼 전달되므로, 리스너를 그 노드에 직접 건다. 드래그 중 그 노드가 문서에서 분리되면
+// (패널 내용이 다시 그려지거나 소스 패널이 제거되는 경우) 이벤트가 document까지 버블링되지 않지만,
 // 노드 자신의 리스너는 계속 받는다. 동시 단일 터치 드래그만 허용한다.
 let session: DragSession | null = null;
 const scheduler = createRafScheduler();
@@ -97,11 +99,13 @@ const updateDrag = (x: number, y: number) => {
   moveGhost(x, y);
   scheduler.schedule(() => {
     if (!session) return;
-    const { nodeId, direction, onDropPreviewChange } = session;
+    const { nodeId, direction, onDropPreviewChange, getSlot } = session;
     const hit = document.elementFromPoint(x, y);
     const anchorEl = hit?.closest("[data-panel-id]") as HTMLElement | null;
     const anchorId = anchorEl?.dataset.panelId;
-    if (!anchorEl || !anchorId || anchorId === nodeId) {
+    // 드롭 위치는 골격의 slot 기준이다. slot이 없으면 이 레이아웃의 패널이 아니다.
+    const slotEl = anchorId ? getSlot(anchorId) : null;
+    if (!anchorEl || !anchorId || anchorId === nodeId || !slotEl) {
       setBlocked(false);
       return;
     }
@@ -111,7 +115,7 @@ const updateDrag = (x: number, y: number) => {
       return;
     }
     setBlocked(false);
-    const { position, depth } = getDropTarget(x, y, anchorEl, direction);
+    const { position, depth } = getDropTarget(x, y, slotEl, direction);
     session.lastDrop = { anchorPanelId: anchorId, position, depth };
     onDropPreviewChange?.({ sourcePanelId: nodeId, anchorPanelId: anchorId, position, depth });
   });
@@ -199,6 +203,7 @@ interface UseTouchDragOptions {
     position: DropPosition,
     depth: number
   ) => void;
+  getSlot: GetSlot;
 }
 
 export const useTouchDrag = (options: UseTouchDragOptions) => {
@@ -213,7 +218,7 @@ export const useTouchDrag = (options: UseTouchDragOptions) => {
       if (session) return;
       const touch = e.changedTouches[0];
       if (!touch) return;
-      const { nodeId, direction, dragHandleSelector, draggable, onDropPreviewChange, onMovePanel } =
+      const { nodeId, direction, dragHandleSelector, draggable, onDropPreviewChange, onMovePanel, getSlot } =
         optionsRef.current;
       if (draggable === false) return;
       if (dragHandleSelector) {
@@ -228,6 +233,7 @@ export const useTouchDrag = (options: UseTouchDragOptions) => {
         direction,
         onDropPreviewChange,
         onMovePanel,
+        getSlot,
         touchId: touch.identifier,
         startX: touch.clientX,
         startY: touch.clientY,
