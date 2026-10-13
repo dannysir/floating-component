@@ -1,16 +1,24 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useLayoutEffect, useRef } from "react";
 import type { CSSProperties } from "react";
-import type { PanelNode, DropPosition, LayoutDirection, SplitDirection } from "../tree/types";
+import type { PanelNode, DropPosition, LayoutDirection } from "../tree/types";
 import type { ComponentStore } from "../tree/componentStore";
+import type { RegisterElement, GetSlot } from "../hooks/usePanelPlacement";
 import { getDropTarget } from "../dnd/dropTarget";
 import { createRafScheduler } from "../utils/rafScheduler";
 import { devWarn } from "../utils/devWarn";
 import type { DropPreview } from "./LayoutNodeRenderer";
-import { panelSizeStyle } from "./panelSizeStyle";
 import { useTouchDrag } from "../hooks/useTouchDrag";
 import { isPanelDraggable, isPanelDroppable } from "../tree/lock";
 
+// left/top/width/height는 usePanelPlacement가 slot 위치로 직접 쓴다. React가 덮어쓰지 않게 여기에 두지 않는다.
+const PANEL_STYLE: CSSProperties = {
+  position: "absolute",
+  boxSizing: "border-box",
+  overflow: "auto",
+};
+
 const SHADOW_STYLE: CSSProperties = {
+  ...PANEL_STYLE,
   opacity: 0.5,
   outline: "2px dashed rgba(0, 120, 212, 0.6)",
   outlineOffset: -2,
@@ -25,7 +33,8 @@ interface PanelNodeRendererProps {
   isPreviewActive?: boolean;
   dragHandleSelector?: string;
   direction: LayoutDirection;
-  parentDirection?: SplitDirection;
+  registerPanel: RegisterElement;
+  getSlot: GetSlot;
 }
 
 export const PanelNodeRenderer = ({
@@ -37,7 +46,8 @@ export const PanelNodeRenderer = ({
   isPreviewActive,
   dragHandleSelector,
   direction,
-  parentDirection,
+  registerPanel,
+  getSlot,
 }: PanelNodeRendererProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const schedulerRef = useRef<ReturnType<typeof createRafScheduler> | null>(null);
@@ -45,6 +55,11 @@ export const PanelNodeRenderer = ({
 
   const canDrag = isPanelDraggable(node);
   const canDrop = isPanelDroppable(node);
+
+  useLayoutEffect(() => {
+    if (!panelRef.current) return;
+    return registerPanel(node.id, panelRef.current);
+  }, [node.id, registerPanel]);
 
   useTouchDrag({
     panelRef,
@@ -54,6 +69,7 @@ export const PanelNodeRenderer = ({
     draggable: canDrag,
     onDropPreviewChange,
     onMovePanel,
+    getSlot,
   });
 
   const handleMouseDown = useCallback(
@@ -87,9 +103,8 @@ export const PanelNodeRenderer = ({
 
       const clientX = e.clientX;
       const clientY = e.clientY;
-      const panelEl = e.currentTarget as HTMLElement;
 
-      const root = panelEl.closest("[data-tree-root]") as HTMLElement | null;
+      const root = (e.currentTarget as HTMLElement).closest("[data-tree-root]") as HTMLElement | null;
       const sourcePanelId = root?.dataset.draggingPanelId;
       if (!sourcePanelId || sourcePanelId === node.id) return;
 
@@ -101,11 +116,14 @@ export const PanelNodeRenderer = ({
       }
 
       schedulerRef.current!.schedule(() => {
-        const { position, depth } = getDropTarget(clientX, clientY, panelEl, direction);
+        // 드롭 위치는 골격의 slot 기준이다(조상 split을 slot의 DOM 조상에서 찾는다).
+        const slotEl = getSlot(node.id);
+        if (!slotEl) return;
+        const { position, depth } = getDropTarget(clientX, clientY, slotEl, direction);
         onDropPreviewChange?.({ sourcePanelId, anchorPanelId: node.id, position, depth });
       });
     },
-    [node.id, canDrop, onDropPreviewChange, direction]
+    [node.id, canDrop, onDropPreviewChange, direction, getSlot]
   );
 
   const handleDrop = useCallback(
@@ -120,11 +138,12 @@ export const PanelNodeRenderer = ({
       e.stopPropagation();
       onDropPreviewChange?.(null);
       const sourcePanelId = e.dataTransfer.getData("text/panel-id");
-      if (!sourcePanelId || sourcePanelId === node.id || !onMovePanel) return;
-      const { position, depth } = getDropTarget(e.clientX, e.clientY, e.currentTarget as HTMLElement, direction);
+      const slotEl = getSlot(node.id);
+      if (!sourcePanelId || sourcePanelId === node.id || !onMovePanel || !slotEl) return;
+      const { position, depth } = getDropTarget(e.clientX, e.clientY, slotEl, direction);
       onMovePanel(sourcePanelId, node.id, position, depth);
     },
-    [node.id, canDrop, isPreviewActive, onDropPreviewChange, onMovePanel, direction]
+    [node.id, canDrop, isPreviewActive, onDropPreviewChange, onMovePanel, direction, getSlot]
   );
 
   const isShadow = node.id === shadowPanelId;
@@ -145,12 +164,7 @@ export const PanelNodeRenderer = ({
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
-      style={{
-        flex: node.size,
-        ...panelSizeStyle(parentDirection, node.minWidth, node.minHeight, node.maxWidth, node.maxHeight),
-        overflow: "auto",
-        ...(isShadow ? SHADOW_STYLE : undefined),
-      }}
+      style={isShadow ? SHADOW_STYLE : PANEL_STYLE}
     >
       {content}
     </div>

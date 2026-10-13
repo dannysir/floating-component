@@ -401,3 +401,4 @@ interface InsertAt {
 - `SplitNode`는 `id`가 없습니다 — 경로(`number[]`)로 식별. 구조적 경로와 중복되고, 자동 언래핑 시 깨지기 쉬워서.
 - `SplitNode`의 자식이 하나만 남으면 `removePanel`/`movePanel` 이후 자동 언래핑되어 트리가 flat하게 유지됩니다.
 - `size`는 픽셀이 아니라 flex 비율입니다. 형제 간 비례 분할.
+- 레이아웃과 패널을 따로 렌더합니다. split·Resizer는 트리 모양대로 그리고 패널 자리에는 빈 slot(`[data-panel-slot]`)만 두며, 패널(`[data-panel-id]`)은 루트 바로 아래에 `position: absolute`로 두고 slot의 위치·크기에 맞춥니다. 그래서 트리 모양이 바뀌어도(미리보기, 이동, 삽입, 제거) 패널은 리마운트되거나 DOM에서 떼이지 않고, 입력값·state·스크롤·iframe이 유지됩니다. 패널의 DOM 순서는 화면 순서가 아니라 처음 나타난 순서입니다.

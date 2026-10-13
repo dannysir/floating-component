@@ -8,10 +8,12 @@ export { harnessError };
 // ── 페이지 안에서 실행되는 함수들. 바깥 변수를 참조하지 않는다 (page.evaluate가 직렬화한다). ──
 
 // 렌더 구조를 중첩 표기로: H[...] = flex-direction row, V[...] = column (LayoutNodeRenderer.tsx:126-129), 패널은 id.
+// 패널이 골격 위에 평평하게 렌더되는 src(골격의 빈 자리 = [data-panel-slot])면 골격을 읽는다. slot이 없으면 기존처럼 패널을 읽는다.
 export const readDomTree = (): string => {
   const root = document.querySelector('[data-testid="workspace"] [data-tree-root]') ?? document.querySelector('[data-tree-root]');
   if (!root) return '';
   const walk = (el: Element): string => {
+    if (el.hasAttribute('data-panel-slot')) return el.getAttribute('data-panel-slot') ?? '?';
     if (el.hasAttribute('data-panel-id')) return el.getAttribute('data-panel-id') ?? '?';
     if (el.hasAttribute('data-layout-split')) {
       const dir = getComputedStyle(el).flexDirection === 'row' ? 'H' : 'V';
@@ -20,7 +22,7 @@ export const readDomTree = (): string => {
     }
     return '?';
   };
-  const first = Array.from(root.children).find((c) => c.hasAttribute('data-layout-split') || c.hasAttribute('data-panel-id'));
+  const first = Array.from(root.children).find((c) => c.hasAttribute('data-layout-split') || c.hasAttribute('data-panel-slot') || c.hasAttribute('data-panel-id'));
   return first ? walk(first) : '';
 };
 
@@ -36,9 +38,11 @@ const findDropPointInPage = (args: { anchorId: string; position: string; depth: 
   };
   const panel = document.querySelector(`[data-tree-root] [data-panel-id="${CSS.escape(args.anchorId)}"]`) as HTMLElement | null;
   if (!panel) return { error: `no panel ${args.anchorId}` };
+  // 골격 slot이 있는 src는 드롭 위치를 slot 기준으로 계산한다(조상 split도 slot의 조상). 없으면 패널 자신.
+  const geo = (document.querySelector(`[data-tree-root] [data-panel-slot="${CSS.escape(args.anchorId)}"]`) as HTMLElement | null) ?? panel;
   const splits: Element[] = [];
   let root: Element | null = null;
-  let cur = panel.parentElement;
+  let cur = geo.parentElement;
   while (cur) {                                                  // dropTarget.ts:45-55
     if (cur.hasAttribute('data-tree-root')) { root = cur; break; }
     if (cur.hasAttribute('data-layout-split')) splits.push(cur);
@@ -47,9 +51,9 @@ const findDropPointInPage = (args: { anchorId: string; position: string; depth: 
   const classify = (x: number, y: number) => {
     if (root) { const n = nearest(x, y, root); if (n.dist < ROOT_EDGE_RATIO) return { position: n.position, depth: splits.length + 1 }; }   // :57-62
     for (let i = splits.length - 1; i >= 0; i--) { const n = nearest(x, y, splits[i]); if (n.dist < SPLIT_EDGE_RATIO) return { position: n.position, depth: i + 1 }; }   // :64-69
-    return { position: nearest(x, y, panel).position, depth: 0 };   // :71-72
+    return { position: nearest(x, y, geo).position, depth: 0 };   // :71-72
   };
-  const r = panel.getBoundingClientRect();
+  const r = geo.getBoundingClientRect();
   const hits: Array<[number, number]> = [];
   for (let y = r.top + 1; y < r.bottom - 1; y += args.step) {
     for (let x = r.left + 1; x < r.right - 1; x += args.step) {

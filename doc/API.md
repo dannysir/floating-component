@@ -401,3 +401,4 @@ interface InsertAt {
 - `SplitNode` has no `id` — paths (`number[]`) are used for identification. IDs would be redundant with structural paths and break when a split is auto-unwrapped.
 - A `SplitNode` with a single child is auto-unwrapped after `removePanel` / `movePanel`, keeping the tree flat.
 - `size` is a flex ratio, not pixels. Siblings share proportionally.
+- Layout and panels are rendered separately. Splits and resizers follow the tree shape with an empty slot (`[data-panel-slot]`) at each panel position, and panels (`[data-panel-id]`) sit directly under the root with `position: absolute`, sized to their slot. When the tree shape changes (preview, move, insert, remove), panels are neither remounted nor detached from the DOM, so input values, state, scroll, and iframes are kept. The DOM order of panels is the order they first appeared, not the visual order.

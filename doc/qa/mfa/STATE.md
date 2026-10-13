@@ -134,6 +134,7 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 - 2026-10-07 B1-03e: 터치 `handleDrag`의 시작 이동을 12px → 24px 두 번으로 나눈다(Chromium touch slop이 첫 12px touchmove를 억제).
 - 2026-10-07 B1-03f: S10용 Playwright 프로젝트 `mouse-full`(`channel: 'chromium'`)을 설정에 둔다. shell `index.html`에 빈 favicon(풀 바이너리의 /favicon.ico 404 방지).
 - 2026-10-07 B1-05: `playwright.config.ts`의 `launchOptions.args`에 `--site-per-process`를 추가한다(B1-05 사다리 telemetry-x 3). headless shell 기본값에서는 telemetry-x가 OOPIF가 아니었다. 추가 뒤 S1~S6·S7a 재실행 통과, 기준선 동일.
+- 2026-10-13 FC-QA-001·002 수정 세션(사용자 승인): 패널이 골격 위에 평평하게 렌더되는 src(`daee5a0`)에 맞춰 `helpers/geometry.ts`의 `readDomTree`·`findDropPointInPage`가 골격 slot(`[data-panel-slot]`)을 읽는다(slot이 없는 옛 src에서는 기존 동작, 옛 src regression 결과 테스트별 동일). S3은 소스가 리마운트되지 않고 `dragend`가 연결된 소스로 오는 것을 확인하도록 바꾼다. 기준선 `s02`(빠지던 `dragleave(output)`이 생김)·`s03`·`s04`(`dragend`가 연결된 소스의 capture/target/bubble)를 갱신한다.
 
 ## 차단 사항
 
@@ -160,3 +161,5 @@ node mfa-lab/scripts/ctl.mjs test smoke    # Bash timeout 600000
 |---|---|---|---|
 | FC-QA-008 | fix/fc-qa-008-resize-capture-cleanup | 2026-10-07T04:47Z | blocked(F1, BLOCKED-ENV-WIN: Windows에서 ctl up·ctl smoke 종료 코드 실패. doc/qa/BLOCKED.md) |
 | FC-QA-008 | fix/fc-qa-008-resize-capture-cleanup | 2026-10-07T05:06Z | fixed(caa911f) — 하네스 Windows 수정 `5ab2a06` 뒤 F1부터 재개, F8 통과 |
+| FC-QA-001 | fix/fc-qa-001-002-panel-layer | 2026-10-13T02:56Z | fixed(daee5a0) — 하네스 `f4c1598`(geometry slot), `679469d`(S3·기준선). F8 통과: smoke 19/1 skipped, regression 마우스 14/1 skipped·터치 15, spike 59/3 skipped |
+| FC-QA-002 | fix/fc-qa-001-002-panel-layer | 2026-10-13T02:56Z | fixed(daee5a0) — FC-QA-001과 같은 수정 |

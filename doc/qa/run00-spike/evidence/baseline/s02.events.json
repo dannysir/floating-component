@@ -182,6 +182,20 @@
   "top": true
  },
  {
+  "type": "dragleave",
+  "phase": "capture",
+  "panelId": "output",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragleave",
+  "phase": "bubble",
+  "panelId": "output",
+  "isTrusted": true,
+  "top": true
+ },
+ {
   "type": "dragover",
   "phase": "capture",
   "panelId": "nav",

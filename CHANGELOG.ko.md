@@ -6,6 +6,19 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
+## [Unreleased]
+
+### 수정
+
+- 패널을 드래그하면 미리보기·취소·드롭 때마다 드래그하지 않은 패널까지 리마운트되거나 DOM에서 떼였다 다시 붙어, 입력값·컴포넌트 state·스크롤 위치가 초기화되고 iframe 패널은 문서를 다시 로드하던 문제([#19](https://github.com/dannysir/floating-component/issues/19), [#20](https://github.com/dannysir/floating-component/issues/20)). `movePanel`·`insertPanel`·`removePanel`로 트리 모양이 바뀔 때도 같았음 — 패널은 이제 트리에서 빠지기 전까지 같은 DOM 노드로 유지
+
+### 변경
+
+- 렌더 구조 — split·Resizer는 트리 모양대로 그리되 패널 자리에는 빈 slot(`[data-panel-slot]`)만 두고, 패널(`[data-panel-id]`)은 루트(`[data-tree-root]`, 이제 `position: relative`) 바로 아래에 `position: absolute`로 렌더해 slot의 위치·크기에 맞춤. 공개 API와 트리 형식은 그대로
+  - 패널의 DOM 순서는 화면 순서가 아니라 처음 나타난 순서(Tab 포커스·스크린리더 순서에 영향)
+  - 패널 위치는 클라이언트에서 정해지므로 SSR HTML에는 패널 위치가 없음
+  - `[data-panel-id]`가 split 요소 안의 flex 아이템이라고 가정한 CSS는 slot 기준으로 바꿔야 함
+
 ## [1.0.0] - 2026-10-07
 
 첫 안정 버전. 트리 레이아웃·경계선 리사이즈·드래그 앤 드롭·직렬화·크기 제약·터치·패널 잠금까지 핵심 기능을 갖춘 시점을 1.0.0으로 정했습니다. 이 버전부터 공개 API의 호환성을 깨는 변경은 메이저 버전에서만 합니다. 0.5.x에서 올릴 때 코드 수정은 필요 없습니다(호환성을 깨는 변경 없음).

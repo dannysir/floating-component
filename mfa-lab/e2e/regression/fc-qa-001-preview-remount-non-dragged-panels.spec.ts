@@ -19,7 +19,6 @@ const CASES = [
 
 CASES.forEach((c) => {
   test(`FC-QA-001 ${c.name}: non-dragged panels are not remounted on hover + Esc`, { annotation: { type: 'issue', description: 'FC-QA-001' } }, async ({ lab, page }) => {
-    test.fail();   // 버그가 있는 동안 이 테스트는 실패해야 한다
     await lab.open({ layout: 'census' });
     await settle(page);
     const before = await read(page);

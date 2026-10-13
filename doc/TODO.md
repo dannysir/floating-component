@@ -16,8 +16,8 @@
 > 발견 문서 [doc/qa/findings/](./qa/findings/), 결과 요약 [REPORT.md](./qa/run01-tier1/REPORT.md), 절차 [FIXING.md](./qa/FIXING.md)
 
 - [x] FC-QA-008 경계선 리사이즈가 포인터 캡처를 잃으면 body userSelect가 none으로 남고 그 Resizer를 다시 잡을 수 없다 — sev-1, `resize-capture-cleanup`, 수정 `caa911f` (main에는 cherry-pick `2decb5f`, 1.0.0으로 배포)
-- [ ] FC-QA-001 드래그 미리보기가 드래그하지 않은 패널을 리마운트한다 — sev-2, `split-index-key`
-- [ ] FC-QA-002 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM에서 떼었다 다시 붙여 스크롤 위치를 잃게 하고 iframe은 다시 로드되게 한다 — sev-2, `keyed-reorder-reinsert`
+- [x] FC-QA-001 드래그 미리보기가 드래그하지 않은 패널을 리마운트한다 — sev-2, `split-index-key`, 수정 `daee5a0` (main에는 `313b8f1`, PR #29)
+- [x] FC-QA-002 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM에서 떼었다 다시 붙여 스크롤 위치를 잃게 하고 iframe은 다시 로드되게 한다 — sev-2, `keyed-reorder-reinsert`, 수정 `daee5a0` (FC-QA-001과 같은 수정)
 - [ ] FC-QA-003 패널 내용(remote의 칸반 카드)에서 시작한 네이티브 드래그가 패널 드래그로 처리된다 — sev-2, `foreign-dragstart-unguarded`
 - [ ] FC-QA-009 드롭 직전 마지막 dragover가 예약한 미리보기가 드래그가 끝난 뒤 실행돼 소스 패널의 shadow가 남는다 (stale preview) — sev-2, `raf-not-cancelled-on-drop`
 - [ ] FC-QA-010 경계선 드래그의 최소·최대 한계가 설정 px과 다르다 (자식 3개 split에서 상한이 약 2/3, 바깥으로 끌면 패널이 줄어듦) — sev-3, `resize-flex-conversion`

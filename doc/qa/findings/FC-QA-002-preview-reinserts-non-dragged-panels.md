@@ -3,7 +3,7 @@ id: FC-QA-002
 title: 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM에서 떼었다 다시 붙여 스크롤 위치를 잃게 하고 iframe은 다시 로드되게 한다
 severity: sev-2
 class: library-bug
-status: open
+status: fixed
 confidence: high
 repro_rate: 2/2
 found_in: run01-tier1
@@ -21,7 +21,7 @@ root_cause_group: keyed-reorder-reinsert
 blocked_by: none
 dup_of: none
 repro_spec: mfa-lab/e2e/regression/fc-qa-002-preview-reinserts-non-dragged-panels.spec.ts
-fix_commit: none
+fix_commit: daee5a0
 ---
 
 # FC-QA-002 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM에서 떼었다 다시 붙여 스크롤 위치를 잃게 하고 iframe은 다시 로드되게 한다
@@ -98,3 +98,4 @@ fix_commit: none
 - 2026-10-07 R04(`?layout=census&a=<remote>`, R01과 같은 제스처, 2/2씩): `orders`·`billing`(mount, `mountCalls`·`unmountCalls` +0, `rootsAlive` 1) 모두 frame +0·content +0·moves +1·scrollTop 120 → 0, 입력·카운터 유지. **`telemetry`(iframe)는 frame +0인데 `loads` +1·`docId` 변경·iframe 문서 요청 +1, 프레임 안 입력값 소실**(재삽입 = 재로드). same-origin `control-iframe`도 같다(컨테이너 고유 현상). iframe 패널은 `(p-a, left, 1)` 점이 iframe 본문이라 `iframeShield=1`로 측정(FC-QA-005). 관찰 기록 `obs/R04-*-run{1,2}.json`.
 - 2026-10-07 R06(`?layout=row3&b=telemetry`, 2/2씩, 리마운트 0): R06-a(`p-c` → `(p-a, left, 1)`) hover에서 `p-a`·`p-b` moves +1, telemetry(p-b) `loads` +1 — **hover 때 재로드**. R06-b(`p-a` → `(p-c, right, 1)`) hover에서는 소스만 moves +1, Esc에서 `p-b`·`p-c` moves +1, telemetry `loads` +1 — **취소 때 재로드**. 드롭은 hover 뒤 추가 없음. React keyed 순서 변경의 `lastPlacedIndex` 규칙과 일치. 관찰 기록 `obs/R06-{a,b}-run{1,2}.json`. 회귀 스펙에 R06-a 케이스 추가(iframe `loads` +0 단언, "예상대로 실패").
 - 2026-10-07 심각도 sev-3 → **sev-2**: iframe 재로드가 관찰돼 분류 기본값("sev-2(iframe 재로드) / sev-3(스크롤만)")을 적용. 제목에 재로드를 더했다.
+- 2026-10-13 수정(`daee5a0`, FC-QA-001과 같은 수정, 브랜치 `fix/fc-qa-001-002-panel-layer`, 클라우드 세션, 레인 B: Playwright 1.63.0 + Chromium 153.0.8010.12 headless shell, `--site-per-process`): 패널을 루트 바로 아래에 고정 순서(처음 나타난 순서)로 렌더하고 화면 위치는 골격 slot 좌표로 정하므로, 트리에서 순서가 바뀌어도 패널 DOM 노드가 옮겨지지 않는다. 회귀 스펙 두 케이스 모두 수정 전 "예상대로 실패" 2/2(`p-a domMoves`, `telemetry loads during hover`) → 수정 뒤 "예상과 달리 통과" 2/2 → `test.fail()` 제거 뒤 통과 2/2. 패널 DOM 순서가 화면 순서와 달라지는 것은 감수했다(CHANGELOG [Unreleased]). main에는 `313b8f1`(dannysir/floating-component#29).

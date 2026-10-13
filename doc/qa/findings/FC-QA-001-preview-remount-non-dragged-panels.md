@@ -3,7 +3,7 @@ id: FC-QA-001
 title: 드래그 미리보기가 드래그하지 않은 패널을 리마운트한다
 severity: sev-2
 class: library-bug
-status: open
+status: fixed
 confidence: high
 repro_rate: 2/2
 found_in: pre-run
@@ -21,7 +21,7 @@ root_cause_group: split-index-key
 blocked_by: none
 dup_of: none
 repro_spec: mfa-lab/e2e/regression/fc-qa-001-preview-remount-non-dragged-panels.spec.ts
-fix_commit: none
+fix_commit: daee5a0
 ---
 
 # FC-QA-001 — 드래그 미리보기가 드래그하지 않은 패널을 리마운트한다
@@ -253,3 +253,4 @@ fix_commit: none
 - 수정 절차: [../FIXING.md](../FIXING.md)
 - 2026-10-07 run 01: R01에서 관측, `status: open`. 관찰 기록 `doc/qa/run01-tier1/obs/R01-*.json`, 회귀 스펙 `mfa-lab/e2e/regression/fc-qa-001-preview-remount-non-dragged-panels.spec.ts`(케이스 (a)·(b) 모두 "예상대로 실패": (a) `control-b frameMounts`, (b) `control-a frameMounts` 단언에서 실패)
 - 2026-10-07 R18 탐색(마우스 22회·터치 10회, `doc/qa/run01-tier1/obs/R18-log.json`): hover·커밋·취소(Resizer·상단 바 위 릴리스, touchCancel 포함)마다 드래그하지 않은 패널의 리마운트가 같은 메커니즘으로 반복된다. Esc 취소 직후 새 드래그(#11)는 한 제스처 구간에 frame +3까지 누적. 새 종류의 리마운트는 없음.
+- 2026-10-13 수정(`daee5a0`, 브랜치 `fix/fc-qa-001-002-panel-layer`, 클라우드 세션, 레인 B: Playwright 1.63.0 + Chromium 153.0.8010.12 headless shell, `--site-per-process`): 렌더를 골격(트리 모양대로 split·Resizer와 빈 slot `[data-panel-slot]`)과 패널 레이어(루트 바로 아래, id key·고정 순서, `position: absolute`, slot의 위치·크기로 배치)로 나눴다. 수정 방향 후보 B의 변형으로, 좌표 계산은 골격의 flex에 맡겨 min/max 제약을 다시 구현하지 않는다. 회귀 스펙 (a)·(b) 모두 수정 전 "예상대로 실패" 2/2(`control-b frameMounts`, `control-a frameMounts`) → 수정 뒤 "예상과 달리 통과" 2/2 → `test.fail()` 제거 뒤 통과 2/2. 하네스 `geometry.ts`가 slot을 읽도록 바꿨다(`f4c1598`, 옛 src의 regression 결과 테스트별 동일). 소스 자신의 리마운트(D3b)도 없어져 스파이크 S3을 갱신했다(`679469d`). FC-QA-002가 같은 수정으로 함께 고쳐졌다. main에는 `313b8f1`(dannysir/floating-component#29).
