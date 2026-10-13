@@ -12,15 +12,14 @@ Tree 기반으로 크기 조절과 패널 이동이 가능한 React 레이아웃
 
 ---
 
-## 최근 변경 (1.0.0)
+## 최근 변경 (1.0.1)
 
-첫 안정 버전입니다. 이후 공개 API의 호환성을 깨는 변경은 메이저 버전에서만 합니다. 0.5.x에서 코드 수정 없이 올릴 수 있습니다.
+버그 수정 릴리스입니다. 공개 API와 트리 형식은 그대로라 1.0.0에서 코드 수정 없이 올릴 수 있습니다.
 
-- 패널 잠금 옵션 `draggable`/`droppable`/`resizable` — 패널별로 드래그·드롭·경계선 리사이즈 차단 (고정 사이드바 등). 드롭 불가 패널 위에서는 불가 표시 후 놓으면 취소
-- `movePanel`/`resizeBorder`가 잠금을 준수 — 위반 호출은 무시되고 dev 모드 경고
-- 수정: 미리보기로 소스 패널이 리마운트될 때 드래그 종료 이벤트가 유실되던 문제, 포인터 캡처를 잃은 경계선 리사이즈가 `user-select: none`을 남기던 문제
+- 수정: 패널을 드래그하면 드래그하지 않은 패널까지 리마운트되거나 DOM에서 떼였다 다시 붙어, 입력값·state·스크롤이 초기화되고 iframe 패널이 다시 로드되던 문제 ([#19](https://github.com/dannysir/floating-component/issues/19), [#20](https://github.com/dannysir/floating-component/issues/20)). 이제 패널은 트리에서 빠지기 전까지 같은 DOM 노드로 유지
+- 변경: 패널이 레이아웃 골격 위에 `position: absolute`로 렌더됨. 패널 DOM 순서는 화면 순서가 아니라 처음 나타난 순서이고, SSR HTML에는 패널 위치가 없음
 
-전체 이력은 [CHANGELOG](./CHANGELOG.ko.md) 참고.
+1.0.0(첫 안정 버전)을 포함한 전체 이력은 [CHANGELOG](./CHANGELOG.ko.md) 참고.
 
 ---
 

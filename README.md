@@ -12,15 +12,14 @@ Tree-based resizable and reorderable panel layout for React. Split panels horizo
 
 ---
 
-## What's New (1.0.0)
+## What's New (1.0.1)
 
-First stable release — from here on, breaking changes to the public API only ship in major versions. Upgrading from 0.5.x requires no code changes.
+Bug fix release — the public API and tree format are unchanged, so upgrading from 1.0.0 requires no code changes.
 
-- Panel lock options `draggable`/`droppable`/`resizable` — block dragging, dropping, and border resizing per panel (e.g. a fixed sidebar). Over a non-droppable panel a "can't drop" indicator is shown and releasing cancels the move
-- `movePanel`/`resizeBorder` honor locks — violating calls are ignored with a dev-mode warning
-- Fixed: drag end events lost when the preview remounted the source panel, and a border resize that lost pointer capture leaving `user-select: none` behind
+- Fixed: dragging a panel remounted, or detached and reattached in the DOM, panels that were not being dragged, resetting their input values, state, and scroll position and reloading iframe panels ([#19](https://github.com/dannysir/floating-component/issues/19), [#20](https://github.com/dannysir/floating-component/issues/20)). Panels now keep the same DOM node until they leave the tree
+- Changed: panels are rendered with `position: absolute` on top of the layout skeleton. Their DOM order is the order they first appeared, not the visual order, and SSR HTML has no panel positions
 
-See the full history in the [changelog](./CHANGELOG.md).
+See the full history, including 1.0.0 (first stable release), in the [changelog](./CHANGELOG.md).
 
 ---
 
