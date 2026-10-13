@@ -448,7 +448,7 @@ interface ProbeEvent {
 
 - window capture에서 `dragstart`를 보면 **그 이벤트의 target 요소 자체**에 `dragend` 리스너를 건다. `touchstart`를 보면 target 요소 자체에 `touchend`와 `touchcancel` 리스너를 건다. 이 기록은 `phase: 'target'`이다.
 - **이유**: 브라우저는 `dragend`와 `touchend`/`touchcancel`을 시퀀스를 시작한 원본 요소로 보낸다. 미리보기가 소스 패널을 리마운트하면 원본 요소는 문서에서 분리되고(`isConnected === false`), 분리된 노드로 간 이벤트의 전파 경로에는 `document`도 `window`도 없다. window 리스너만으로는 이 경로가 **보이지 않는다**. 이 프로젝트가 한 번 놓친 버그가 정확히 이 경로였다 (`doc/TODO.md`의 "해결: 드래그 중 소스 DOM 교체로 종료 이벤트 유실"). 라이브러리의 수정도 같은 원리로 원본 노드에 리스너를 건다 (`TreeLayout.tsx:144-150`, `useTouchDrag.ts:243-245`).
-- 판독: 종료 이벤트가 `phase: 'target'` 레코드에만 있고 같은 `eid`의 capture 레코드가 없으면, 그 이벤트는 분리된 노드로 갔다. S3의 통과 조건이 이 레코드(`dragend`, `isConnected: false`)다.
+- 판독: 종료 이벤트가 `phase: 'target'` 레코드에만 있고 같은 `eid`의 capture 레코드가 없으면, 그 이벤트는 분리된 노드로 갔다. S3의 통과 조건이 이 레코드(`dragend`, `isConnected: false`)였다. FC-QA-001 수정(`daee5a0`) 뒤에는 미리보기가 소스를 리마운트하지 않으므로 S3는 연결된 소스의 `dragend`(`isConnected: true`)를 확인하고, 분리된 노드 경로는 S5(npm 0.5.1)가 계속 확인한다.
 - 분리된 소스로 가는 `touchmove`도 window에서 보이지 않는다. 그 수는 하네스가 보낸 CDP 호출 수로 안다.
 
 ### DOM 이동 로그

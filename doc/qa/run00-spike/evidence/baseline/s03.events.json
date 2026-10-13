@@ -169,7 +169,21 @@
  },
  {
   "type": "dragend",
+  "phase": "capture",
+  "panelId": "terminal",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragend",
   "phase": "target",
+  "panelId": "terminal",
+  "isTrusted": true,
+  "top": true
+ },
+ {
+  "type": "dragend",
+  "phase": "bubble",
   "panelId": "terminal",
   "isTrusted": true,
   "top": true
