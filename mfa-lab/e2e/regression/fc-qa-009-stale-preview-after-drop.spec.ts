@@ -7,7 +7,6 @@ import { settle } from '../helpers/settle';
 import { checkInvariants } from '../helpers/invariants';
 
 test('FC-QA-009 workbench: release over another panel header leaves no shadow on the source', { annotation: { type: 'issue', description: 'FC-QA-009' } }, async ({ lab, page }) => {
-  test.fail();   // 버그가 있는 동안 이 테스트는 실패해야 한다
   await lab.open({ layout: 'workbench' });
   const s = await begin(page, 'orders');
   await s.teleport(await dropPoint(page, 'billing', 'top', 0)); await s.release(); await settle(page);
@@ -22,7 +21,6 @@ test('FC-QA-009 workbench: release over another panel header leaves no shadow on
 });
 
 test('FC-QA-009 workbench: a non-panel drop (ext-chip) after a drag does not call onMovePanel', { annotation: { type: 'issue', description: 'FC-QA-009' } }, async ({ lab, page }) => {
-  test.fail();   // 버그가 있는 동안 이 테스트는 실패해야 한다 (R08 대체 유도: stale 미리보기를 chip 드롭이 커밋한다)
   await lab.open({ layout: 'workbench' });
   const s = await begin(page, 'orders');
   await s.teleport(await dropPoint(page, 'billing', 'top', 0)); await s.release(); await settle(page);
