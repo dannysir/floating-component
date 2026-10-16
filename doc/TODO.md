@@ -90,6 +90,7 @@ root(H)                           root(H)
 - [ ] **패널 잠금 (1.0.0)** — 실제 마우스로 드롭 불가 패널 위 `not-allowed` 커서 표시(합성 `DataTransfer`는 `dropEffect` 쓰기가 무시돼 스크립트로 검증 불가) / 실기기(또는 DevTools 모바일 에뮬레이션 실입력)로 터치 경로. 참고: `qa/mfa-lab`의 CDP 입력 스펙(마우스 S2·S4, 터치 S7a(2))에서 잠긴 패널 위 놓기 취소는 통과
 - [ ] **경계선 리사이즈 캡처 유실 (1.0.0, QA FC-QA-008)** — 실제 Chrome에서 cross-origin iframe 쪽으로 경계선을 끌고 놓은 뒤 `body`의 `user-select` 복원과 같은 경계선 재사용 확인 (CDP 입력에서는 확인됨)
 - [ ] **패널 레이어 분리 (1.0.1, QA FC-QA-001·002)** — 실제 브라우저·실기기에서 미리보기·취소·드롭 때 드래그하지 않은 패널의 입력값·스크롤·iframe 유지, 패널과 경계선 정렬(창 리사이즈·브라우저 확대 포함), Tab 순서 영향 확인 (CDP 입력 랩·플레이그라운드에서는 확인됨)
+- [ ] **드롭 뒤 미리보기 잔존 (1.0.2, QA FC-QA-009)** — 실제 마우스로 다른 패널 헤더 위에서 빠르게 놓았을 때 소스 패널에 shadow가 남지 않는지 확인 (CDP 입력 랩에서는 확인됨. 사람 손으로는 경합 재현이 어려움)
 - [ ] **패널 크기 제약 (0.4.0)** — `minWidth`/`maxWidth`(가로 split), `minHeight`/`maxHeight`(세로 split)가 윈도우 리사이즈·경계선 드래그 모두에서 같은 px로 지켜지는지 / 패널보다 큰 콘텐츠가 `overflow:auto`로 스크롤되는지
 
 ---
@@ -106,3 +107,4 @@ root(H)                           root(H)
 | 패널 잠금 | 1.0.0 | `feat/panel-lock` | `PanelNode`의 `draggable`/`droppable`/`resizable` + `movePanel`/`resizeBorder` 잠금 준수, `splitPanel` `newPanel`의 min/max 누락 수정. 검증 중 발견한 소스 DOM 교체 시 종료 이벤트 유실도 수정(위 "해결" 절) |
 | 리사이즈 캡처 정리 | 1.0.0 | `fix/fc-qa-008-resize-capture-cleanup`(`qa/mfa-lab`) → cherry-pick | 포인터 캡처를 잃으면 `user-select: none`이 남고 Resizer가 다시 잡히지 않던 문제(QA FC-QA-008). `user-select`를 캡처 수명에 묶고 `blur`·unmount·다음 `pointerdown` 정리 추가 |
 | 패널 레이어 분리 | 1.0.1 | `claude/fervent-bell-iffcis`(PR #29) / `qa/mfa-lab`에는 `fix/fc-qa-001-002-panel-layer`(PR #30) | 미리보기·트리 변경 때 드래그하지 않은 패널이 리마운트·DOM 재삽입되던 문제(QA FC-QA-001·002, #19·#20). 골격(빈 slot)과 패널 레이어(루트 바로 아래, 고정 순서, `position: absolute`)로 렌더를 분리. 기록: [doc/blog/1.0.1-panel-layer.md](./blog/1.0.1-panel-layer.md) |
+| 드롭 뒤 미리보기 잔존 | 1.0.2 | `fix/22-stale-preview`(PR #34) / `qa/mfa-lab`에는 `fix/fc-qa-009-stale-preview`(PR #33) | 마지막 `dragover`가 rAF로 예약한 미리보기가 drop·`finishDrag` 뒤에 실행돼 소스 패널 shadow가 남고, 비패널 드롭이 그 미리보기를 커밋하던 문제(QA FC-QA-009, #22). 예약 콜백이 실행 시점에 드래그 진행 여부(`data-dragging-panel-id`)를 확인하고, `handleDrop`에서 예약을 취소 |
