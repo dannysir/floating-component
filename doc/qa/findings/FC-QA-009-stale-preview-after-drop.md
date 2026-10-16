@@ -3,7 +3,7 @@ id: FC-QA-009
 title: 드롭 직전 마지막 dragover가 예약한 미리보기가 드래그가 끝난 뒤 실행돼 소스 패널의 shadow가 남는다 (stale preview)
 severity: sev-2
 class: library-bug
-status: open
+status: fixed
 confidence: high
 repro_rate: 4/4
 found_in: run01-tier1
@@ -21,7 +21,7 @@ root_cause_group: raf-not-cancelled-on-drop
 blocked_by: none
 dup_of: none
 repro_spec: mfa-lab/e2e/regression/fc-qa-009-stale-preview-after-drop.spec.ts
-fix_commit: none
+fix_commit: 7042aa4
 ---
 
 # FC-QA-009 드롭 직전 마지막 dragover가 예약한 미리보기가 드래그가 끝난 뒤 실행돼 소스 패널의 shadow가 남는다 (stale preview)
@@ -96,3 +96,4 @@ fix_commit: none
 - 2026-10-07 R08(`?layout=census` bare, 브리프의 `immediate` 유도): 0/5 × 2 — 미리보기 리플로로 커서 아래 요소가 바뀌어 `mouse.up`의 dragover가 미뤄지고(HARNESS 부작용 #17) drop 없이 취소된다. 이 환경에서 그 유도 경로는 stale을 만들지 못한다. `obs/R08-stale-run{1,2}.json`.
 - 2026-10-07 R08 대체 유도(R18-x01 경로, `obs/R08-chip-alt-run{1,2}.json`, 2/2): stale 상태에서 **패널 드래그가 아닌** ext-chip(`application/x-harbor-chip`, `data-dragging-panel-id` 없음)을 orders 위에 놓으면 패널 `handleDrop`이 `isPreviewActive`로 통과하고 루트 `onDrop`이 stale 미리보기를 커밋한다: `onMovePanel('board','telemetry','top',1)` 1건, `treeVersion` 2→3. 이 경우 미리보기 트리가 커밋 트리와 같아 화면은 그대로지만, 호스트는 사용자가 하지 않은 이동 콜백을 받는다. 대조(stale 없음, `obs/R08-chip-control-run{1,2}.json`): `onMovePanel` 0건, drop `stopped`.
 - 2026-10-07 심각도 sev-3 → **sev-2**: 분류 기본값("sev-2(`R08-chip`의 stale 커밋이 관찰되면)"). 증거 `R08c-03-after.png`.
+- 2026-10-16 수정(`7042aa4`, 브랜치 `fix/fc-qa-009-stale-preview`, 사용자 Windows PC, 레인 B: Playwright 1.63.0 + Chromium 153.0.8010.12 headless shell, `--site-per-process`): 마우스 경로에 터치 경로(`endSession`의 `scheduler.cancel()`과 콜백의 `if (!session) return`)와 같은 두 겹 방어를 넣었다. `dragover`의 예약 콜백은 실행 시점에 루트의 `data-dragging-panel-id`가 예약 때의 소스와 같은지 확인하고, 다르면(= `finishDrag`가 지움) 미리보기를 설정하지 않는다. `handleDrop`은 시작에서 그 패널의 예약을 취소한다. 수정 전 회귀 스펙 2/2 예상대로 실패(I2 단언, `onMovePanel` 호출 수 단언), 수정 후 `test.fail()` 없이 5회 연속 + 2회 통과. F8: smoke 19/1 skipped, regression 마우스 14/1 skipped·터치 15, spike 59/3 skipped. 그 spike 실행에서 S8의 stale 비율은 `settled`·`other-droppable` 6/10 → 0/10, `immediate`·`other-droppable` 8/10 → 0/10이 됐다(`run00-spike/evidence/s08-ratio.json`은 run00 기록이라 갱신하지 않는다).

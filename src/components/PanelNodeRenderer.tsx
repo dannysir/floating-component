@@ -116,6 +116,8 @@ export const PanelNodeRenderer = ({
       }
 
       schedulerRef.current!.schedule(() => {
+        // 예약 뒤 드래그가 끝났으면(finishDrag가 draggingPanelId를 지움) 미리보기를 다시 켜지 않는다.
+        if (root?.dataset.draggingPanelId !== sourcePanelId) return;
         // 드롭 위치는 골격의 slot 기준이다(조상 split을 slot의 DOM 조상에서 찾는다).
         const slotEl = getSlot(node.id);
         if (!slotEl) return;
@@ -129,6 +131,8 @@ export const PanelNodeRenderer = ({
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
+      // 직전 dragover가 예약한 미리보기가 drop 뒤에 실행되지 않게 한다.
+      schedulerRef.current!.cancel();
       // dropEffect "none"이라 보통 발생하지 않지만, 발생해도 루트의 미리보기 커밋으로 번지지 않게 막는다.
       if (!canDrop) {
         e.stopPropagation();
