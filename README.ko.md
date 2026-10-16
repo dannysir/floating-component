@@ -12,14 +12,13 @@ Tree 기반으로 크기 조절과 패널 이동이 가능한 React 레이아웃
 
 ---
 
-## 최근 변경 (1.0.1)
+## 최근 변경 (1.0.2)
 
-버그 수정 릴리스입니다. 공개 API와 트리 형식은 그대로라 1.0.0에서 코드 수정 없이 올릴 수 있습니다.
+버그 수정 릴리스입니다. 공개 API와 트리 형식은 그대로라 1.0.1에서 코드 수정 없이 올릴 수 있습니다.
 
-- 수정: 패널을 드래그하면 드래그하지 않은 패널까지 리마운트되거나 DOM에서 떼였다 다시 붙어, 입력값·state·스크롤이 초기화되고 iframe 패널이 다시 로드되던 문제 ([#19](https://github.com/dannysir/floating-component/issues/19), [#20](https://github.com/dannysir/floating-component/issues/20)). 이제 패널은 트리에서 빠지기 전까지 같은 DOM 노드로 유지
-- 변경: 패널이 레이아웃 골격 위에 `position: absolute`로 렌더됨. 패널 DOM 순서는 화면 순서가 아니라 처음 나타난 순서이고, SSR HTML에는 패널 위치가 없음
+- 수정: 마우스 드래그를 다른 패널 위에서 놓은 뒤 소스 패널에 미리보기 shadow(반투명·점선)가 다음 드래그 전까지 남고, 그 상태에서 패널이 아닌 드래그를 놓으면 `onMovePanel`이 한 번 더 불릴 수 있던 문제 ([#22](https://github.com/dannysir/floating-component/issues/22))
 
-1.0.0(첫 안정 버전)을 포함한 전체 이력은 [CHANGELOG](./CHANGELOG.ko.md) 참고.
+1.0.1(패널 레이어 분리)과 1.0.0(첫 안정 버전)을 포함한 전체 이력은 [CHANGELOG](./CHANGELOG.ko.md) 참고.
 
 ---
 

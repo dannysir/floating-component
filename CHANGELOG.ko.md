@@ -6,7 +6,9 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
-## [Unreleased]
+## [1.0.2] - 2026-10-16
+
+버그 수정 릴리스. 공개 API와 트리 형식은 바뀌지 않아 1.0.1에서 코드 수정 없이 올릴 수 있습니다.
 
 ### 수정
 
