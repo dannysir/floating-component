@@ -19,7 +19,7 @@
 - [x] FC-QA-001 드래그 미리보기가 드래그하지 않은 패널을 리마운트한다 — sev-2, `split-index-key`, 수정 `daee5a0` (main에는 `313b8f1`, PR #29)
 - [x] FC-QA-002 드래그 미리보기가 드래그하지 않은 패널을 리마운트 없이 DOM에서 떼었다 다시 붙여 스크롤 위치를 잃게 하고 iframe은 다시 로드되게 한다 — sev-2, `keyed-reorder-reinsert`, 수정 `daee5a0` (FC-QA-001과 같은 수정)
 - [ ] FC-QA-003 패널 내용(remote의 칸반 카드)에서 시작한 네이티브 드래그가 패널 드래그로 처리된다 — sev-2, `foreign-dragstart-unguarded`
-- [ ] FC-QA-009 드롭 직전 마지막 dragover가 예약한 미리보기가 드래그가 끝난 뒤 실행돼 소스 패널의 shadow가 남는다 (stale preview) — sev-2, `raf-not-cancelled-on-drop`
+- [x] FC-QA-009 드롭 직전 마지막 dragover가 예약한 미리보기가 드래그가 끝난 뒤 실행돼 소스 패널의 shadow가 남는다 (stale preview) — sev-2, `raf-not-cancelled-on-drop`, 수정 `7042aa4` (main 반영은 별도 PR, GitHub #22)
 - [ ] FC-QA-010 경계선 드래그의 최소·최대 한계가 설정 px과 다르다 (자식 3개 split에서 상한이 약 2/3, 바깥으로 끌면 패널이 줄어듦) — sev-3, `resize-flex-conversion`
 - [ ] FC-QA-005 iframe 패널은 마우스 드래그의 드롭 대상이 되지 않는데 터치 드래그에서는 된다 (경로 불일치) — sev-3, `iframe-drop-target-mouse`
 
