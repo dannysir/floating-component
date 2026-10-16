@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Fixed
+
+- Releasing a mouse drag over another panel could leave the preview shadow (translucent, dashed) on the source panel until the next drag, when the last `dragover` and the `drop` arrived within one frame ([#22](https://github.com/dannysir/floating-component/issues/22)). In that state, dropping a non-panel drag onto the layout could commit the leftover preview and call `onMovePanel` one more time
+
 ## [1.0.1] - 2026-10-13
 
 Bug fix release. The public API and tree format are unchanged, so upgrading from 1.0.0 requires no code changes. The internal DOM structure changed; if you have CSS that targets the library's DOM directly, see "Changed" below.

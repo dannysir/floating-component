@@ -6,6 +6,12 @@
 
 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/)를 따릅니다.
 
+## [Unreleased]
+
+### 수정
+
+- 마우스 드래그를 다른 패널 위에서 놓을 때 마지막 `dragover`와 `drop`이 한 프레임 안에 오면, 드래그가 끝난 뒤에도 소스 패널에 미리보기 shadow(반투명·점선)가 다음 드래그 전까지 남던 문제([#22](https://github.com/dannysir/floating-component/issues/22)). 그 상태에서 패널이 아닌 드래그를 레이아웃 위에 놓으면 남은 미리보기가 커밋돼 `onMovePanel`이 한 번 더 불릴 수 있었음
+
 ## [1.0.1] - 2026-10-13
 
 버그 수정 릴리스. 공개 API와 트리 형식은 바뀌지 않아 1.0.0에서 코드 수정 없이 올릴 수 있습니다. 내부 DOM 구조가 바뀌었으니 라이브러리 DOM을 직접 가리키는 CSS가 있다면 아래 "변경"을 확인하세요.
